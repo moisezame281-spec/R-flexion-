@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>S.E. Corporation — Évaluation Terminale L</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --ink:#0f0e0a; --cream:#f5f0e8; --gold:#c9a84c; --gold-lite:rgba(201,168,76,.12);
+  --red:#8b1a1a; --blue:#1a2f5e; --grey:#6b6560; --green:#1a5e1a;
+  --bg2:#13120d; --white:#fff;
+}
+html{scroll-behavior:smooth}
+body{background:var(--ink);color:var(--cream);font-family:'Cormorant Garamond',serif;
+  min-height:100vh;overflow-x:hidden;-webkit-user-select:none;user-select:none}
+body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");opacity:.25}
+
+.page{display:none;min-height:100vh;flex-direction:column}
+.page.active{display:flex}
+
+/* ═══ ACCUEIL ══════════════════════════════════════════ */
+#pg-accueil{
+  justify-content:center;align-items:center;padding:3rem 1.5rem;
+  background:radial-gradient(ellipse at 50% 0%,rgba(26,47,94,.25) 0%,transparent 65%),var(--ink);
+  position:relative;overflow:hidden
+}
+#pg-accueil::after{
+  content:'ln';position:absolute;font-size:38rem;
+  color:rgba(201,168,76,.025);font-family:'Playfair Display',serif;
+  font-style:italic;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none
+}
+
+.logo-block{display:flex;flex-direction:column;align-items:center;gap:.5rem;margin-bottom:2.5rem;z-index:1}
+.logo-stars{color:var(--gold);font-size:1.1rem;letter-spacing:.5rem}
+.logo-brand{font-family:'Space Mono',monospace;font-size:.68rem;letter-spacing:.5em;color:var(--gold);text-transform:uppercase}
+.logo-since{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.85rem;color:var(--grey);letter-spacing:.2em}
+
+.acc-title{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,4.5vw,3.2rem);
+  font-weight:900;text-align:center;line-height:1.12;margin-bottom:.6rem;color:var(--cream);z-index:1}
+.acc-sub{font-size:1rem;color:var(--grey);text-align:center;font-style:italic;
+  margin-bottom:2.5rem;z-index:1;letter-spacing:.04em}
+
+.form-box{
+  background:rgba(255,255,255,.025);border:1px solid rgba(201,168,76,.18);
+  border-radius:5px;padding:2.5rem;width:100%;max-width:460px;z-index:1;position:relative
+}
+.form-box::before{
+  content:'';position:absolute;inset:-1px;border-radius:5px;z-index:-1;
+  background:linear-gradient(135deg,rgba(201,168,76,.18),transparent 55%,rgba(201,168,76,.05))
+}
+
+.field{margin-bottom:1.4rem}
+.field label{display:block;font-family:'Space Mono',monospace;font-size:.6rem;
+  letter-spacing:.32em;color:var(--gold);text-transform:uppercase;margin-bottom:.55rem}
+.field input,.field select{
+  width:100%;padding:.8rem 1rem;background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.1);border-radius:3px;
+  color:var(--cream);font-family:'Cormorant Garamond',serif;font-size:1.05rem;
+  outline:none;transition:border-color .2s;-webkit-user-select:text;user-select:text
+}
+.field input:focus,.field select:focus{border-color:var(--gold)}
+.field select option{background:var(--ink)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+
+.divider{height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:1.5rem 0}
+
+.btn{
+  width:100%;padding:.95rem;border:none;border-radius:3px;cursor:pointer;
+  font-family:'Space Mono',monospace;font-size:.72rem;letter-spacing:.22em;
+  text-transform:uppercase;font-weight:700;transition:opacity .18s,transform .1s
+}
+.btn:hover{opacity:.87}.btn:active{transform:scale(.98)}
+.btn-gold{background:var(--gold);color:var(--ink)}
+.btn-red{background:var(--red);color:#fff}
+
+/* ═══ RÈGLES ═══════════════════════════════════════════ */
+#pg-regles{justify-content:center;align-items:center;padding:3rem 1.5rem;background:var(--bg2)}
+.regles-box{max-width:680px;width:100%;
+  background:rgba(255,255,255,.02);border:1px solid rgba(201,168,76,.2);
+  border-radius:5px;padding:3rem 3rem 2.5rem}
+.reg-title{font-family:'Playfair Display',serif;font-size:1.9rem;font-weight:900;
+  text-align:center;margin-bottom:.3rem;color:var(--cream)}
+.reg-title span{color:var(--gold);font-style:italic}
+.reg-intro{text-align:center;font-style:italic;color:var(--grey);font-size:.9rem;margin-bottom:1.5rem}
+
+.rule{display:grid;grid-template-columns:30px 1fr;gap:.9rem;
+  padding:1rem 0;border-bottom:1px solid rgba(255,255,255,.05);align-items:start}
+.rule:last-of-type{border-bottom:none}
+.rule-n{font-family:'Space Mono',monospace;font-size:.62rem;color:var(--gold);padding-top:3px}
+.rule-t{font-size:1rem;color:rgba(245,240,232,.85);line-height:1.65}
+.rule-t strong{color:var(--cream)}.rule-t .alert{color:#e05555;font-weight:600}
+
+.accept{display:flex;align-items:flex-start;gap:.8rem;margin-top:1.5rem;cursor:pointer}
+.accept input[type=checkbox]{
+  width:18px;height:18px;accent-color:var(--gold);cursor:pointer;margin-top:3px;flex-shrink:0
+}
+.accept label{font-size:.95rem;color:var(--grey);cursor:pointer;line-height:1.55}
+.accept label em{color:var(--cream);font-style:normal}
+
+/* ═══ QUIZ ══════════════════════════════════════════════ */
+#pg-quiz{background:var(--bg2)}
+.topbar{
+  position:sticky;top:0;z-index:100;
+  background:var(--ink);border-bottom:1px solid rgba(201,168,76,.2);
+  padding:.85rem 2rem;display:flex;align-items:center;justify-content:space-between
+}
+.topbar-l{font-family:'Space Mono',monospace;font-size:.6rem;color:var(--gold);letter-spacing:.18em}
+.timer{display:flex;align-items:center;gap:.55rem;
+  font-family:'Space Mono',monospace;font-size:1.1rem;font-weight:700;color:var(--cream)}
+.timer-dot{width:8px;height:8px;border-radius:50%;background:#3ab03a;animation:blink 1s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.timer.danger{color:#e05555}.timer.danger .timer-dot{background:#e05555}
+
+.prog-bar{height:3px;background:rgba(201,168,76,.12)}
+.prog-fill{height:100%;background:var(--gold);transition:width .4s}
+
+.quiz-body{max-width:780px;margin:0 auto;padding:2.5rem 1.5rem 6rem;width:100%}
+
+.sec-head{display:flex;align-items:center;gap:1rem;margin:2.2rem 0 1.2rem}
+.sec-badge{font-family:'Space Mono',monospace;font-size:.58rem;letter-spacing:.28em;
+  background:var(--gold);color:var(--ink);padding:.28rem .65rem;border-radius:2px;font-weight:700}
+.sec-title{font-family:'Playfair Display',serif;font-size:1.05rem;font-style:italic;
+  color:rgba(245,240,232,.65)}
+
+.qcard{
+  background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);
+  border-radius:4px;padding:1.8rem 2rem 1.5rem;margin-bottom:1.1rem;transition:border-color .2s
+}
+.qcard:hover{border-color:rgba(201,168,76,.18)}
+.qcard.answered{border-color:rgba(201,168,76,.35)}
+.q-label{font-family:'Space Mono',monospace;font-size:.58rem;color:var(--gold);
+  letter-spacing:.18em;margin-bottom:.75rem}
+.q-text{font-size:1.05rem;line-height:1.75;color:var(--cream);margin-bottom:1.2rem;
+  white-space:pre-line}
+.q-text .math{font-family:'Playfair Display',serif;font-style:italic;color:rgba(201,168,76,.9)}
+
+.opts{display:flex;flex-direction:column;gap:.55rem}
+.opt{
+  display:flex;align-items:flex-start;gap:.85rem;padding:.75rem 1rem;
+  border:1px solid rgba(255,255,255,.07);border-radius:3px;
+  cursor:pointer;transition:all .15s;-webkit-user-select:none;user-select:none
+}
+.opt:hover{border-color:rgba(201,168,76,.38);background:rgba(201,168,76,.05)}
+.opt.sel{border-color:var(--gold);background:rgba(201,168,76,.1)}
+.opt input{display:none}
+.opt-letter{font-family:'Space Mono',monospace;font-size:.68rem;color:var(--gold);
+  font-weight:700;padding-top:3px;flex-shrink:0;width:18px}
+.opt-text{font-size:1rem;color:rgba(245,240,232,.85);line-height:1.5}
+
+.quiz-foot{
+  position:fixed;bottom:0;left:0;right:0;
+  background:var(--ink);border-top:1px solid rgba(201,168,76,.18);
+  padding:.95rem 2rem;display:flex;justify-content:space-between;align-items:center
+}
+.q-counter{font-family:'Space Mono',monospace;font-size:.62rem;color:var(--grey)}
+
+/* ═══ FIN ════════════════════════════════════════════ */
+#pg-fin{
+  justify-content:center;align-items:center;padding:3rem 1.5rem;
+  background:radial-gradient(ellipse at 50% 30%,rgba(26,47,94,.35) 0%,transparent 70%),var(--ink)
+}
+.fin-box{max-width:520px;width:100%;text-align:center;
+  background:rgba(255,255,255,.02);border:1px solid rgba(201,168,76,.2);
+  border-radius:5px;padding:3rem 2.5rem}
+.fin-icon{font-size:2.8rem;margin-bottom:1.2rem}
+.fin-title{font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;
+  color:var(--cream);margin-bottom:.4rem}
+.fin-title span{color:var(--gold);font-style:italic}
+
+.id-box{margin:2rem 0;padding:1.5rem;
+  background:rgba(201,168,76,.07);border:2px solid var(--gold);border-radius:4px}
+.id-lbl{font-family:'Space Mono',monospace;font-size:.6rem;letter-spacing:.3em;
+  color:var(--gold);text-transform:uppercase;margin-bottom:.8rem}
+.id-val{font-family:'Space Mono',monospace;font-size:2.6rem;font-weight:700;
+  color:var(--cream);letter-spacing:.25em}
+.id-warn{font-size:.88rem;color:var(--grey);font-style:italic;margin-top:.8rem;line-height:1.55}
+
+.score-box{margin:1.5rem 0;padding:1rem;
+  background:rgba(26,94,26,.15);border:1px solid rgba(50,160,50,.35);border-radius:3px}
+.score-lbl{font-family:'Space Mono',monospace;font-size:.58rem;letter-spacing:.22em;
+  color:rgba(100,200,100,.8);text-transform:uppercase;margin-bottom:.4rem}
+.score-val{font-family:'Playfair Display',serif;font-size:3rem;font-weight:900;color:#6dc96d}
+.score-sub{font-size:.95rem;color:var(--grey)}
+.fin-note{font-size:.92rem;color:var(--grey);line-height:1.65;font-style:italic}
+
+/* ═══ OVERLAY FRAUDE ══════════════════════════════════ */
+#fraud-overlay{
+  display:none;position:fixed;inset:0;z-index:99998;
+  background:rgba(100,0,0,.97);justify-content:center;align-items:center;
+  flex-direction:column;gap:1.5rem;text-align:center;padding:2rem
+}
+#fraud-overlay.show{display:flex}
+.fraud-title{font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:900;color:#fff}
+.fraud-body{font-size:1.05rem;color:rgba(255,255,255,.75);line-height:1.7;max-width:480px}
+.fraud-count{font-family:'Space Mono',monospace;font-size:1.3rem;color:#fff;
+  background:rgba(255,255,255,.1);padding:.5rem 1.5rem;border-radius:3px}
+
+@media(max-width:580px){
+  .row2{grid-template-columns:1fr}
+  .regles-box,.form-box{padding:2rem 1.4rem}
+  .quiz-body{padding:1.5rem 1rem 6rem}
+  .qcard{padding:1.4rem 1.2rem}
+  .topbar{padding:.75rem 1rem}
+  .topbar-l{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- FRAUD OVERLAY -->
+<div id="fraud-overlay">
+  <div class="fraud-title">⚠️ Sortie détectée !</div>
+  <div class="fraud-body">
+    Vous avez quitté la page d'évaluation.<br>
+    Cette action a été <strong>enregistrée et signalée</strong>.<br>
+    Votre classement sera marqué : <strong style="color:#ffaaaa">SORTI DU SITE</strong>
+  </div>
+  <div class="fraud-count" id="fraud-cd">Retour dans 5s</div>
+</div>
+
+<!-- ═════════════════════════════════════════════════════ -->
+<!-- PAGE ACCUEIL                                         -->
+<!-- ═════════════════════════════════════════════════════ -->
+<div class="page active" id="pg-accueil">
+  <div class="logo-block">
+    <div class="logo-stars">★ ★ ★</div>
+    <div class="logo-brand">S.E. Corporation</div>
+    <div class="logo-since">Since 2015 — Excellence académique</div>
+  </div>
+
+  <h1 class="acc-title">Évaluation Hebdomadaire<br>Terminale L</h1>
+  <p class="acc-sub">Mathématiques — Fonctions Logarithmiques</p>
+
+  <div class="form-box">
+    <div class="field">
+      <label>Prénom</label>
+      <input type="text" id="f-prenom" placeholder="Votre prénom" autocomplete="off" spellcheck="false">
+    </div>
+    <div class="field">
+      <label>Nom</label>
+      <input type="text" id="f-nom" placeholder="Votre nom de famille" autocomplete="off" spellcheck="false">
+    </div>
+    <div class="row2">
+      <div class="field">
+        <label>Classe</label>
+        <select id="f-classe">
+          <option value="">— Choisir —</option>
+          <option value="TleL">Terminale L</option>
+          <option value="TleS">Terminale S</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Sexe</label>
+        <select id="f-sexe">
+          <option value="">— Choisir —</option>
+          <option value="M">Masculin</option>
+          <option value="F">Féminin</option>
+        </select>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <button class="btn btn-gold" onclick="goRegles()">Continuer →</button>
+  </div>
+</div>
+
+<!-- ═════════════════════════════════════════════════════ -->
+<!-- PAGE RÈGLES                                          -->
+<!-- ═════════════════════════════════════════════════════ -->
+<div class="page" id="pg-regles">
+  <div class="regles-box">
+    <h2 class="reg-title">Règlement de <span>l'évaluation</span></h2>
+    <p class="reg-intro">Lisez attentivement avant de commencer</p>
+    <div class="divider" style="margin:0 0 1.5rem"></div>
+
+    <div class="rule">
+      <span class="rule-n">01</span>
+      <p class="rule-t">Le quiz dure <strong>30 minutes</strong>. Le chronomètre démarre dès que vous appuyez sur « Commencer ». À l'expiration, le quiz est <strong>soumis automatiquement</strong>.</p>
+    </div>
+    <div class="rule">
+      <span class="rule-n">02</span>
+      <p class="rule-t"><span class="alert">Toute sortie de la page</span> (changement d'onglet, retour arrière, minimisation) sera <strong>détectée et enregistrée</strong>. Votre classement sera pénalisé.</p>
+    </div>
+    <div class="rule">
+      <span class="rule-n">03</span>
+      <p class="rule-t">Chaque infraction est comptabilisée. Le statut <span class="alert">FRAUDE</span> sera visible dans le classement public si des sorties répétées sont constatées.</p>
+    </div>
+    <div class="rule">
+      <span class="rule-n">04</span>
+      <p class="rule-t">À la fin, vous recevez un <strong>identifiant unique</strong> (ex : SE-4K7R). <strong>Notez-le impérativement</strong> — il est votre seul moyen de retrouver votre classement.</p>
+    </div>
+    <div class="rule">
+      <span class="rule-n">05</span>
+      <p class="rule-t">Le classement est <strong>confidentiel</strong> : seul votre identifiant y apparaît. Le professeur est le seul à connaître la correspondance nom ↔ identifiant.</p>
+    </div>
+    <div class="rule">
+      <span class="rule-n">06</span>
+      <p class="rule-t">Travaillez seul(e), <strong>sans aide extérieure</strong>. Clic droit et raccourcis clavier sont désactivés pendant l'évaluation.</p>
+    </div>
+
+    <div class="divider"></div>
+    <div class="accept">
+      <input type="checkbox" id="chk-accept">
+      <label for="chk-accept">J'ai lu et j'accepte le règlement. Je m'engage à composer seul(e) et à ne pas quitter la page. Je comprends que toute irrégularité sera <em>enregistrée et sanctionnée</em>.</label>
+    </div>
+    <button class="btn btn-gold" style="margin-top:1.5rem" onclick="startQuiz()">
+      Commencer l'évaluation →
+    </button>
+  </div>
+</div>
+
+<!-- ═════════════════════════════════════════════════════ -->
+<!-- PAGE QUIZ                                            -->
+<!-- ═════════════════════════════════════════════════════ -->
+<div class="page" id="pg-quiz">
+  <div class="topbar">
+    <div class="topbar-l">S.E. CORPORATION — TERMINALE L — MATHÉMATIQUES</div>
+    <div class="timer" id="timer-box">
+      <div class="timer-dot"></div>
+      <span id="timer-display">30:00</span>
+    </div>
+  </div>
+  <div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+  <div class="quiz-body" id="quiz-body"></div>
+  <div class="quiz-foot">
+    <div class="q-counter" id="q-counter">0 / 0 réponses</div>
+    <button class="btn btn-red" style="width:auto;padding:.7rem 2rem" onclick="confirmSubmit()">
+      Terminer &amp; Soumettre
+    </button>
+  </div>
+</div>
+
+<!-- ═════════════════════════════════════════════════════ -->
+<!-- PAGE FIN                                             -->
+<!-- ═════════════════════════════════════════════════════ -->
+<div class="page" id="pg-fin">
+  <div class="fin-box">
+    <div class="fin-icon">✦</div>
+    <h2 class="fin-title">Évaluation <span>terminée</span></h2>
+    <div class="id-box">
+      <div class="id-lbl">Votre identifiant confidentiel</div>
+      <div class="id-val" id="fin-id">——</div>
+      <div class="id-warn">📌 Notez cet identifiant maintenant — vous en aurez besoin pour consulter votre classement.</div>
+    </div>
+    <div class="score-box" id="score-box">
+      <div class="score-lbl">Score obtenu</div>
+      <div class="score-val" id="score-val">—</div>
+      <div class="score-sub" id="score-sub">/ 20</div>
+    </div>
+    <p class="fin-note" id="fin-note">Le classement sera publié prochainement.<br>Bonne continuation !</p>
+  </div>
+</div>
+
+<!-- ═════════════════════════════════════════════════════ -->
+<!-- FIREBASE + LOGIQUE                                   -->
+<!-- ═════════════════════════════════════════════════════ -->
+<script type="module">
+import { initializeApp }        from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore,collection,addDoc,serverTimestamp }
+                                 from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+// ⚠️ REMPLACE PAR TES CLÉS FIREBASE
+const firebaseConfig = {
+  apiKey:            "VOTRE_API_KEY",
+  authDomain:        "VOTRE_PROJECT.firebaseapp.com",
+  projectId:         "VOTRE_PROJECT_ID",
+  storageBucket:     "VOTRE_PROJECT.appspot.com",
+  messagingSenderId: "VOTRE_SENDER_ID",
+  appId:             "VOTRE_APP_ID"
+};
+const app = initializeApp(firebaseConfig);
+const db  = getFirestore(app);
+window._db  = db;
+window._col = collection;
+window._add = addDoc;
+window._sts = serverTimestamp;
+
+// ════════════════════════════════════════════════
+// QUIZ DATA — TERMINALE L
+// ════════════════════════════════════════════════
+window.QUIZ = {
+  duree: 30*60,
+  sections:[
+    {
+      badge:"LIMITES — PARTIE 1",
+      titre:"Calcul de limites en 0⁺",
+      qs:[
+        {id:"L1",pts:1,
+         txt:"Calculer :\n\nlim(x→0⁺)  x · ln(x²)",
+         opts:["0","+ ∞","− 1","− ∞"],rep:0},
+        {id:"L2",pts:1,
+         txt:"Calculer :\n\nlim(x→0⁺)  ln(x) / x",
+         opts:["0","1","− ∞","Aucune de ces réponses"],rep:2},
+        {id:"L3",pts:1,
+         txt:"Calculer :\n\nlim(x→0⁺)  ln(1 + x) / x",
+         opts:["0","1","+ ∞","e"],rep:1},
+      ]
+    },
+    {
+      badge:"LIMITES — PARTIE 2",
+      titre:"Calcul de limites en +∞",
+      qs:[
+        {id:"L4",pts:1,
+         txt:"Calculer :\n\nlim(x→+∞)  ln(2x + 3) / ln(x)",
+         opts:["2","ln 2","1","+ ∞"],rep:2},
+        {id:"L5",pts:1,
+         txt:"Calculer :\n\nlim(x→+∞)  x · ln(1/x)",
+         opts:["0","+ ∞","1","− ∞"],rep:3},
+        {id:"L6",pts:1,
+         txt:"Calculer :\n\nlim(x→+∞)  x · ln(x) − (ln x)²",
+         opts:["0","− ∞","1","+ ∞"],rep:3},
+      ]
+    },
+    {
+      badge:"ÉQUATIONS",
+      titre:"Résolution d'équations logarithmiques",
+      qs:[
+        {id:"E1",pts:1,
+         txt:"Résoudre dans ℝ :\n\nln(5 − 2x) = 0",
+         opts:["x = 3/2","x = 2","x = 4","Pas de solution"],rep:1},
+        {id:"E2",pts:1.5,
+         txt:"Résoudre dans ℝ :\n\nln(x² − 2x + 2) = 1",
+         opts:[
+           "S = { 1 + √(e−1)  ;  1 − √(e−1) }",
+           "S = { 1 + √e  ;  1 − √e }",
+           "S = { 0  ;  2 }",
+           "Pas de solution réelle"
+         ],rep:0},
+        {id:"E3",pts:1.5,
+         txt:"Résoudre dans ℝ :\n\nln(2x − 3) + 2 ln(x + 1) = ln(x − 1)",
+         opts:[
+           "x = 0,5",
+           "x ≈ 1,54  (unique solution valide)",
+           "Pas de solution dans le domaine",
+           "x = −1"
+         ],rep:1},
+      ]
+    },
+    {
+      badge:"SYSTÈMES",
+      titre:"Systèmes d'équations logarithmiques",
+      qs:[
+        {id:"S1",pts:1.5,
+         txt:"Résoudre le système :\n{ 2 ln x + ln y = 1\n{ 5 ln x + 3 ln y = 4",
+         opts:[
+           "(x ; y) = (1/e ; e³)",
+           "(x ; y) = (e ; e⁻³)",
+           "(x ; y) = (e⁻¹ ; e²)",
+           "(x ; y) = (e ; 1/e)"
+         ],rep:0},
+        {id:"S2",pts:1.5,
+         txt:"Le système suivant admet-il des solutions réelles ?\n{ x² + y² = 29\n{ ln x + ln y = 10",
+         opts:[
+           "Oui : (5 ; 2)",
+           "Oui : (3 ; 4)",
+           "Non — aucune solution réelle",
+           "Oui : (e⁵ ; e⁵)"
+         ],rep:2},
+        {id:"S3",pts:1.5,
+         txt:"Résoudre le système :\n{ ln x · ln y = −15\n{ ln(xy) = −2",
+         opts:[
+           "(e³ ; e⁻⁵) et (e⁻⁵ ; e³)",
+           "(e⁵ ; e⁻³) uniquement",
+           "(e³ ; e⁻⁵) uniquement",
+           "(e³ ; e³)"
+         ],rep:0},
+      ]
+    },
+    {
+      badge:"ÉTUDE DE FONCTION",
+      titre:"h(x) = −x + 1 − 2 ln x sur ]0 ; +∞[",
+      qs:[
+        {id:"H1",pts:1,
+         txt:"Soit h définie sur ]0 ; +∞[ par  h(x) = −x + 1 − 2 ln x\n\nCalculer h′(x) :",
+         opts:[
+           "h′(x) = −1 − 2/x",
+           "h′(x) = 1 + 2/x",
+           "h′(x) = −1 + 2/x",
+           "h′(x) = −2/x"
+         ],rep:0},
+        {id:"H2",pts:1,
+         txt:"Pour h(x) = −x + 1 − 2 ln x sur ]0 ; +∞[\n\nQuel est le signe de h′(x) sur ]0 ; +∞[ ?",
+         opts:[
+           "h′(x) > 0 pour tout x > 0 → h croissante",
+           "h′(x) < 0 pour tout x > 0 → h décroissante",
+           "h′(x) change de signe en x = 1",
+           "h′(x) change de signe en x = 2"
+         ],rep:1},
+        {id:"H3",pts:1,
+         txt:"Pour h(x) = −x + 1 − 2 ln x\n\nCalculer :   lim(x→0⁺)  h(x)",
+         opts:["0","1","− ∞","+ ∞"],rep:3},
+        {id:"H4",pts:1,
+         txt:"Pour h(x) = −x + 1 − 2 ln x\n\nCalculer :   lim(x→+∞)  h(x)",
+         opts:["+ ∞","0","1","− ∞"],rep:3},
+        {id:"H5",pts:1,
+         txt:"Pour h(x) = −x + 1 − 2 ln x sur ]0 ; +∞[\n\nL'équation h(x) = 0 — quelle est la solution ?",
+         opts:[
+           "x = 1  est l'unique solution",
+           "x = e  est l'unique solution",
+           "h(x) ≠ 0 sur ]0 ; +∞[  — pas de solution",
+           "Deux solutions : x = 1 et x = 2"
+         ],rep:0},
+      ]
+    }
+  ]
+};
+
+// ════════════════════════════════════════════════
+// ÉTAT
+// ════════════════════════════════════════════════
+let eleve={}, reps={}, frauds=0, started=false, done=false, timerInt=null, tLeft=0;
+
+const TOTAL_PTS = QUIZ.sections.flatMap(s=>s.qs).reduce((a,q)=>a+q.pts,0);
+const ALL_QS    = () => QUIZ.sections.flatMap(s=>s.qs);
+
+// ════════════════════════════════════════════════
+// NAVIGATION
+// ════════════════════════════════════════════════
+window.showPage = id => {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('pg-'+id).classList.add('active');
+};
+
+window.goRegles = () => {
+  const p=document.getElementById('f-prenom').value.trim();
+  const n=document.getElementById('f-nom').value.trim();
+  const c=document.getElementById('f-classe').value;
+  const s=document.getElementById('f-sexe').value;
+  if(!p||!n||!c||!s){alert('Veuillez remplir tous les champs.');return;}
+  if(c!=='TleL'){alert('Ce quiz est réservé aux élèves de Terminale L.');return;}
+  eleve={prenom:p,nom:n,classe:c,sexe:s};
+  showPage('regles');
+};
+
+window.startQuiz = () => {
+  if(!document.getElementById('chk-accept').checked){
+    alert('Vous devez accepter le règlement.');return;
+  }
+  buildQuiz();
+  showPage('quiz');
+  startTimer();
+  started=true;
+  antiCheat();
+};
+
+// ════════════════════════════════════════════════
+// BUILD QUIZ
+// ════════════════════════════════════════════════
+function buildQuiz(){
+  const body=document.getElementById('quiz-body');
+  body.innerHTML='';
+  QUIZ.sections.forEach(sec=>{
+    body.insertAdjacentHTML('beforeend',`
+      <div class="sec-head">
+        <span class="sec-badge">${sec.badge}</span>
+        <span class="sec-title">${sec.titre}</span>
+      </div>`);
+    sec.qs.forEach(q=>{
+      const opts=q.opts.map((o,i)=>`
+        <label class="opt" id="opt-${q.id}-${i}" onclick="pick('${q.id}',${i},this)">
+          <input type="radio" name="q${q.id}">
+          <span class="opt-letter">${'ABCD'[i]}</span>
+          <span class="opt-text">${o}</span>
+        </label>`).join('');
+      body.insertAdjacentHTML('beforeend',`
+        <div class="qcard" id="qc-${q.id}">
+          <div class="q-label">QUESTION ${q.id} — ${q.pts} pt${q.pts>1?'s':''}</div>
+          <div class="q-text">${q.txt}</div>
+          <div class="opts">${opts}</div>
+        </div>`);
+    });
+  });
+  updateCounter();
+}
+
+window.pick=(qId,idx,el)=>{
+  document.querySelectorAll(`[id^="opt-${qId}-"]`).forEach(l=>l.classList.remove('sel'));
+  el.classList.add('sel');
+  reps[qId]=idx;
+  document.getElementById('qc-'+qId).classList.add('answered');
+  updateCounter();
+};
+
+function updateCounter(){
+  const tot=ALL_QS().length, done2=Object.keys(reps).length;
+  document.getElementById('q-counter').textContent=`${done2} / ${tot} réponses`;
+  document.getElementById('prog-fill').style.width=`${(done2/tot)*100}%`;
+}
+
+// ════════════════════════════════════════════════
+// TIMER
+// ════════════════════════════════════════════════
+function startTimer(){
+  tLeft=QUIZ.duree;
+  timerInt=setInterval(()=>{
+    tLeft--;
+    const m=String(Math.floor(tLeft/60)).padStart(2,'0');
+    const s=String(tLeft%60).padStart(2,'0');
+    document.getElementById('timer-display').textContent=`${m}:${s}`;
+    if(tLeft<=300) document.getElementById('timer-box').classList.add('danger');
+    if(tLeft<=0){clearInterval(timerInt);submit('temps_depasse');}
+  },1000);
+}
+
+// ════════════════════════════════════════════════
+// ANTI-TRICHE
+// ════════════════════════════════════════════════
+function antiCheat(){
+  document.addEventListener('visibilitychange',()=>{
+    if(!started||done) return;
+    if(document.hidden){frauds++;showFraud();}
+  });
+  document.addEventListener('contextmenu',e=>{if(started&&!done)e.preventDefault();});
+  document.addEventListener('keydown',e=>{
+    if(!started||done) return;
+    if(e.ctrlKey&&'cvusap'.includes(e.key.toLowerCase()))e.preventDefault();
+    if(e.key==='F12'||(e.ctrlKey&&e.shiftKey&&e.key==='I'))e.preventDefault();
+  });
+  window.addEventListener('beforeunload',e=>{
+    if(started&&!done){frauds++;e.preventDefault();e.returnValue='';}
+  });
+}
+
+function showFraud(){
+  const ov=document.getElementById('fraud-overlay');
+  ov.classList.add('show');
+  let n=5;
+  document.getElementById('fraud-cd').textContent=`Retour dans ${n}s`;
+  const t=setInterval(()=>{
+    n--;
+    document.getElementById('fraud-cd').textContent=`Retour dans ${n}s`;
+    if(n<=0){clearInterval(t);ov.classList.remove('show');}
+  },1000);
+}
+
+// ════════════════════════════════════════════════
+// SOUMISSION
+// ════════════════════════════════════════════════
+window.confirmSubmit=()=>{
+  const tot=ALL_QS().length, left=tot-Object.keys(reps).length;
+  if(left>0&&!confirm(`${left} question(s) sans réponse. Soumettre quand même ?`)) return;
+  submit('normal');
+};
+
+async function submit(statut){
+  if(done) return;
+  done=true; started=false;
+  clearInterval(timerInt);
+
+  // Score
+  let score=0;
+  ALL_QS().forEach(q=>{if(reps[q.id]!==undefined&&reps[q.id]===q.rep)score+=q.pts;});
+  const s20=Math.round(score/TOTAL_PTS*20*100)/100;
+
+  // Statut final
+  let st=statut;
+  if(frauds>0&&statut==='normal') st=`fraude_${frauds}_sorties`;
+
+  const id=genId();
+  const data={
+    identifiant:id,
+    prenom:eleve.prenom, nom:eleve.nom,
+    classe:eleve.classe, sexe:eleve.sexe,
+    score, scoreOn20:s20,
+    totalPts:TOTAL_PTS,
+    statut:st, fraudCount:frauds,
+    reponses:JSON.stringify(reps),
+    createdAt:window._sts()
+  };
+
+  // Firebase
+  try{
+    await window._add(window._col(window._db,'resultats'),data);
+  }catch(e){
+    // Fallback localStorage
+    const arr=JSON.parse(localStorage.getItem('se_res')||'[]');
+    arr.push({...data,createdAt:new Date().toISOString()});
+    localStorage.setItem('se_res',JSON.stringify(arr));
+  }
+
+  // Page fin
+  document.getElementById('fin-id').textContent=id;
+  document.getElementById('score-val').textContent=s20;
+  document.getElementById('score-sub').textContent=`/ 20  (${score} pts sur ${TOTAL_PTS})`;
+
+  if(st!=='normal'){
+    const box=document.getElementById('score-box');
+    box.style.background='rgba(139,26,26,.18)';
+    box.style.borderColor='rgba(224,85,85,.4)';
+    document.getElementById('score-val').style.color='#e05555';
+    document.getElementById('fin-note').innerHTML=
+      `⚠️ Votre résultat est marqué <strong>${st.replace(/_/g,' ')}</strong>.<br>
+       Votre classement sera pénalisé en conséquence.`;
+  }
+  showPage('fin');
+}
+
+function genId(){
+  const c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  return 'SE-'+[...Array(4)].map(()=>c[Math.floor(Math.random()*c.length)]).join('');
+}
+</script>
+</body>
+</html>
