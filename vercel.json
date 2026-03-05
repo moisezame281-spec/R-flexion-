@@ -1,13 +1,11 @@
 {
   "version": 2,
   "public": true,
-  "headers": [
-    {
-      "source": "/(.*)",
-      "headers": [
-        { "key": "X-Frame-Options", "value": "SAMEORIGIN" },
-        { "key": "X-Content-Type-Options", "value": "nosniff" }
-      ]
-    }
+  "routes": [
+    { "src": "/", "dest": "/index.html" },
+    { "src": "/terminaleS", "dest": "/terminaleS.html" },
+    { "src": "/terminaleS.html", "dest": "/terminaleS.html" },
+    { "src": "/admin", "dest": "/admin.html" },
+    { "src": "/admin.html", "dest": "/admin.html" }
   ]
 }
