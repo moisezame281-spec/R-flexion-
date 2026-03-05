@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>S.E. Corporation — Évaluation Terminale L</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
@@ -14,7 +14,9 @@
 }
 html{scroll-behavior:smooth}
 body{background:var(--ink);color:var(--cream);font-family:'Cormorant Garamond',serif;
-  min-height:100vh;overflow-x:hidden;-webkit-user-select:none;user-select:none}
+  min-height:100vh;min-height:-webkit-fill-available;overflow-x:hidden;
+  -webkit-user-select:none;user-select:none}
+html{height:-webkit-fill-available}
 body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
   background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");opacity:.25}
 
@@ -110,7 +112,9 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
 .divider{height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:1.5rem 0}
 .btn{width:100%;padding:.95rem;border:none;border-radius:3px;cursor:pointer;
   font-family:'Space Mono',monospace;font-size:.72rem;letter-spacing:.22em;
-  text-transform:uppercase;font-weight:700;transition:opacity .18s,transform .1s}
+  text-transform:uppercase;font-weight:700;transition:opacity .18s,transform .1s;
+  -webkit-tap-highlight-color:transparent;touch-action:manipulation;
+  -webkit-appearance:none;appearance:none}
 .btn:hover{opacity:.87}.btn:active{transform:scale(.98)}
 .btn-gold{background:var(--gold);color:var(--ink)}
 .btn-red{background:var(--red);color:#fff}
@@ -345,7 +349,7 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore,collection,addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey:"AIzaSyAhSTl2OR5ztfoIwB2TgIqEaiMjD6TmrcI",
@@ -358,6 +362,8 @@ const firebaseConfig = {
 const app=initializeApp(firebaseConfig);
 const db=getFirestore(app);
 window._db=db;window._col=collection;window._add=addDoc;
+// Make available in non-module scope for iOS
+window.__db=db; window.__col=collection; window.__add=addDoc;
 
 window.QUIZ={duree:30*60,sections:[
   {badge:"LIMITES — PARTIE 1",titre:"Calcul de limites en 0⁺",qs:[
@@ -446,7 +452,10 @@ function startTimer(){
 }
 
 function antiCheat(){
+  // iOS Safari compatible fraud detection
   document.addEventListener('visibilitychange',()=>{if(!started||done)return;if(document.hidden){frauds++;showFraud();}});
+  document.addEventListener('pagehide',()=>{if(started&&!done){frauds++;}});
+  window.addEventListener('blur',()=>{if(started&&!done){frauds++;showFraud();}});
   document.addEventListener('contextmenu',e=>{if(started&&!done)e.preventDefault();});
   document.addEventListener('keydown',e=>{
     if(!started||done)return;
@@ -463,8 +472,11 @@ function showFraud(){
 }
 
 window.confirmSubmit=()=>{
+  if(done) return; // prevent double tap on iOS
   const tot=ALL_QS().length,left=tot-Object.keys(reps).length;
-  if(left>0&&!confirm(`${left} question(s) sans réponse. Soumettre quand même ?`))return;
+  if(left>0){
+    if(!confirm(`${left} question(s) sans réponse. Soumettre quand même ?`)) return;
+  }
   submit('normal');
 };
 
@@ -477,20 +489,21 @@ async function submit(statut){
   const data={identifiant:id,prenom:eleve.prenom,nom:eleve.nom,classe:eleve.classe,sexe:eleve.sexe,
     score,scoreOn20:s20,totalPts:TOTAL_PTS,statut:st,fraudCount:frauds,
     reponses:JSON.stringify(reps),createdAt: new Date().toISOString()};
-  try{
-    console.log('Tentative Firebase...',data);
-    await window._add(window._col(window._db,'resultats'),data);
-    console.log('Firebase OK !');
-  } catch(e){
-    console.error('Firebase erreur:',e.message);
-    // Fallback: sauvegarde locale
+  // Compatible iOS Safari
+  const saveData = async () => {
     try {
-      const arr=JSON.parse(localStorage.getItem('se_res')||'[]');
-      arr.push({...data,createdAt:new Date().toISOString()});
-      localStorage.setItem('se_res',JSON.stringify(arr));
-      console.log('Sauvegarde locale OK');
-    } catch(e2){ console.error('Erreur locale:',e2); }
-  }
+      await addDoc(collection(db,'resultats'), data);
+      console.log('Firebase OK');
+    } catch(e) {
+      console.warn('Firebase fallback:', e.message);
+      try {
+        const arr = JSON.parse(localStorage.getItem('se_res')||'[]');
+        arr.push({...data});
+        localStorage.setItem('se_res', JSON.stringify(arr));
+      } catch(e2){}
+    }
+  };
+  saveData();
   document.getElementById('fin-id').textContent=id;
   document.getElementById('score-val').textContent=s20;
   document.getElementById('score-sub').textContent=`/ 20  (${score} pts sur ${TOTAL_PTS})`;
