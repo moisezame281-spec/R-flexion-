@@ -254,9 +254,9 @@ tbody td.mono{font-family:'Space Mono',monospace;font-size:.75rem;letter-spacing
     <div class="field">
       <label>Mot de passe</label>
       <input type="password" id="pwd-input" placeholder="••••••••"
-             onkeydown="if(event.key==='Enter')doLogin()">
+             onkeydown="if(event.key==='Enter' && window.doLogin) window.doLogin()">
     </div>
-    <button class="btn btn-gold" onclick="doLogin()">Accéder au tableau de bord →</button>
+    <button class="btn btn-gold" onclick="if(window.doLogin) window.doLogin()">Accéder au tableau de bord →</button>
     <div class="login-err" id="login-err">Mot de passe incorrect.</div>
   </div>
 </div>
@@ -278,7 +278,7 @@ tbody td.mono{font-family:'Space Mono',monospace;font-size:.75rem;letter-spacing
     <div class="adm-header-right">
       <div class="live-dot">Temps réel</div>
       <button class="btn btn-gold btn-sm" onclick="refreshData()">↻ Actualiser</button>
-      <button class="btn btn-sm" style="background:rgba(255,255,255,.06);color:var(--grey)" onclick="logout()">Déconnexion</button>
+      <button class="btn btn-sm" style="background:rgba(255,255,255,.06);color:var(--grey)" onclick="if(window.logout) window.logout()">Déconnexion</button>
     </div>
   </div>
 
@@ -386,6 +386,18 @@ tbody td.mono{font-family:'Space Mono',monospace;font-size:.75rem;letter-spacing
 
 </div><!-- fin pg-admin -->
 
+<!-- WRAPPERS GLOBAUX (avant le module) -->
+<script>
+function doLogin() {
+  if (window._doLogin) window._doLogin();
+  else setTimeout(doLogin, 100);
+}
+function logout() {
+  if (window._logout) window._logout();
+  else setTimeout(logout, 100);
+}
+</script>
+
 <!-- ═══════════════════════════════════════════════════ -->
 <!-- FIREBASE + LOGIQUE                                 -->
 <!-- ═══════════════════════════════════════════════════ -->
@@ -419,7 +431,7 @@ let sortAsc      = false;
 let unsubscribe  = null;
 
 // ═══ LOGIN ═══
-window.doLogin = () => {
+window._doLogin = () => {
   const pwd = document.getElementById('pwd-input').value;
   if (pwd === ADMIN_PWD) {
     document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
@@ -432,7 +444,7 @@ window.doLogin = () => {
   }
 };
 
-window.logout = () => {
+window._logout = () => {
   if (unsubscribe) unsubscribe();
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById('pg-login').classList.add('active');
