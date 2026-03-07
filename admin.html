@@ -509,9 +509,7 @@ window.toggleArchives = () => {
 // ═══ CONFIRMER ARCHIVAGE ═══
 window.confirmArchiveEval = () => {
   const n = allData.length;
-  if (!confirm('Archiver ' + n + ' résultat(s) de l'évaluation en cours ?
-
-Ils resteront accessibles dans les archives.')) return;
+  if (!confirm('Archiver ' + n + ' résultat(s) ?\n\nIls resteront accessibles dans les archives.')) return;
   archiveCurrentEval();
 };
 
@@ -534,7 +532,7 @@ async function archiveCurrentEval() {
     showNotif('✓ ' + toArchive.length + ' résultats archivés avec succès !');
   } catch(e) {
     console.error(e);
-    showNotif('❌ Erreur lors de l'archivage');
+    showNotif('❌ Erreur archivage');
   }
 }
 
