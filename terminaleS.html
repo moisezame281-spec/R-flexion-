@@ -511,7 +511,17 @@ window.QUIZ={duree:30*60,sections:[
   }
 ]}
 
-let eleve={},reps={},frauds=0,started=false,done=false,timerInt=null,tLeft=0;
+const EVAL_EXPIRY = new Date('2026-03-15T23:59:59');
+(function checkExpiry(){
+  if(new Date() > EVAL_EXPIRY){
+    document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:#0f0e0a;color:#f5f0e8;font-family:serif;text-align:center;padding:2rem"><div><div style="font-size:3rem;margin-bottom:1rem">🔒</div><h1 style="color:#c9a84c;font-size:1.8rem;margin-bottom:1rem">Évaluation terminée</h1><p style="color:#aaa;font-size:1.1rem">Cette évaluation est clôturée.</p></div></div>';
+    throw new Error('EXPIRED');
+  }
+})();
+const _savedFrauds = parseInt(sessionStorage.getItem('se_frauds')||'0');
+const _wasStarted  = sessionStorage.getItem('se_started')==='1';
+let eleve={},reps={},frauds=_savedFrauds,started=false,done=false,timerInt=null,tLeft=0;
+if(_wasStarted){ frauds++; sessionStorage.setItem('se_frauds', frauds); }
 const TOTAL_PTS=QUIZ.sections.flatMap(s=>s.qs).reduce((a,q)=>a+q.pts,0);
 const ALL_QS=()=>QUIZ.sections.flatMap(s=>s.qs);
 
