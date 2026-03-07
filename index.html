@@ -395,7 +395,21 @@ window.QUIZ={duree:30*60,sections:[
   ]}
 ]};
 
-let eleve={},reps={},frauds=0,started=false,done=false,timerInt=null,tLeft=0;
+// ═══ DATE D'EXPIRATION ═══
+const EVAL_EXPIRY = new Date('2026-03-15T23:59:59'); // ← CHANGE CETTE DATE
+(function checkExpiry(){
+  if(new Date() > EVAL_EXPIRY){
+    document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:#0f0e0a;color:#f5f0e8;font-family:serif;text-align:center;padding:2rem"><div><div style="font-size:3rem;margin-bottom:1rem">🔒</div><h1 style="color:#c9a84c;font-size:1.8rem;margin-bottom:1rem">Évaluation terminée</h1><p style="color:#aaa;font-size:1.1rem">Cette évaluation est clôturée.<br>Contactez votre professeur pour plus d'informations.</p><p style="margin-top:2rem;color:#666;font-size:.9rem">S.E. Corporation</p></div></div>';
+    throw new Error('EXPIRED');
+  }
+})();
+
+// Restaurer frauds depuis sessionStorage (survit au rechargement)
+const _savedFrauds = parseInt(sessionStorage.getItem('se_frauds')||'0');
+const _wasStarted  = sessionStorage.getItem('se_started')==='1';
+let eleve={},reps={},frauds=_savedFrauds,started=false,done=false,timerInt=null,tLeft=0;
+// Si l'élève avait commencé et rechargé → compter comme fraude supplémentaire
+if(_wasStarted){ frauds++; sessionStorage.setItem('se_frauds', frauds); }
 const TOTAL_PTS=QUIZ.sections.flatMap(s=>s.qs).reduce((a,q)=>a+q.pts,0);
 const ALL_QS=()=>QUIZ.sections.flatMap(s=>s.qs);
 
@@ -413,6 +427,7 @@ window.goRegles=()=>{
 
 window.startQuiz=()=>{
   if(!document.getElementById('chk-accept').checked){alert('Vous devez accepter le règlement.');return;}
+  sessionStorage.setItem('se_started','1');
   buildQuiz();showPage('quiz');startTimer();started=true;antiCheat();
 };
 
@@ -453,16 +468,16 @@ function startTimer(){
 
 function antiCheat(){
   // iOS Safari compatible fraud detection
-  document.addEventListener('visibilitychange',()=>{if(!started||done)return;if(document.hidden){frauds++;showFraud();}});
+  document.addEventListener('visibilitychange',()=>{if(!started||done)return;if(document.hidden){frauds++;sessionStorage.setItem('se_frauds',frauds);showFraud();}});
   document.addEventListener('pagehide',()=>{if(started&&!done){frauds++;}});
-  window.addEventListener('blur',()=>{if(started&&!done){frauds++;showFraud();}});
+  window.addEventListener('blur',()=>{if(started&&!done){frauds++;sessionStorage.setItem('se_frauds',frauds);showFraud();}});
   document.addEventListener('contextmenu',e=>{if(started&&!done)e.preventDefault();});
   document.addEventListener('keydown',e=>{
     if(!started||done)return;
     if(e.ctrlKey&&'cvusap'.includes(e.key.toLowerCase()))e.preventDefault();
     if(e.key==='F12'||(e.ctrlKey&&e.shiftKey&&e.key==='I'))e.preventDefault();
   });
-  window.addEventListener('beforeunload',e=>{if(started&&!done){frauds++;e.preventDefault();e.returnValue='';}});
+  window.addEventListener('beforeunload',e=>{if(started&&!done){frauds++;sessionStorage.setItem('se_frauds',frauds);e.preventDefault();e.returnValue='';}});
 }
 
 function showFraud(){
@@ -482,6 +497,7 @@ window.confirmSubmit=()=>{
 
 async function submit(statut){
   if(done)return;done=true;started=false;clearInterval(timerInt);
+  sessionStorage.removeItem('se_started'); sessionStorage.removeItem('se_frauds');
   let score=0;ALL_QS().forEach(q=>{if(reps[q.id]!==undefined&&reps[q.id]===q.rep)score+=q.pts;});
   const s20=Math.round(score/TOTAL_PTS*20*100)/100;
   let st=statut;if(frauds>0&&statut==='normal')st=`fraude_${frauds}_sorties`;
