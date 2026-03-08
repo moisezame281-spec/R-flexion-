@@ -511,10 +511,15 @@ window.QUIZ={duree:30*60,sections:[
   }
 ]}
 
-const EVAL_EXPIRY = new Date('2026-03-15T23:59:59');
 (function checkExpiry(){
-  if(new Date() > EVAL_EXPIRY){
-    document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:#0f0e0a;color:#f5f0e8;font-family:serif;text-align:center;padding:2rem"><div><div style="font-size:3rem;margin-bottom:1rem">🔒</div><h1 style="color:#c9a84c;font-size:1.8rem;margin-bottom:1rem">Évaluation terminée</h1><p style="color:#aaa;font-size:1.1rem">Cette évaluation est clôturée.</p></div></div>';
+  const now = new Date();
+  const day = now.getDay();
+  const h = now.getHours(), m = now.getMinutes();
+  const isSaturday = day === 6;
+  const afterCutoff = h > 20 || (h === 20 && m >= 45);
+  const expired = !isSaturday || (isSaturday && afterCutoff);
+  if(expired){
+    document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:#0f0e0a;color:#f5f0e8;font-family:serif;text-align:center;padding:2rem"><div><div style="font-size:3rem;margin-bottom:1rem">🔒</div><h1 style="color:#c9a84c;font-size:1.8rem;margin-bottom:1rem">Évaluation clôturée</h1><p style="color:#aaa;font-size:1.1rem">Les évaluations se déroulent<br><strong style=\'color:#c9a84c\'>chaque samedi jusqu\'à 20h45</strong>.<br>Revenez samedi prochain !</p><p style="margin-top:2rem;color:#666;font-size:.9rem">S.E. Corporation</p></div></div>';
     throw new Error('EXPIRED');
   }
 })();
