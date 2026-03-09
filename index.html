@@ -228,6 +228,13 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
 </head>
 <body>
 
+<!-- AUTH OVERLAY -->
+<div id="auth-overlay" style="display:none;position:fixed;inset:0;z-index:99999;background:#0f0e0a;justify-content:center;align-items:center;flex-direction:column;gap:1.2rem">
+  <div style="width:48px;height:48px;border:3px solid rgba(42,184,200,.3);border-top-color:#2ab8c8;border-radius:50%;animation:spin 1s linear infinite"></div>
+  <p id="auth-msg" style="color:#f5f0e8;font-family:serif;font-size:1.1rem;text-align:center;padding:0 2rem">Connexion en cours…</p>
+  <p style="color:#666;font-size:.82rem;font-family:monospace">S.E. Corporation — Accès sécurisé</p>
+</div>
+
 <div id="fraud-overlay">
   <div class="fraud-title">⚠️ Sortie détectée !</div>
   <div class="fraud-body">
@@ -349,7 +356,8 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, collection, addDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey:"AIzaSyAhSTl2OR5ztfoIwB2TgIqEaiMjD6TmrcI",
@@ -361,38 +369,143 @@ const firebaseConfig = {
 };
 const app=initializeApp(firebaseConfig);
 const db=getFirestore(app);
+const auth=getAuth(app);
+const provider=new GoogleAuthProvider();
 window._db=db;window._col=collection;window._add=addDoc;
-// Make available in non-module scope for iOS
 window.__db=db; window.__col=collection; window.__add=addDoc;
 
+// ── ÉCRAN DE CHARGEMENT AUTH ──
+const authOverlay = document.getElementById('auth-overlay');
+const authMsg = document.getElementById('auth-msg');
+
+// Obtenir le lundi de la semaine courante (pour délimiter "cette semaine")
+function getLundiSemaine(){
+  const d=new Date();
+  const day=d.getDay()||7; // lundi=1, dimanche=7
+  d.setHours(0,0,0,0);
+  d.setDate(d.getDate()-(day-1));
+  return d.toISOString();
+}
+
+async function verifierDoublure(uid){
+  const lundi=getLundiSemaine();
+  const q=query(collection(db,'resultats'),where('uid','==',uid),where('createdAt','>=',lundi));
+  const snap=await getDocs(q);
+  return !snap.empty;
+}
+
+async function lancerAuth(){
+  authOverlay.style.display='flex';
+  authMsg.textContent='Vérification en cours…';
+  try {
+    const result=await signInWithPopup(auth,provider);
+    const uid=result.user.uid;
+    window._currentUid=uid;
+    authMsg.textContent='Vérification de votre participation…';
+    const dejaCompose=await verifierDoublure(uid);
+    if(dejaCompose){
+      authOverlay.innerHTML=`<div style="text-align:center;padding:2rem">
+        <div style="font-size:3rem;margin-bottom:1rem">🔒</div>
+        <h2 style="color:#c9a84c;font-family:serif;font-size:1.6rem;margin-bottom:1rem">Déjà participé</h2>
+        <p style="color:#aaa;font-size:1.05rem;line-height:1.7">Vous avez déjà composé cette évaluation<br>cette semaine.<br><br><strong style="color:#f5f0e8">Une seule participation par semaine est autorisée.</strong></p>
+        <p style="margin-top:2rem;color:#666;font-size:.9rem">S.E. Corporation</p>
+      </div>`;
+      return;
+    }
+    // Auth OK, pas de doublure → masquer overlay
+    authOverlay.style.display='none';
+  } catch(e){
+    authMsg.textContent='Connexion requise pour accéder à l\'évaluation.';
+    setTimeout(lancerAuth, 2000);
+  }
+}
+
+// Lancer auth dès le chargement
+lancerAuth();
+
 window.QUIZ={duree:30*60,sections:[
-  {badge:"LIMITES — PARTIE 1",titre:"Calcul de limites en 0⁺",qs:[
-    {id:"L1",pts:1,txt:"Calculer :\n\nlim(x→0⁺)  x · ln(x²)",opts:["0","+ ∞","− 1","− ∞"],rep:0},
-    {id:"L2",pts:1,txt:"Calculer :\n\nlim(x→0⁺)  ln(x) / x",opts:["0","1","− ∞","Aucune de ces réponses"],rep:2},
-    {id:"L3",pts:1,txt:"Calculer :\n\nlim(x→0⁺)  ln(1 + x) / x",opts:["0","1","+ ∞","e"],rep:1},
+  {badge:"EXERCICE 1",titre:"Simplification d'expressions — a, b, c réels positifs",qs:[
+    {id:"A1",pts:1,
+     txt:"Simplifier :\n\nA = ln(a/b) + ln(b/c)",
+     opts:["ln(a/c)","ln(a·b/c)","ln(a) − ln(c²)","ln(b/ac)"],rep:0},
+    {id:"A2",pts:1,
+     txt:"Simplifier :\n\nB = ln(a/b) − ln(c/b) − ln(a/c)",
+     opts:["ln(a/c)","2·ln(a/b)","0","ln(c/b)"],rep:2},
+    {id:"A3",pts:1,
+     txt:"Simplifier :\n\nC = ln(a²) + ln(b/a)",
+     opts:["ln(a²b)","ln(ab)","2·ln(ab)","ln(a/b)"],rep:1},
+    {id:"A4",pts:1,
+     txt:"Simplifier :\n\nD = ln(ab) + ln(b/a)",
+     opts:["ln(b²)","2·ln(b)","ln(a²b²)","Les deux premières réponses sont correctes"],rep:3},
   ]},
-  {badge:"LIMITES — PARTIE 2",titre:"Calcul de limites en +∞",qs:[
-    {id:"L4",pts:1,txt:"Calculer :\n\nlim(x→+∞)  ln(2x + 3) / ln(x)",opts:["2","ln 2","1","+ ∞"],rep:2},
-    {id:"L5",pts:1,txt:"Calculer :\n\nlim(x→+∞)  x · ln(1/x)",opts:["0","+ ∞","1","− ∞"],rep:3},
-    {id:"L6",pts:1,txt:"Calculer :\n\nlim(x→+∞)  x · ln(x) − (ln x)²",opts:["0","− ∞","1","+ ∞"],rep:3},
+  {badge:"PROBLÈME — PARTIE 1",titre:"f(x) = (ln x)² − ln x : limites et asymptotes",qs:[
+    {id:"P1",pts:1,
+     txt:"Soit f(x) = (ln x)² − ln x sur ]0 ; +∞[\n\nCalculer  lim(x→0⁺)  f(x) :",
+     opts:["0","− ∞","+ ∞","1"],rep:2},
+    {id:"P2",pts:1,
+     txt:"Soit f(x) = (ln x)² − ln x sur ]0 ; +∞[\n\nCalculer  lim(x→+∞)  f(x) :",
+     opts:["0","+ ∞","− ∞","1"],rep:1},
+    {id:"P3",pts:1,
+     txt:"D'après les limites de f en 0⁺ et en +∞,\nquelle(s) asymptote(s) possède la courbe (C) ?",
+     opts:["Asymptote horizontale y = 0","Asymptote verticale x = 0 uniquement","Asymptote horizontale y = 1","Asymptote oblique y = x"],rep:1},
   ]},
-  {badge:"ÉQUATIONS",titre:"Résolution d'équations logarithmiques",qs:[
-    {id:"E1",pts:1,txt:"Résoudre dans ℝ :\n\nln(5 − 2x) = 0",opts:["x = 3/2","x = 2","x = 4","Pas de solution"],rep:1},
-    {id:"E2",pts:1.5,txt:"Résoudre dans ℝ :\n\nln(x² − 2x + 2) = 1",opts:["S = { 1 + √(e−1)  ;  1 − √(e−1) }","S = { 1 + √e  ;  1 − √e }","S = { 0  ;  2 }","Pas de solution réelle"],rep:0},
-    {id:"E3",pts:1.5,txt:"Résoudre dans ℝ :\n\nln(2x − 3) + 2 ln(x + 1) = ln(x − 1)",opts:["x = 0,5","x ≈ 1,54  (unique solution valide)","Pas de solution dans le domaine","x = −1"],rep:1},
+  {badge:"PROBLÈME — PARTIE 2",titre:"f(x) = (ln x)² − ln x : dérivée et variations",qs:[
+    {id:"P4",pts:1,
+     txt:"Soit f(x) = (ln x)² − ln x\n\nCalculer f′(x) :",
+     opts:["f′(x) = (2·ln x − 1) / x","f′(x) = 2·ln x / x","f′(x) = (ln x − 1) / x","f′(x) = 2·ln x − 1"],rep:0},
+    {id:"P5",pts:1,
+     txt:"f′(x) = (2·ln x − 1) / x\n\nf′(x) = 0 pour quelle valeur de x ?",
+     opts:["x = e","x = 1","x = √e","x = e²"],rep:2},
+    {id:"P6",pts:1,
+     txt:"Quel est le sens de variation de f sur ]0 ; √e[ ?",
+     opts:["f est croissante sur ]0 ; √e[","f est décroissante sur ]0 ; √e[","f est constante sur ]0 ; √e[","On ne peut pas conclure"],rep:1},
+    {id:"P7",pts:1,
+     txt:"Quel est le minimum de f sur ]0 ; +∞[ ?",
+     opts:["f(√e) = 0","f(√e) = −1/4","f(1) = 0","f(e) = 0"],rep:1},
   ]},
-  {badge:"SYSTÈMES",titre:"Systèmes d'équations logarithmiques",qs:[
-    {id:"S1",pts:1.5,txt:"Résoudre le système :\n{ 2 ln x + ln y = 1\n{ 5 ln x + 3 ln y = 4",opts:["(x ; y) = (1/e ; e³)","(x ; y) = (e ; e⁻³)","(x ; y) = (e⁻¹ ; e²)","(x ; y) = (e ; 1/e)"],rep:0},
-    {id:"S2",pts:1.5,txt:"Le système suivant admet-il des solutions réelles ?\n{ x² + y² = 29\n{ ln x + ln y = 10",opts:["Oui : (5 ; 2)","Oui : (3 ; 4)","Non — aucune solution réelle","Oui : (e⁵ ; e⁵)"],rep:2},
-    {id:"S3",pts:1.5,txt:"Résoudre le système :\n{ ln x · ln y = −15\n{ ln(xy) = −2",opts:["(e³ ; e⁻⁵) et (e⁻⁵ ; e³)","(e⁵ ; e⁻³) uniquement","(e³ ; e⁻⁵) uniquement","(e³ ; e³)"],rep:0},
+  {badge:"PROBLÈME — PARTIE 3",titre:"f(x) = (ln x)² − ln x : tangente et équation",qs:[
+    {id:"P8",pts:1,
+     txt:"Calculer f(1) :",
+     opts:["f(1) = 1","f(1) = −1","f(1) = 0","f(1) = 2"],rep:2},
+    {id:"P9",pts:1,
+     txt:"Calculer f′(1) :",
+     opts:["f′(1) = 0","f′(1) = 1","f′(1) = −1","f′(1) = 2"],rep:2},
+    {id:"P10",pts:1,
+     txt:"Quelle est l'équation de la tangente (T) à (C) au point d'abscisse 1 ?",
+     opts:["y = x − 1","y = −x + 1","y = x","y = −x"],rep:1},
+    {id:"P11",pts:1.5,
+     txt:"Résoudre dans ℝ :\n\n(ln x)² − 2·ln x = 5/4\n\n(Poser t = ln x)",
+     opts:["x = e^(5/2)  ou  x = e^(−1/2)","x = e^(5/4)  ou  x = e^(−1)","x = e^5  ou  x = e^(−1)","Pas de solution réelle"],rep:0},
+    {id:"P12",pts:1.5,
+     txt:"Pour l'équation (ln x)² − 2·ln x = 5/4\n\nSi t = ln x, quel discriminant obtient-on ?",
+     opts:["Δ = 4","Δ = 9","Δ = 6","Δ = 5"],rep:1},
   ]},
-  {badge:"ÉTUDE DE FONCTION",titre:"h(x) = −x + 1 − 2 ln x sur ]0 ; +∞[",qs:[
-    {id:"H1",pts:1,txt:"Soit h définie sur ]0 ; +∞[ par  h(x) = −x + 1 − 2 ln x\n\nCalculer h′(x) :",opts:["h′(x) = −1 − 2/x","h′(x) = 1 + 2/x","h′(x) = −1 + 2/x","h′(x) = −2/x"],rep:0},
-    {id:"H2",pts:1,txt:"Pour h(x) = −x + 1 − 2 ln x sur ]0 ; +∞[\n\nQuel est le signe de h′(x) sur ]0 ; +∞[ ?",opts:["h′(x) > 0 pour tout x > 0 → h croissante","h′(x) < 0 pour tout x > 0 → h décroissante","h′(x) change de signe en x = 1","h′(x) change de signe en x = 2"],rep:1},
-    {id:"H3",pts:1,txt:"Pour h(x) = −x + 1 − 2 ln x\n\nCalculer :   lim(x→0⁺)  h(x)",opts:["0","1","− ∞","+ ∞"],rep:3},
-    {id:"H4",pts:1,txt:"Pour h(x) = −x + 1 − 2 ln x\n\nCalculer :   lim(x→+∞)  h(x)",opts:["+ ∞","0","1","− ∞"],rep:3},
-    {id:"H5",pts:1,txt:"Pour h(x) = −x + 1 − 2 ln x sur ]0 ; +∞[\n\nL'équation h(x) = 0 — quelle est la solution ?",opts:["x = 1  est l'unique solution","x = e  est l'unique solution","h(x) ≠ 0 sur ]0 ; +∞[  — pas de solution","Deux solutions : x = 1 et x = 2"],rep:0},
-  ]}
+  {badge:"PROBLÈME — PARTIE 4",titre:"f(x) = (ln x)² − ln x : signe et lecture graphique",qs:[
+    {id:"P13",pts:1,
+     txt:"Factoriser f(x) = (ln x)² − ln x :\n\nf(x) = ln x · ( ? )",
+     opts:["ln x · (ln x + 1)","ln x · (ln x − 1)","ln x · (1 − ln x)","ln x · (2 ln x − 1)"],rep:1},
+    {id:"P14",pts:1,
+     txt:"Sur quel intervalle f(x) < 0 ?",
+     opts:["]0 ; 1[","]1 ; e[","]0 ; e[","]e ; +∞["],rep:1},
+    {id:"P15",pts:1,
+     txt:"f(e) = ?",
+     opts:["0","1","e","e − 1"],rep:0},
+    {id:"P16",pts:1,
+     txt:"Calculer f(1/e) :",
+     opts:["0","2","1/e","1 + 1/e"],rep:1},
+    {id:"P17",pts:1,
+     txt:"La courbe (C) coupe l'axe des abscisses en :",
+     opts:["x = 1 uniquement","x = e uniquement","x = 1  et  x = e","x = 0  et  x = 1"],rep:2},
+    {id:"P18",pts:1,
+     txt:"Sur ]0 ; 1[, f′(x) est :",
+     opts:["positif car ln x > 1/2","négatif car ln x < 0 < 1/2","nul en tout point","positif puis négatif"],rep:1},
+    {id:"P19",pts:1,
+     txt:"Laquelle de ces affirmations est vraie ?\n\nf(x) = (ln x)² − ln x",
+     opts:["f est paire","f(1/x) = f(x) pour tout x > 0","f(x²) = 4·f(x) pour tout x > 0","f(√x) = f(x)/4 pour tout x > 0"],rep:1},
+    {id:"P20",pts:1,
+     txt:"Quel est le signe de f′(x) sur ]√e ; +∞[ ?",
+     opts:["f′(x) < 0","f′(x) = 0","f′(x) > 0","f′(x) change de signe"],rep:2},
+  ]},
 ]};
 
 // ═══ DATE D'EXPIRATION ═══
@@ -510,7 +623,7 @@ async function submit(statut){
   const s20=Math.round(score/TOTAL_PTS*20*100)/100;
   let st=statut;if(frauds>0&&statut==='normal')st=`fraude_${frauds}_sorties`;
   const id=genId();
-  const data={identifiant:id,prenom:eleve.prenom,nom:eleve.nom,classe:eleve.classe,sexe:eleve.sexe,
+  const data={uid:window._currentUid||null,identifiant:id,prenom:eleve.prenom,nom:eleve.nom,classe:eleve.classe,sexe:eleve.sexe,
     score,scoreOn20:s20,totalPts:TOTAL_PTS,statut:st,fraudCount:frauds,
     reponses:JSON.stringify(reps),createdAt: new Date().toISOString()};
   // Compatible iOS Safari
