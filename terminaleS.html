@@ -228,6 +228,13 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
 </head>
 <body>
 
+<!-- AUTH OVERLAY -->
+<div id="auth-overlay" style="display:none;position:fixed;inset:0;z-index:99999;background:#0f0e0a;justify-content:center;align-items:center;flex-direction:column;gap:1.2rem">
+  <div style="width:48px;height:48px;border:3px solid rgba(42,184,200,.3);border-top-color:#2ab8c8;border-radius:50%;animation:spin 1s linear infinite"></div>
+  <p id="auth-msg" style="color:#f5f0e8;font-family:serif;font-size:1.1rem;text-align:center;padding:0 2rem">Connexion en cours…</p>
+  <p style="color:#666;font-size:.82rem;font-family:monospace">S.E. Corporation — Accès sécurisé</p>
+</div>
+
 <div id="fraud-overlay">
   <div class="fraud-title">⚠️ Sortie détectée !</div>
   <div class="fraud-body">
@@ -349,7 +356,8 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, collection, addDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey:"AIzaSyAhSTl2OR5ztfoIwB2TgIqEaiMjD6TmrcI",
@@ -361,154 +369,127 @@ const firebaseConfig = {
 };
 const app=initializeApp(firebaseConfig);
 const db=getFirestore(app);
-window._db=db;window._col=collection;window._add=addDoc;
-// Make available in non-module scope for iOS
-window.__db=db; window.__col=collection; window.__add=addDoc;
+const auth=getAuth(app);
+const provider=new GoogleAuthProvider();
+
+const authOverlay=document.getElementById('auth-overlay');
+const authMsg=document.getElementById('auth-msg');
+
+function getLundiSemaine(){
+  const d=new Date();const day=d.getDay()||7;
+  d.setHours(0,0,0,0);d.setDate(d.getDate()-(day-1));
+  return d.toISOString();
+}
+async function verifierDoublure(uid){
+  const lundi=getLundiSemaine();
+  const q=query(collection(db,'resultats'),where('uid','==',uid),where('createdAt','>=',lundi));
+  const snap=await getDocs(q);return !snap.empty;
+}
+async function lancerAuth(){
+  authOverlay.style.display='flex';authMsg.textContent='Vérification en cours…';
+  try{
+    const result=await signInWithPopup(auth,provider);
+    const uid=result.user.uid;window._currentUid=uid;
+    authMsg.textContent='Vérification de votre participation…';
+    const dejaCompose=await verifierDoublure(uid);
+    if(dejaCompose){
+      authOverlay.innerHTML=`<div style="text-align:center;padding:2rem">
+        <div style="font-size:3rem;margin-bottom:1rem">🔒</div>
+        <h2 style="color:#c9a84c;font-family:serif;font-size:1.6rem;margin-bottom:1rem">Déjà participé</h2>
+        <p style="color:#aaa;font-size:1.05rem;line-height:1.7">Vous avez déjà composé cette évaluation<br>cette semaine.<br><br><strong style="color:#f5f0e8">Une seule participation par semaine est autorisée.</strong></p>
+        <p style="margin-top:2rem;color:#666;font-size:.9rem">S.E. Corporation</p>
+      </div>`;return;
+    }
+    authOverlay.style.display='none';
+  }catch(e){authMsg.textContent='Connexion requise pour accéder à l\'évaluation.';setTimeout(lancerAuth,2000);}
+}
+lancerAuth();
 
 window.QUIZ={duree:30*60,sections:[
   {
-    badge:"EXERCICE 14 — PARTIE 1",
-    titre:"Décomposition en éléments simples",
+    badge:"EXERCICE 2 — 1ère PARTIE",
+    titre:"h(x) = xeˣ + eˣ − 1 : limites et variations",
     qs:[
-      {id:"E14A",pts:1.5,
-       txt:"Soit f(x) = (3x+1)/(2x+1)² définie sur ℝ\\{-1/2}\n\nOn cherche a et b tels que :\nf(x) = a/(2x+1) + b/(2x+1)²\n\nQuelles sont les valeurs de a et b ?",
-       opts:["a = 3/2  ;  b = −1/2","a = 1/2  ;  b = 3/2","a = 3  ;  b = −1","a = 1  ;  b = 1"],rep:0},
-      {id:"E14B",pts:2,
-       txt:"Avec a = 3/2 et b = −1/2\n\nDéterminer la primitive F de f sur ]−0,5 ; +∞[\ntelle que F(0) = 1",
-       opts:[
-         "F(x) = (3/4)·ln(2x+1) + 1/(4(2x+1)) + 3/4",
-         "F(x) = (3/2)·ln(2x+1) − 1/(2x+1) + 1",
-         "F(x) = (3/4)·ln(2x+1) − 1/(4(2x+1)) + 5/4",
-         "F(x) = ln(2x+1) + 1/(2x+1) + 1"
-       ],rep:0},
+      {id:"H1A",pts:1,
+       txt:"Soit h définie sur ℝ par h(x) = xeˣ + eˣ − 1\n\nCalculer  lim(x→+∞) h(x) :",
+       opts:["0","− 1","+ ∞","1"],rep:2},
+      {id:"H1B",pts:1,
+       txt:"Soit h définie sur ℝ par h(x) = xeˣ + eˣ − 1\n\nCalculer  lim(x→−∞) h(x) :",
+       opts:["0","− 1","+ ∞","− ∞"],rep:1},
+      {id:"H1C",pts:1,
+       txt:"Calculer h′(x) pour h(x) = xeˣ + eˣ − 1 :",
+       opts:["h′(x) = eˣ","h′(x) = xeˣ","h′(x) = (x+2)eˣ","h′(x) = (x+1)eˣ − 1"],rep:2},
+      {id:"H1D",pts:1,
+       txt:"h′(x) = (x+2)eˣ\n\nSigne de h′(x) sur ℝ ?",
+       opts:["h′(x) > 0 pour tout x","h′(x) < 0 pour x < −2, h′(x) > 0 pour x > −2","h′(x) > 0 pour x < −2, h′(x) < 0 pour x > −2","h′(x) = 0 pour tout x"],rep:1},
+      {id:"H1E",pts:1,
+       txt:"Calculer h(0) :",
+       opts:["h(0) = 0","h(0) = 1","h(0) = −1","h(0) = 2"],rep:0},
     ]
   },
   {
-    badge:"EXERCICE 4 — I",
-    titre:"Placement financier — Tontine",
+    badge:"EXERCICE 2 — 2ème PARTIE",
+    titre:"g(x) = xeˣ − x + 1 : variations et signe",
     qs:[
-      {id:"F4A",pts:1.5,
-       txt:"MAGNY place 500 000 FCFA dans une tontine à 6% annuels composés.\n\nAprès combien d'années le capital sera-t-il d'au moins 800 000 FCFA ?",
-       opts:["8 ans","9 ans","10 ans","7 ans"],rep:1},
-      {id:"F4B",pts:1,
-       txt:"Le capital après n années est Cₙ = 500 000 × (1,06)ⁿ\n\nQuelle inégalité permet de trouver n ?",
-       opts:[
-         "(1,06)ⁿ ≥ 1,6  soit  n ≥ ln(1,6)/ln(1,06)",
-         "n × 1,06 ≥ 800 000 / 500 000",
-         "(1,06)ⁿ ≤ 1,6",
-         "n ≥ ln(0,6)/ln(1,06)"
-       ],rep:0},
+      {id:"G2A",pts:1,
+       txt:"Soit g(x) = xeˣ − x + 1\n\nMontrer que g′(x) = h(x). Calculer g′(x) :",
+       opts:["g′(x) = eˣ − 1","g′(x) = xeˣ + eˣ − 1  =  h(x)","g′(x) = xeˣ","g′(x) = eˣ + 1"],rep:1},
+      {id:"G2B",pts:1,
+       txt:"g′(x) = h(x) et h admet un minimum en x = −2\n\nSens de variation de g sur ℝ ?",
+       opts:["g croissante sur ℝ","g décroissante puis croissante, minimum en x = −2","g croissante puis décroissante","g constante sur ℝ"],rep:1},
+      {id:"G2C",pts:1,
+       txt:"Calculer g(0) :",
+       opts:["g(0) = 0","g(0) = −1","g(0) = 1","g(0) = 2"],rep:2},
+      {id:"G2D",pts:1,
+       txt:"D'après les variations de g et g(0) = 1 > 0,\nquel est le signe de g(x) sur ℝ ?",
+       opts:["g(x) < 0 pour tout x","g(x) > 0 pour tout x","g(x) change de signe en x = 0","g(x) = 0 pour tout x"],rep:1},
+      {id:"G2E",pts:1,
+       txt:"Vérifier : g(x) − eˣ = (x−1)(eˣ−1)\n\nSur [0;1], que conclure sur g(x) par rapport à eˣ ?",
+       opts:["g(x) ≥ eˣ sur [0;1]","g(x) ≤ eˣ sur [0;1]","g(x) = eˣ sur [0;1]","On ne peut pas conclure"],rep:1},
     ]
   },
   {
-    badge:"EXERCICE 4 — II",
-    titre:"Coût de production & bénéfice",
+    badge:"EXERCICE 2 — 3ème PARTIE",
+    titre:"f(x) = ln(xeˣ − x + 1) : domaine et limites",
     qs:[
-      {id:"F4C",pts:1.5,
-       txt:"C(x) = 20·ln(3x+1) est le coût en milliers de FCFA.\nPrix de vente : 3 000 FCFA par objet.\n\nExprimer le bénéfice B(x) :",
-       opts:[
-         "B(x) = 3x − 20·ln(3x+1)",
-         "B(x) = 3 000x − 20·ln(3x+1)",
-         "B(x) = 20·ln(3x+1) − 3x",
-         "B(x) = 3x + 20·ln(3x+1)"
-       ],rep:0},
-      {id:"F4D",pts:1.5,
-       txt:"B\'(x) = (9x − 57)/(3x+1)\n\nQuel est le nombre minimum d\'objets à vendre\npour réaliser un bénéfice ?",
-       opts:["31 objets","30 objets","35 objets","19 objets"],rep:0},
+      {id:"F3A",pts:1,
+       txt:"f(x) = ln(xeˣ − x + 1) = ln(g(x))\n\nPourquoi f est-elle définie sur ℝ ?",
+       opts:["Car ln est définie sur ℝ","Car g(x) > 0 pour tout x ∈ ℝ","Car xeˣ > 0 pour tout x","Car g est bornée"],rep:1},
+      {id:"F3B",pts:1,
+       txt:"Calculer  lim(x→+∞)  f(x) :",
+       opts:["0","1","+ ∞","− ∞"],rep:2},
+      {id:"F3C",pts:1,
+       txt:"Calculer  lim(x→−∞)  f(x) :",
+       opts:["0","+ ∞","− ∞","1"],rep:0},
+      {id:"F3D",pts:1.5,
+       txt:"f′(x) = h(x) / g(x)\n\nf′(x) = 0 quand :",
+       opts:["g(x) = 0","h(x) = 0, c'est-à-dire x = −2","h(x) = g(x)","f′(x) ≠ 0 pour tout x"],rep:1},
+      {id:"F3E",pts:1,
+       txt:"f′(x) = h(x)/g(x), g(x) > 0 sur ℝ\n\nSens de variation de f sur ]−∞ ; −2[ ?",
+       opts:["f croissante car h(x) > 0","f décroissante car h(x) < 0","f constante","On ne peut pas conclure"],rep:1},
     ]
   },
   {
-    badge:"EXERCICE 5",
-    titre:"Calcul de limites",
+    badge:"EXERCICE 2 — 4ème PARTIE",
+    titre:"Suite (uₙ) définie par u₀ = ln2, uₙ₊₁ = f(uₙ)",
     qs:[
-      {id:"L5A",pts:1,
-       txt:"Calculer :\n\nlim(x→+∞)  x² + 2 − 4·ln(x)",
-       opts:["0","+ ∞","− ∞","4"],rep:1},
-      {id:"L5B",pts:1,
-       txt:"Calculer :\n\nlim(x→+∞)  (5·ln x + 1) / (2·ln x + 3)",
-       opts:["5/3","1","5/2","+ ∞"],rep:2},
-      {id:"L5C",pts:1,
-       txt:"Calculer :\n\nlim(x→+∞)  ln((2x − 7) / (x + 1))",
-       opts:["ln(2)","0","2","+ ∞"],rep:0},
-      {id:"L5D",pts:1,
-       txt:"Calculer :\n\nlim(x→+∞)  (1 − x)·ln(x)",
-       opts:["0","+ ∞","1","− ∞"],rep:3},
-      {id:"L5E",pts:1,
-       txt:"Calculer :\n\nlim(x→0⁺)  1 / (x·ln x)",
-       opts:["0","+ ∞","1","− ∞"],rep:3},
-      {id:"L5F",pts:1,
-       txt:"Calculer :\n\nlim(x→−1⁺)  x/(x+1) − ln(x+1)",
-       opts:["0","+ ∞","1","− ∞"],rep:3},
+      {id:"S4A",pts:1,
+       txt:"On pose u₀ = ln 2 et uₙ₊₁ = f(uₙ)\n\nCalculer u₀ ≈ ?",
+       opts:["u₀ ≈ 0,69","u₀ ≈ 1","u₀ ≈ 0,5","u₀ ≈ 2"],rep:0},
+      {id:"S4B",pts:1,
+       txt:"Pour montrer par récurrence que 0 ≤ uₙ ≤ 1,\nquelle propriété de f utilise-t-on sur [0;1] ?",
+       opts:["f est croissante sur [0;1]","f([0;1]) ⊂ [0;1] car g(x) ∈ [1;e] sur [0;1]","f est décroissante sur [0;1]","f(x) = x sur [0;1]"],rep:1},
+      {id:"S4C",pts:1.5,
+       txt:"Pour montrer que (uₙ) est décroissante,\non montre que uₙ₊₁ − uₙ ≤ 0.\nCela revient à montrer que f(x) ≤ x sur [0;1].\nOr f(x) ≤ eˣ et eˣ ≤ ?\n\nSur [0;1], quelle inégalité permet de conclure ?",
+       opts:["eˣ ≤ x + 1  sur [0;1] donc f(x) ≤ x","eˣ ≤ x  sur [0;1]","ln(x) ≤ x  sur [0;1]","g(x) ≤ x  sur [0;1]"],rep:0},
+      {id:"S4D",pts:1,
+       txt:"(uₙ) est décroissante et minorée par 0.\nQue peut-on conclure ?",
+       opts:["(uₙ) diverge","(uₙ) est convergente","(uₙ) tend vers +∞","(uₙ) est constante"],rep:1},
+      {id:"S4E",pts:1.5,
+       txt:"Si (uₙ) converge vers ℓ, alors f(ℓ) = ℓ\nc'est-à-dire ln(ℓeˡ − ℓ + 1) = ℓ\n\nQuelle est la limite de la suite (uₙ) ?",
+       opts:["ℓ = 1","ℓ = 0","ℓ = ln 2","ℓ = e"],rep:1},
     ]
   },
-  {
-    badge:"EXERCICE 8A",
-    titre:"Étude de g(x) = 1 − x² − ln x",
-    qs:[
-      {id:"G8A",pts:1,
-       txt:"g(x) = 1 − x² − ln x sur ]0 ; +∞[\n\nCalculer g′(x) :",
-       opts:[
-         "g′(x) = −2x − 1/x",
-         "g′(x) = −2x + 1/x",
-         "g′(x) = 2x − 1/x",
-         "g′(x) = −2x"
-       ],rep:0},
-      {id:"G8B",pts:1,
-       txt:"g′(x) = −(2x² + 1)/x\n\nSens de variation de g sur ]0 ; +∞[ ?",
-       opts:[
-         "g est strictement croissante",
-         "g est strictement décroissante",
-         "g est croissante puis décroissante",
-         "g est décroissante puis croissante"
-       ],rep:1},
-      {id:"G8C",pts:1,
-       txt:"Calculer g(1) et déduire le signe de g(x) sur ]0 ; +∞[ :",
-       opts:[
-         "g(1) = 0 ; g > 0 sur ]0;1[  et  g < 0 sur ]1;+∞[",
-         "g(1) = 1 ; g > 0 sur ]0;+∞[",
-         "g(1) = 0 ; g < 0 sur ]0;1[  et  g > 0 sur ]1;+∞[",
-         "g(1) = −1 ; g < 0 sur ]0;+∞["
-       ],rep:0},
-    ]
-  },
-  {
-    badge:"EXERCICE 8B",
-    titre:"f(x) = −x + 3 + ln(x)/x sur ]0 ; +∞[",
-    qs:[
-      {id:"G8D",pts:1,
-       txt:"f(x) = −x + 3 + ln(x)/x\n\nCalculer lim(x→0⁺) f(x) et lim(x→+∞) f(x) :",
-       opts:[
-         "lim(0⁺) = −∞  et  lim(+∞) = −∞",
-         "lim(0⁺) = +∞  et  lim(+∞) = −∞",
-         "lim(0⁺) = 0   et  lim(+∞) = 0",
-         "lim(0⁺) = −∞  et  lim(+∞) = +∞"
-       ],rep:0},
-      {id:"G8E",pts:1,
-       txt:"f(x) − (−x+3) = ln(x)/x → 0 quand x→+∞\n\nQue conclure sur la droite (△) : y = −x + 3 ?",
-       opts:[
-         "(△) est asymptote oblique à (Cf) en +∞",
-         "(△) est asymptote verticale à (Cf)",
-         "(△) est tangente à (Cf) en x = 1",
-         "(△) coupe (Cf) en deux points"
-       ],rep:0},
-      {id:"G8F",pts:1,
-       txt:"f′(x) = −1 + (1 − ln x)/x²\n\nEn quel point A la tangente à (Cf) est-elle parallèle à (△) ?",
-       opts:[
-         "A = (e  ;  −e + 3 + 1/e)",
-         "A = (1  ;  3)",
-         "A = (e²  ;  −e² + 3)",
-         "A = (1/e  ;  3 + e)"
-       ],rep:0},
-      {id:"G8G",pts:1,
-       txt:"f(3) ≈ 0,37  et  f(4) ≈ −0,65\n\nQue conclure sur f(x) = 0 dans [3 ; 4] ?",
-       opts:[
-         "∃ unique solution α ∈ ]3;4[ car f continue et strictement monotone",
-         "Pas de solution car f est décroissante",
-         "Deux solutions dans [3;4]",
-         "On ne peut pas conclure"
-       ],rep:0},
-    ]
-  }
 ]}
 
 (function checkExpiry(){
@@ -617,7 +598,7 @@ async function submit(statut){
   const s20=Math.round(score/TOTAL_PTS*20*100)/100;
   let st=statut;if(frauds>0&&statut==='normal')st=`fraude_${frauds}_sorties`;
   const id=genId();
-  const data={identifiant:id,prenom:eleve.prenom,nom:eleve.nom,classe:eleve.classe,sexe:eleve.sexe,
+  const data={uid:window._currentUid||null,identifiant:id,prenom:eleve.prenom,nom:eleve.nom,classe:eleve.classe,sexe:eleve.sexe,
     score,scoreOn20:s20,totalPts:TOTAL_PTS,statut:st,fraudCount:frauds,
     reponses:JSON.stringify(reps),createdAt: new Date().toISOString()};
   // Compatible iOS Safari
