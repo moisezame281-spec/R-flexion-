@@ -228,7 +228,7 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
 </head>
 <body>
 
-<!-- AUTH OVERLAY -->
+<!-- AUTH OVERLAY (élèves seulement) -->
 <div id="auth-overlay" style="display:none;position:fixed;inset:0;z-index:99999;background:#0f0e0a;justify-content:center;align-items:center;flex-direction:column;gap:1.2rem">
   <div style="width:48px;height:48px;border:3px solid rgba(42,184,200,.3);border-top-color:#2ab8c8;border-radius:50%;animation:spin 1s linear infinite"></div>
   <p id="auth-msg" style="color:#f5f0e8;font-family:serif;font-size:1.1rem;text-align:center;padding:0 2rem">Connexion en cours…</p>
@@ -372,138 +372,94 @@ const db=getFirestore(app);
 const auth=getAuth(app);
 const provider=new GoogleAuthProvider();
 
-const authOverlay=document.getElementById('auth-overlay');
-const authMsg=document.getElementById('auth-msg');
+// ══ MODE ADMIN ══
+const ADMIN_KEY='SE2025';
+const urlParams=new URLSearchParams(window.location.search);
+const isAdmin=urlParams.get('admin')===ADMIN_KEY;
+window._isAdmin=isAdmin;
 
 function getLundiSemaine(){
-  const d=new Date();const day=d.getDay()||7;
-  d.setHours(0,0,0,0);d.setDate(d.getDate()-(day-1));
+  const d=new Date(); const day=d.getDay()||7;
+  d.setHours(0,0,0,0); d.setDate(d.getDate()-(day-1));
   return d.toISOString();
 }
 async function verifierDoublure(uid){
   const lundi=getLundiSemaine();
   const q=query(collection(db,'resultats'),where('uid','==',uid),where('createdAt','>=',lundi));
-  const snap=await getDocs(q);return !snap.empty;
+  const snap=await getDocs(q); return !snap.empty;
 }
-async function lancerAuth(){
-  authOverlay.style.display='flex';authMsg.textContent='Vérification en cours…';
-  try{
-    const result=await signInWithPopup(auth,provider);
-    const uid=result.user.uid;window._currentUid=uid;
-    authMsg.textContent='Vérification de votre participation…';
-    const dejaCompose=await verifierDoublure(uid);
-    if(dejaCompose){
-      authOverlay.innerHTML=`<div style="text-align:center;padding:2rem">
-        <div style="font-size:3rem;margin-bottom:1rem">🔒</div>
-        <h2 style="color:#c9a84c;font-family:serif;font-size:1.6rem;margin-bottom:1rem">Déjà participé</h2>
-        <p style="color:#aaa;font-size:1.05rem;line-height:1.7">Vous avez déjà composé cette évaluation<br>cette semaine.<br><br><strong style="color:#f5f0e8">Une seule participation par semaine est autorisée.</strong></p>
-        <p style="margin-top:2rem;color:#666;font-size:.9rem">S.E. Corporation</p>
-      </div>`;return;
+
+// ══ AUTH GOOGLE pour élèves seulement ══
+if(!isAdmin){
+  const overlay=document.getElementById('auth-overlay');
+  const msg=document.getElementById('auth-msg');
+  overlay.style.display='flex';
+  msg.textContent='Connexion en cours…';
+  (async()=>{
+    try{
+      const result=await signInWithPopup(auth,provider);
+      const uid=result.user.uid;
+      window._currentUid=uid;
+      msg.textContent='Vérification…';
+      const dejaCompose=await verifierDoublure(uid);
+      if(dejaCompose){
+        overlay.innerHTML=`<div style="text-align:center;padding:2rem"><div style="font-size:3rem;margin-bottom:1rem">🔒</div><h2 style="color:#c9a84c;font-family:serif;font-size:1.6rem;margin-bottom:1rem">Déjà participé</h2><p style="color:#aaa;font-size:1.05rem;line-height:1.7">Vous avez déjà composé cette semaine.<br><strong style="color:#f5f0e8">Une seule participation autorisée.</strong></p><p style="margin-top:2rem;color:#666;font-size:.9rem">S.E. Corporation</p></div>`;
+        return;
+      }
+      overlay.style.display='none';
+    }catch(e){
+      msg.textContent='Connexion requise. Rechargez la page.';
     }
-    authOverlay.style.display='none';
-  }catch(e){authMsg.textContent='Connexion requise pour accéder à l\'évaluation.';setTimeout(lancerAuth,2000);}
+  })();
 }
-lancerAuth();
 
 window.QUIZ={duree:30*60,sections:[
-  {
-    badge:"EXERCICE 2 — 1ère PARTIE",
-    titre:"h(x) = xeˣ + eˣ − 1 : limites et variations",
-    qs:[
-      {id:"H1A",pts:1,
-       txt:"Soit h définie sur ℝ par h(x) = xeˣ + eˣ − 1\n\nCalculer  lim(x→+∞) h(x) :",
-       opts:["0","− 1","+ ∞","1"],rep:2},
-      {id:"H1B",pts:1,
-       txt:"Soit h définie sur ℝ par h(x) = xeˣ + eˣ − 1\n\nCalculer  lim(x→−∞) h(x) :",
-       opts:["0","− 1","+ ∞","− ∞"],rep:1},
-      {id:"H1C",pts:1,
-       txt:"Calculer h′(x) pour h(x) = xeˣ + eˣ − 1 :",
-       opts:["h′(x) = eˣ","h′(x) = xeˣ","h′(x) = (x+2)eˣ","h′(x) = (x+1)eˣ − 1"],rep:2},
-      {id:"H1D",pts:1,
-       txt:"h′(x) = (x+2)eˣ\n\nSigne de h′(x) sur ℝ ?",
-       opts:["h′(x) > 0 pour tout x","h′(x) < 0 pour x < −2, h′(x) > 0 pour x > −2","h′(x) > 0 pour x < −2, h′(x) < 0 pour x > −2","h′(x) = 0 pour tout x"],rep:1},
-      {id:"H1E",pts:1,
-       txt:"Calculer h(0) :",
-       opts:["h(0) = 0","h(0) = 1","h(0) = −1","h(0) = 2"],rep:0},
-    ]
-  },
-  {
-    badge:"EXERCICE 2 — 2ème PARTIE",
-    titre:"g(x) = xeˣ − x + 1 : variations et signe",
-    qs:[
-      {id:"G2A",pts:1,
-       txt:"Soit g(x) = xeˣ − x + 1\n\nMontrer que g′(x) = h(x). Calculer g′(x) :",
-       opts:["g′(x) = eˣ − 1","g′(x) = xeˣ + eˣ − 1  =  h(x)","g′(x) = xeˣ","g′(x) = eˣ + 1"],rep:1},
-      {id:"G2B",pts:1,
-       txt:"g′(x) = h(x) et h admet un minimum en x = −2\n\nSens de variation de g sur ℝ ?",
-       opts:["g croissante sur ℝ","g décroissante puis croissante, minimum en x = −2","g croissante puis décroissante","g constante sur ℝ"],rep:1},
-      {id:"G2C",pts:1,
-       txt:"Calculer g(0) :",
-       opts:["g(0) = 0","g(0) = −1","g(0) = 1","g(0) = 2"],rep:2},
-      {id:"G2D",pts:1,
-       txt:"D'après les variations de g et g(0) = 1 > 0,\nquel est le signe de g(x) sur ℝ ?",
-       opts:["g(x) < 0 pour tout x","g(x) > 0 pour tout x","g(x) change de signe en x = 0","g(x) = 0 pour tout x"],rep:1},
-      {id:"G2E",pts:1,
-       txt:"Vérifier : g(x) − eˣ = (x−1)(eˣ−1)\n\nSur [0;1], que conclure sur g(x) par rapport à eˣ ?",
-       opts:["g(x) ≥ eˣ sur [0;1]","g(x) ≤ eˣ sur [0;1]","g(x) = eˣ sur [0;1]","On ne peut pas conclure"],rep:1},
-    ]
-  },
-  {
-    badge:"EXERCICE 2 — 3ème PARTIE",
-    titre:"f(x) = ln(xeˣ − x + 1) : domaine et limites",
-    qs:[
-      {id:"F3A",pts:1,
-       txt:"f(x) = ln(xeˣ − x + 1) = ln(g(x))\n\nPourquoi f est-elle définie sur ℝ ?",
-       opts:["Car ln est définie sur ℝ","Car g(x) > 0 pour tout x ∈ ℝ","Car xeˣ > 0 pour tout x","Car g est bornée"],rep:1},
-      {id:"F3B",pts:1,
-       txt:"Calculer  lim(x→+∞)  f(x) :",
-       opts:["0","1","+ ∞","− ∞"],rep:2},
-      {id:"F3C",pts:1,
-       txt:"Calculer  lim(x→−∞)  f(x) :",
-       opts:["0","+ ∞","− ∞","1"],rep:0},
-      {id:"F3D",pts:1.5,
-       txt:"f′(x) = h(x) / g(x)\n\nf′(x) = 0 quand :",
-       opts:["g(x) = 0","h(x) = 0, c'est-à-dire x = −2","h(x) = g(x)","f′(x) ≠ 0 pour tout x"],rep:1},
-      {id:"F3E",pts:1,
-       txt:"f′(x) = h(x)/g(x), g(x) > 0 sur ℝ\n\nSens de variation de f sur ]−∞ ; −2[ ?",
-       opts:["f croissante car h(x) > 0","f décroissante car h(x) < 0","f constante","On ne peut pas conclure"],rep:1},
-    ]
-  },
-  {
-    badge:"EXERCICE 2 — 4ème PARTIE",
-    titre:"Suite (uₙ) définie par u₀ = ln2, uₙ₊₁ = f(uₙ)",
-    qs:[
-      {id:"S4A",pts:1,
-       txt:"On pose u₀ = ln 2 et uₙ₊₁ = f(uₙ)\n\nCalculer u₀ ≈ ?",
-       opts:["u₀ ≈ 0,69","u₀ ≈ 1","u₀ ≈ 0,5","u₀ ≈ 2"],rep:0},
-      {id:"S4B",pts:1,
-       txt:"Pour montrer par récurrence que 0 ≤ uₙ ≤ 1,\nquelle propriété de f utilise-t-on sur [0;1] ?",
-       opts:["f est croissante sur [0;1]","f([0;1]) ⊂ [0;1] car g(x) ∈ [1;e] sur [0;1]","f est décroissante sur [0;1]","f(x) = x sur [0;1]"],rep:1},
-      {id:"S4C",pts:1.5,
-       txt:"Pour montrer que (uₙ) est décroissante,\non montre que uₙ₊₁ − uₙ ≤ 0.\nCela revient à montrer que f(x) ≤ x sur [0;1].\nOr f(x) ≤ eˣ et eˣ ≤ ?\n\nSur [0;1], quelle inégalité permet de conclure ?",
-       opts:["eˣ ≤ x + 1  sur [0;1] donc f(x) ≤ x","eˣ ≤ x  sur [0;1]","ln(x) ≤ x  sur [0;1]","g(x) ≤ x  sur [0;1]"],rep:0},
-      {id:"S4D",pts:1,
-       txt:"(uₙ) est décroissante et minorée par 0.\nQue peut-on conclure ?",
-       opts:["(uₙ) diverge","(uₙ) est convergente","(uₙ) tend vers +∞","(uₙ) est constante"],rep:1},
-      {id:"S4E",pts:1.5,
-       txt:"Si (uₙ) converge vers ℓ, alors f(ℓ) = ℓ\nc'est-à-dire ln(ℓeˡ − ℓ + 1) = ℓ\n\nQuelle est la limite de la suite (uₙ) ?",
-       opts:["ℓ = 1","ℓ = 0","ℓ = ln 2","ℓ = e"],rep:1},
-    ]
-  },
-]}
+  {badge:"EXERCICE 2 — 1ère PARTIE",titre:"h(x) = xeˣ + eˣ − 1 : limites et variations",qs:[
+    {id:"H1A",pts:1,txt:"Soit h définie sur ℝ par h(x) = xeˣ + eˣ − 1\n\nCalculer  lim(x→+∞) h(x) :",opts:["0","− 1","+ ∞","1"],rep:2},
+    {id:"H1B",pts:1,txt:"Soit h définie sur ℝ par h(x) = xeˣ + eˣ − 1\n\nCalculer  lim(x→−∞) h(x) :",opts:["0","− 1","+ ∞","− ∞"],rep:1},
+    {id:"H1C",pts:1,txt:"Calculer h′(x) pour h(x) = xeˣ + eˣ − 1 :",opts:["h′(x) = eˣ","h′(x) = xeˣ","h′(x) = (x+2)eˣ","h′(x) = (x+1)eˣ − 1"],rep:2},
+    {id:"H1D",pts:1,txt:"h′(x) = (x+2)eˣ\n\nSigne de h′(x) sur ℝ ?",opts:["h′(x) > 0 pour tout x","h′(x) < 0 pour x < −2, h′(x) > 0 pour x > −2","h′(x) > 0 pour x < −2, h′(x) < 0 pour x > −2","h′(x) = 0 pour tout x"],rep:1},
+    {id:"H1E",pts:1,txt:"Calculer h(0) :",opts:["h(0) = 0","h(0) = 1","h(0) = −1","h(0) = 2"],rep:0},
+  ]},
+  {badge:"EXERCICE 2 — 2ème PARTIE",titre:"g(x) = xeˣ − x + 1 : variations et signe",qs:[
+    {id:"G2A",pts:1,txt:"Soit g(x) = xeˣ − x + 1\n\nCalculer g′(x) :",opts:["g′(x) = eˣ − 1","g′(x) = xeˣ + eˣ − 1  =  h(x)","g′(x) = xeˣ","g′(x) = eˣ + 1"],rep:1},
+    {id:"G2B",pts:1,txt:"g′(x) = h(x) et h admet un minimum en x = −2\n\nSens de variation de g sur ℝ ?",opts:["g croissante sur ℝ","g décroissante puis croissante, minimum en x = −2","g croissante puis décroissante","g constante sur ℝ"],rep:1},
+    {id:"G2C",pts:1,txt:"Calculer g(0) :",opts:["g(0) = 0","g(0) = −1","g(0) = 1","g(0) = 2"],rep:2},
+    {id:"G2D",pts:1,txt:"D'après les variations de g et g(0) = 1 > 0,\nquel est le signe de g(x) sur ℝ ?",opts:["g(x) < 0 pour tout x","g(x) > 0 pour tout x","g(x) change de signe en x = 0","g(x) = 0 pour tout x"],rep:1},
+    {id:"G2E",pts:1,txt:"Vérifier : g(x) − eˣ = (x−1)(eˣ−1)\n\nSur [0;1], que conclure sur g(x) par rapport à eˣ ?",opts:["g(x) ≥ eˣ sur [0;1]","g(x) ≤ eˣ sur [0;1]","g(x) = eˣ sur [0;1]","On ne peut pas conclure"],rep:1},
+  ]},
+  {badge:"EXERCICE 2 — 3ème PARTIE",titre:"f(x) = ln(xeˣ − x + 1) : domaine et limites",qs:[
+    {id:"F3A",pts:1,txt:"f(x) = ln(xeˣ − x + 1) = ln(g(x))\n\nPourquoi f est-elle définie sur ℝ ?",opts:["Car ln est définie sur ℝ","Car g(x) > 0 pour tout x ∈ ℝ","Car xeˣ > 0 pour tout x","Car g est bornée"],rep:1},
+    {id:"F3B",pts:1,txt:"Calculer  lim(x→+∞)  f(x) :",opts:["0","1","+ ∞","− ∞"],rep:2},
+    {id:"F3C",pts:1,txt:"Calculer  lim(x→−∞)  f(x) :",opts:["0","+ ∞","− ∞","1"],rep:0},
+    {id:"F3D",pts:1.5,txt:"f′(x) = h(x) / g(x)\n\nf′(x) = 0 quand :",opts:["g(x) = 0","h(x) = 0, c'est-à-dire x = −2","h(x) = g(x)","f′(x) ≠ 0 pour tout x"],rep:1},
+    {id:"F3E",pts:1,txt:"f′(x) = h(x)/g(x), g(x) > 0 sur ℝ\n\nSens de variation de f sur ]−∞ ; −2[ ?",opts:["f croissante car h(x) > 0","f décroissante car h(x) < 0","f constante","On ne peut pas conclure"],rep:1},
+  ]},
+  {badge:"EXERCICE 2 — 4ème PARTIE",titre:"Suite (uₙ) définie par u₀ = ln2, uₙ₊₁ = f(uₙ)",qs:[
+    {id:"S4A",pts:1,txt:"On pose u₀ = ln 2 et uₙ₊₁ = f(uₙ)\n\nCalculer u₀ ≈ ?",opts:["u₀ ≈ 0,69","u₀ ≈ 1","u₀ ≈ 0,5","u₀ ≈ 2"],rep:0},
+    {id:"S4B",pts:1,txt:"Pour montrer par récurrence que 0 ≤ uₙ ≤ 1,\nquelle propriété de f utilise-t-on sur [0;1] ?",opts:["f est croissante sur [0;1]","f([0;1]) ⊂ [0;1] car g(x) ∈ [1;e] sur [0;1]","f est décroissante sur [0;1]","f(x) = x sur [0;1]"],rep:1},
+    {id:"S4C",pts:1.5,txt:"Pour montrer que (uₙ) est décroissante,\non montre f(x) ≤ x sur [0;1].\nOr f(x) ≤ eˣ. Sur [0;1], quelle inégalité conclut ?",opts:["eˣ ≤ x + 1 sur [0;1] donc f(x) ≤ x","eˣ ≤ x sur [0;1]","ln(x) ≤ x sur [0;1]","g(x) ≤ x sur [0;1]"],rep:0},
+    {id:"S4D",pts:1,txt:"(uₙ) est décroissante et minorée par 0.\nQue peut-on conclure ?",opts:["(uₙ) diverge","(uₙ) est convergente","(uₙ) tend vers +∞","(uₙ) est constante"],rep:1},
+    {id:"S4E",pts:1.5,txt:"Si (uₙ) converge vers ℓ, alors f(ℓ) = ℓ\nc'est-à-dire ln(ℓeˡ − ℓ + 1) = ℓ\n\nQuelle est la limite de la suite (uₙ) ?",opts:["ℓ = 1","ℓ = 0","ℓ = ln 2","ℓ = e"],rep:1},
+  ]},
+]};
 
+// ══ EXPIRATION : ouvert samedi 18h–20h45, SAUF admin ══
 (function checkExpiry(){
+  if(window._isAdmin) return;
   const now = new Date();
   const day = now.getDay();
   const h = now.getHours(), m = now.getMinutes();
   const isSaturday = day === 6;
+  const afterOpen   = h > 18 || (h === 18 && m >= 0);
   const afterCutoff = h > 20 || (h === 20 && m >= 45);
-  const expired = !isSaturday || (isSaturday && afterCutoff);
-  if(expired){
-    document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:#0f0e0a;color:#f5f0e8;font-family:serif;text-align:center;padding:2rem"><div><div style="font-size:3rem;margin-bottom:1rem">🔒</div><h1 style="color:#c9a84c;font-size:1.8rem;margin-bottom:1rem">Évaluation clôturée</h1><p style="color:#aaa;font-size:1.1rem">Les évaluations se déroulent<br><strong style=\'color:#c9a84c\'>chaque samedi jusqu\'à 20h45</strong>.<br>Revenez samedi prochain !</p><p style="margin-top:2rem;color:#666;font-size:.9rem">S.E. Corporation</p></div></div>';
+  const isOpen = isSaturday && afterOpen && !afterCutoff;
+  if(!isOpen){
+    document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:#0f0e0a;color:#f5f0e8;font-family:serif;text-align:center;padding:2rem"><div><div style="font-size:3rem;margin-bottom:1rem">🔒</div><h1 style="color:#c9a84c;font-size:1.8rem;margin-bottom:1rem">Évaluation clôturée</h1><p style="color:#aaa;font-size:1.1rem">Les évaluations se déroulent<br><strong style=\'color:#c9a84c\'>chaque samedi de 18h00 à 20h45</strong>.<br>Revenez samedi prochain !</p><p style="margin-top:2rem;color:#666;font-size:.9rem">S.E. Corporation</p></div></div>';
     throw new Error('EXPIRED');
   }
 })();
+// ══ ÉTAT ══
 const _savedFrauds = parseInt(sessionStorage.getItem('se_frauds')||'0');
 const _wasStarted  = sessionStorage.getItem('se_started')==='1';
 let eleve={},reps={},frauds=_savedFrauds,started=false,done=false,timerInt=null,tLeft=0;
