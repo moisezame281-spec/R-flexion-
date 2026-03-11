@@ -2,10 +2,12 @@
   "version": 2,
   "public": true,
   "routes": [
-    { "src": "/", "dest": "/index.html" },
-    { "src": "/terminaleS", "dest": "/terminaleS.html" },
-    { "src": "/terminaleS.html", "dest": "/terminaleS.html" },
-    { "src": "/admin", "dest": "/admin.html" },
-    { "src": "/admin.html", "dest": "/admin.html" }
+    {"src": "/", "dest": "/index.html"},
+    {"src": "/terminaleS", "dest": "/terminaleS.html"},
+    {"src": "/terminaleS.html", "dest": "/terminaleS.html"},
+    {"src": "/admin", "dest": "/admin.html"},
+    {"src": "/admin.html", "dest": "/admin.html"},
+    {"src": "/communication", "dest": "/communication.html"},
+    {"src": "/communication.html", "dest": "/communication.html"}
   ]
 }
