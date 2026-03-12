@@ -8,9 +8,10 @@
     {"src": "/admin", "dest": "/admin.html"},
     {"src": "/admin.html", "dest": "/admin.html"},
     {"src": "/communication", "dest": "/communication.html"},
-    {"src": "/communication.html", "dest": "/communication.html"}
-    {"src":"/diagnostic","dest":"/diagnostic.html"},
-{"src":"/admin-diagnostic","dest":"/admin_diagnostic.html"}
-    
+    {"src": "/communication.html", "dest": "/communication.html"},
+    {"src": "/diagnostic", "dest": "/diagnostic.html"},
+    {"src": "/diagnostic.html", "dest": "/diagnostic.html"},
+    {"src": "/admin-diagnostic", "dest": "/admin_diagnostic.html"},
+    {"src": "/admin_diagnostic.html", "dest": "/admin_diagnostic.html"}
   ]
 }
