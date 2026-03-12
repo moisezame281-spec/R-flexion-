@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>S.E. Corporation — Progression Hebdomadaire</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f0f4f8;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .header {
+      background: linear-gradient(135deg, #1a3a5c, #2d6a9f);
+      color: white;
+      text-align: center;
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+    .header .logo {
+      width: 48px; height: 48px;
+      background: white; color: #1a3a5c;
+      border-radius: 50%; font-weight: 900;
+      font-size: 18px; display: inline-flex;
+      align-items: center; justify-content: center;
+      margin-bottom: 10px;
+    }
+    .header h1 { font-size: 1.3rem; font-weight: 700; }
+    .header p { font-size: 0.85rem; opacity: 0.85; margin-top: 4px; }
+
+    .steps {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    .step {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 0.78rem; color: #888;
+    }
+    .step-num {
+      width: 26px; height: 26px;
+      border-radius: 50%; background: #ddd; color: #888;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 0.75rem;
+    }
+    .step.active .step-num { background: #2d6a9f; color: white; }
+    .step.active { color: #2d6a9f; font-weight: 600; }
+    .step.done .step-num { background: #27ae60; color: white; }
+    .step-line { width: 30px; height: 2px; background: #ddd; }
+    .step-line.done { background: #27ae60; }
+
+    .card {
+      background: white;
+      border-radius: 14px;
+      padding: 28px;
+      max-width: 600px;
+      margin: 0 auto 20px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      display: none;
+    }
+    .card.active { display: block; }
+
+    .card h2 {
+      font-size: 1.1rem;
+      color: #1a3a5c;
+      margin-bottom: 6px;
+    }
+    .card .subtitle {
+      font-size: 0.83rem;
+      color: #666;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+
+    label { font-size: 0.85rem; color: #444; font-weight: 600; display: block; margin-bottom: 6px; }
+    input, select, textarea {
+      width: 100%; padding: 11px 14px;
+      border: 1.5px solid #ddd; border-radius: 8px;
+      font-size: 0.9rem; color: #333;
+      transition: border-color 0.2s;
+      font-family: inherit;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none; border-color: #2d6a9f;
+    }
+    textarea { resize: vertical; min-height: 80px; }
+    .field { margin-bottom: 18px; }
+    .error-msg {
+      font-size: 0.78rem; color: #e74c3c;
+      margin-top: 4px; display: none;
+    }
+
+    /* Notions QCM */
+    .notions-info {
+      background: #eaf3fb;
+      border-left: 4px solid #2d6a9f;
+      border-radius: 6px;
+      padding: 12px 16px;
+      font-size: 0.83rem;
+      color: #1a3a5c;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    .notion-card {
+      border: 1.5px solid #e0e0e0;
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .notion-card.evaluated { border-color: #2d6a9f; box-shadow: 0 0 0 3px rgba(45,106,159,0.08); }
+    .notion-title {
+      font-weight: 700; font-size: 0.9rem;
+      color: #1a3a5c; margin-bottom: 10px;
+    }
+    .notion-options {
+      display: flex; flex-wrap: wrap; gap: 8px;
+    }
+    .notion-btn {
+      padding: 7px 14px; border-radius: 20px;
+      border: 1.5px solid #ddd; background: white;
+      font-size: 0.8rem; cursor: pointer;
+      transition: all 0.15s; color: #555;
+    }
+    .notion-btn:hover { border-color: #2d6a9f; color: #2d6a9f; }
+    .notion-btn.selected-ok { background: #eafaf1; border-color: #27ae60; color: #27ae60; font-weight: 600; }
+    .notion-btn.selected-partial { background: #fef9e7; border-color: #f39c12; color: #e67e22; font-weight: 600; }
+    .notion-btn.selected-nok { background: #fdf0f0; border-color: #e74c3c; color: #e74c3c; font-weight: 600; }
+
+    .progress-bar-wrap {
+      background: #eee; border-radius: 10px;
+      height: 8px; margin-bottom: 6px; overflow: hidden;
+    }
+    .progress-bar { height: 100%; background: linear-gradient(90deg, #2d6a9f, #27ae60); border-radius: 10px; transition: width 0.3s; }
+    .progress-label { font-size: 0.78rem; color: #888; text-align: right; margin-bottom: 16px; }
+
+    /* Boutons */
+    .btn-primary {
+      background: linear-gradient(135deg, #1a3a5c, #2d6a9f);
+      color: white; border: none;
+      padding: 13px 28px; border-radius: 8px;
+      font-size: 0.95rem; font-weight: 600;
+      cursor: pointer; width: 100%;
+      transition: opacity 0.2s, transform 0.1s;
+    }
+    .btn-primary:hover { opacity: 0.92; transform: translateY(-1px); }
+    .btn-secondary {
+      background: white; color: #2d6a9f;
+      border: 1.5px solid #2d6a9f;
+      padding: 11px 20px; border-radius: 8px;
+      font-size: 0.9rem; font-weight: 600;
+      cursor: pointer; width: 100%; margin-bottom: 10px;
+      transition: all 0.2s;
+    }
+    .btn-secondary:hover { background: #eaf3fb; }
+
+    /* Succès */
+    .success-icon {
+      font-size: 3rem; text-align: center; margin-bottom: 14px;
+    }
+    .success-title {
+      font-size: 1.3rem; font-weight: 800;
+      color: #1a3a5c; text-align: center; margin-bottom: 8px;
+    }
+    .success-msg {
+      font-size: 0.88rem; color: #555;
+      text-align: center; line-height: 1.6;
+      margin-bottom: 20px;
+    }
+    .footer-brand {
+      text-align: center; font-size: 0.78rem;
+      color: #888; margin-top: 6px; line-height: 1.6;
+    }
+    .footer-brand strong { color: #1a3a5c; }
+
+    /* Semaine badge */
+    .semaine-badge {
+      display: inline-block;
+      background: #eaf3fb; color: #1a3a5c;
+      border: 1px solid #b8d4ed; border-radius: 20px;
+      padding: 4px 12px; font-size: 0.78rem; font-weight: 600;
+      margin-bottom: 16px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">SE</div>
+  <h1>S.E. Corporation — Progression Hebdomadaire</h1>
+  <p>Suivi personnalisé • Baccalauréat • Grandes Écoles</p>
+</div>
+
+<div class="steps" id="stepsBar">
+  <div class="step active" id="s1"><div class="step-num">1</div> Profil</div>
+  <div class="step-line" id="line1"></div>
+  <div class="step" id="s2"><div class="step-num">2</div> Progression</div>
+  <div class="step-line" id="line2"></div>
+  <div class="step" id="s3"><div class="step-num">3</div> Terminé</div>
+</div>
+
+<!-- ÉTAPE 1 : Profil -->
+<div class="card active" id="step1">
+  <h2>👤 Ton profil</h2>
+  <p class="subtitle">Remplis ces informations pour que ton suivi soit bien enregistré cette semaine.</p>
+
+  <div class="field">
+    <label>Prénom *</label>
+    <input type="text" id="prenom" placeholder="Ex: Jean" />
+    <div class="error-msg" id="err-prenom">Prénom invalide (minimum 2 lettres)</div>
+  </div>
+  <div class="field">
+    <label>Nom de famille *</label>
+    <input type="text" id="nom" placeholder="Ex: Mballa" />
+    <div class="error-msg" id="err-nom">Nom invalide (minimum 2 lettres)</div>
+  </div>
+  <div class="field">
+    <label>Classe *</label>
+    <select id="classe">
+      <option value="">-- Sélectionne ta classe --</option>
+      <option>Terminale C</option>
+      <option>Terminale D</option>
+      <option>Terminale A</option>
+      <option>Terminale A4</option>
+      <option>Terminale E</option>
+      <option>Terminale F</option>
+    </select>
+    <div class="error-msg" id="err-classe">Sélectionne ta classe</div>
+  </div>
+  <div class="field">
+    <label>Numéro WhatsApp *</label>
+    <input type="tel" id="whatsapp" placeholder="Ex: 6XXXXXXXX" />
+    <div class="error-msg" id="err-whatsapp">Numéro invalide (minimum 9 chiffres)</div>
+  </div>
+
+  <button class="btn-primary" onclick="goStep2()">Suivant →</button>
+</div>
+
+<!-- ÉTAPE 2 : Progression -->
+<div class="card" id="step2">
+  <h2>📊 Progression de la semaine</h2>
+  <div id="semaineBadge" class="semaine-badge">📅 Semaine en cours</div>
+  <p class="subtitle">
+    Pour chaque notion du QCM, dis-nous où tu en es.<br>
+    <strong>Sois honnête — c'est pour toi !</strong>
+  </p>
+
+  <div class="notions-info">
+    🎯 Clique sur chaque notion et choisis ton niveau :<br>
+    ✅ <strong>Compris</strong> — je maîtrise<br>
+    ⚠️ <strong>À revoir</strong> — je comprends un peu mais pas sûr(e)<br>
+    ❌ <strong>Bloqué(e)</strong> — je n'ai pas compris
+  </div>
+
+  <div class="progress-bar-wrap">
+    <div class="progress-bar" id="progressBar" style="width:0%"></div>
+  </div>
+  <div class="progress-label" id="progressLabel">0 / 0 évaluées</div>
+
+  <div id="notionsContainer">
+    <!-- Les notions sont chargées dynamiquement depuis le localStorage ou la config -->
+  </div>
+
+  <div class="field" style="margin-top:16px;">
+    <label>📝 Ce que tu veux dire à Ing. Moïse (facultatif)</label>
+    <textarea id="commentaire" placeholder="Ex: J'ai du mal avec les limites en +∞, les dérivées ça va mieux..."></textarea>
+  </div>
+
+  <button class="btn-secondary" onclick="goBack1()">← Retour</button>
+  <button class="btn-primary" onclick="soumettre()">Envoyer ma progression ✓</button>
+</div>
+
+<!-- ÉTAPE 3 : Succès -->
+<div class="card" id="step3">
+  <div class="success-icon">🌟</div>
+  <div class="success-title">Merci !</div>
+  <div class="success-msg">
+    Ta progression a bien été enregistrée.<br>
+    <strong>Ing. Moïse Zame</strong> analysera tes résultats et te contactera personnellement sur WhatsApp.<br><br>
+    Continue de travailler avec courage — le bac se prépare pas à pas, et tu n'es pas seul(e). 💪
+  </div>
+  <div class="footer-brand">
+    <strong>Ing. Moïse Zame — S.E. Corporation</strong><br>
+    Master 1 Génie Civil • ENSPD Douala<br>
+    📞 +237 695 535 585 / 621 576 854 / 693 698 161<br>
+    Since 2015 • 100% de réussite au bac pour nos suivis
+  </div>
+</div>
+
+<script>
+  // ============================================================
+  // CONFIG : Notions de la semaine (modifiables depuis l'admin)
+  // ============================================================
+  const STORAGE_KEY_NOTIONS = 'se_notions_semaine';
+  const STORAGE_KEY_SEMAINE = 'se_semaine_label';
+  const STORAGE_KEY_PROGRESSIONS = 'se_progressions';
+
+  const notionsDefaut = [
+    "Fonctions ln / exp",
+    "Équations du 2ème degré",
+    "Inéquations",
+    "Polynôme degré 3",
+    "Limites",
+    "Dérivées",
+    "Tableau de variation",
+    "Étude complète de fonction"
+  ];
+
+  let notions = [];
+  let reponsesNotions = {};
+  let currentStep = 1;
+
+  function init() {
+    // Charger les notions depuis localStorage (définies par l'admin)
+    const saved = localStorage.getItem(STORAGE_KEY_NOTIONS);
+    notions = saved ? JSON.parse(saved) : notionsDefaut;
+
+    const semaine = localStorage.getItem(STORAGE_KEY_SEMAINE) || getSemaineLabel();
+    document.getElementById('semaineBadge').textContent = '📅 ' + semaine;
+
+    renderNotions();
+  }
+
+  function getSemaineLabel() {
+    const now = new Date();
+    const debut = new Date(now);
+    debut.setDate(now.getDate() - now.getDay() + 1);
+    const fin = new Date(debut);
+    fin.setDate(debut.getDate() + 6);
+    const fmt = (d) => d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
+    return `Semaine du ${fmt(debut)} au ${fmt(fin)}`;
+  }
+
+  function renderNotions() {
+    const container = document.getElementById('notionsContainer');
+    container.innerHTML = '';
+    notions.forEach((notion, i) => {
+      const div = document.createElement('div');
+      div.className = 'notion-card';
+      div.id = `notion-${i}`;
+      div.innerHTML = `
+        <div class="notion-title">${i+1}. ${notion}</div>
+        <div class="notion-options">
+          <button class="notion-btn" onclick="choisir(${i},'ok', this)">✅ Compris</button>
+          <button class="notion-btn" onclick="choisir(${i},'partial', this)">⚠️ À revoir</button>
+          <button class="notion-btn" onclick="choisir(${i},'nok', this)">❌ Bloqué(e)</button>
+        </div>
+      `;
+      container.appendChild(div);
+    });
+    updateProgress();
+  }
+
+  function choisir(index, valeur, btn) {
+    reponsesNotions[index] = valeur;
+    const card = document.getElementById(`notion-${index}`);
+    card.classList.add('evaluated');
+    const btns = card.querySelectorAll('.notion-btn');
+    btns.forEach(b => b.classList.remove('selected-ok','selected-partial','selected-nok'));
+    btn.classList.add(`selected-${valeur}`);
+    updateProgress();
+  }
+
+  function updateProgress() {
+    const total = notions.length;
+    const done = Object.keys(reponsesNotions).length;
+    const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+    document.getElementById('progressBar').style.width = pct + '%';
+    document.getElementById('progressLabel').textContent = `${done} / ${total} évaluées`;
+  }
+
+  // ============================================================
+  // Navigation
+  // ============================================================
+  function showStep(n) {
+    document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
+    document.getElementById('step' + n).classList.add('active');
+    for (let i = 1; i <= 3; i++) {
+      const s = document.getElementById('s' + i);
+      s.classList.remove('active','done');
+      if (i < n) s.classList.add('done');
+      else if (i === n) s.classList.add('active');
+      if (i < 3) {
+        const l = document.getElementById('line' + i);
+        l.classList.toggle('done', i < n);
+      }
+    }
+    currentStep = n;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function goBack1() { showStep(1); }
+
+  function goStep2() {
+    const prenom = document.getElementById('prenom').value.trim();
+    const nom = document.getElementById('nom').value.trim();
+    const classe = document.getElementById('classe').value;
+    const wa = document.getElementById('whatsapp').value.trim();
+    let ok = true;
+
+    if (prenom.length < 2 || /\d/.test(prenom)) {
+      document.getElementById('err-prenom').style.display = 'block'; ok = false;
+    } else { document.getElementById('err-prenom').style.display = 'none'; }
+
+    if (nom.length < 2 || /\d/.test(nom)) {
+      document.getElementById('err-nom').style.display = 'block'; ok = false;
+    } else { document.getElementById('err-nom').style.display = 'none'; }
+
+    if (!classe) {
+      document.getElementById('err-classe').style.display = 'block'; ok = false;
+    } else { document.getElementById('err-classe').style.display = 'none'; }
+
+    if (wa.replace(/\D/g,'').length < 9) {
+      document.getElementById('err-whatsapp').style.display = 'block'; ok = false;
+    } else { document.getElementById('err-whatsapp').style.display = 'none'; }
+
+    if (ok) showStep(2);
+  }
+
+  function soumettre() {
+    const total = notions.length;
+    const done = Object.keys(reponsesNotions).length;
+
+    if (done < total) {
+      if (!confirm(`Tu n'as évalué que ${done}/${total} notions. Envoyer quand même ?`)) return;
+    }
+
+    const prenom = document.getElementById('prenom').value.trim();
+    const nom = document.getElementById('nom').value.trim();
+    const classe = document.getElementById('classe').value;
+    const wa = document.getElementById('whatsapp').value.trim();
+    const commentaire = document.getElementById('commentaire').value.trim();
+    const semaine = localStorage.getItem(STORAGE_KEY_SEMAINE) || getSemaineLabel();
+
+    const entry = {
+      id: Date.now(),
+      date: new Date().toISOString(),
+      semaine,
+      prenom, nom, classe,
+      whatsapp: wa,
+      commentaire,
+      notions: notions.map((n, i) => ({
+        notion: n,
+        statut: reponsesNotions[i] || 'non-evalue'
+      }))
+    };
+
+    // Sauvegarder dans localStorage
+    const existing = JSON.parse(localStorage.getItem(STORAGE_KEY_PROGRESSIONS) || '[]');
+    existing.push(entry);
+    localStorage.setItem(STORAGE_KEY_PROGRESSIONS, JSON.stringify(existing));
+
+    showStep(3);
+  }
+
+  init();
+</script>
+</body>
+</html>

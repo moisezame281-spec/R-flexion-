@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>S.E. Corporation — Admin Progression</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', sans-serif; background: #f0f4f8; min-height: 100vh; }
+
+    .header {
+      background: linear-gradient(135deg, #1a3a5c, #2d6a9f);
+      color: white; padding: 18px 24px;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .logo {
+      width: 44px; height: 44px; background: white;
+      color: #1a3a5c; border-radius: 50%;
+      font-weight: 900; font-size: 16px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .header h1 { font-size: 1.1rem; }
+    .header p { font-size: 0.78rem; opacity: 0.8; }
+    .admin-badge {
+      margin-left: auto; background: rgba(255,255,255,0.2);
+      border: 1px solid rgba(255,255,255,0.4);
+      border-radius: 20px; padding: 4px 12px;
+      font-size: 0.75rem; font-weight: 700;
+    }
+
+    /* LOGIN */
+    #loginScreen {
+      display: flex; align-items: center; justify-content: center;
+      min-height: calc(100vh - 80px); padding: 20px;
+    }
+    .login-card {
+      background: white; border-radius: 14px;
+      padding: 36px; max-width: 360px; width: 100%;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1); text-align: center;
+    }
+    .lock-icon { font-size: 2.5rem; margin-bottom: 12px; }
+    .login-card h2 { color: #1a3a5c; margin-bottom: 6px; }
+    .login-card p { font-size: 0.83rem; color: #888; margin-bottom: 20px; }
+    .login-card input {
+      width: 100%; padding: 12px; border: 1.5px solid #ddd;
+      border-radius: 8px; font-size: 0.9rem; text-align: center;
+      letter-spacing: 4px; margin-bottom: 12px;
+    }
+    .login-card input:focus { outline: none; border-color: #2d6a9f; }
+    .err-login { color: #e74c3c; font-size: 0.8rem; margin-bottom: 10px; display: none; }
+
+    /* MAIN */
+    #mainScreen { display: none; padding: 20px; max-width: 1100px; margin: 0 auto; }
+
+    .tabs {
+      display: flex; gap: 4px; background: white;
+      border-radius: 12px; padding: 6px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      margin-bottom: 20px; flex-wrap: wrap;
+    }
+    .tab {
+      padding: 9px 18px; border-radius: 8px;
+      font-size: 0.85rem; font-weight: 600;
+      cursor: pointer; color: #666; transition: all 0.2s; border: none; background: none;
+    }
+    .tab.active { background: #1a3a5c; color: white; }
+    .tab:hover:not(.active) { background: #eaf3fb; color: #2d6a9f; }
+
+    .section { display: none; }
+    .section.active { display: block; }
+
+    .card {
+      background: white; border-radius: 14px;
+      padding: 24px; margin-bottom: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+    }
+    .card h3 {
+      font-size: 1rem; color: #1a3a5c;
+      margin-bottom: 16px; display: flex;
+      align-items: center; gap: 8px;
+    }
+
+    /* Stats */
+    .stats-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 14px; margin-bottom: 20px;
+    }
+    .stat-box {
+      background: white; border-radius: 12px;
+      padding: 18px; text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .stat-num { font-size: 2rem; font-weight: 800; color: #1a3a5c; }
+    .stat-label { font-size: 0.75rem; color: #888; margin-top: 4px; }
+
+    /* Notions editor */
+    .notion-row {
+      display: flex; align-items: center; gap: 10px; margin-bottom: 10px;
+    }
+    .notion-row input {
+      flex: 1; padding: 9px 12px; border: 1.5px solid #ddd;
+      border-radius: 8px; font-size: 0.88rem;
+    }
+    .notion-row input:focus { outline: none; border-color: #2d6a9f; }
+    .btn-del {
+      background: #fdf0f0; color: #e74c3c; border: 1px solid #e74c3c;
+      border-radius: 6px; padding: 7px 10px; cursor: pointer; font-size: 0.8rem;
+      white-space: nowrap;
+    }
+    .btn-del:hover { background: #e74c3c; color: white; }
+    .btn-add {
+      background: #eaf3fb; color: #2d6a9f; border: 1.5px dashed #2d6a9f;
+      border-radius: 8px; padding: 10px; width: 100%;
+      font-size: 0.88rem; cursor: pointer; margin-top: 6px; font-weight: 600;
+    }
+    .btn-add:hover { background: #2d6a9f; color: white; }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #1a3a5c, #2d6a9f);
+      color: white; border: none; padding: 12px 24px;
+      border-radius: 8px; font-size: 0.9rem; font-weight: 600;
+      cursor: pointer; transition: opacity 0.2s;
+    }
+    .btn-primary:hover { opacity: 0.9; }
+    .btn-success {
+      background: linear-gradient(135deg, #1e8449, #27ae60);
+      color: white; border: none; padding: 10px 20px;
+      border-radius: 8px; font-size: 0.85rem; font-weight: 600;
+      cursor: pointer;
+    }
+    .btn-success:hover { opacity: 0.9; }
+    .btn-outline {
+      background: white; color: #2d6a9f;
+      border: 1.5px solid #2d6a9f; padding: 9px 18px;
+      border-radius: 8px; font-size: 0.85rem; font-weight: 600;
+      cursor: pointer;
+    }
+    .btn-outline:hover { background: #eaf3fb; }
+
+    .saved-msg {
+      background: #eafaf1; color: #1e8449;
+      border: 1px solid #27ae60; border-radius: 8px;
+      padding: 10px 16px; font-size: 0.85rem;
+      display: none; margin-top: 12px;
+    }
+
+    /* Tableau élèves */
+    .filters {
+      display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 16px;
+    }
+    .filters input, .filters select {
+      padding: 8px 12px; border: 1.5px solid #ddd;
+      border-radius: 8px; font-size: 0.85rem;
+    }
+    .filters input:focus, .filters select:focus { outline: none; border-color: #2d6a9f; }
+
+    table { width: 100%; border-collapse: collapse; font-size: 0.83rem; }
+    th { background: #f5f7fa; color: #1a3a5c; font-weight: 700; padding: 10px 12px; text-align: left; }
+    td { padding: 10px 12px; border-bottom: 1px solid #f0f0f0; }
+    tr:hover td { background: #fafcff; }
+    .badge {
+      display: inline-block; padding: 3px 10px;
+      border-radius: 12px; font-size: 0.75rem; font-weight: 600;
+    }
+    .badge-ok { background: #eafaf1; color: #27ae60; }
+    .badge-partial { background: #fef9e7; color: #e67e22; }
+    .badge-nok { background: #fdf0f0; color: #e74c3c; }
+    .badge-na { background: #f5f5f5; color: #999; }
+
+    /* Génération messages */
+    .eleve-msg-card {
+      border: 1.5px solid #e0e0e0; border-radius: 10px;
+      padding: 16px; margin-bottom: 14px;
+      transition: border-color 0.2s;
+    }
+    .eleve-msg-card:hover { border-color: #2d6a9f; }
+    .eleve-msg-header {
+      display: flex; justify-content: space-between;
+      align-items: flex-start; margin-bottom: 10px; gap: 10px;
+    }
+    .eleve-nom { font-weight: 700; color: #1a3a5c; font-size: 0.95rem; }
+    .eleve-meta { font-size: 0.78rem; color: #888; margin-top: 2px; }
+    .msg-box {
+      background: #f5f7fa; border-radius: 8px;
+      padding: 12px; font-size: 0.83rem; color: #333;
+      line-height: 1.6; white-space: pre-wrap;
+      border-left: 3px solid #2d6a9f;
+      margin-bottom: 10px;
+    }
+    .btn-copy {
+      background: #eaf3fb; color: #2d6a9f;
+      border: 1px solid #2d6a9f; border-radius: 6px;
+      padding: 7px 14px; font-size: 0.8rem;
+      cursor: pointer; font-weight: 600;
+    }
+    .btn-copy:hover { background: #2d6a9f; color: white; }
+    .btn-copy.copied { background: #eafaf1; color: #27ae60; border-color: #27ae60; }
+    .btn-wa {
+      background: #eafaf1; color: #27ae60;
+      border: 1px solid #27ae60; border-radius: 6px;
+      padding: 7px 14px; font-size: 0.8rem;
+      cursor: pointer; font-weight: 600; text-decoration: none;
+      display: inline-block;
+    }
+    .btn-wa:hover { background: #27ae60; color: white; }
+
+    .empty-state {
+      text-align: center; padding: 40px;
+      color: #888; font-size: 0.9rem;
+    }
+    .empty-state .emoji { font-size: 2.5rem; margin-bottom: 10px; }
+
+    label { font-size: 0.85rem; color: #444; font-weight: 600; display: block; margin-bottom: 6px; }
+    input[type=text], input[type=week] {
+      padding: 9px 12px; border: 1.5px solid #ddd;
+      border-radius: 8px; font-size: 0.88rem; width: 100%;
+    }
+    input:focus { outline: none; border-color: #2d6a9f; }
+    .field { margin-bottom: 16px; }
+
+    .semaine-active {
+      background: #eaf3fb; border: 1px solid #b8d4ed;
+      border-radius: 8px; padding: 10px 14px;
+      font-size: 0.85rem; color: #1a3a5c;
+      margin-bottom: 16px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">SE</div>
+  <div>
+    <h1>S.E. Corporation — Admin Progression</h1>
+    <p>Tableau de bord privé</p>
+  </div>
+  <div class="admin-badge">ADMIN</div>
+</div>
+
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="login-card">
+    <div class="lock-icon">🔒</div>
+    <h2>Accès privé</h2>
+    <p>Réservé à Ing. Moïse Zame</p>
+    <input type="password" id="pwdInput" placeholder="Mot de passe" onkeydown="if(event.key==='Enter')login()" />
+    <div class="err-login" id="errLogin">Mot de passe incorrect.</div>
+    <button class="btn-primary" style="width:100%" onclick="login()">Se connecter</button>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div id="mainScreen">
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('config')">⚙️ Configurer la semaine</button>
+    <button class="tab" onclick="switchTab('progressions')">📋 Progressions reçues</button>
+    <button class="tab" onclick="switchTab('messages')">💬 Messages WhatsApp</button>
+  </div>
+
+  <!-- SECTION CONFIG -->
+  <div class="section active" id="sec-config">
+
+    <div class="stats-grid" id="statsGrid">
+      <div class="stat-box">
+        <div class="stat-num" id="statTotal">0</div>
+        <div class="stat-label">Progressions total</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num" id="statSemaine">0</div>
+        <div class="stat-label">Cette semaine</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num" id="statCompris">0%</div>
+        <div class="stat-label">Taux de compréhension</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num" id="statBloques">0</div>
+        <div class="stat-label">Élèves bloqués</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>📅 Semaine en cours</h3>
+      <div class="field">
+        <label>Label de la semaine (affiché aux élèves)</label>
+        <input type="text" id="semaineLabel" placeholder="Ex: Semaine du 10 au 15 mars 2025" />
+      </div>
+      <button class="btn-outline" onclick="setSemaineAuto()">📅 Remplir automatiquement</button>
+    </div>
+
+    <div class="card">
+      <h3>📚 Notions du QCM cette semaine</h3>
+      <p style="font-size:0.83rem;color:#888;margin-bottom:16px">Ces notions apparaîtront dans le formulaire des élèves.</p>
+      <div id="notionsList"></div>
+      <button class="btn-add" onclick="addNotion()">+ Ajouter une notion</button>
+      <br/><br/>
+      <button class="btn-primary" onclick="saveConfig()">💾 Enregistrer la configuration</button>
+      <div class="saved-msg" id="savedMsg">✅ Configuration enregistrée ! Les élèves voient maintenant ces notions.</div>
+    </div>
+
+    <div class="card">
+      <h3>🗑️ Gestion des données</h3>
+      <p style="font-size:0.83rem;color:#888;margin-bottom:14px">Réinitialiser les progressions après avoir tout exporté.</p>
+      <button class="btn-outline" onclick="exportCSV()">📥 Exporter CSV</button>
+      &nbsp;
+      <button onclick="clearProgressions()" style="background:#fdf0f0;color:#e74c3c;border:1px solid #e74c3c;padding:10px 18px;border-radius:8px;cursor:pointer;font-size:0.85rem;font-weight:600;">
+        🗑️ Vider les progressions
+      </button>
+    </div>
+  </div>
+
+  <!-- SECTION PROGRESSIONS -->
+  <div class="section" id="sec-progressions">
+    <div class="card">
+      <h3>📋 Progressions reçues</h3>
+      <div class="filters">
+        <input type="text" id="searchEleve" placeholder="🔍 Rechercher un élève..." oninput="renderTable()" style="width:200px"/>
+        <select id="filterClasse" onchange="renderTable()">
+          <option value="">Toutes les classes</option>
+          <option>Terminale C</option>
+          <option>Terminale D</option>
+          <option>Terminale A</option>
+          <option>Terminale A4</option>
+          <option>Terminale E</option>
+          <option>Terminale F</option>
+        </select>
+        <select id="filterStatut" onchange="renderTable()">
+          <option value="">Tous les statuts</option>
+          <option value="nok">Avec bloqués</option>
+          <option value="ok">Tout compris</option>
+        </select>
+      </div>
+      <div id="tableContainer">
+        <table>
+          <thead>
+            <tr>
+              <th>Élève</th>
+              <th>Classe</th>
+              <th>WhatsApp</th>
+              <th>Compris</th>
+              <th>À revoir</th>
+              <th>Bloqué(e)</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION MESSAGES -->
+  <div class="section" id="sec-messages">
+    <div class="card">
+      <h3>💬 Messages WhatsApp personnalisés</h3>
+      <p style="font-size:0.83rem;color:#888;margin-bottom:16px">
+        Un message est généré automatiquement pour chaque élève. Copiez et envoyez sur WhatsApp.
+      </p>
+      <div id="messagesContainer"></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const PASSWORD = 'SE2025admin';
+  const STORAGE_KEY_NOTIONS = 'se_notions_semaine';
+  const STORAGE_KEY_SEMAINE = 'se_semaine_label';
+  const STORAGE_KEY_PROGRESSIONS = 'se_progressions';
+
+  // ============================================================
+  // LOGIN
+  // ============================================================
+  function login() {
+    const pwd = document.getElementById('pwdInput').value;
+    if (pwd === PASSWORD) {
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('mainScreen').style.display = 'block';
+      loadAll();
+    } else {
+      document.getElementById('errLogin').style.display = 'block';
+    }
+  }
+
+  // ============================================================
+  // TABS
+  // ============================================================
+  function switchTab(name) {
+    document.querySelectorAll('.tab').forEach((t, i) => {
+      t.classList.toggle('active', ['config','progressions','messages'][i] === name);
+    });
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.getElementById('sec-' + name).classList.add('active');
+    if (name === 'progressions') renderTable();
+    if (name === 'messages') renderMessages();
+  }
+
+  // ============================================================
+  // CONFIG
+  // ============================================================
+  let notions = [];
+
+  function loadAll() {
+    const saved = localStorage.getItem(STORAGE_KEY_NOTIONS);
+    notions = saved ? JSON.parse(saved) : [
+      "Fonctions ln / exp",
+      "Équations du 2ème degré",
+      "Inéquations",
+      "Polynôme degré 3",
+      "Limites",
+      "Dérivées",
+      "Tableau de variation",
+      "Étude complète de fonction"
+    ];
+    renderNotionsList();
+
+    const semaine = localStorage.getItem(STORAGE_KEY_SEMAINE) || getSemaineLabel();
+    document.getElementById('semaineLabel').value = semaine;
+
+    updateStats();
+  }
+
+  function getSemaineLabel() {
+    const now = new Date();
+    const debut = new Date(now);
+    debut.setDate(now.getDate() - now.getDay() + 1);
+    const fin = new Date(debut);
+    fin.setDate(debut.getDate() + 6);
+    const fmt = (d) => d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+    return `Semaine du ${fmt(debut)} au ${fmt(fin)}`;
+  }
+
+  function setSemaineAuto() {
+    document.getElementById('semaineLabel').value = getSemaineLabel();
+  }
+
+  function renderNotionsList() {
+    const container = document.getElementById('notionsList');
+    container.innerHTML = '';
+    notions.forEach((n, i) => {
+      const row = document.createElement('div');
+      row.className = 'notion-row';
+      row.innerHTML = `
+        <input type="text" value="${n}" onchange="notions[${i}]=this.value" placeholder="Nom de la notion" />
+        <button class="btn-del" onclick="removeNotion(${i})">✕ Supprimer</button>
+      `;
+      container.appendChild(row);
+    });
+  }
+
+  function addNotion() {
+    notions.push('');
+    renderNotionsList();
+    const inputs = document.querySelectorAll('#notionsList input');
+    inputs[inputs.length - 1].focus();
+  }
+
+  function removeNotion(i) {
+    notions.splice(i, 1);
+    renderNotionsList();
+  }
+
+  function saveConfig() {
+    notions = notions.map(n => n.trim()).filter(n => n);
+    localStorage.setItem(STORAGE_KEY_NOTIONS, JSON.stringify(notions));
+    localStorage.setItem(STORAGE_KEY_SEMAINE, document.getElementById('semaineLabel').value);
+    renderNotionsList();
+    const msg = document.getElementById('savedMsg');
+    msg.style.display = 'block';
+    setTimeout(() => msg.style.display = 'none', 3000);
+  }
+
+  // ============================================================
+  // STATS
+  // ============================================================
+  function updateStats() {
+    const all = JSON.parse(localStorage.getItem(STORAGE_KEY_PROGRESSIONS) || '[]');
+    const semaine = localStorage.getItem(STORAGE_KEY_SEMAINE) || getSemaineLabel();
+
+    document.getElementById('statTotal').textContent = all.length;
+
+    const thisSemaine = all.filter(e => e.semaine === semaine);
+    document.getElementById('statSemaine').textContent = thisSemaine.length;
+
+    // Taux compréhension
+    let total = 0, ok = 0;
+    all.forEach(e => {
+      e.notions.forEach(n => {
+        if (n.statut !== 'non-evalue') { total++; if (n.statut === 'ok') ok++; }
+      });
+    });
+    document.getElementById('statCompris').textContent = total > 0 ? Math.round((ok / total) * 100) + '%' : '0%';
+
+    // Élèves bloqués
+    const bloques = all.filter(e => e.notions.some(n => n.statut === 'nok'));
+    document.getElementById('statBloques').textContent = bloques.length;
+  }
+
+  // ============================================================
+  // TABLEAU
+  // ============================================================
+  function renderTable() {
+    const all = JSON.parse(localStorage.getItem(STORAGE_KEY_PROGRESSIONS) || '[]');
+    const search = document.getElementById('searchEleve').value.toLowerCase();
+    const classe = document.getElementById('filterClasse').value;
+    const statut = document.getElementById('filterStatut').value;
+
+    let filtered = all.filter(e => {
+      const name = (e.prenom + ' ' + e.nom).toLowerCase();
+      if (search && !name.includes(search)) return false;
+      if (classe && e.classe !== classe) return false;
+      if (statut === 'nok' && !e.notions.some(n => n.statut === 'nok')) return false;
+      if (statut === 'ok' && e.notions.some(n => n.statut !== 'ok' && n.statut !== 'non-evalue')) return false;
+      return true;
+    }).reverse();
+
+    const tbody = document.getElementById('tableBody');
+    if (filtered.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:#888;padding:20px">Aucun résultat</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = filtered.map(e => {
+      const compris = e.notions.filter(n => n.statut === 'ok').length;
+      const arevoir = e.notions.filter(n => n.statut === 'partial').length;
+      const bloques = e.notions.filter(n => n.statut === 'nok').length;
+      const date = new Date(e.date).toLocaleDateString('fr-FR');
+      return `
+        <tr>
+          <td><strong>${e.prenom} ${e.nom}</strong></td>
+          <td>${e.classe}</td>
+          <td>${e.whatsapp}</td>
+          <td><span class="badge badge-ok">${compris} ✅</span></td>
+          <td><span class="badge badge-partial">${arevoir} ⚠️</span></td>
+          <td><span class="badge badge-nok">${bloques} ❌</span></td>
+          <td>${date}</td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  // ============================================================
+  // GÉNÉRATION MESSAGES WHATSAPP
+  // ============================================================
+  function renderMessages() {
+    const all = JSON.parse(localStorage.getItem(STORAGE_KEY_PROGRESSIONS) || '[]');
+    const container = document.getElementById('messagesContainer');
+
+    if (all.length === 0) {
+      container.innerHTML = `
+        <div class="empty-state">
+          <div class="emoji">📭</div>
+          <p>Aucune progression enregistrée pour l'instant.<br>Les messages apparaîtront dès que les élèves remplissent le formulaire.</p>
+        </div>
+      `;
+      return;
+    }
+
+    // Grouper par élève (dernière progression par numéro WhatsApp)
+    const byWa = {};
+    all.forEach(e => {
+      if (!byWa[e.whatsapp] || new Date(e.date) > new Date(byWa[e.whatsapp].date)) {
+        byWa[e.whatsapp] = e;
+      }
+    });
+
+    const eleves = Object.values(byWa).reverse();
+
+    container.innerHTML = eleves.map((e, idx) => {
+      const msg = genererMessage(e);
+      const waNum = e.whatsapp.replace(/\D/g, '');
+      const waLink = `https://wa.me/237${waNum}?text=${encodeURIComponent(msg)}`;
+
+      return `
+        <div class="eleve-msg-card">
+          <div class="eleve-msg-header">
+            <div>
+              <div class="eleve-nom">${e.prenom} ${e.nom}</div>
+              <div class="eleve-meta">${e.classe} • 📞 ${e.whatsapp} • ${new Date(e.date).toLocaleDateString('fr-FR')}</div>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button class="btn-copy" id="copybtn-${idx}" onclick="copyMsg(${idx}, \`${escapeBacktick(msg)}\`)">📋 Copier</button>
+              <a class="btn-wa" href="${waLink}" target="_blank">💬 WhatsApp</a>
+            </div>
+          </div>
+          <div class="msg-box" id="msg-${idx}">${msg}</div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function escapeBacktick(str) {
+    return str.replace(/`/g, '\\`').replace(/\$/g, '\\$');
+  }
+
+  function genererMessage(e) {
+    const compris = e.notions.filter(n => n.statut === 'ok').map(n => n.notion);
+    const arevoir = e.notions.filter(n => n.statut === 'partial').map(n => n.notion);
+    const bloques = e.notions.filter(n => n.statut === 'nok').map(n => n.notion);
+    const semaine = e.semaine || 'cette semaine';
+
+    let msg = `Bonjour ${e.prenom} ! 👋\n\n`;
+    msg += `J'ai bien reçu ta progression pour *${semaine}*.\n\n`;
+
+    if (compris.length > 0) {
+      msg += `✅ *Ce que tu maîtrises bien :*\n`;
+      compris.forEach(n => msg += `• ${n}\n`);
+      msg += `Excellent travail sur ces points ! Continue comme ça. 💪\n\n`;
+    }
+
+    if (arevoir.length > 0) {
+      msg += `⚠️ *À consolider :*\n`;
+      arevoir.forEach(n => msg += `• ${n}\n`);
+      msg += `Ces notions sont presque acquises — revois bien les exercices types et tu seras au point. 📖\n\n`;
+    }
+
+    if (bloques.length > 0) {
+      msg += `❌ *Points de blocage à travailler en priorité :*\n`;
+      bloques.forEach(n => msg += `• ${n}\n`);
+      msg += `Ne t'inquiète pas, on va reprendre ça ensemble. Je vais te préparer des exercices ciblés sur ces notions. 🎯\n\n`;
+    }
+
+    if (bloques.length === 0 && arevoir.length === 0) {
+      msg += `🌟 *Résultat exceptionnel cette semaine !* Tu as tout compris. Garde ce rythme jusqu'au bac !\n\n`;
+    }
+
+    if (e.commentaire) {
+      msg += `📝 *Ton message :* "${e.commentaire}"\n→ J'en prends note, on en parle lors de notre prochain échange.\n\n`;
+    }
+
+    msg += `Courage ${e.prenom} — le bac se prépare pas à pas, et tu n'es pas seul(e). 🏆\n\n`;
+    msg += `*Ing. Moïse Zame — S.E. Corporation*\n📞 +237 695 535 585`;
+
+    return msg;
+  }
+
+  function copyMsg(idx, msg) {
+    navigator.clipboard.writeText(msg).then(() => {
+      const btn = document.getElementById('copybtn-' + idx);
+      btn.textContent = '✅ Copié !';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = '📋 Copier';
+        btn.classList.remove('copied');
+      }, 2000);
+    });
+  }
+
+  // ============================================================
+  // EXPORT CSV
+  // ============================================================
+  function exportCSV() {
+    const all = JSON.parse(localStorage.getItem(STORAGE_KEY_PROGRESSIONS) || '[]');
+    if (all.length === 0) { alert('Aucune donnée à exporter.'); return; }
+
+    const headers = ['Date', 'Semaine', 'Prénom', 'Nom', 'Classe', 'WhatsApp', 'Commentaire'];
+    const notionSample = all[0].notions.map(n => n.notion);
+    notionSample.forEach(n => headers.push(n));
+
+    const rows = all.map(e => {
+      const base = [
+        new Date(e.date).toLocaleDateString('fr-FR'),
+        e.semaine, e.prenom, e.nom, e.classe, e.whatsapp,
+        (e.commentaire || '').replace(/,/g, ';')
+      ];
+      e.notions.forEach(n => {
+        const label = n.statut === 'ok' ? 'Compris' : n.statut === 'partial' ? 'À revoir' : n.statut === 'nok' ? 'Bloqué(e)' : '-';
+        base.push(label);
+      });
+      return base.join(',');
+    });
+
+    const csv = [headers.join(','), ...rows].join('\n');
+    const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'progressions_se_corp.csv';
+    a.click();
+  }
+
+  function clearProgressions() {
+    if (!confirm('⚠️ Supprimer TOUTES les progressions ? Cette action est irréversible.')) return;
+    localStorage.removeItem(STORAGE_KEY_PROGRESSIONS);
+    updateStats();
+    alert('Progressions supprimées.');
+  }
+</script>
+</body>
+</html>
