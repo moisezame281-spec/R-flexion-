@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S.E. Corporation — Diagnostic</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--or:#c9a84c;--or2:#e8c96a;--noir:#0a0906;--fond:#f7f4ee;--gris:#6b6560;--blanc:#fff;--vert:#2d6a4f;--rouge:#c0392b;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:"DM Sans",sans-serif;background:var(--fond);color:var(--noir);min-height:100vh;}
+.hdr{background:var(--noir);padding:1.1rem 1.5rem;display:flex;align-items:center;gap:.8rem;border-bottom:3px solid var(--or);}
+.logo{width:42px;height:42px;border-radius:50%;background:var(--or);display:flex;align-items:center;justify-content:center;font-family:"Cormorant Garamond",serif;font-weight:700;font-size:1rem;color:var(--noir);flex-shrink:0;}
+.hdr h1{font-family:"Cormorant Garamond",serif;font-size:1.2rem;color:var(--blanc);}
+.hdr p{font-size:.72rem;color:#aaa;}
+.steps{display:flex;justify-content:center;gap:.3rem;padding:1rem 1rem;background:var(--blanc);border-bottom:1px solid #eee;overflow-x:auto;}
+.step{display:flex;align-items:center;gap:.4rem;font-size:.72rem;font-weight:600;color:#ccc;white-space:nowrap;}
+.step.active{color:var(--or);}
+.step.done{color:var(--vert);}
+.step-num{width:22px;height:22px;border-radius:50%;border:2px solid currentColor;display:flex;align-items:center;justify-content:center;font-size:.68rem;flex-shrink:0;}
+.step-sep{width:20px;height:2px;background:#eee;margin:0 .2rem;}
+.main{max-width:650px;margin:1.5rem auto;padding:0 1rem;}
+.card{background:var(--blanc);border-radius:14px;padding:1.8rem;box-shadow:0 4px 24px rgba(0,0,0,.07);border-top:4px solid var(--or);display:none;}
+.card.active{display:block;animation:fi .35s ease;}
+@keyframes fi{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+.card-title{font-family:"Cormorant Garamond",serif;font-size:1.4rem;font-weight:700;margin-bottom:.25rem;}
+.card-sub{font-size:.83rem;color:var(--gris);margin-bottom:1.3rem;line-height:1.6;}
+label{display:block;font-size:.72rem;font-weight:600;color:var(--gris);margin:.85rem 0 .25rem;text-transform:uppercase;letter-spacing:.04em;}
+input,select,textarea{width:100%;padding:.65rem .9rem;border:1.5px solid #ddd;border-radius:9px;font-family:"DM Sans",sans-serif;font-size:.88rem;background:var(--fond);color:var(--noir);transition:border-color .2s;}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--or);}
+textarea{resize:vertical;min-height:70px;}
+.err{border-color:var(--rouge) !important;}
+.err-msg{font-size:.75rem;color:var(--rouge);margin-top:.2rem;display:none;}
+.radio-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:.4rem;}
+.radio-grid.col3{grid-template-columns:1fr 1fr 1fr;}
+.ro{position:relative;}
+.ro input{position:absolute;opacity:0;width:0;height:0;}
+.ro label{display:flex;align-items:center;gap:.5rem;padding:.6rem .9rem;border:1.5px solid #ddd;border-radius:9px;cursor:pointer;font-size:.83rem;transition:all .2s;background:var(--fond);margin:0;}
+.ro input:checked+label{border-color:var(--or);background:#fffdf5;font-weight:600;}
+.prog-wrap{background:#eee;border-radius:10px;height:7px;margin:.5rem 0;}
+.prog-bar{height:7px;border-radius:10px;background:linear-gradient(90deg,var(--or),var(--or2));transition:width .4s;}
+.notion-list{display:flex;flex-direction:column;gap:.45rem;margin-top:.5rem;}
+.ni{background:var(--fond);border:1.5px solid #e8e3d8;border-radius:10px;overflow:hidden;transition:border-color .2s;}
+.ni.expanded{border-color:var(--or);}
+.ni.st-ok{border-color:var(--vert);}
+.ni.st-nok{border-color:var(--rouge);}
+.ni-hdr{display:flex;justify-content:space-between;align-items:center;padding:.7rem 1rem;cursor:pointer;user-select:none;}
+.ni-left{flex:1;}
+.ni-title{font-weight:600;font-size:.86rem;}
+.ni-sub{font-size:.74rem;color:var(--gris);margin-top:.1rem;}
+.ni-badge{font-size:.72rem;font-weight:600;padding:.2rem .6rem;border-radius:20px;flex-shrink:0;}
+.bOk{background:#e8f5ee;color:var(--vert);}
+.bNok{background:#fdecea;color:var(--rouge);}
+.ni-body{display:none;padding:0 1rem .9rem;border-top:1px solid #f0ede6;}
+.ni.expanded .ni-body{display:block;}
+.q-label{font-size:.78rem;font-weight:600;color:var(--gris);margin:.7rem 0 .3rem;}
+.opt-row{display:flex;gap:.4rem;flex-wrap:wrap;}
+.opt-btn{padding:.38rem .85rem;border:1.5px solid #ddd;border-radius:20px;font-size:.78rem;font-weight:600;cursor:pointer;background:var(--fond);transition:all .2s;color:var(--gris);}
+.opt-btn:hover{border-color:var(--or);}
+.opt-btn.sel-def{border-color:#1a3a5c;background:#e8f0f8;color:#1a3a5c;}
+.opt-btn.sel-app{border-color:#8b6000;background:#fdf5e0;color:#8b6000;}
+.opt-btn.sel-ok{border-color:var(--vert);background:#e8f5ee;color:var(--vert);}
+.opt-btn.sel-nok{border-color:var(--rouge);background:#fdecea;color:var(--rouge);}
+.btn-row{display:flex;gap:.7rem;margin-top:1.4rem;flex-wrap:wrap;}
+.btn{padding:.75rem 1.3rem;border:none;border-radius:9px;font-family:"DM Sans",sans-serif;font-size:.88rem;font-weight:600;cursor:pointer;transition:all .2s;flex:1;}
+.btn-gold{background:var(--or);color:var(--noir);}
+.btn-gold:hover{background:var(--or2);}
+.btn-outline{background:none;border:1.5px solid var(--or);color:var(--or);}
+.btn-outline:hover{background:#fffdf5;}
+.btn:disabled{opacity:.5;cursor:not-allowed;}
+.pi-yes{background:#e8f5ee;border:2px solid var(--vert);border-radius:10px;padding:.9rem 1rem;margin-top:.7rem;font-size:.85rem;color:var(--vert);font-weight:600;}
+.pi-no{background:#fdf0ef;border:2px solid #f0c0bb;border-radius:10px;padding:.9rem 1rem;margin-top:.7rem;}
+.merci-box{text-align:center;padding:2rem 1rem;}
+.merci-ico{font-size:3.5rem;margin-bottom:1rem;}
+.merci-title{font-family:"Cormorant Garamond",serif;font-size:1.8rem;font-weight:700;color:var(--or);margin-bottom:.5rem;}
+.merci-txt{font-size:.9rem;color:var(--gris);line-height:1.7;margin-bottom:1.2rem;}
+.merci-sig{background:var(--noir);border-radius:10px;padding:1rem;color:var(--blanc);font-size:.82rem;}
+.merci-sig strong{color:var(--or);display:block;margin-bottom:.2rem;}
+.spin{display:inline-block;width:18px;height:18px;border:2px solid rgba(0,0,0,.2);border-top-color:var(--noir);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:.4rem;}
+@keyframes spin{to{transform:rotate(360deg);}}
+@media(max-width:500px){.radio-grid{grid-template-columns:1fr;}.radio-grid.col3{grid-template-columns:1fr 1fr;}}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="logo">SE</div>
+  <div>
+    <h1>S.E. Corporation &mdash; Diagnostic</h1>
+    <p>Suivi personnalis&eacute; &bull; Baccalaur&eacute;at &bull; Grandes &Eacute;coles</p>
+  </div>
+</div>
+
+<div class="steps">
+  <div class="step active" id="stp1"><div class="step-num">1</div><span>Profil</span></div>
+  <div class="step-sep"></div>
+  <div class="step" id="stp2"><div class="step-num">2</div><span>Diagnostic</span></div>
+  <div class="step-sep"></div>
+  <div class="step" id="stp3"><div class="step-num">3</div><span>Pr&eacute;inscription</span></div>
+  <div class="step-sep"></div>
+  <div class="step" id="stp4"><div class="step-num">4</div><span>Termin&eacute;</span></div>
+</div>
+
+<div class="main">
+
+<!-- STEP 1: PROFIL -->
+<div class="card active" id="card1">
+  <div class="card-title">&#128100; Ton profil</div>
+  <div class="card-sub">Remplis soigneusement. Ton suivi sera bas&eacute; sur ces informations.<br><strong>Sois honn&ecirc;te — c'est pour toi !</strong></div>
+
+  <label>Pr&eacute;nom *</label>
+  <input type="text" id="f_prenom" placeholder="Ex : Jean-Paul" oninput="clearErr(this)">
+  <div class="err-msg" id="e_prenom">Pr&eacute;nom invalide (minimum 3 lettres, pas de chiffres)</div>
+
+  <label>Nom de famille *</label>
+  <input type="text" id="f_nom" placeholder="Ex : Mballa" oninput="clearErr(this)">
+  <div class="err-msg" id="e_nom">Nom invalide (minimum 3 lettres, pas de chiffres)</div>
+
+  <label>Sexe *</label>
+  <div class="radio-grid col3">
+    <div class="ro"><input type="radio" name="sexe" id="s_m" value="M"><label for="s_m">&#128104; Masculin</label></div>
+    <div class="ro"><input type="radio" name="sexe" id="s_f" value="F"><label for="s_f">&#128105; F&eacute;minin</label></div>
+  </div>
+
+  <label>Classe *</label>
+  <div class="radio-grid">
+    <div class="ro"><input type="radio" name="classe" id="cC" value="Tle C"><label for="cC">Terminale C</label></div>
+    <div class="ro"><input type="radio" name="classe" id="cD" value="Tle D"><label for="cD">Terminale D</label></div>
+    <div class="ro"><input type="radio" name="classe" id="cA" value="Tle A"><label for="cA">Terminale A</label></div>
+    <div class="ro"><input type="radio" name="classe" id="cA4" value="Tle A4"><label for="cA4">Terminale A4</label></div>
+    <div class="ro"><input type="radio" name="classe" id="cE" value="Tle E"><label for="cE">Terminale E</label></div>
+    <div class="ro"><input type="radio" name="classe" id="cF" value="Tle F"><label for="cF">Terminale F</label></div>
+  </div>
+
+  <label>Etablissement *</label>
+  <input type="text" id="f_etab" placeholder="Ex : Lyc&eacute;e de New-Bell Douala">
+
+  <label>M&eacute;tier vis&eacute; (ou RAS)</label>
+  <input type="text" id="f_metier" placeholder="Ex : M&eacute;decin, Ing&eacute;nieur, RAS...">
+
+  <label>Num&eacute;ro WhatsApp *</label>
+  <input type="tel" id="f_tel" placeholder="Ex : 6XX XXX XXX">
+
+  <div id="doublon-msg" style="display:none;background:#fdecea;border-radius:8px;padding:.7rem 1rem;font-size:.83rem;color:var(--rouge);margin-top:.8rem;border-left:3px solid var(--rouge);"></div>
+
+  <div class="btn-row">
+    <button class="btn btn-gold" id="btn1" onclick="goStep2()">Suivant &#8594;</button>
+  </div>
+</div>
+
+<!-- STEP 2: DIAGNOSTIC -->
+<div class="card" id="card2">
+  <div class="card-title">&#128202; Diagnostic Math&eacute;matiques</div>
+  <div class="card-sub">Clique sur chaque notion. Dis-nous si tu as du mal sur la <strong>d&eacute;finition</strong> ou l'<strong>application</strong>, puis si tu <strong>ma&icirc;trises</strong> ou pas.</div>
+
+  <div class="prog-wrap"><div class="prog-bar" id="diag-prog" style="width:0%"></div></div>
+  <div style="font-size:.73rem;color:var(--gris);text-align:right;margin-bottom:.8rem;" id="prog-txt">0 / 8 &eacute;valu&eacute;es</div>
+
+  <div class="notion-list" id="notion-list"></div>
+
+  <div class="btn-row">
+    <button class="btn btn-outline" onclick="goStep1()">&#8592; Retour</button>
+    <button class="btn btn-gold" onclick="goStep3()">Suivant &#8594;</button>
+  </div>
+</div>
+
+<!-- STEP 3: PREINSCRIPTION -->
+<div class="card" id="card3">
+  <div class="card-title">&#128222; Pr&eacute;inscription</div>
+  <div class="card-sub" id="pi_intro">Derni&egrave;re &eacute;tape.</div>
+
+  <p style="font-size:.88rem;font-weight:600;margin-bottom:.3rem;">Es-tu d&eacute;j&agrave; pr&eacute;inscrit(e) chez S.E. Corporation ?</p>
+  <p style="font-size:.78rem;color:var(--gris);margin-bottom:.8rem;font-style:italic;">&#128073; Ce n'est pas la peine de mentir &mdash; la pr&eacute;inscription est gratuite et sans engagement.</p>
+
+  <div class="radio-grid">
+    <div class="ro"><input type="radio" name="pi" id="pi_o" value="oui" onchange="showPI('oui')"><label for="pi_o">&#9989; Oui, inscrit(e)</label></div>
+    <div class="ro"><input type="radio" name="pi" id="pi_n" value="non" onchange="showPI('non')"><label for="pi_n">&#10060; Pas encore</label></div>
+  </div>
+
+  <div id="pi_oui_box" style="display:none">
+    <div class="pi-yes">&#127881; Excellent ! Tu es sur la bonne voie. Ton suivi personnalis&eacute; commence cette semaine.</div>
+  </div>
+
+  <div id="pi_non_box" style="display:none">
+    <div class="pi-no">
+      <div style="font-weight:600;font-size:.86rem;margin-bottom:.6rem;">Pourquoi pas encore ?</div>
+      <div class="radio-grid">
+        <div class="ro"><input type="radio" name="raison" id="r1" value="parent_decide" onchange="showRaison(this.value)"><label for="r1">C'est mon parent qui d&eacute;cide</label></div>
+        <div class="ro"><input type="radio" name="raison" id="r2" value="pas_info" onchange="showRaison(this.value)"><label for="r2">Pas encore les infos</label></div>
+        <div class="ro"><input type="radio" name="raison" id="r3" value="attendre_bac" onchange="showRaison(this.value)"><label for="r3">J'attends le bac</label></div>
+        <div class="ro"><input type="radio" name="raison" id="r4" value="pas_convaincu" onchange="showRaison(this.value)"><label for="r4">Pas encore convaincu(e)</label></div>
+        <div class="ro"><input type="radio" name="raison" id="r5" value="autre" onchange="showRaison(this.value)"><label for="r5">Autre raison</label></div>
+      </div>
+      <div id="raison_extra" style="display:none;margin-top:.7rem;"></div>
+    </div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-outline" onclick="goStep2()">&#8592; Retour</button>
+    <button class="btn btn-gold" id="btn_submit" onclick="submit()">Envoyer mon diagnostic</button>
+  </div>
+</div>
+
+<!-- STEP 4: MERCI -->
+<div class="card active" id="card4" style="display:none;">
+  <div class="merci-box">
+    <div class="merci-ico">&#127775;</div>
+    <div class="merci-title" id="merci_titre">Merci !</div>
+    <div class="merci-txt" id="merci_txt">
+      Ton diagnostic a bien &eacute;t&eacute; enregistr&eacute;.<br>
+      Ing. Mo&iuml;se Zame analysera tes r&eacute;sultats et te contactera personnellement sur WhatsApp.<br><br>
+      Continue de travailler avec courage &mdash; le bac se pr&eacute;pare pas &agrave; pas, et tu n'es pas seul(e).
+    </div>
+    <div class="merci-sig">
+      <strong>Ing. Mo&iuml;se Zame &mdash; S.E. Corporation</strong>
+      Master 1 G&eacute;nie Civil &bull; ENSPD Douala<br>
+      &#128222; +237 657 882 322 / 697 763 742<br>
+      <span style="color:#aaa;font-size:.75rem;">Since 2015 &bull; 100% de r&eacute;ussite au bac pour nos suivis</span>
+    </div>
+    <div style="margin-top:1rem;font-size:.8rem;color:var(--gris);">Bonne journ&eacute;e et bon courage ! &#9728;&#65039;</div>
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, addDoc, query, where, getDocs, serverTimestamp }
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+var firebaseConfig = {
+  apiKey: "AIzaSyAhSTl2OR5ztfoIwB2TgIqEaiMjD6TmrcI",
+  authDomain: "se-corporation-quiz-7187e.firebaseapp.com",
+  projectId: "se-corporation-quiz-7187e",
+  storageBucket: "se-corporation-quiz-7187e.appspot.com",
+  messagingSenderId: "538290513786",
+  appId: "1:538290513786:web:placeholder"
+};
+
+var app = initializeApp(firebaseConfig);
+var db = getFirestore(app);
+window._db = db;
+window._fs = { collection, addDoc, query, where, getDocs, serverTimestamp };
+
+var NOTIONS = [
+  {id:"ln_def", titre:"Fonctions ln et Exponentielle", sous:"D\u00e9finition et propri\u00e9t\u00e9s"},
+  {id:"eq", titre:"Equations", sous:"Logarithmiques et exponentielles"},
+  {id:"ineq", titre:"In\u00e9quations et syst\u00e8mes", sous:"R\u00e9solution"},
+  {id:"poly3", titre:"Polyn\u00f4me de degr\u00e9 3", sous:"Factorisation, racines"},
+  {id:"limites", titre:"Limites", sous:"Calcul et formes ind\u00e9termin\u00e9es"},
+  {id:"derivees", titre:"D\u00e9riv\u00e9es", sous:"Fonctions compos\u00e9es ln/exp"},
+  {id:"variation", titre:"Sens de variation & Tableau", sous:"Signe de f'(x)"},
+  {id:"etude", titre:"Etude compl\u00e8te de fonctions", sous:"De A \u00e0 Z"}
+];
+
+var notionStatus = {};
+var studentData = {};
+
+function initNotions() {
+  var c = document.getElementById("notion-list");
+  c.innerHTML = "";
+  NOTIONS.forEach(function(n) {
+    notionStatus[n.id] = {type: null, level: null};
+    var div = document.createElement("div");
+    div.className = "ni";
+    div.id = "ni_" + n.id;
+    div.innerHTML =
+      '<div class="ni-hdr" onclick="toggleNotion(\'' + n.id + '\')">' +
+        '<div class="ni-left"><div class="ni-title">' + n.titre + '</div><div class="ni-sub">' + n.sous + '</div></div>' +
+        '<div id="nbadge_' + n.id + '" style="margin-left:.5rem"></div>' +
+        '<span style="margin-left:.5rem;color:var(--gris);font-size:.8rem" id="narr_' + n.id + '">&#9660;</span>' +
+      '</div>' +
+      '<div class="ni-body">' +
+        '<div class="q-label">Tu bloques plut\u00f4t sur :</div>' +
+        '<div class="opt-row">' +
+          '<button class="opt-btn" id="bt_def_' + n.id + '" onclick="setType(\'' + n.id + '\',\'def\')">&#128218; La d\u00e9finition</button>' +
+          '<button class="opt-btn" id="bt_app_' + n.id + '" onclick="setType(\'' + n.id + '\',\'app\')">&#9999; L\'application</button>' +
+          '<button class="opt-btn" id="bt_both_' + n.id + '" onclick="setType(\'' + n.id + '\',\'both\')">&#128308; Les deux</button>' +
+        '</div>' +
+        '<div class="q-label" style="margin-top:.7rem">Niveau global :</div>' +
+        '<div class="opt-row">' +
+          '<button class="opt-btn" id="bt_ok_' + n.id + '" onclick="setLevel(\'' + n.id + '\',\'ok\')">&#128994; Je ma\u00eetrise</button>' +
+          '<button class="opt-btn" id="bt_nok_' + n.id + '" onclick="setLevel(\'' + n.id + '\',\'nok\')">&#128308; J\'ai du mal</button>' +
+        '</div>' +
+      '</div>';
+    c.appendChild(div);
+  });
+}
+
+window.toggleNotion = function(id) {
+  var el = document.getElementById("ni_" + id);
+  var arr = document.getElementById("narr_" + id);
+  var expanded = el.classList.contains("expanded");
+  document.querySelectorAll(".ni").forEach(function(e){
+    e.classList.remove("expanded");
+    var a = e.querySelector("[id^=narr_]");
+    if(a) a.innerHTML = "&#9660;";
+  });
+  if(!expanded){
+    el.classList.add("expanded");
+    arr.innerHTML = "&#9650;";
+  }
+};
+
+window.setType = function(id, type) {
+  notionStatus[id].type = type;
+  ["def","app","both"].forEach(function(t){
+    var b = document.getElementById("bt_" + t + "_" + id);
+    b.className = "opt-btn" + (type===t ? " sel-" + (t==="def"?"def":t==="app"?"app":"nok") : "");
+  });
+  updateBadge(id); updateProgress();
+};
+
+window.setLevel = function(id, level) {
+  notionStatus[id].level = level;
+  var el = document.getElementById("ni_" + id);
+  el.classList.remove("st-ok","st-nok");
+  el.classList.add("st-" + level);
+  ["ok","nok"].forEach(function(l){
+    var b = document.getElementById("bt_" + l + "_" + id);
+    b.className = "opt-btn" + (level===l ? " sel-" + l : "");
+  });
+  updateBadge(id); updateProgress();
+};
+
+function updateBadge(id) {
+  var s = notionStatus[id];
+  var b = document.getElementById("nbadge_" + id);
+  if(!s.level){b.innerHTML="";return;}
+  var cls = s.level==="ok"?"bOk":"bNok";
+  var lbl = s.level==="ok"?"&#128994; OK":"&#128308; Difficult\u00e9";
+  b.innerHTML = '<span class="ni-badge ' + cls + '">' + lbl + '</span>';
+}
+
+function updateProgress() {
+  var done = Object.values(notionStatus).filter(function(s){return s.level!==null;}).length;
+  var pct = Math.round(done/NOTIONS.length*100);
+  document.getElementById("diag-prog").style.width = pct + "%";
+  document.getElementById("prog-txt").textContent = done + " / " + NOTIONS.length + " \u00e9valu\u00e9es";
+}
+
+function isValidName(s) {
+  return /^[A-Za-z\u00C0-\u024F\-\s']{3,}$/.test(s.trim()) && s.trim().length >= 3;
+}
+
+window.clearErr = function(el) {
+  el.classList.remove("err");
+};
+
+window.showPI = function(val) {
+  document.getElementById("pi_oui_box").style.display = val==="oui"?"block":"none";
+  document.getElementById("pi_non_box").style.display = val==="non"?"block":"none";
+};
+
+window.showRaison = function(val) {
+  var ex = document.getElementById("raison_extra");
+  if(val==="parent_decide"){
+    ex.style.display="block";
+    ex.innerHTML='<label>Num\u00e9ro WhatsApp du parent *</label><input type="tel" id="f_tel_parent" placeholder="Ex : 6XX XXX XXX"><div style="font-size:.75rem;color:var(--gris);margin-top:.3rem;">Ing. Mo\u00efse Zame contactera directement le parent selon le m\u00e9tier vis\u00e9.</div>';
+  } else if(val==="autre"){
+    ex.style.display="block";
+    ex.innerHTML='<label>Pr\u00e9cise</label><textarea id="f_raison_autre" placeholder="Ta raison..."></textarea>';
+  } else {
+    ex.style.display="none";
+  }
+};
+
+window.goStep1 = function() { showCard(1); setStep(1); };
+
+window.goStep2 = async function() {
+  var prenom = document.getElementById("f_prenom").value.trim();
+  var nom = document.getElementById("f_nom").value.trim();
+  var classe = document.querySelector('input[name="classe"]:checked');
+  var tel = document.getElementById("f_tel").value.trim();
+  var ok = true;
+
+  if(!isValidName(prenom)){
+    document.getElementById("f_prenom").classList.add("err");
+    document.getElementById("e_prenom").style.display="block";
+    ok=false;
+  }
+  if(!isValidName(nom)){
+    document.getElementById("f_nom").classList.add("err");
+    document.getElementById("e_nom").style.display="block";
+    ok=false;
+  }
+  if(!classe||!tel){
+    alert("Merci de remplir tous les champs obligatoires (*)");
+    ok=false;
+  }
+  if(!ok) return;
+
+  var btn = document.getElementById("btn1");
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spin"></span>V\u00e9rification...';
+
+  // Check doublon
+  var key = (prenom+nom).toLowerCase().replace(/\s/g,"");
+  try {
+    var q = window._fs.query(
+      window._fs.collection(window._db, "diagnostics"),
+      window._fs.where("key","==",key)
+    );
+    var snap = await window._fs.getDocs(q);
+    if(!snap.empty){
+      document.getElementById("doublon-msg").style.display="block";
+      document.getElementById("doublon-msg").textContent =
+        "Un diagnostic a d\u00e9j\u00e0 \u00e9t\u00e9 soumis pour ce nom. Si c'est une erreur, contacte Ing. Mo\u00efse Zame directement.";
+      btn.disabled=false;
+      btn.innerHTML="Suivant &#8594;";
+      return;
+    }
+  } catch(e) {
+    console.log("Firebase check error:", e);
+  }
+
+  studentData = {
+    prenom: prenom, nom: nom, key: key,
+    sexe: (document.querySelector('input[name="sexe"]:checked')||{value:"?"}).value,
+    classe: classe.value,
+    etab: document.getElementById("f_etab").value.trim(),
+    metier: document.getElementById("f_metier").value.trim()||"RAS",
+    tel: tel
+  };
+
+  btn.disabled=false;
+  btn.innerHTML="Suivant &#8594;";
+  initNotions();
+  showCard(2); setStep(2);
+};
+
+window.goStep3 = function() {
+  var prenom = studentData.prenom;
+  var sexe = studentData.sexe;
+  document.getElementById("pi_intro").textContent =
+    (sexe==="F"?"Presque termin\u00e9e, ":"Presque termin\u00e9, ") + prenom + " \ud83d\ude0a";
+  showCard(3); setStep(3);
+};
+
+window.submit = async function() {
+  var pi = document.querySelector('input[name="pi"]:checked');
+  if(!pi){ alert("Indique si tu es pr\u00e9inscrit(e) ou non."); return; }
+
+  var btn = document.getElementById("btn_submit");
+  btn.disabled=true;
+  btn.innerHTML='<span class="spin"></span>Envoi...';
+
+  var raison = (document.querySelector('input[name="raison"]:checked')||{value:""}).value;
+  var telParent = "";
+  if(raison==="parent_decide"){
+    var tp = document.getElementById("f_tel_parent");
+    if(tp) telParent = tp.value.trim();
+  }
+  var raisonAutre = "";
+  if(raison==="autre"){
+    var ra = document.getElementById("f_raison_autre");
+    if(ra) raisonAutre = ra.value.trim();
+  }
+
+  var notionsArr = {};
+  NOTIONS.forEach(function(n){
+    notionsArr[n.id] = notionStatus[n.id];
+  });
+
+  var payload = {
+    ...studentData,
+    notions: notionsArr,
+    preinscrit: pi.value,
+    raison_non: raison,
+    tel_parent: telParent,
+    raison_autre: raisonAutre,
+    date: window._fs.serverTimestamp(),
+    semaine: getSemaine()
+  };
+
+  try {
+    await window._fs.addDoc(window._fs.collection(window._db,"diagnostics"), payload);
+  } catch(e) {
+    console.error("Save error:", e);
+  }
+
+  var prenom = studentData.prenom;
+  var sexe = studentData.sexe;
+  document.getElementById("merci_titre").textContent =
+    "Merci " + prenom + " \ud83c\udf1f";
+  document.getElementById("merci_txt").innerHTML =
+    "Ton diagnostic a bien \u00e9t\u00e9 enregistr\u00e9.<br>" +
+    "Ing. Mo\u00efse Zame analysera tes r\u00e9sultats et te contactera personnellement sur WhatsApp.<br><br>" +
+    (pi.value==="oui"
+      ? "Tu es pr\u00e9inscrit" + (sexe==="F"?"e":"") + " &mdash; ton suivi personnalis\u00e9 commence cette semaine. Reste disponible sur WhatsApp !"
+      : "Tu n'es pas encore inscrit" + (sexe==="F"?"e":"") + ". Pas de pression &mdash; mais souviens-toi : chaque semaine qui passe, c'est une semaine de moins pour se pr\u00e9parer.") +
+    "<br><br>Continue de travailler avec courage. Tu n'es pas seul" + (sexe==="F"?"e":"") + ".";
+
+  showCard(4); setStep(4);
+};
+
+function getSemaine() {
+  var d = new Date();
+  var j = d.getDay()||7;
+  var lundi = new Date(d);
+  lundi.setDate(d.getDate()-j+1);
+  return lundi.toISOString().slice(0,10);
+}
+
+function showCard(n) {
+  [1,2,3,4].forEach(function(i){
+    var c = document.getElementById("card"+i);
+    c.classList.remove("active");
+    c.style.display = "none";
+  });
+  var target = document.getElementById("card"+n);
+  target.style.display = "block";
+  target.classList.add("active");
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function setStep(n) {
+  [1,2,3,4].forEach(function(i){
+    var el = document.getElementById("stp"+i);
+    el.classList.remove("active","done");
+    if(i<n) el.classList.add("done");
+    else if(i===n) el.classList.add("active");
+  });
+}
+
+// Init
+showCard(1);
+</script>
+</body>
+</html>
