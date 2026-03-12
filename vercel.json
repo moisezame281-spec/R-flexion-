@@ -12,6 +12,10 @@
     {"src": "/diagnostic", "dest": "/diagnostic.html"},
     {"src": "/diagnostic.html", "dest": "/diagnostic.html"},
     {"src": "/admin-diagnostic", "dest": "/admin_diagnostic.html"},
-    {"src": "/admin_diagnostic.html", "dest": "/admin_diagnostic.html"}
+    {"src": "/admin_diagnostic.html", "dest": "/admin_diagnostic.html"},
+    {"src": "/progression", "dest": "/progression.html"},
+    {"src": "/progression.html", "dest": "/progression.html"},
+    {"src": "/admin-progression", "dest": "/admin_progression.html"},
+    {"src": "/admin_progression.html", "dest": "/admin_progression.html"}
   ]
 }
