@@ -9,5 +9,7 @@
     {"src": "/admin.html", "dest": "/admin.html"},
     {"src": "/communication", "dest": "/communication.html"},
     {"src": "/communication.html", "dest": "/communication.html"}
+    {"src":"/diagnostic","dest":"/diagnostic.html"},
+    {"src":"/admin-diagnostic","dest":"/admin_diagnostic.html"}
   ]
 }
