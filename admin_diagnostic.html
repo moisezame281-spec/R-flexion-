@@ -53,9 +53,8 @@ tr:hover td{background:#fffdf8;}
 .pill-pi-oui{background:#e8f5ee;color:var(--vert);}
 .pill-pi-non{background:#fdecea;color:var(--rouge);}
 .pill-neutral{background:#f0ede6;color:var(--gris);}
-.btn-pdf{background:linear-gradient(135deg,#c9a84c,#e8c96a);color:var(--noir);border:none;border-radius:6px;padding:.3rem .7rem;font-size:.73rem;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:.3rem;transition:transform .15s,box-shadow .15s;}
+.btn-pdf{background:linear-gradient(135deg,#c9a84c,#e8c96a);color:var(--noir);border:none;border-radius:6px;padding:.3rem .7rem;font-size:.73rem;font-weight:700;cursor:pointer;transition:transform .15s,box-shadow .15s;}
 .btn-pdf:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(201,168,76,.4);}
-.btn-pdf:active{transform:translateY(0);}
 .btn-detail{background:var(--or);border:none;border-radius:6px;padding:.3rem .7rem;font-size:.75rem;font-weight:600;cursor:pointer;}
 .detail-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;z-index:100;align-items:center;justify-content:center;}
 .detail-overlay.open{display:flex;}
@@ -74,17 +73,13 @@ tr:hover td{background:#fffdf8;}
 .loading{text-align:center;padding:3rem;color:var(--gris);}
 .spin{display:inline-block;width:24px;height:24px;border:3px solid #eee;border-top-color:var(--or);border-radius:50%;animation:spin .7s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg);}}
-
-/* PDF Generation Toast */
-.toast{position:fixed;bottom:2rem;right:2rem;background:var(--noir);color:var(--blanc);padding:.8rem 1.4rem;border-radius:10px;font-size:.82rem;font-weight:600;border-left:4px solid var(--or);transform:translateY(100px);opacity:0;transition:all .3s;z-index:999;}
+.toast{position:fixed;bottom:2rem;right:2rem;background:var(--noir);color:var(--blanc);padding:.8rem 1.4rem;border-radius:10px;font-size:.82rem;font-weight:600;border-left:4px solid var(--or);transform:translateY(100px);opacity:0;transition:all .3s;z-index:9999;}
 .toast.show{transform:translateY(0);opacity:1;}
-
 @media(max-width:900px){.stats-row{grid-template-columns:1fr 1fr;}.filters{flex-direction:column;align-items:flex-start;}}
-@media(max-width:600px){.stats-row{grid-template-columns:1fr 1fr;} table{font-size:.75rem;} td,th{padding:.5rem .5rem;}}
+@media(max-width:600px){.stats-row{grid-template-columns:1fr 1fr;}table{font-size:.75rem;}td,th{padding:.5rem .5rem;}}
 </style>
 </head>
 <body>
-
 <div class="hdr">
   <div class="hdr-left">
     <div class="logo">SE</div>
@@ -105,49 +100,27 @@ tr:hover td{background:#fffdf8;}
 </div>
 
 <div class="dash" id="dashboard">
-  <div class="stats-row" id="stats-row">
-    <div class="stat-card"><div class="stat-num" id="st-total">—</div><div class="stat-lbl">Diagnostics total</div></div>
-    <div class="stat-card"><div class="stat-num" id="st-pi" style="color:var(--vert)">—</div><div class="stat-lbl">Pr&eacute;inscrits</div></div>
-    <div class="stat-card"><div class="stat-num" id="st-npi" style="color:var(--rouge)">—</div><div class="stat-lbl">Non inscrits</div></div>
-    <div class="stat-card"><div class="stat-num" id="st-week">—</div><div class="stat-lbl">Cette semaine</div></div>
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-num" id="st-total">&#8212;</div><div class="stat-lbl">Diagnostics total</div></div>
+    <div class="stat-card"><div class="stat-num" id="st-pi" style="color:var(--vert)">&#8212;</div><div class="stat-lbl">Pr&eacute;inscrits</div></div>
+    <div class="stat-card"><div class="stat-num" id="st-npi" style="color:var(--rouge)">&#8212;</div><div class="stat-lbl">Non inscrits</div></div>
+    <div class="stat-card"><div class="stat-num" id="st-week">&#8212;</div><div class="stat-lbl">Cette semaine</div></div>
   </div>
-
   <div class="filters">
-    <div class="filter-group">
-      <label>Recherche</label>
-      <input type="text" id="f-search" placeholder="Nom, pr&eacute;nom..." oninput="applyFilters()">
+    <div class="filter-group"><label>Recherche</label><input type="text" id="f-search" placeholder="Nom, pr&eacute;nom..." oninput="applyFilters()"></div>
+    <div class="filter-group"><label>Classe</label>
+      <select id="f-classe" onchange="applyFilters()"><option value="">Toutes</option><option>Tle C</option><option>Tle D</option><option>Tle A</option><option>Tle A4</option><option>Tle E</option><option>Tle F</option></select>
     </div>
-    <div class="filter-group">
-      <label>Classe</label>
-      <select id="f-classe" onchange="applyFilters()">
-        <option value="">Toutes</option>
-        <option>Tle C</option><option>Tle D</option><option>Tle A</option>
-        <option>Tle A4</option><option>Tle E</option><option>Tle F</option>
-      </select>
+    <div class="filter-group"><label>M&eacute;tier</label><select id="f-metier" onchange="applyFilters()"><option value="">Tous</option></select></div>
+    <div class="filter-group"><label>Pr&eacute;inscription</label>
+      <select id="f-pi" onchange="applyFilters()"><option value="">Tous</option><option value="oui">Pr&eacute;inscrits</option><option value="non">Non inscrits</option></select>
     </div>
-    <div class="filter-group">
-      <label>M&eacute;tier</label>
-      <select id="f-metier" onchange="applyFilters()"><option value="">Tous</option></select>
-    </div>
-    <div class="filter-group">
-      <label>Pr&eacute;inscription</label>
-      <select id="f-pi" onchange="applyFilters()">
-        <option value="">Tous</option>
-        <option value="oui">Pr&eacute;inscrits</option>
-        <option value="non">Non inscrits</option>
-      </select>
-    </div>
-    <div class="filter-group">
-      <label>Point faible</label>
+    <div class="filter-group"><label>Point faible</label>
       <select id="f-notion" onchange="applyFilters()">
-        <option value="">Toutes notions</option>
-        <option value="ln_def">Fonctions ln/exp</option>
-        <option value="eq">Equations</option>
-        <option value="ineq">In&eacute;quations</option>
-        <option value="poly3">Polyn&ocirc;me degr&eacute; 3</option>
-        <option value="limites">Limites</option>
-        <option value="derivees">D&eacute;riv&eacute;es</option>
-        <option value="variation">Tableau de variation</option>
+        <option value="">Toutes notions</option><option value="ln_def">Fonctions ln/exp</option>
+        <option value="eq">Equations</option><option value="ineq">In&eacute;quations</option>
+        <option value="poly3">Polyn&ocirc;me degr&eacute; 3</option><option value="limites">Limites</option>
+        <option value="derivees">D&eacute;riv&eacute;es</option><option value="variation">Tableau de variation</option>
         <option value="etude">Etude compl&egrave;te</option>
       </select>
     </div>
@@ -156,31 +129,25 @@ tr:hover td{background:#fffdf8;}
       <button class="btn-sm btn-export" onclick="exportCSV()">&#128229; Export CSV</button>
     </div>
   </div>
-
   <div class="table-wrap">
-    <div class="table-hdr">
-      <h3>&#128203; Liste des diagnostics</h3>
-      <span class="count-lbl" id="count-lbl">Chargement...</span>
-    </div>
+    <div class="table-hdr"><h3>&#128203; Liste des diagnostics</h3><span class="count-lbl" id="count-lbl">Chargement...</span></div>
     <div id="table-area"><div class="loading"><div class="spin"></div></div></div>
   </div>
 </div>
 
 <div class="detail-overlay" id="detail-overlay" onclick="closeDetail(event)">
-  <div class="detail-box" id="detail-box">
+  <div class="detail-box">
     <button class="detail-close" onclick="document.getElementById('detail-overlay').classList.remove('open')">&#10005;</button>
     <div id="detail-content"></div>
   </div>
 </div>
-
 <div class="toast" id="toast"></div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, collection, getDocs, orderBy, query }
-  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore, collection, getDocs, orderBy, query } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-var firebaseConfig = {
+const firebaseConfig = {
   apiKey: "AIzaSyAhSTl2OR5ztfoIwB2TgIqEaiMjD6TmrcI",
   authDomain: "se-corporation-quiz-7187e.firebaseapp.com",
   projectId: "se-corporation-quiz-7187e",
@@ -188,912 +155,608 @@ var firebaseConfig = {
   messagingSenderId: "538290513786",
   appId: "1:538290513786:web:placeholder"
 };
-
-var app = initializeApp(firebaseConfig);
-var db = getFirestore(app);
-
-var PWD = "SE2025admin";
-var allData = [];
-
-var NOTIONS_LABELS = {
-  ln_def:"Fonctions ln/exp", eq:"Equations", ineq:"Inequations",
-  poly3:"Polynome degre 3", limites:"Limites", derivees:"Derivees",
-  variation:"Tableau de variation", etude:"Etude complete"
-};
-
-// =============================================
-// CONTENU PEDAGOGIQUE PAR NOTION
-// Inspire de camerecole, sujetexa, scribd
-// =============================================
-var CONTENU_PEDAGOGIQUE = {
-
-  ln_def: {
-    titre: "Fonctions Logarithme et Exponentielle",
-    couleur: [26, 58, 92], // bleu fonce
-    intro: "La fonction logarithme neperien ln et la fonction exponentielle exp sont fondamentales en Terminale. Elles apparaissent dans de nombreux sujets du BAC.",
-    definition: [
-      "ln est definie sur ]0;+inf[ et ln(e) = 1, ln(1) = 0",
-      "exp(x) = e^x est definie sur R et exp(0) = 1",
-      "ln et exp sont des fonctions reciproques : ln(exp(x)) = x et exp(ln(x)) = x pour x > 0"
-    ],
-    proprietes: [
-      "ln(a x b) = ln(a) + ln(b)   (a,b > 0)",
-      "ln(a/b) = ln(a) - ln(b)      (a,b > 0)",
-      "ln(a^n) = n x ln(a)           (a > 0)",
-      "exp(a+b) = exp(a) x exp(b)",
-      "exp(a-b) = exp(a) / exp(b)",
-      "(exp(a))^n = exp(n x a)"
-    ],
-    exemples: [
-      {
-        enonce: "Simplifier : ln(e^3) + ln(1/e)",
-        solution: "ln(e^3) + ln(1/e) = 3 + ln(e^(-1)) = 3 + (-1) = 2"
-      },
-      {
-        enonce: "Resoudre : ln(2x - 1) = ln(5)",
-        solution: "ln est injective donc 2x - 1 = 5, soit x = 3. Verification : 2(3)-1 = 5 > 0. Solution : x = 3"
-      },
-      {
-        enonce: "Resoudre : e^(2x) = e^(x+3)",
-        solution: "exp est injective donc 2x = x + 3, soit x = 3. Solution : x = 3"
-      }
-    ],
-    exercices: [
-      { enonce: "Calculer ln(e^5) - ln(e^2)", corrige: "ln(e^5) - ln(e^2) = 5 - 2 = 3" },
-      { enonce: "Resoudre ln(x+2) = 1", corrige: "x + 2 = e, donc x = e - 2 (verif: e-2+2=e>0) OK" },
-      { enonce: "Simplifier exp(3ln(2))", corrige: "exp(ln(2^3)) = 2^3 = 8" },
-      { enonce: "Resoudre e^x = 7 (donner la solution avec ln)", corrige: "x = ln(7)" }
-    ],
-    bac_tip: "Au BAC, les equations avec ln ou exp arrivent souvent dans les etudes de fonctions (signe de la derivee). Pensez toujours a verifier le domaine de definition pour ln !"
-  },
-
-  eq: {
-    titre: "Equations du 2nd Degre et Equations Diverses",
-    couleur: [45, 106, 79], // vert
-    intro: "Resoudre une equation, c'est trouver toutes les valeurs de x qui verifient l'egalite. C'est une competence cle pour le BAC.",
-    definition: [
-      "Equation du 2nd degre : ax^2 + bx + c = 0 (a different de 0)",
-      "Discriminant : Delta = b^2 - 4ac",
-      "Si Delta > 0 : deux solutions x1 = (-b - racine(Delta))/(2a) et x2 = (-b + racine(Delta))/(2a)",
-      "Si Delta = 0 : une solution double x0 = -b/(2a)",
-      "Si Delta < 0 : pas de solution reelle"
-    ],
-    proprietes: [
-      "Somme des racines : x1 + x2 = -b/a",
-      "Produit des racines : x1 x x2 = c/a",
-      "Factorisation : ax^2 + bx + c = a(x - x1)(x - x2)"
-    ],
-    exemples: [
-      {
-        enonce: "Resoudre : x^2 - 5x + 6 = 0",
-        solution: "Delta = 25 - 24 = 1 > 0. x1 = (5-1)/2 = 2, x2 = (5+1)/2 = 3. Solutions : x = 2 ou x = 3"
-      },
-      {
-        enonce: "Resoudre : 2x^2 + 3x + 1 = 0",
-        solution: "Delta = 9 - 8 = 1. x1 = (-3-1)/4 = -1, x2 = (-3+1)/4 = -1/2. Solutions : x = -1 ou x = -1/2"
-      }
-    ],
-    exercices: [
-      { enonce: "Resoudre x^2 - 7x + 12 = 0", corrige: "Delta = 49-48 = 1. x = 3 ou x = 4" },
-      { enonce: "Resoudre x^2 + 4x + 4 = 0", corrige: "Delta = 16-16 = 0. x = -2 (racine double)" },
-      { enonce: "Resoudre x^2 + x + 1 = 0", corrige: "Delta = 1-4 = -3 < 0. Pas de solution reelle." },
-      { enonce: "Factoriser : x^2 - 4x + 3", corrige: "Delta = 4. Racines : 1 et 3. Factorisation : (x-1)(x-3)" }
-    ],
-    bac_tip: "Au BAC Cameroun, les equations apparaissent souvent dans les etudes de fonctions pour trouver les zeros. Maitrisez aussi les equations de la forme f(x) = k !"
-  },
-
-  ineq: {
-    titre: "Inequations",
-    couleur: [192, 57, 43], // rouge
-    intro: "Une inequation est une inegalite contenant une inconnue. La solution est un ensemble (intervalle) et non un nombre isole.",
-    definition: [
-      "Resoudre f(x) > 0 revient a trouver les intervalles ou f est positive",
-      "Methode : chercher les zeros de f, dresser le tableau de signes",
-      "ATTENTION : si on multiplie/divise par un nombre negatif, le sens de l'inegalite s'inverse"
-    ],
-    proprietes: [
-      "ax + b > 0 => x > -b/a si a > 0, x < -b/a si a < 0",
-      "Pour un produit : A x B > 0 si meme signe (++ ou --)",
-      "Pour un quotient : A/B > 0 meme regle que le produit"
-    ],
-    exemples: [
-      {
-        enonce: "Resoudre : 3x - 6 > 0",
-        solution: "3x > 6, x > 2. Solution : ]2 ; +inf["
-      },
-      {
-        enonce: "Resoudre : (x-1)(x+3) <= 0",
-        solution: "Zeros : x = 1 et x = -3. Tableau de signes : produit negatif entre -3 et 1. Solution : [-3 ; 1]"
-      },
-      {
-        enonce: "Resoudre : x^2 - 4 > 0",
-        solution: "x^2 - 4 = (x-2)(x+2). Zeros : x = -2 et x = 2. Solution : ]-inf ; -2[ U ]2 ; +inf["
-      }
-    ],
-    exercices: [
-      { enonce: "Resoudre 2x + 5 < 11", corrige: "2x < 6, x < 3. Solution : ]-inf ; 3[" },
-      { enonce: "Resoudre (x-2)(x-5) > 0", corrige: "Solution : ]-inf ; 2[ U ]5 ; +inf[" },
-      { enonce: "Resoudre x^2 - 9 <= 0", corrige: "(x-3)(x+3) <= 0. Solution : [-3 ; 3]" },
-      { enonce: "Resoudre (2x-1)/(x+2) >= 0", corrige: "Zeros : x=1/2 et x=-2 (exclu). Solution : ]-inf;-2[ U [1/2;+inf[" }
-    ],
-    bac_tip: "Les inequations sont souvent liees aux tableaux de variation au BAC. Maitrisez le tableau de signes : c'est la cle !"
-  },
-
-  poly3: {
-    titre: "Polynomes du 3eme Degre",
-    couleur: [90, 60, 140], // violet
-    intro: "Un polynome du 3eme degre a la forme P(x) = ax^3 + bx^2 + cx + d. On les etudie souvent via la factorisation.",
-    definition: [
-      "Theoreme : si P(r) = 0, alors (x - r) est un facteur de P(x)",
-      "Factorisation : P(x) = a(x - r)(x^2 + px + q)",
-      "Methode de division euclidienne ou identification des coefficients"
-    ],
-    proprietes: [
-      "Un polynome de degre 3 a au moins une racine reelle",
-      "Si r est racine : P(x) = (x - r) x Q(x) ou Q est de degre 2",
-      "Chercher les racines rationnelles parmi les diviseurs du terme constant"
-    ],
-    exemples: [
-      {
-        enonce: "Factoriser P(x) = x^3 - 6x^2 + 11x - 6",
-        solution: "P(1) = 1-6+11-6 = 0, donc (x-1) est facteur. Division : P(x) = (x-1)(x^2-5x+6) = (x-1)(x-2)(x-3)"
-      },
-      {
-        enonce: "Factoriser P(x) = 2x^3 - x^2 - 5x + 2 sachant que 2 est racine",
-        solution: "P(x) = (x-2)(2x^2+3x-1). Puis on resout 2x^2+3x-1=0 pour les autres racines."
-      }
-    ],
-    exercices: [
-      { enonce: "Verifier que 1 est racine de x^3 - 3x + 2 et factoriser", corrige: "P(1)=0. P(x)=(x-1)(x^2+x-2)=(x-1)(x-1)(x+2)=(x-1)^2(x+2)" },
-      { enonce: "Factoriser x^3 + 3x^2 - 4 sachant que 1 est racine", corrige: "P(x)=(x-1)(x^2+4x+4)=(x-1)(x+2)^2" },
-      { enonce: "Resoudre x^3 - x = 0", corrige: "x(x^2-1)=0. x(x-1)(x+1)=0. Solutions : x=0, x=1, x=-1" }
-    ],
-    bac_tip: "Au BAC, on vous donne souvent une racine evidente. Testez toujours x = 1, x = -1, x = 2 en premier !"
-  },
-
-  limites: {
-    titre: "Calcul de Limites",
-    couleur: [180, 120, 20], // or fonce
-    intro: "La limite d'une fonction en un point decrit son comportement au voisinage de ce point. C'est la base de l'analyse.",
-    definition: [
-      "lim(x->a) f(x) = L signifie que f(x) se rapproche de L quand x s'approche de a",
-      "Limite en +inf ou -inf : comportement asymptotique",
-      "Formes indeterminees : inf/inf, 0/0, inf - inf => il faut lever l'indetermination"
-    ],
-    proprietes: [
-      "Limites usuelles : lim(x->+inf) x^n = +inf, lim(x->-inf) x^n (selon parite)",
-      "Croissances comparees : ln(x)/x^n -> 0 et x^n/e^x -> 0 quand x -> +inf",
-      "Factoriser par le terme dominant pour les formes inf/inf",
-      "Conjuguee pour les formes avec racines carrees"
-    ],
-    exemples: [
-      {
-        enonce: "Calculer lim(x->+inf) (3x^2 - 2x + 1) / (x^2 + 5)",
-        solution: "Diviser par x^2 : (3 - 2/x + 1/x^2) / (1 + 5/x^2). Quand x->+inf : -> 3/1 = 3"
-      },
-      {
-        enonce: "Calculer lim(x->2) (x^2 - 4)/(x - 2)",
-        solution: "Forme 0/0. Factoriser : (x-2)(x+2)/(x-2) = x+2. Limite = 2+2 = 4"
-      },
-      {
-        enonce: "Calculer lim(x->+inf) (x - racine(x^2 + 1))",
-        solution: "Conjuguee : (x^2-(x^2+1))/(x+racine(x^2+1)) = -1/(x+racine(x^2+1)) -> 0"
-      }
-    ],
-    exercices: [
-      { enonce: "lim(x->+inf) (2x^3 - x) / (x^3 + 4)", corrige: "Diviser par x^3 -> 2/1 = 2" },
-      { enonce: "lim(x->3) (x^2 - 9)/(x - 3)", corrige: "= (x+3)(x-3)/(x-3) = x+3 -> 6" },
-      { enonce: "lim(x->+inf) x - racine(x)", corrige: "= racine(x)(racine(x)-1) -> +inf" },
-      { enonce: "lim(x->0) sin(x)/x", corrige: "Limite remarquable = 1" }
-    ],
-    bac_tip: "Les formes indeterminees sont quasi-systematiques au BAC. Apprenez les 4 methodes : factorisation, terme dominant, conjuguee, croissances comparees !"
-  },
-
-  derivees: {
-    titre: "Derivees de Fonctions",
-    couleur: [20, 100, 150], // bleu moyen
-    intro: "La derivee mesure la variation instantanee d'une fonction. Elle est essentielle pour les tableaux de variation et l'optimisation.",
-    definition: [
-      "f'(x) = lim(h->0) [f(x+h) - f(x)] / h",
-      "f'(a) represente la pente de la tangente a la courbe en x = a",
-      "Si f'(x) > 0 : f est croissante. Si f'(x) < 0 : f est decroissante"
-    ],
-    proprietes: [
-      "(u + v)' = u' + v'",
-      "(k x u)' = k x u'   (k constante)",
-      "(u x v)' = u'v + uv'",
-      "(u/v)' = (u'v - uv') / v^2",
-      "(u^n)' = n x u^(n-1) x u'",
-      "(ln u)' = u'/u",
-      "(exp u)' = u' x exp(u)",
-      "(racine(u))' = u' / (2 x racine(u))"
-    ],
-    exemples: [
-      {
-        enonce: "Calculer f'(x) si f(x) = 3x^2 - 2x + 5",
-        solution: "f'(x) = 6x - 2"
-      },
-      {
-        enonce: "Calculer f'(x) si f(x) = (2x+1)/(x-3)",
-        solution: "u=2x+1, v=x-3, u'=2, v'=1. f'(x) = (2(x-3) - (2x+1)(1))/(x-3)^2 = (2x-6-2x-1)/(x-3)^2 = -7/(x-3)^2"
-      },
-      {
-        enonce: "Calculer f'(x) si f(x) = ln(x^2 + 1)",
-        solution: "u = x^2+1, u' = 2x. f'(x) = 2x/(x^2+1)"
-      }
-    ],
-    exercices: [
-      { enonce: "Derivee de f(x) = x^3 - 4x^2 + 2", corrige: "f'(x) = 3x^2 - 8x" },
-      { enonce: "Derivee de f(x) = e^(3x+1)", corrige: "f'(x) = 3e^(3x+1)" },
-      { enonce: "Derivee de f(x) = x x ln(x)", corrige: "f'(x) = ln(x) + x x (1/x) = ln(x) + 1" },
-      { enonce: "Derivee de f(x) = racine(2x+3)", corrige: "f'(x) = 2/(2 x racine(2x+3)) = 1/racine(2x+3)" }
-    ],
-    bac_tip: "La derivee, c'est le coeur de l'etude de fonction. Sans la derivee = pas de tableau de variation = pas de maximum/minimum. Maitrisez TOUTES les formules !"
-  },
-
-  variation: {
-    titre: "Tableaux de Variation",
-    couleur: [60, 130, 60], // vert moyen
-    intro: "Le tableau de variation resume le comportement d'une fonction : sens de variation, extrema, limites aux bornes. C'est la synthese de l'etude.",
-    definition: [
-      "Etape 1 : Determiner le domaine de definition Df",
-      "Etape 2 : Calculer f'(x)",
-      "Etape 3 : Resoudre f'(x) = 0 et etudier son signe",
-      "Etape 4 : Calculer les limites aux bornes du domaine",
-      "Etape 5 : Dresser le tableau avec les fleches"
-    ],
-    proprietes: [
-      "Fleche montante (/) : f est croissante (f' > 0)",
-      "Fleche descendante (\\) : f est decroissante (f' < 0)",
-      "Maximum local : f' change de + a -",
-      "Minimum local : f' change de - a +"
-    ],
-    exemples: [
-      {
-        enonce: "Dresser le tableau de variation de f(x) = x^2 - 4x + 3",
-        solution: "f'(x) = 2x-4 = 0 => x=2. f'<0 sur ]-inf;2[, f'>0 sur ]2;+inf[. f(2) = 4-8+3 = -1. Minimum en x=2, valeur -1."
-      },
-      {
-        enonce: "Dresser le tableau de variation de f(x) = -x^3 + 3x sur R",
-        solution: "f'(x) = -3x^2+3 = -3(x^2-1) = -3(x-1)(x+1). Zeros : -1 et 1. f'<0 sur ]-inf;-1[, f'>0 sur ]-1;1[, f'<0 sur ]1;+inf[. f(-1)=-2, f(1)=2."
-      }
-    ],
-    exercices: [
-      { enonce: "Tableau de variation de f(x) = x^3 - 3x sur R", corrige: "f'=3x^2-3=3(x-1)(x+1). Min en -1 (f(-1)=2), Max en 1 (f(1)=-2). Attention signe !" },
-      { enonce: "Tableau de f(x) = e^x - x", corrige: "f'=e^x-1. Annule en x=0. Decr sur ]-inf;0[, croiss sur ]0;+inf[. Min f(0)=1." },
-      { enonce: "Dresser le tableau de variation de f(x) = ln(x) - x + 1 sur ]0;+inf[", corrige: "f'=1/x-1=(1-x)/x. Annule en x=1. Croiss sur ]0;1[, decr sur ]1;+inf[. Max f(1)=0." }
-    ],
-    bac_tip: "Le tableau de variation est quasi-obligatoire au BAC. Il faut etre propre : les limites aux bords, les valeurs aux extrema. Ne ratez aucune etape !"
-  },
-
-  etude: {
-    titre: "Etude Complète d'une Fonction",
-    couleur: [120, 50, 20], // brun
-    intro: "L'etude complete d'une fonction regroupe toutes les competences : domaine, limites, derivee, variation, et representation graphique.",
-    definition: [
-      "Etape 1 - Domaine Df : ensemble des x ou f est definie",
-      "Etape 2 - Parite : f paire (f(-x)=f(x)), impaire (f(-x)=-f(x)), ni l'un ni l'autre",
-      "Etape 3 - Limites aux bornes de Df et asymptotes",
-      "Etape 4 - Derivee f'(x), signe, zeros",
-      "Etape 5 - Tableau de variation complet",
-      "Etape 6 - Points remarquables (intersection axes)",
-      "Etape 7 - Representation graphique"
-    ],
-    proprietes: [
-      "Asymptote verticale en x=a si lim(x->a) f(x) = +/-inf",
-      "Asymptote horizontale en y=L si lim(x->+/-inf) f(x) = L",
-      "Asymptote oblique y=ax+b si lim(x->+inf) [f(x)-(ax+b)] = 0",
-      "Intersection avec l'axe x : resoudre f(x)=0",
-      "Intersection avec l'axe y : calculer f(0)"
-    ],
-    exemples: [
-      {
-        enonce: "Etude complete de f(x) = (x^2 - 1)/(x - 2)",
-        solution: "Df = R\\{2}. Pas de parite. lim(+inf)=+inf, lim(-inf)=-inf, lim(2+)=+inf, lim(2-)=-inf => AV : x=2. Division : f(x)=x+2+3/(x-2) => AO : y=x+2. f'(x)=(x^2-4x+1)/(x-2)^2. Zeros de f'... Tableau de variation complet."
-      }
-    ],
-    exercices: [
-      { enonce: "Df et asymptotes de f(x) = 1/(x^2-4)", corrige: "Df=R\\{-2;2}. AV en x=-2 et x=2. AH : y=0." },
-      { enonce: "Etudier la parite de f(x) = x^3 - x", corrige: "f(-x)=-x^3+x=-(x^3-x)=-f(x). Fonction IMPAIRE." },
-      { enonce: "Trouver l'asymptote oblique de f(x) = (2x^2+x-1)/(x+1)", corrige: "Division : 2x-1. AO : y=2x-1." },
-      { enonce: "Intersection avec les axes de f(x) = x^2 - 3x + 2", corrige: "f(0)=2 (axe y). f(x)=0 => x=1 ou x=2 (axe x)." }
-    ],
-    bac_tip: "L'etude complete est souvent le plus grand exercice du BAC (8-10 points). Suivez TOUJOURS les etapes dans l'ordre. Ne sautez aucune partie meme si vous n'etes pas sur !"
-  }
-};
-
-// =============================================
-// GENERATION PDF
-// =============================================
-window.generatePDF = function(id) {
-  var d = allData.find(function(x){return x.id===id;});
-  if(!d) return;
-
-  showToast("Generation du PDF en cours...");
-
-  var nok = [];
-  if(d.notions){
-    Object.keys(d.notions).forEach(function(k){
-      if(d.notions[k].level==="nok") nok.push(k);
-    });
-  }
-
-  if(nok.length === 0){
-    showToast("Aucune difficulte enregistree pour cet eleve.");
-    return;
-  }
-
-  var { jsPDF } = window.jspdf;
-  var doc = new jsPDF('p','mm','a4');
-  var pw = 210, ph = 297;
-  var margin = 18;
-  var y = 0;
-
-  // ---- PAGE DE GARDE ----
-  // Fond noir
-  doc.setFillColor(10, 9, 6);
-  doc.rect(0, 0, pw, ph, 'F');
-
-  // Bande decorative dorée en haut
-  doc.setFillColor(201, 168, 76);
-  doc.rect(0, 0, pw, 6, 'F');
-
-  // Bande decorative en bas
-  doc.rect(0, ph-6, pw, 6, 'F');
-
-  // Logo cercle
-  doc.setFillColor(201, 168, 76);
-  doc.circle(pw/2, 55, 22, 'F');
-  doc.setTextColor(10, 9, 6);
-  doc.setFont("helvetica", "bold");
-  doc.setFontSize(14);
-  doc.text("SE", pw/2, 58, {align:"center"});
-
-  // Titre principal
-  doc.setTextColor(201, 168, 76);
-  doc.setFontSize(9);
-  doc.setFont("helvetica", "normal");
-  doc.text("S . E .  C O R P O R A T I O N", pw/2, 92, {align:"center"});
-
-  doc.setTextColor(255, 255, 255);
-  doc.setFontSize(22);
-  doc.setFont("helvetica", "bold");
-  doc.text("PLAN DE REMISE", pw/2, 110, {align:"center"});
-  doc.text("A NIVEAU", pw/2, 122, {align:"center"});
-
-  // Message percutant selon genre
-  var isFille = (d.sexe === "F");
-  var messages = [
-    isFille ? "Tu es capable. Ce plan est fait pour toi." : "Tu es capable. Ce plan est fait pour toi.",
-    isFille ? "Chaque difficulte est une victoire qui t'attend." : "Chaque difficulte est une victoire qui t'attend.",
-    isFille ? "La reussite se construit pas a pas. Commence maintenant." : "La reussite se construit pas a pas. Commence maintenant.",
-    isFille ? "Ton BAC commence ici. Ne lache pas." : "Ton BAC commence ici. Ne lache pas."
-  ];
-  var msg = messages[Math.floor(Math.random() * messages.length)];
-
-  // Cadre nom
-  doc.setFillColor(201, 168, 76);
-  doc.roundedRect(margin, 135, pw - 2*margin, 30, 4, 4, 'F');
-  doc.setTextColor(10, 9, 6);
-  doc.setFontSize(8);
-  doc.setFont("helvetica", "normal");
-  doc.text("PREPARE SPECIALEMENT POUR", pw/2, 143, {align:"center"});
-  doc.setFontSize(16);
-  doc.setFont("helvetica", "bold");
-  doc.text(d.prenom.toUpperCase() + " " + d.nom.toUpperCase(), pw/2, 156, {align:"center"});
-
-  // Message percutant
-  doc.setTextColor(255, 255, 255);
-  doc.setFontSize(10);
-  doc.setFont("helvetica", "italic");
-  doc.text('"' + msg + '"', pw/2, 178, {align:"center"});
-
-  // Infos eleve
-  doc.setFillColor(30, 30, 30);
-  doc.roundedRect(margin, 190, pw - 2*margin, 42, 4, 4, 'F');
-  doc.setTextColor(201, 168, 76);
-  doc.setFontSize(7);
-  doc.setFont("helvetica", "bold");
-  doc.text("INFORMATIONS", margin+10, 200);
-  doc.setTextColor(200,200,200);
-  doc.setFont("helvetica","normal");
-  doc.setFontSize(8.5);
-  doc.text("Classe : " + d.classe, margin+10, 210);
-  doc.text("Etablissement : " + (d.etab || "—"), margin+10, 219);
-  if(d.metier) doc.text("Metier vise : " + d.metier, margin+10, 228);
-
-  // Notions a travailler
-  doc.setTextColor(255, 100, 100);
-  doc.setFontSize(7.5);
-  doc.setFont("helvetica", "bold");
-  doc.text("POINTS A TRAVAILLER : " + nok.map(function(k){return NOTIONS_LABELS[k]||k;}).join(" | "), margin+10, 240);
-
-  // Signature
-  doc.setTextColor(150,150,150);
-  doc.setFontSize(7);
-  doc.setFont("helvetica","normal");
-  doc.text("Ing. Moise Zame  —  S.E. Corporation  |  WhatsApp : +237 6 95 55 35 85", pw/2, 270, {align:"center"});
-  doc.text("Document confidentiel — Usage pedagogique exclusif", pw/2, 277, {align:"center"});
-
-  // ---- PAGES DE CONTENU ----
-  nok.forEach(function(notionKey) {
-    var contenu = CONTENU_PEDAGOGIQUE[notionKey];
-    if(!contenu) return;
-
-    var r = contenu.couleur[0], g = contenu.couleur[1], b = contenu.couleur[2];
-
-    // Nouvelle page
-    doc.addPage();
-    y = 0;
-
-    // Header de la page
-    doc.setFillColor(r, g, b);
-    doc.rect(0, 0, pw, 22, 'F');
-    doc.setTextColor(255,255,255);
-    doc.setFontSize(13);
-    doc.setFont("helvetica", "bold");
-    doc.text(contenu.titre, margin, 14);
-
-    // Sous-ligne avec nom eleve
-    doc.setFillColor(245, 242, 236);
-    doc.rect(0, 22, pw, 8, 'F');
-    doc.setTextColor(r, g, b);
-    doc.setFontSize(7);
-    doc.setFont("helvetica","italic");
-    doc.text("Plan personnalise pour " + d.prenom + " " + d.nom + "  |  " + d.classe, margin, 27.5);
-
-    y = 38;
-
-    // INTRO
-    doc.setFillColor(250, 248, 242);
-    doc.roundedRect(margin, y, pw-2*margin, 14, 3, 3, 'F');
-    doc.setDrawColor(r, g, b);
-    doc.setLineWidth(0.8);
-    doc.line(margin, y, margin, y+14);
-    doc.setTextColor(60, 60, 60);
-    doc.setFontSize(8.5);
-    doc.setFont("helvetica","italic");
-    var introLines = doc.splitTextToSize(contenu.intro, pw-2*margin-8);
-    doc.text(introLines, margin+5, y+7);
-    y += 20;
-
-    // DEFINITIONS
-    doc.setFillColor(r, g, b);
-    doc.roundedRect(margin, y, 40, 7, 2, 2, 'F');
-    doc.setTextColor(255,255,255);
-    doc.setFontSize(8);
-    doc.setFont("helvetica","bold");
-    doc.text("DEFINITIONS CLES", margin+3, y+5);
-    y += 11;
-
-    contenu.definition.forEach(function(def) {
-      doc.setFillColor(248, 246, 240);
-      doc.setDrawColor(r, g, b);
-      doc.setLineWidth(0.3);
-      var defLines = doc.splitTextToSize("• " + def, pw-2*margin-4);
-      var defH = defLines.length * 5 + 4;
-      doc.roundedRect(margin, y, pw-2*margin, defH, 2, 2, 'F');
-      doc.setTextColor(40, 40, 40);
-      doc.setFontSize(8);
-      doc.setFont("helvetica","normal");
-      doc.text(defLines, margin+3, y+5);
-      y += defH + 2;
-    });
-    y += 4;
-
-    // PROPRIETES
-    if(contenu.proprietes && contenu.proprietes.length > 0) {
-      doc.setFillColor(r, g, b);
-      doc.roundedRect(margin, y, 36, 7, 2, 2, 'F');
-      doc.setTextColor(255,255,255);
-      doc.setFontSize(8);
-      doc.setFont("helvetica","bold");
-      doc.text("PROPRIETES", margin+3, y+5);
-      y += 11;
-
-      doc.setFillColor(255, 255, 255);
-      doc.setDrawColor(r, g, b);
-      doc.setLineWidth(0.5);
-      var propH = contenu.proprietes.length * 7 + 6;
-      doc.roundedRect(margin, y, pw-2*margin, propH, 3, 3, 'FD');
-      contenu.proprietes.forEach(function(p, pi) {
-        doc.setTextColor(40, 40, 40);
-        doc.setFontSize(8.5);
-        doc.setFont("helvetica", pi===0?"bold":"normal");
-        var pLines = doc.splitTextToSize("  " + p, pw-2*margin-8);
-        doc.text(pLines, margin+4, y+7+pi*7);
-      });
-      y += propH + 6;
-    }
-
-    // Verifier si on a besoin d'une nouvelle page
-    if(y > 210) { doc.addPage(); y = 18; }
-
-    // EXEMPLES RESOLUS
-    doc.setFillColor(r, g, b);
-    doc.roundedRect(margin, y, 44, 7, 2, 2, 'F');
-    doc.setTextColor(255,255,255);
-    doc.setFontSize(8);
-    doc.setFont("helvetica","bold");
-    doc.text("EXEMPLES RESOLUS", margin+3, y+5);
-    y += 11;
-
-    contenu.exemples.forEach(function(ex, ei) {
-      // Enonce
-      doc.setFillColor(240, 248, 255);
-      doc.setDrawColor(r, g, b);
-      doc.setLineWidth(0.6);
-      var enonceLines = doc.splitTextToSize("Exemple " + (ei+1) + " : " + ex.enonce, pw-2*margin-8);
-      var enonceH = enonceLines.length * 5 + 6;
-
-      if(y + enonceH + 20 > ph-15) { doc.addPage(); y = 18; }
-
-      doc.roundedRect(margin, y, pw-2*margin, enonceH, 2, 2, 'F');
-      doc.setTextColor(r, g, b);
-      doc.setFontSize(8);
-      doc.setFont("helvetica","bold");
-      doc.text(enonceLines, margin+4, y+6);
-      y += enonceH + 1;
-
-      // Solution
-      doc.setFillColor(255, 255, 255);
-      var solLines = doc.splitTextToSize("Solution : " + ex.solution, pw-2*margin-8);
-      var solH = solLines.length * 5 + 6;
-      doc.roundedRect(margin+4, y, pw-2*margin-4, solH, 2, 2, 'F');
-      doc.setTextColor(60, 60, 60);
-      doc.setFont("helvetica","normal");
-      doc.text(solLines, margin+8, y+6);
-      y += solH + 5;
-    });
-
-    // Nouvelle page pour exercices
-    doc.addPage();
-    y = 0;
-
-    // Header page exercices
-    doc.setFillColor(40, 40, 40);
-    doc.rect(0, 0, pw, 18, 'F');
-    doc.setFillColor(r, g, b);
-    doc.rect(0, 0, 5, 18, 'F');
-    doc.setTextColor(255,255,255);
-    doc.setFontSize(11);
-    doc.setFont("helvetica","bold");
-    doc.text("EXERCICES D'APPLICATION", margin, 12);
-    doc.setTextColor(r, g, b);
-    doc.setFontSize(7);
-    doc.text(contenu.titre.toUpperCase(), pw-margin, 12, {align:"right"});
-
-    y = 26;
-
-    // Sous-titre
-    doc.setTextColor(100, 100, 100);
-    doc.setFontSize(8);
-    doc.setFont("helvetica","italic");
-    doc.text("Entrainement personnalise — " + d.prenom + " " + d.nom, margin, y);
-    y += 10;
-
-    // Exercices
-    contenu.exercices.forEach(function(ex, ei) {
-      if(y > 220) { doc.addPage(); y = 18; }
-
-      // Numero + enonce
-      doc.setFillColor(r, g, b);
-      doc.circle(margin+4, y+4, 4, 'F');
-      doc.setTextColor(255,255,255);
-      doc.setFontSize(9);
-      doc.setFont("helvetica","bold");
-      doc.text(String(ei+1), margin+4, y+5.5, {align:"center"});
-
-      doc.setTextColor(30, 30, 30);
-      doc.setFontSize(9);
-      doc.setFont("helvetica","bold");
-      var qLines = doc.splitTextToSize(ex.enonce, pw-2*margin-16);
-      doc.text(qLines, margin+12, y+5);
-      y += qLines.length * 5 + 4;
-
-      // Zone reponse
-      doc.setFillColor(252, 251, 248);
-      doc.setDrawColor(200, 200, 200);
-      doc.setLineWidth(0.3);
-      doc.roundedRect(margin+6, y, pw-2*margin-6, 22, 2, 2, 'FD');
-      doc.setTextColor(180,180,180);
-      doc.setFontSize(7.5);
-      doc.setFont("helvetica","italic");
-      doc.text("Votre solution ici...", margin+10, y+8);
-      doc.line(margin+10, y+14, pw-margin-4, y+14);
-      doc.line(margin+10, y+19, pw-margin-4, y+19);
-      y += 28;
-    });
-
-    y += 5;
-
-    // CORRIGE (separe)
-    if(y > 210) { doc.addPage(); y = 18; }
-
-    doc.setFillColor(40, 40, 40);
-    doc.roundedRect(margin, y, pw-2*margin, 8, 3, 3, 'F');
-    doc.setTextColor(201, 168, 76);
-    doc.setFontSize(8.5);
-    doc.setFont("helvetica","bold");
-    doc.text("CORRIGES", pw/2, y+5.5, {align:"center"});
-    y += 12;
-
-    contenu.exercices.forEach(function(ex, ei) {
-      if(y > 245) { doc.addPage(); y = 18; }
-      doc.setFillColor(248, 252, 248);
-      doc.setDrawColor(r, g, b);
-      doc.setLineWidth(0.4);
-      var corrLines = doc.splitTextToSize((ei+1) + ". " + ex.corrige, pw-2*margin-8);
-      var corrH = corrLines.length * 5 + 6;
-      doc.roundedRect(margin, y, pw-2*margin, corrH, 2, 2, 'FD');
-      doc.setTextColor(40, 100, 40);
-      doc.setFontSize(8);
-      doc.setFont("helvetica","normal");
-      doc.text(corrLines, margin+4, y+5);
-      y += corrH + 3;
-    });
-
-    y += 8;
-
-    // TIP BAC
-    if(y > 235) { doc.addPage(); y = 18; }
-    doc.setFillColor(255, 248, 220);
-    doc.setDrawColor(201, 168, 76);
-    doc.setLineWidth(1);
-    var tipLines = doc.splitTextToSize("CONSEIL BAC : " + contenu.bac_tip, pw-2*margin-12);
-    var tipH = tipLines.length * 5.5 + 10;
-    doc.roundedRect(margin, y, pw-2*margin, tipH, 4, 4, 'FD');
-    doc.setTextColor(150, 110, 0);
-    doc.setFontSize(8);
-    doc.setFont("helvetica","bold");
-    doc.text(tipLines, margin+6, y+8);
-  });
-
-  // PAGE FINALE - Motivation
-  doc.addPage();
-  doc.setFillColor(10, 9, 6);
-  doc.rect(0, 0, pw, ph, 'F');
-  doc.setFillColor(201, 168, 76);
-  doc.rect(0, 0, pw, 6, 'F');
-  doc.rect(0, ph-6, pw, 6, 'F');
-
-  doc.setTextColor(201, 168, 76);
-  doc.setFontSize(40);
-  doc.setFont("helvetica","bold");
-  doc.text("GO !", pw/2, 80, {align:"center"});
-
-  doc.setTextColor(255,255,255);
-  doc.setFontSize(14);
-  doc.setFont("helvetica","bold");
-  var finalName = d.prenom.toUpperCase();
-  doc.text(finalName + ", tu as tout ce qu'il faut.", pw/2, 105, {align:"center"});
-
-  doc.setFontSize(9);
-  doc.setFont("helvetica","normal");
-  doc.setTextColor(180, 180, 180);
-  var motivLines = [
-    "Ce document est ton point de depart.",
-    "Travaille chaque notion, une par une.",
-    "Reviens sur les exemples autant de fois que necessaire.",
-    "Fais tous les exercices avant de regarder le corrige.",
-    "",
-    "Le BAC se gagne dans la regularite, pas dans l'intensite d'un soir.",
-  ];
-  motivLines.forEach(function(line, li) {
-    doc.text(line, pw/2, 125 + li*10, {align:"center"});
-  });
-
-  doc.setFillColor(201, 168, 76);
-  doc.roundedRect(margin, 200, pw-2*margin, 20, 4, 4, 'F');
-  doc.setTextColor(10, 9, 6);
-  doc.setFontSize(9);
-  doc.setFont("helvetica","bold");
-  doc.text("Questions ? WhatsApp : +237 6 95 55 35 85", pw/2, 211, {align:"center"});
-  doc.text("Ing. Moise Zame  —  S.E. Corporation", pw/2, 218, {align:"center"});
-
-  // Sauvegarde
-  var filename = "Plan_" + d.prenom + "_" + d.nom + "_SE_Corp.pdf";
-  filename = filename.replace(/[^a-zA-Z0-9_\-\.]/g, '_');
-  doc.save(filename);
-  showToast("PDF de " + d.prenom + " " + d.nom + " telecharge !");
-};
-
-function showToast(msg) {
-  var t = document.getElementById("toast");
-  t.textContent = msg;
-  t.classList.add("show");
-  setTimeout(function(){t.classList.remove("show");}, 3500);
-}
-
-// =============================================
-// LOGIQUE EXISTANTE (inchangee)
-// =============================================
-var PWD = "SE2025admin";
-var allData = [];
-
-var NOTIONS_LABELS = {
-  ln_def:"Fonctions ln/exp", eq:"Equations", ineq:"Inequations",
-  poly3:"Polynome degre 3", limites:"Limites", derivees:"Derivees",
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const PWD = "SE2025admin";
+let allData = [];
+
+const NL = {
+  ln_def:"Definition ln/exp", eq:"Equations ln/exp", ineq:"Inequations ln/exp",
+  poly3:"Polynome/ln/exp", limites:"Limites ln/exp", derivees:"Derivees ln/exp",
   variation:"Tableau variation", etude:"Etude complete"
 };
 
-window.login = function() {
-  var p = document.getElementById("pwd").value;
-  if(p === PWD) {
-    document.getElementById("login-wrap").style.display = "none";
-    document.getElementById("dashboard").style.display = "block";
-    loadData();
-  } else {
-    document.getElementById("err-login").style.display = "block";
+// ================================================================
+// CONTENU PEDAGOGIQUE — TOUT CENTRE SUR ln ET exp
+// ================================================================
+const SECTIONS = {
+  ln_def:{
+    titre:"Definition et Proprietes de ln et exp",couleur:[26,58,92],
+    intro:"ln et exp sont les deux fonctions les plus importantes de la Terminale. Reciproques l'une de l'autre, elles sont au coeur de la quasi-totalite des sujets BAC Cameroun.",
+    cours:[
+      {st:"Fonction logarithme neperien ln",pts:["Domaine : ]0 ; +inf[ — ln n'est JAMAIS definie pour x <= 0","ln(1) = 0  |  ln(e) = 1  |  ln(e^n) = n","ln strictement croissante sur ]0 ; +inf[","ln(a x b) = ln(a) + ln(b)  pour a,b > 0","ln(a/b) = ln(a) - ln(b)  pour a,b > 0","ln(a^n) = n x ln(a)  pour a > 0"]},
+      {st:"Fonction exponentielle exp",pts:["Domaine : R entier — exp est definie partout","exp(0) = 1  |  exp(1) = e  |  exp(-x) = 1/exp(x)","exp strictement croissante sur R","exp(a+b) = exp(a) x exp(b)","exp(a-b) = exp(a) / exp(b)","exp(n x a) = (exp(a))^n"]},
+      {st:"Reciprocite ln / exp",pts:["ln(exp(x)) = x  pour tout x de R","exp(ln(x)) = x  pour tout x > 0","ln(x) = a  <=>  x = e^a  (avec x > 0)","exp(x) = b  <=>  x = ln(b)  (avec b > 0)"]}
+    ],
+    exemples:[
+      {e:"Simplifier : ln(e^4) - ln(e^(-2)) + ln(1)",s:"= 4 - (-2) + 0 = 6"},
+      {e:"Simplifier : exp(3 x ln(2))",s:"= exp(ln(2^3)) = exp(ln(8)) = 8"},
+      {e:"Simplifier : ln(8) + ln(3) - ln(6)",s:"= ln(8x3) - ln(6) = ln(24/6) = ln(4)"},
+      {e:"Calculer ln(e^2 / e^5)",s:"= ln(e^2) - ln(e^5) = 2 - 5 = -3"}
+    ],
+    exos:[
+      {q:"Simplifier ln(e^7) + ln(e^(-3))",c:"7 + (-3) = 4"},
+      {q:"Simplifier exp(2 x ln(5))",c:"= exp(ln(25)) = 25"},
+      {q:"Ecrire ln(12) en fonction de ln(2) et ln(3)",c:"ln(4x3) = 2ln(2) + ln(3)"},
+      {q:"Simplifier ln(racine(e))",c:"= ln(e^(1/2)) = 1/2"}
+    ],
+    bac:{annee:"BAC C/D Cameroun (type frequent)",enonce:"On pose f(x) = ln(x^2+1). Montrer que f est definie sur R. Calculer f(0) et f(1).",solution:"x^2+1 > 0 pour tout x (car x^2 >= 0), donc ln defini sur R. f(0)=ln(1)=0. f(1)=ln(2)."},
+    conseil:"Au BAC, ln(AB)=ln(A)+ln(B) et exp(a+b)=exp(a)exp(b) reviennent tres souvent dans les simplifications. Apprenez-les par coeur !"
+  },
+  eq:{
+    titre:"Equations avec ln et exp",couleur:[45,106,79],
+    intro:"Resoudre une equation avec ln ou exp utilise la reciprocite et l'injectivite de ces fonctions. Competence directement evaluee au BAC Cameroun.",
+    cours:[
+      {st:"Methode pour les equations avec ln",pts:["Etape 1 : Poser le domaine (argument de ln > 0)","Etape 2 : ln(A) = ln(B)  =>  A = B  (injectivite)","Etape 3 : ln(A) = k  =>  A = e^k","Etape 4 : Verifier que la solution est dans le domaine"]},
+      {st:"Methode pour les equations avec exp",pts:["exp(A) = exp(B)  =>  A = B  (injectivite)","exp(A) = k  =>  A = ln(k)  si k > 0","exp(A) = k avec k <= 0 : IMPOSSIBLE (pas de solution)","Astuce : poser X = e^x pour les equations du 2nd degre"]},
+      {st:"Equations se ramenant au 2nd degre",pts:["Forme : (e^x)^2 - 3(e^x) + 2 = 0","Poser X = e^x avec X > 0 toujours !","Resoudre X^2 - 3X + 2 = 0 en X","Revenir a x : si X = e^x alors x = ln(X)"]}
+    ],
+    exemples:[
+      {e:"Resoudre : ln(2x-1) = ln(7)",s:"Dom : 2x-1>0 => x>1/2. Injectif : 2x-1=7 => x=4. Verif 4>1/2. Sol : {4}"},
+      {e:"Resoudre : ln(x+3) = 2",s:"Dom : x>-3. x+3=e^2. x=e^2-3. Sol : {e^2-3}"},
+      {e:"Resoudre : e^(2x) - 3e^x + 2 = 0",s:"Poser X=e^x>0. X^2-3X+2=0. X=1 ou X=2. e^x=1 => x=0. e^x=2 => x=ln2. Sol : {0 ; ln2}"},
+      {e:"Resoudre : ln(x^2-1) = 0",s:"Dom : x<-1 ou x>1. x^2-1=1 => x^2=2 => x=+-racine(2). Les deux verifient le domaine. Sol : {-racine(2) ; racine(2)}"}
+    ],
+    exos:[
+      {q:"Resoudre ln(3x+2) = ln(5)",c:"3x+2=5 => x=1. Verif 5>0. Sol : {1}"},
+      {q:"Resoudre e^(x-1) = 4",c:"x-1=ln4 => x=1+ln4"},
+      {q:"Resoudre e^(2x) - 5e^x + 6 = 0",c:"X=e^x : X^2-5X+6=0. X=2 ou X=3. Sol : x=ln2 ou x=ln3"},
+      {q:"Resoudre ln(x) + ln(x-1) = ln(6)",c:"Dom : x>1. ln(x(x-1))=ln6. x^2-x-6=0. x=3 ou x=-2. Sol : {3}"}
+    ],
+    bac:{annee:"BAC D Cameroun 2019 (adapte)",enonce:"Resoudre dans R : ln(x+1) + ln(x-1) = ln(3). Preciser le domaine.",solution:"Dom : x>1. ln((x+1)(x-1))=ln3. x^2-1=3. x^2=4. x=2 ou x=-2. Seul x=2>1. Sol : {2}"},
+    conseil:"Pour toute equation avec ln, TOUJOURS preciser le domaine en premier. Oublier cette etape = perte de points garantie au BAC."
+  },
+  ineq:{
+    titre:"Inequations avec ln et exp",couleur:[192,57,43],
+    intro:"Les inequations avec ln et exp suivent la meme logique que les equations, en respectant le sens de variation (croissance) de chaque fonction.",
+    cours:[
+      {st:"Inequations avec ln (ln croissante)",pts:["ln(A) > ln(B)  <=>  A > B  (avec A,B > 0)","ln(x) > k  <=>  x > e^k  (et x > 0)","ln(x) < k  <=>  0 < x < e^k","ln(x) > 0  <=>  x > 1  (car ln(1) = 0)","ln(x) < 0  <=>  0 < x < 1"]},
+      {st:"Inequations avec exp (exp croissante)",pts:["exp(A) > exp(B)  <=>  A > B","e^x > k  <=>  x > ln(k)  si k > 0","e^x > 0  pour TOUT x de R (toujours vraie !)","e^x > 1  <=>  x > 0","e^x < 1  <=>  x < 0"]},
+      {st:"Methode en 4 etapes",pts:["1 - Identifier ln ou exp dans l'inequation","2 - Poser le domaine (ln : argument > 0)","3 - Utiliser la croissance pour ecrire l'equivalent","4 - Resoudre et intersectionner avec le domaine"]}
+    ],
+    exemples:[
+      {e:"Resoudre : ln(2x-1) > ln(3)",s:"Dom : x>1/2. Croissante : 2x-1>3 => x>2. Intersection avec x>1/2 : x>2. Sol : ]2;+inf["},
+      {e:"Resoudre : e^(x-1) <= 5",s:"x-1 <= ln5. x <= 1+ln5. Sol : ]-inf ; 1+ln5]"},
+      {e:"Resoudre : ln(x^2-3) > 0",s:"Dom : x<-racine(3) ou x>racine(3). x^2-3>1 => x^2>4 => x<-2 ou x>2. Intersection : ]-inf;-2[ U ]2;+inf["},
+      {e:"Resoudre : 2ln(x) - ln(x+1) < ln(2)",s:"Dom : x>0. ln(x^2/(x+1))<ln2. x^2<2x+2. x^2-2x-2<0. Racines: 1+/-racine(3). Sol : ]0 ; 1+racine(3)["}
+    ],
+    exos:[
+      {q:"Resoudre ln(x+1) > 0",c:"x+1>1 => x>0. Sol : ]0;+inf["},
+      {q:"Resoudre e^(2x) < e^3",c:"2x<3 => x<3/2. Sol : ]-inf ; 3/2["},
+      {q:"Resoudre ln(x)+ln(x-2) > ln(3)",c:"Dom: x>2. x(x-2)>3. x^2-2x-3>0. (x-3)(x+1)>0. Avec x>2: x>3. Sol: ]3;+inf["},
+      {q:"Resoudre e^x - 2 > 0",c:"e^x>2 => x>ln2. Sol : ]ln2 ; +inf["}
+    ],
+    bac:{annee:"BAC C Cameroun 2021 (type courant)",enonce:"Resoudre : ln(x+2) + ln(x) >= ln(3). Preciser le domaine.",solution:"Dom : x>0. ln(x(x+2))>=ln3. x^2+2x-3>=0. (x+3)(x-1)>=0. Sur x>0 : x>=1. Sol : [1;+inf["},
+    conseil:"ln croissant = sens de l'inegalite CONSERVE. Ne confondez pas avec les fonctions decroissantes. C'est le piege classique au BAC !"
+  },
+  poly3:{
+    titre:"Polynomes du 3e Degre relies a ln et exp",couleur:[90,50,140],
+    intro:"Les polynomes du 3e degre apparaissent souvent comme numerateur ou denominateur dans les fonctions melant ln ou exp. Savoir les factoriser est indispensable pour etudier le signe de f'(x).",
+    cours:[
+      {st:"Factorisation d'un polynome de degre 3",pts:["Si P(a)=0 alors (x-a) est un facteur de P(x)","Tester a=0, 1, -1, 2, -2 en premier","Apres factorisation : P(x)=(x-a)(Ax^2+Bx+C)","Resoudre le trinome du 2nd degre pour les autres racines"]},
+      {st:"Cas typiques BAC : f(x) = P(x) x e^x",pts:["f'(x) = (P'(x) + P(x)) x e^x","Signe de f' = signe de (P'(x)+P(x)) car e^x > 0 toujours","On factorise P'(x)+P(x) pour trouver les zeros","Le polynome resultant peut etre de degre 2 ou 3"]},
+      {st:"Equations e^x de degre 3",pts:["Poser X = e^x avec X > 0 toujours","Resoudre P(X) = 0 comme polynome classique","Revenir a x = ln(X) pour chaque racine positive","Eliminer les racines negatives ou nulles de X"]}
+    ],
+    exemples:[
+      {e:"Factoriser P(x) = x^3 - 6x^2 + 11x - 6",s:"P(1)=1-6+11-6=0 donc (x-1) facteur. P(x)=(x-1)(x^2-5x+6)=(x-1)(x-2)(x-3)"},
+      {e:"f(x)=(x^2-x-2)e^x. Trouver les zeros de f'(x).",s:"f'(x)=(2x-1)e^x+(x^2-x-2)e^x=(x^2+x-3)e^x. Zeros de x^2+x-3=0 : x=(-1+/-racine(13))/2"},
+      {e:"Resoudre e^(3x) - 4e^(2x) + 5e^x - 2 = 0",s:"Poser X=e^x>0. X^3-4X^2+5X-2=0. P(1)=0. P(x)=(X-1)(X^2-3X+2)=(X-1)^2(X-2). X=1 (double) ou X=2. x=0 ou x=ln2."}
+    ],
+    exos:[
+      {q:"Factoriser P(x)=x^3-3x+2 sachant P(1)=0",c:"P(x)=(x-1)(x^2+x-2)=(x-1)^2(x+2)"},
+      {q:"f(x)=(x^2+2x)e^x. Signe de f'(x).",c:"f'=(2x+2+x^2+2x)e^x=(x^2+4x+2)e^x. Zeros: x=-2+/-racine(2). Signe = signe du trinome."},
+      {q:"Signe de f'(x) = (x^3-1)e^x",c:"e^x>0 tjrs. x^3-1=(x-1)(x^2+x+1). x^2+x+1>0 tjrs. Signe = signe de (x-1). Negatif sur ]-inf;1[."},
+      {q:"Resoudre e^(2x) - 3e^x + 2 = 0",c:"X=e^x : (X-1)(X-2)=0. X=1 ou X=2. x=0 ou x=ln2."}
+    ],
+    bac:{annee:"BAC D Cameroun 2018 (extrait)",enonce:"Soit f(x)=(x^2-x-2)e^x. 1) Calculer f'(x). 2) Deduire le tableau de variation sur R.",solution:"1) f'(x)=(2x-1)e^x+(x^2-x-2)e^x=(x^2+x-3)e^x. 2) Zeros: (-1+/-racine(13))/2. f decroit puis croit."},
+    conseil:"Quand f'(x)=P(x)xe^x, e^x est TOUJOURS positif. Vous n'etudiez que le signe de P(x). Enorme gain de temps et de simplicite !"
+  },
+  limites:{
+    titre:"Limites de Fonctions avec ln et exp",couleur:[170,100,10],
+    intro:"Les limites avec ln et exp sont un classique du BAC Cameroun. Les formes indeterminees et les croissances comparees sont les points les plus evalues.",
+    cours:[
+      {st:"Limites de reference — a connaitre par coeur",pts:["lim(x->+inf) ln(x) = +inf","lim(x->0+) ln(x) = -inf","lim(x->+inf) e^x = +inf","lim(x->-inf) e^x = 0","lim(x->0) (e^x - 1)/x = 1  (limite remarquable)"]},
+      {st:"Croissances comparees — TRES IMPORTANT au BAC",pts:["lim(x->+inf) ln(x)/x = 0  (x croit plus vite que ln)","lim(x->+inf) ln(x)/x^n = 0  pour tout n > 0","lim(x->+inf) x^n/e^x = 0  (e^x domine tout polynome)","lim(x->-inf) x^n x e^x = 0  pour n > 0","lim(x->0+) x x ln(x) = 0  (PIEGE classique BAC)"]},
+      {st:"Lever les formes indeterminees",pts:["Forme inf-inf avec ln : factoriser par terme dominant","Forme 0 x (-inf) : x x ln(x) -> 0 quand x->0+","Forme inf/inf : diviser par terme dominant","Substitution : poser X=ln(x) ou X=e^x selon le cas"]}
+    ],
+    exemples:[
+      {e:"Calculer lim(x->+inf) (3ln(x) - x + 2)",s:"= lim x(3ln(x)/x - 1 + 2/x). Comme ln(x)/x -> 0 : -> lim x(-1) = -inf"},
+      {e:"Calculer lim(x->0+) x x ln(x)",s:"Forme 0 x (-inf). Ecrire ln(x)/(1/x). Par croissances comparees : limite = 0"},
+      {e:"Calculer lim(x->+inf) (x^3+1)/e^x",s:"Croissances comparees : x^n/e^x -> 0. Limite = 0"},
+      {e:"Calculer lim(x->+inf) ln(x^2+1) - 2ln(x)",s:"= ln((x^2+1)/x^2) = ln(1+1/x^2) -> ln(1) = 0"}
+    ],
+    exos:[
+      {q:"lim(x->+inf) (ln x)^2 / x",c:"Croissances comparees : -> 0"},
+      {q:"lim(x->-inf) (x^2+x)e^x",c:"x^n e^x -> 0 quand x->-inf. Limite = 0"},
+      {q:"lim(x->+inf) x - ln(x)",c:"= x(1-ln(x)/x). ln(x)/x->0. Donc -> +inf"},
+      {q:"lim(x->0+) x^2 ln(x)",c:"= x x (x ln(x)) -> x x 0 = 0"}
+    ],
+    bac:{annee:"BAC C/D Cameroun 2022 (type)",enonce:"Soit f(x)=x-1-ln(x) sur ]0;+inf[. Calculer lim(x->0+) f(x) et lim(x->+inf) f(x).",solution:"lim(0+): x->0, ln(x)->-inf => f->0-1-(-inf)=+inf. lim(+inf): x domine ln(x) => f->+inf."},
+    conseil:"Les croissances comparees tombent SYSTEMATIQUEMENT au BAC. Sachez les citer comme limites de reference : x^n/e^x -> 0 et ln(x)/x -> 0."
+  },
+  derivees:{
+    titre:"Derivees de Fonctions avec ln et exp",couleur:[20,90,160],
+    intro:"Les derivees de ln et exp sont les plus calculees au BAC Cameroun. Elles apparaissent dans les etudes de fonctions, les tableaux de variation et les equations de tangentes.",
+    cours:[
+      {st:"Formules fondamentales ln et exp",pts:["(ln x)' = 1/x  sur ]0;+inf[","(ln u)' = u'/u  avec u > 0","(e^x)' = e^x","(e^u)' = u' x e^u","(ln|u|)' = u'/u  si u different de 0"]},
+      {st:"Derivees composees et produits",pts:["(u x v)' = u'v + uv'","(u/v)' = (u'v - uv') / v^2","Pour f(x)=P(x)e^(ax) : f'(x)=(aP(x)+P'(x))e^(ax)","(racine(u))' = u' / (2 racine(u))"]},
+      {st:"Cas typiques BAC Cameroun",pts:["f(x)=(ax+b)e^x => f'(x)=(ax+a+b)e^x","f(x)=e^x/P(x) => f'(x)=e^x(P(x)-P'(x))/P(x)^2","f(x)=ln(P(x)) => f'(x)=P'(x)/P(x) sur P(x)>0","f(x)=[ln x]^n => f'(x)=n[ln x]^(n-1)/x"]}
+    ],
+    exemples:[
+      {e:"f(x) = (2x+3)e^x. Calculer f'(x).",s:"u=2x+3, u'=2, v=e^x, v'=e^x. f'(x)=2e^x+(2x+3)e^x=(2x+5)e^x"},
+      {e:"f(x) = ln(x^2+2x+2). Calculer f'(x).",s:"u=x^2+2x+2 > 0 pour tout x. f'(x)=(2x+2)/(x^2+2x+2)"},
+      {e:"f(x) = x ln(x) - x. Calculer f'(x).",s:"f'(x)=ln(x)+x(1/x)-1=ln(x)+1-1=ln(x)"},
+      {e:"f(x) = e^(2x)/(x+1). Calculer f'(x).",s:"f'(x)=(2e^(2x)(x+1)-e^(2x))/(x+1)^2=e^(2x)(2x+1)/(x+1)^2"}
+    ],
+    exos:[
+      {q:"Derivee de f(x)=(x^2-3)e^x",c:"f'=(2x)e^x+(x^2-3)e^x=(x^2+2x-3)e^x=(x+3)(x-1)e^x"},
+      {q:"Derivee de f(x)=ln(2x+1)",c:"f'=2/(2x+1) sur ]-1/2;+inf["},
+      {q:"Derivee de f(x)=x-ln(x+1)",c:"f'=1-1/(x+1)=x/(x+1)"},
+      {q:"Derivee de f(x)=e^(-x^2)",c:"u=-x^2, u'=-2x. f'=-2x e^(-x^2)"}
+    ],
+    bac:{annee:"BAC D Cameroun 2020 (extrait)",enonce:"Soit f(x)=(x-1)e^x+1 sur R. Calculer f'(x) et montrer que f'(x)=x e^x.",solution:"f'(x)=e^x+(x-1)e^x=e^x(1+x-1)=xe^x. CQFD."},
+    conseil:"(ln u)' = u'/u est la formule la plus oubliee. Ecrivez-la systematiquement en haut de chaque copie de BAC !"
+  },
+  variation:{
+    titre:"Tableaux de Variation avec ln et exp",couleur:[40,120,60],
+    intro:"Le tableau de variation est l'objectif final du calcul de derivee. Avec ln et exp, il faut gerer avec soin le domaine de definition et les limites aux bornes.",
+    cours:[
+      {st:"Methode en 6 etapes pour ln et exp",pts:["1 - Domaine Df : attention ln => argument > 0","2 - Limites aux bornes (utiliser croissances comparees)","3 - Calculer f'(x) avec les formules ln/exp","4 - Resoudre f'(x)=0 : souvent P(x)xe^x => P(x)=0","5 - Dresser le tableau de signes de f'(x)","6 - Deduire les variations et les valeurs extremales"]},
+      {st:"Cas f(x) = P(x) x e^x",pts:["f'(x)=(P'(x)+P(x))e^x","Signe de f' = signe de (P'+P) car e^x > 0","Calculer les valeurs de f aux zeros de P'+P","lim(+inf)=+inf si coeff dominant > 0, lim(-inf)=0"]},
+      {st:"Cas f(x) contient ln(x)",pts:["Domaine : ]0;+inf[ obligatoire","lim(x->0+) : utiliser lim x ln(x)=0 si necessaire","f'(x) aura 1/x dans son expression","Reduire au meme denominateur pour etudier le signe"]}
+    ],
+    exemples:[
+      {e:"Tableau de variation de f(x)=xe^x sur R",s:"f'(x)=e^x+xe^x=(1+x)e^x. Signe : e^x>0, signe de (1+x). f'<0 sur ]-inf;-1[, f'>0 sur ]-1;+inf[. lim(-inf)=0, lim(+inf)=+inf. Min en x=-1 : f(-1)=-1/e"},
+      {e:"Tableau de f(x)=ln(x)-x+1 sur ]0;+inf[",s:"f'(x)=1/x-1=(1-x)/x. f'>0 sur ]0;1[, f'<0 sur ]1;+inf[. lim(0+)=-inf, lim(+inf)=-inf. Max en x=1 : f(1)=0"},
+      {e:"Tableau de f(x)=(x^2+1)e^(-x) sur R",s:"f'=-e^(-x)(x-1)^2 <= 0 pour tout x. f decroissante sur R (palier en x=1). lim(-inf)=+inf, lim(+inf)=0"}
+    ],
+    exos:[
+      {q:"Tableau de f(x)=x-ln(x) sur ]0;+inf[",c:"f'=(x-1)/x. Min en x=1 : f(1)=1. lim(0+)=+inf, lim(+inf)=+inf"},
+      {q:"Tableau de f(x)=(x-2)e^x",c:"f'=(x-1)e^x. Min en x=1 : f(1)=-e. Decr sur ]-inf;1[, crois sur ]1;+inf["},
+      {q:"Tableau de f(x)=ln(x)+1/x sur ]0;+inf[",c:"f'=(x-1)/x^2. Min en x=1 : f(1)=1. Decr sur ]0;1[, crois sur ]1;+inf["},
+      {q:"Tableau de f(x)=e^x-ex sur R",c:"f'=e^x-e. Zero en x=1. Min f(1)=0. Decr sur ]-inf;1[, crois sur ]1;+inf["}
+    ],
+    bac:{annee:"BAC C Cameroun 2023 (type epreuve)",enonce:"Soit f(x)=(2x-1)e^x. 1) Calculer f'(x). 2) Tableau de variation. 3) Deduire le minimum.",solution:"1) f'=(2x+1)e^x. 2) Zero: x=-1/2. Decr sur ]-inf;-1/2[, crois sur ]-1/2;+inf[. 3) Min en x=-1/2 : f(-1/2)=(-2)e^(-1/2)=-2/racine(e)"},
+    conseil:"Le tableau de variation doit etre COMPLET : limites aux bords, valeurs aux extrema, fleches. Un tableau incomplet = points perdus systematiquement."
+  },
+  etude:{
+    titre:"Etude Complete d'une Fonction avec ln ou exp",couleur:[120,40,20],
+    intro:"L'etude complete est l'exercice roi du BAC Cameroun : 8 a 10 points. Elle rassemble TOUTES les competences. Avec ln/exp, chaque etape est indispensable.",
+    cours:[
+      {st:"Les 7 etapes obligatoires",pts:["1 - DOMAINE Df : donner l'ensemble de definition (attention ln)","2 - PARITE : f paire, impaire, ou aucune","3 - LIMITES et ASYMPTOTES aux bornes de Df","4 - DERIVEE f'(x) : calcul detaille","5 - SIGNE de f'(x) et TABLEAU DE VARIATION complet","6 - POINTS REMARQUABLES : f(0), zeros de f, extrema","7 - REPRESENTATION GRAPHIQUE propre et a l'echelle"]},
+      {st:"Asymptotes avec ln et exp",pts:["AV (verticale) : lim(x->a) f(x)=+/-inf => x=a est AV","AH (horizontale) : lim(x->+/-inf) f(x)=L => y=L est AH","Exemple : f(x)=e^x/(1+e^x) => y=0 et y=1 sont AH","Pas d'AO en general avec ln/exp purs"]},
+      {st:"Strategies pour ne pas perdre de points",pts:["Toujours preciser le domaine AVANT toute autre chose","Calculer les limites aux 2 bornes (pas seulement +inf)","Montrer clairement le signe de f'(x) avec un tableau","Calculer f aux extrema et les ecrire dans le tableau","Tracer proprement : tangentes horizontales aux extrema"]}
+    ],
+    exemples:[
+      {e:"Etude de f(x)=x-1-ln(x) sur ]0;+inf[",s:"Df=]0;+inf[. Pas de parite. lim(0+)=+inf, lim(+inf)=+inf. f'=(x-1)/x. Min en x=1 : f(1)=0. Courbe en U avec minimum (1,0)."},
+      {e:"Etude de f(x)=(x+1)e^(-x) sur R",s:"Df=R. Pas de parite. lim(-inf)=-inf. lim(+inf)=0 (AH y=0). f'=-xe^(-x). Max en x=0 : f(0)=1."}
+    ],
+    exos:[
+      {q:"Domaine et asymptotes de f(x)=ln(x+1)/(x-2)",c:"Df : x>-1 et x≠2. AV en x=2. lim(+inf)=+inf (pas AH)."},
+      {q:"Etude complete de f(x)=e^x-x-1",c:"Df=R. f'=e^x-1. Zero: x=0. Min f(0)=0. f>=0 sur R."},
+      {q:"Parite de f(x)=e^x+e^(-x)",c:"f(-x)=e^(-x)+e^x=f(x). Fonction PAIRE."},
+      {q:"AH de f(x)=2e^x/(e^x+3)",c:"lim(-inf)=0 => y=0 AH. lim(+inf)=2 => y=2 AH."}
+    ],
+    bac:{annee:"BAC D Cameroun 2019 (sujet complet)",enonce:"f(x)=(x^2+x+1)e^(-x). 1) Domaine. 2) Limites en +/-inf. 3) f'(x). 4) Tableau de variation. 5) Tangente en x=0.",solution:"1) R. 2) lim(+inf)=0 (AH y=0), lim(-inf)=+inf. 3) f'=x(1-x)e^(-x). 4) Max en x=1 : f(1)=3/e. 5) f(0)=1, f'(0)=0 => Tangente y=1"},
+    conseil:"L'etude complete vaut 8-10 pts au BAC. Respectez l'ordre des 7 etapes meme si vous n'etes pas sur. Partiel = points partiels. Ne sautez RIEN."
   }
 };
 
-window.loadData = async function() {
-  document.getElementById("table-area").innerHTML = '<div class="loading"><div class="spin"></div></div>';
-  try {
-    var q = query(collection(db, "diagnostics"), orderBy("date","desc"));
-    var snap = await getDocs(q);
-    allData = [];
-    snap.forEach(function(doc){ allData.push({id:doc.id, ...doc.data()}); });
-    updateStats();
-    populateMetierFilter();
-    applyFilters();
-  } catch(e) {
-    document.getElementById("table-area").innerHTML = '<div class="loading">Erreur de chargement.</div>';
-    console.error(e);
-  }
+// ================================================================
+// GENERATION PDF — 1 PDF GLOBAL ET STRUCTURE PAR ELEVE
+// ================================================================
+window.generatePDF = function(id) {
+  const d = allData.find(x => x.id === id);
+  if(!d) return;
+  const nok = [];
+  if(d.notions) Object.keys(d.notions).forEach(k => { if(d.notions[k].level==="nok") nok.push(k); });
+  if(!nok.length){ showToast("Aucune difficulte pour cet eleve."); return; }
+  showToast("Generation du PDF... Patientez.");
+  setTimeout(() => _buildPDF(d, nok), 150);
 };
 
-function updateStats() {
-  var total = allData.length;
-  var pi = allData.filter(function(d){return d.preinscrit==="oui";}).length;
-  var npi = allData.filter(function(d){return d.preinscrit==="non";}).length;
-  var semaine = getSemaine();
-  var week = allData.filter(function(d){return d.semaine===semaine;}).length;
-  document.getElementById("st-total").textContent = total;
-  document.getElementById("st-pi").textContent = pi;
-  document.getElementById("st-npi").textContent = npi;
-  document.getElementById("st-week").textContent = week;
-}
+function _buildPDF(d, nok) {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF('p','mm','a4');
+  const W=210, H=297, M=16;
+  let y=0;
+  const isFille = d.sexe==="F";
+  const prenom = (d.prenom||"").trim();
+  const nom = (d.nom||"").trim();
+  const fullUC = (prenom+" "+nom).toUpperCase();
+  const msgs = [
+    "Ta reussite commence par comprendre tes lacunes.",
+    "Les champions s'entrainent sur leurs points faibles.",
+    "Chaque notion maitrisee te rapproche du BAC.",
+    isFille?"Tu es plus forte que tu ne le crois.":"Tu es plus fort que tu ne le crois."
+  ];
+  const motivMsg = msgs[Math.floor(Math.random()*msgs.length)];
 
-function populateMetierFilter() {
-  var metiers = [...new Set(allData.map(function(d){return d.metier||"RAS";}).filter(Boolean))].sort();
-  var sel = document.getElementById("f-metier");
-  var cur = sel.value;
-  sel.innerHTML = '<option value="">Tous</option>';
-  metiers.forEach(function(m){
-    sel.innerHTML += '<option value="'+m+'"'+(cur===m?" selected":"")+'>'+m+'</option>';
+  // helper
+  const addPage = ()=>{ doc.addPage(); y=0; };
+  const checkY = (need)=>{ if(y+need > H-18) addPage(); };
+
+  // ===== PAGE DE GARDE =====
+  doc.setFillColor(10,9,6); doc.rect(0,0,W,H,'F');
+  doc.setFillColor(201,168,76); doc.rect(0,0,W,5,'F'); doc.rect(0,H-5,W,5,'F');
+  doc.rect(8,8,2,H-16,'F'); doc.rect(W-10,8,2,H-16,'F');
+  doc.circle(W/2,52,20,'F');
+  doc.setTextColor(10,9,6); doc.setFont("helvetica","bold"); doc.setFontSize(13);
+  doc.text("SE",W/2,55,{align:"center"});
+  doc.setTextColor(150,150,150); doc.setFontSize(7); doc.setFont("helvetica","normal");
+  doc.text("S . E .  C O R P O R A T I O N  —  MATHS TERMINALE",W/2,84,{align:"center"});
+  doc.setTextColor(255,255,255); doc.setFontSize(24); doc.setFont("helvetica","bold");
+  doc.text("PLAN DE REMISE A NIVEAU",W/2,103,{align:"center"});
+  doc.setTextColor(201,168,76); doc.setFontSize(9); doc.setFont("helvetica","italic");
+  doc.text("Fonctions Logarithme Neperien et Exponentielle — BAC Terminale",W/2,115,{align:"center"});
+  doc.setFillColor(201,168,76); doc.roundedRect(M+4,126,W-2*(M+4),28,4,4,'F');
+  doc.setTextColor(10,9,6); doc.setFontSize(7.5); doc.setFont("helvetica","normal");
+  doc.text("PREPARE SPECIALEMENT POUR",W/2,135,{align:"center"});
+  doc.setFontSize(17); doc.setFont("helvetica","bold");
+  doc.text(fullUC,W/2,148,{align:"center"});
+  doc.setTextColor(200,200,200); doc.setFontSize(9.5); doc.setFont("helvetica","italic");
+  doc.text('"'+motivMsg+'"',W/2,169,{align:"center"});
+  doc.setFillColor(25,25,25); doc.roundedRect(M+4,180,W-2*(M+4),48,4,4,'F');
+  doc.setTextColor(201,168,76); doc.setFontSize(7); doc.setFont("helvetica","bold");
+  doc.text("VOS INFORMATIONS",M+12,191);
+  doc.setDrawColor(201,168,76); doc.setLineWidth(0.3); doc.line(M+12,194,W-M-12,194);
+  const infos=[["Classe",d.classe||"—"],["Etablissement",d.etab||"—"],["Metier vise",d.metier||"—"],["Statut",d.preinscrit==="oui"?"Preinscrit(e)":"Non preinscrit(e)"]];
+  infos.forEach((info,i)=>{
+    doc.setTextColor(150,150,150); doc.setFontSize(7); doc.setFont("helvetica","normal");
+    doc.text(info[0]+" :",M+12,200+i*7);
+    doc.setTextColor(255,255,255); doc.setFont("helvetica","bold");
+    doc.text(info[1],M+52,200+i*7);
   });
+  doc.setTextColor(255,100,100); doc.setFontSize(7); doc.setFont("helvetica","bold");
+  const nokLbls = nok.map(k=>NL[k]||k).join("  •  ");
+  const nokLns = doc.splitTextToSize("A TRAVAILLER : "+nokLbls, W-2*M-12);
+  doc.text(nokLns,M+12,232);
+  doc.setTextColor(100,100,100); doc.setFontSize(6.5); doc.setFont("helvetica","normal");
+  doc.text("Ing. Moise Zame — S.E. Corporation  |  +237 6 95 55 35 85",W/2,265,{align:"center"});
+
+  // ===== SOMMAIRE =====
+  addPage();
+  doc.setFillColor(10,9,6); doc.rect(0,0,W,H,'F');
+  doc.setFillColor(201,168,76); doc.rect(0,0,W,5,'F'); doc.rect(0,H-5,W,5,'F');
+  doc.setTextColor(201,168,76); doc.setFontSize(16); doc.setFont("helvetica","bold");
+  doc.text("SOMMAIRE",W/2,38,{align:"center"});
+  doc.setLineWidth(0.5); doc.line(M+20,43,W-M-20,43);
+  doc.setTextColor(180,180,180); doc.setFontSize(8); doc.setFont("helvetica","normal");
+  doc.text("Ce document couvre "+nok.length+" point(s) pour "+prenom+" "+nom+".",W/2,53,{align:"center"});
+  let sy=66;
+  nok.forEach((k,i)=>{
+    const sec=SECTIONS[k]; if(!sec) return;
+    const [r,g,b]=sec.couleur;
+    doc.setFillColor(r,g,b); doc.roundedRect(M,sy,10,10,2,2,'F');
+    doc.setTextColor(255,255,255); doc.setFontSize(9); doc.setFont("helvetica","bold");
+    doc.text(String(i+1),M+5,sy+7,{align:"center"});
+    doc.setFontSize(9.5); doc.text(sec.titre,M+14,sy+7);
+    doc.setTextColor(120,120,120); doc.setFontSize(7.5); doc.setFont("helvetica","normal");
+    doc.text("Cours  |  Exemples resolus  |  Exercices  |  Sujet BAC",M+14,sy+14);
+    sy+=22;
+  });
+  doc.setTextColor(201,168,76); doc.setFontSize(7.5);
+  doc.text("Contact : +237 6 95 55 35 85 — Ing. Moise Zame",W/2,H-14,{align:"center"});
+
+  // ===== PAGES PAR NOTION =====
+  nok.forEach((k,secIdx)=>{
+    const sec=SECTIONS[k]; if(!sec) return;
+    const [R,G,B]=sec.couleur;
+
+    // --- PAGE COURS ---
+    addPage();
+    doc.setFillColor(R,G,B); doc.rect(0,0,W,24,'F');
+    doc.setTextColor(255,255,255,0.5); doc.setFontSize(5.5); doc.setFont("helvetica","normal");
+    doc.text("PARTIE "+(secIdx+1)+" / "+nok.length+"  —  "+prenom+" "+nom,M,9);
+    doc.setTextColor(255,255,255); doc.setFontSize(13); doc.setFont("helvetica","bold");
+    doc.text(sec.titre,M,19);
+    doc.setFillColor(245,243,237); doc.rect(0,24,W,16,'F');
+    doc.setFillColor(R,G,B); doc.rect(0,24,4,16,'F');
+    doc.setTextColor(60,60,60); doc.setFontSize(8); doc.setFont("helvetica","italic");
+    const inL=doc.splitTextToSize(sec.intro,W-M-10);
+    doc.text(inL,M+5,31);
+    y=46;
+    sec.cours.forEach(s=>{
+      checkY(20);
+      doc.setFillColor(R,G,B); doc.roundedRect(M,y,W-2*M,8,2,2,'F');
+      doc.setTextColor(255,255,255); doc.setFontSize(8); doc.setFont("helvetica","bold");
+      doc.text(s.st,M+4,y+5.5); y+=11;
+      s.pts.forEach(pt=>{
+        const ls=doc.splitTextToSize("•  "+pt,W-2*M-10);
+        const bh=ls.length*5+5;
+        checkY(bh+2);
+        doc.setFillColor(249,247,242); doc.roundedRect(M,y,W-2*M,bh,1.5,1.5,'F');
+        doc.setDrawColor(R,G,B); doc.setLineWidth(0.5); doc.line(M,y,M,y+bh);
+        doc.setTextColor(35,35,35); doc.setFontSize(8); doc.setFont("helvetica","normal");
+        doc.text(ls,M+5,y+4.5); y+=bh+2;
+      });
+      y+=4;
+    });
+
+    // --- PAGE EXEMPLES ---
+    addPage();
+    doc.setFillColor(R,G,B); doc.rect(0,0,W,18,'F');
+    doc.setTextColor(255,255,255); doc.setFontSize(12); doc.setFont("helvetica","bold");
+    doc.text("EXEMPLES RESOLUS ETAPE PAR ETAPE",M,13);
+    doc.setFontSize(6); doc.setFont("helvetica","normal");
+    doc.text(sec.titre.toUpperCase(),W-M,13,{align:"right"});
+    y=26;
+    sec.exemples.forEach((ex,ei)=>{
+      const eL=doc.splitTextToSize(ex.e,W-2*M-16);
+      const sL=doc.splitTextToSize("Solution : "+ex.s,W-2*M-16);
+      checkY(eL.length*5+sL.length*5+20);
+      doc.setFillColor(R,G,B); doc.circle(M+5,y+5,5,'F');
+      doc.setTextColor(255,255,255); doc.setFontSize(8); doc.setFont("helvetica","bold");
+      doc.text(String(ei+1),M+5,y+7,{align:"center"});
+      const eH=eL.length*5+6;
+      doc.setFillColor(235,245,255); doc.roundedRect(M+12,y,W-2*M-12,eH,2,2,'F');
+      doc.setTextColor(R,G,B); doc.setFontSize(8.5); doc.setFont("helvetica","bold");
+      doc.text(eL,M+16,y+5); y+=eH+2;
+      const sH=sL.length*5+7;
+      doc.setFillColor(248,255,248); doc.setDrawColor(R,G,B); doc.setLineWidth(0.4);
+      doc.roundedRect(M+12,y,W-2*M-12,sH,2,2,'FD');
+      doc.setTextColor(25,80,25); doc.setFontSize(8); doc.setFont("helvetica","normal");
+      doc.text(sL,M+16,y+5.5); y+=sH+8;
+    });
+
+    // --- PAGE EXERCICES ---
+    addPage();
+    doc.setFillColor(30,30,30); doc.rect(0,0,W,18,'F');
+    doc.setFillColor(R,G,B); doc.rect(0,0,5,18,'F');
+    doc.setTextColor(255,255,255); doc.setFontSize(12); doc.setFont("helvetica","bold");
+    doc.text("EXERCICES D'APPLICATION",M,12.5);
+    doc.setTextColor(R,G,B); doc.setFontSize(6.5); doc.setFont("helvetica","normal");
+    doc.text(sec.titre.toUpperCase(),W-M,12.5,{align:"right"});
+    y=24;
+    doc.setTextColor(120,120,120); doc.setFontSize(7.5); doc.setFont("helvetica","italic");
+    doc.text("Travail personnel de "+prenom+" "+nom+" — Fais chaque exercice avant de regarder le corrige.",M,y);
+    y+=10;
+    sec.exos.forEach((ex,ei)=>{
+      const qL=doc.splitTextToSize(ex.q,W-2*M-14);
+      checkY(qL.length*5+34);
+      doc.setFillColor(R,G,B); doc.circle(M+4.5,y+4.5,4.5,'F');
+      doc.setTextColor(255,255,255); doc.setFontSize(8); doc.setFont("helvetica","bold");
+      doc.text(String(ei+1),M+4.5,y+6,{align:"center"});
+      doc.setTextColor(20,20,20); doc.setFontSize(9); doc.setFont("helvetica","bold");
+      doc.text(qL,M+12,y+6); y+=qL.length*5+4;
+      doc.setFillColor(253,252,249); doc.setDrawColor(210,210,210); doc.setLineWidth(0.25);
+      doc.roundedRect(M+6,y,W-2*M-6,24,2,2,'FD');
+      doc.setTextColor(190,190,190); doc.setFontSize(7); doc.setFont("helvetica","italic");
+      doc.text("Votre demarche ici...",M+10,y+8);
+      [1,2,3].forEach(li=>{ doc.setDrawColor(230,230,230); doc.line(M+10,y+8+li*5,W-M-8,y+8+li*5); });
+      y+=30;
+    });
+    // Corriges
+    checkY(14);
+    doc.setFillColor(30,30,30); doc.roundedRect(M,y,W-2*M,9,3,3,'F');
+    doc.setTextColor(201,168,76); doc.setFontSize(9); doc.setFont("helvetica","bold");
+    doc.text("CORRIGES",W/2,y+6,{align:"center"}); y+=13;
+    sec.exos.forEach((ex,ei)=>{
+      const cL=doc.splitTextToSize((ei+1)+".  "+ex.c,W-2*M-10);
+      const cH=cL.length*5+6;
+      checkY(cH+3);
+      doc.setFillColor(245,255,245); doc.setDrawColor(R,G,B); doc.setLineWidth(0.35);
+      doc.roundedRect(M,y,W-2*M,cH,2,2,'FD');
+      doc.setTextColor(25,90,25); doc.setFontSize(8); doc.setFont("helvetica","normal");
+      doc.text(cL,M+4,y+5); y+=cH+3;
+    });
+
+    // --- BLOC BAC ---
+    checkY(20); y+=6;
+    doc.setFillColor(R,G,B); doc.roundedRect(M,y,W-2*M,9,3,3,'F');
+    doc.setTextColor(255,255,255); doc.setFontSize(8.5); doc.setFont("helvetica","bold");
+    doc.text("SUJET BAC — "+sec.bac.annee,W/2,y+6,{align:"center"}); y+=13;
+    const beL=doc.splitTextToSize(sec.bac.enonce,W-2*M-8);
+    const beH=beL.length*5+7;
+    checkY(beH+4);
+    doc.setFillColor(250,246,235); doc.setDrawColor(R,G,B); doc.setLineWidth(0.6);
+    doc.roundedRect(M,y,W-2*M,beH,2,2,'FD');
+    doc.setTextColor(80,50,0); doc.setFontSize(8); doc.setFont("helvetica","bold");
+    doc.text(beL,M+4,y+5.5); y+=beH+4;
+    const bsL=doc.splitTextToSize("CORRECTION : "+sec.bac.solution,W-2*M-8);
+    const bsH=bsL.length*5+7;
+    checkY(bsH+4);
+    doc.setFillColor(245,255,245); doc.roundedRect(M,y,W-2*M,bsH,2,2,'F');
+    doc.setTextColor(20,90,20); doc.setFontSize(8); doc.setFont("helvetica","normal");
+    doc.text(bsL,M+4,y+5.5); y+=bsH+8;
+
+    // --- CONSEIL BAC ---
+    const ctL=doc.splitTextToSize(sec.conseil,W-2*M-14);
+    const ctH=ctL.length*6+12;
+    checkY(ctH+4);
+    doc.setFillColor(255,252,230); doc.setDrawColor(201,168,76); doc.setLineWidth(0.8);
+    doc.roundedRect(M,y,W-2*M,ctH,3,3,'FD');
+    doc.setFillColor(201,168,76); doc.roundedRect(M,y,30,8,2,2,'F');
+    doc.setTextColor(10,9,6); doc.setFontSize(6.5); doc.setFont("helvetica","bold");
+    doc.text("CONSEIL BAC",M+3,y+5.5);
+    doc.setTextColor(100,70,0); doc.setFontSize(8); doc.setFont("helvetica","italic");
+    doc.text(ctL,M+5,y+14);
+  });
+
+  // ===== PAGE FINALE =====
+  addPage();
+  doc.setFillColor(10,9,6); doc.rect(0,0,W,H,'F');
+  doc.setFillColor(201,168,76); doc.rect(0,0,W,5,'F'); doc.rect(0,H-5,W,5,'F');
+  doc.setTextColor(201,168,76); doc.setFontSize(52); doc.setFont("helvetica","bold");
+  doc.text("GO,",W/2,78,{align:"center"});
+  doc.setFontSize(36); doc.text(prenom.toUpperCase()+" !",W/2,105,{align:"center"});
+  doc.setTextColor(255,255,255); doc.setFontSize(10.5); doc.setFont("helvetica","normal");
+  const finalLines=[
+    "Tu as maintenant tous les outils pour progresser.",
+    "Travaille chaque notion dans l'ordre du document.",
+    "Refais les exemples sans regarder la solution.",
+    "Fais tous les exercices avant de consulter le corrige.",
+    "Reviens sur les conseils BAC avant l'examen.",
+    "",
+    "Le BAC se gagne dans la regularite, pas dans l'urgence."
+  ];
+  finalLines.forEach((line,li)=>{
+    doc.setTextColor(li===6?201:200, li===6?168:200, li===6?76:200);
+    doc.text(line,W/2,128+li*11,{align:"center"});
+  });
+  doc.setFillColor(201,168,76); doc.roundedRect(M+10,213,W-2*(M+10),24,4,4,'F');
+  doc.setTextColor(10,9,6); doc.setFontSize(8.5); doc.setFont("helvetica","bold");
+  doc.text("Des questions ? On est la pour toi !",W/2,223,{align:"center"});
+  doc.setFontSize(9);
+  doc.text("WhatsApp : +237 6 95 55 35 85 — Ing. Moise Zame",W/2,232,{align:"center"});
+
+  const fn=("Plan_"+prenom+"_"+nom+"_ln_exp_SE.pdf").replace(/[^a-zA-Z0-9_\-\.]/g,"_");
+  doc.save(fn);
+  showToast("PDF de "+prenom+" "+nom+" genere !");
 }
 
-window.applyFilters = function() {
-  var search = document.getElementById("f-search").value.toLowerCase();
-  var classe = document.getElementById("f-classe").value;
-  var metier = document.getElementById("f-metier").value;
-  var pi = document.getElementById("f-pi").value;
-  var notion = document.getElementById("f-notion").value;
-  var filtered = allData.filter(function(d) {
-    if(search && !(d.prenom+d.nom+(d.etab||"")).toLowerCase().includes(search)) return false;
-    if(classe && d.classe !== classe) return false;
-    if(metier && d.metier !== metier) return false;
-    if(pi && d.preinscrit !== pi) return false;
-    if(notion && d.notions && d.notions[notion] && d.notions[notion].level !== "nok") return false;
+function showToast(msg){
+  const t=document.getElementById("toast");
+  t.textContent=msg; t.classList.add("show");
+  setTimeout(()=>t.classList.remove("show"),4000);
+}
+
+// ================================================================
+// DASHBOARD LOGIC
+// ================================================================
+window.login = function(){
+  const p=document.getElementById("pwd").value;
+  if(p===PWD){
+    document.getElementById("login-wrap").style.display="none";
+    document.getElementById("dashboard").style.display="block";
+    loadData();
+  } else { document.getElementById("err-login").style.display="block"; }
+};
+
+window.loadData = async function(){
+  document.getElementById("table-area").innerHTML='<div class="loading"><div class="spin"></div></div>';
+  try{
+    const q=query(collection(db,"diagnostics"),orderBy("date","desc"));
+    const snap=await getDocs(q);
+    allData=[]; snap.forEach(doc=>allData.push({id:doc.id,...doc.data()}));
+    updateStats(); populateMetierFilter(); applyFilters();
+  }catch(e){
+    document.getElementById("table-area").innerHTML='<div class="loading">Erreur de chargement.</div>';
+  }
+};
+
+function updateStats(){
+  const total=allData.length;
+  const pi=allData.filter(d=>d.preinscrit==="oui").length;
+  const npi=allData.filter(d=>d.preinscrit==="non").length;
+  const sem=getSemaine();
+  const week=allData.filter(d=>d.semaine===sem).length;
+  document.getElementById("st-total").textContent=total;
+  document.getElementById("st-pi").textContent=pi;
+  document.getElementById("st-npi").textContent=npi;
+  document.getElementById("st-week").textContent=week;
+}
+
+function populateMetierFilter(){
+  const metiers=[...new Set(allData.map(d=>d.metier||"RAS").filter(Boolean))].sort();
+  const sel=document.getElementById("f-metier");
+  const cur=sel.value;
+  sel.innerHTML='<option value="">Tous</option>';
+  metiers.forEach(m=>sel.innerHTML+=`<option value="${m}"${cur===m?" selected":""}>${m}</option>`);
+}
+
+window.applyFilters = function(){
+  const search=document.getElementById("f-search").value.toLowerCase();
+  const classe=document.getElementById("f-classe").value;
+  const metier=document.getElementById("f-metier").value;
+  const pi=document.getElementById("f-pi").value;
+  const notion=document.getElementById("f-notion").value;
+  const filtered=allData.filter(d=>{
+    if(search&&!(d.prenom+d.nom+(d.etab||"")).toLowerCase().includes(search)) return false;
+    if(classe&&d.classe!==classe) return false;
+    if(metier&&d.metier!==metier) return false;
+    if(pi&&d.preinscrit!==pi) return false;
+    if(notion&&d.notions&&d.notions[notion]&&d.notions[notion].level!=="nok") return false;
     return true;
   });
   renderTable(filtered);
-  document.getElementById("count-lbl").textContent = filtered.length + " / " + allData.length + " eleves";
+  document.getElementById("count-lbl").textContent=filtered.length+" / "+allData.length+" eleves";
 };
 
-function renderTable(data) {
-  if(data.length===0){
-    document.getElementById("table-area").innerHTML = '<div class="loading">Aucun resultat.</div>';
-    return;
-  }
-  var html = '<div style="overflow-x:auto"><table><thead><tr>' +
-    '<th>#</th><th>Nom complet</th><th>Classe</th><th>Metier</th>' +
-    '<th>Preinscrit</th><th>Points faibles</th><th>Tel.</th><th>Date</th><th>Actions</th>' +
-    '</tr></thead><tbody>';
-
-  data.forEach(function(d, i) {
-    var nok = [];
-    if(d.notions) {
-      Object.keys(d.notions).forEach(function(k){
-        if(d.notions[k].level==="nok") nok.push(NOTIONS_LABELS[k]||k);
-      });
-    }
-    var piClass = d.preinscrit==="oui"?"pill-pi-oui":"pill-pi-non";
-    var piLbl = d.preinscrit==="oui"?"&#9989; Oui":"&#10060; Non";
-    var dateStr = d.date && d.date.toDate ? d.date.toDate().toLocaleDateString("fr-FR") : d.semaine||"—";
-    var nokHtml = nok.length>0
-      ? nok.map(function(n){return '<span class="pill pill-nok">'+n+'</span>';}).join(" ")
-      : '<span class="pill pill-neutral">Aucun signale</span>';
-
-    html += '<tr>' +
-      '<td style="color:var(--gris);font-size:.75rem;">'+(i+1)+'</td>' +
-      '<td><strong>'+d.prenom+' '+d.nom+'</strong>' +
-        (d.sexe?'<br><span style="font-size:.7rem;color:var(--gris)">'+d.sexe+'</span>':'')+'</td>' +
-      '<td>'+d.classe+'</td>' +
-      '<td>'+d.metier+'</td>' +
-      '<td><span class="pill '+piClass+'">'+piLbl+'</span></td>' +
-      '<td>'+nokHtml+'</td>' +
-      '<td style="font-size:.78rem;">'+d.tel+(d.tel_parent?'<br><span style="color:var(--bleu)">Parent: '+d.tel_parent+'</span>':'')+'</td>' +
-      '<td style="font-size:.75rem;color:var(--gris);">'+dateStr+'</td>' +
-      '<td style="display:flex;gap:.3rem;flex-wrap:wrap;">' +
-        '<button class="btn-detail" onclick="showDetail(\''+d.id+'\')">Detail</button>' +
-        '<button class="btn-pdf" onclick="generatePDF(\''+d.id+'\')" title="Generer le PDF personnalise">&#128229; PDF</button>' +
-      '</td>' +
-    '</tr>';
+function renderTable(data){
+  if(!data.length){ document.getElementById("table-area").innerHTML='<div class="loading">Aucun resultat.</div>'; return; }
+  let html='<div style="overflow-x:auto"><table><thead><tr><th>#</th><th>Nom complet</th><th>Classe</th><th>Metier</th><th>Preinscrit</th><th>Points faibles</th><th>Tel.</th><th>Date</th><th>Actions</th></tr></thead><tbody>';
+  data.forEach((d,i)=>{
+    const nok=[];
+    if(d.notions) Object.keys(d.notions).forEach(k=>{ if(d.notions[k].level==="nok") nok.push(NL[k]||k); });
+    const piCls=d.preinscrit==="oui"?"pill-pi-oui":"pill-pi-non";
+    const piLbl=d.preinscrit==="oui"?"&#9989; Oui":"&#10060; Non";
+    const dateStr=d.date&&d.date.toDate?d.date.toDate().toLocaleDateString("fr-FR"):d.semaine||"—";
+    const nokH=nok.length?nok.map(n=>`<span class="pill pill-nok">${n}</span>`).join(" "):'<span class="pill pill-neutral">Aucun</span>';
+    html+=`<tr>
+      <td style="color:var(--gris);font-size:.75rem;">${i+1}</td>
+      <td><strong>${d.prenom} ${d.nom}</strong>${d.sexe?`<br><span style="font-size:.7rem;color:var(--gris)">${d.sexe}</span>`:""}</td>
+      <td>${d.classe}</td><td>${d.metier}</td>
+      <td><span class="pill ${piCls}">${piLbl}</span></td>
+      <td>${nokH}</td>
+      <td style="font-size:.78rem;">${d.tel}${d.tel_parent?`<br><span style="color:var(--bleu)">Parent: ${d.tel_parent}</span>`:""}</td>
+      <td style="font-size:.75rem;color:var(--gris);">${dateStr}</td>
+      <td style="display:flex;gap:.3rem;flex-wrap:wrap;">
+        <button class="btn-detail" onclick="showDetail('${d.id}')">Detail</button>
+        <button class="btn-pdf" onclick="generatePDF('${d.id}')">&#128229; PDF</button>
+      </td>
+    </tr>`;
   });
-
-  html += '</tbody></table></div>';
-  document.getElementById("table-area").innerHTML = html;
+  html+='</tbody></table></div>';
+  document.getElementById("table-area").innerHTML=html;
 }
 
-function getRaisonLabel(r) {
-  var map = {parent_decide:"Parent decide",pas_info:"Manque d'infos",attendre_bac:"Attend le bac",pas_convaincu:"Pas convaincu",autre:"Autre"};
-  return map[r]||r;
-}
-
-window.showDetail = function(id) {
-  var d = allData.find(function(x){return x.id===id;});
-  if(!d) return;
-  var ok = [], nok = [], none = [];
-  if(d.notions){
-    Object.keys(d.notions).forEach(function(k){
-      var s = d.notions[k];
-      var lbl = NOTIONS_LABELS[k]||k;
-      var type = s.type==="def"?" (Def.)":s.type==="app"?" (Applic.)":s.type==="both"?" (Les deux)":"";
-      if(s.level==="ok") ok.push(lbl);
-      else if(s.level==="nok") nok.push(lbl+type);
-      else none.push(lbl);
-    });
-  }
-  var html = '<div class="detail-title">'+d.prenom+' '+d.nom+'</div>';
-  html += '<div class="detail-grid">';
-  html += '<div class="dg-item"><div class="dg-label">Classe</div><div class="dg-val">'+d.classe+'</div></div>';
-  html += '<div class="dg-item"><div class="dg-label">Sexe</div><div class="dg-val">'+(d.sexe||"—")+'</div></div>';
-  html += '<div class="dg-item"><div class="dg-label">Etablissement</div><div class="dg-val">'+(d.etab||"—")+'</div></div>';
-  html += '<div class="dg-item"><div class="dg-label">Metier vise</div><div class="dg-val">'+d.metier+'</div></div>';
-  html += '<div class="dg-item"><div class="dg-label">WhatsApp</div><div class="dg-val">'+d.tel+'</div></div>';
-  html += '<div class="dg-item"><div class="dg-label">Preinscrit</div><div class="dg-val">'+(d.preinscrit==="oui"?"&#9989; Oui":"&#10060; Non")+'</div></div>';
-  if(d.tel_parent) html += '<div class="dg-item" style="grid-column:span 2"><div class="dg-label">Tel parent</div><div class="dg-val" style="color:var(--bleu)">'+d.tel_parent+'</div></div>';
-  html += '</div>';
-  html += '<div style="font-weight:600;font-size:.85rem;margin-bottom:.5rem;">Notions — Detail</div>';
-  html += '<div class="notion-recap">';
-  nok.forEach(function(n){html+='<div class="nr-row nr-nok"><span>&#128308; '+n+'</span><span class="pill pill-nok">Difficulte</span></div>';});
-  ok.forEach(function(n){html+='<div class="nr-row nr-ok"><span>&#128994; '+n+'</span><span class="pill pill-ok">Maitrise</span></div>';});
-  none.forEach(function(n){html+='<div class="nr-row nr-none"><span>'+n+'</span><span style="font-size:.72rem;color:#bbb">Non evalue</span></div>';});
-  html += '</div>';
-  html += '<div style="margin-top:1rem;"><button onclick="generatePDF(\''+d.id+'\')" class="btn-pdf" style="width:100%;padding:.6rem;font-size:.85rem;border-radius:9px;">&#128229; Generer le PDF personnalise</button></div>';
-  document.getElementById("detail-content").innerHTML = html;
+window.showDetail = function(id){
+  const d=allData.find(x=>x.id===id); if(!d) return;
+  const ok=[],nok=[],none=[];
+  if(d.notions) Object.keys(d.notions).forEach(k=>{
+    const s=d.notions[k],lbl=NL[k]||k;
+    const type=s.type==="def"?" (Def.)":s.type==="app"?" (App.)":s.type==="both"?" (Les deux)":"";
+    if(s.level==="ok") ok.push(lbl);
+    else if(s.level==="nok") nok.push(lbl+type);
+    else none.push(lbl);
+  });
+  let html=`<div class="detail-title">${d.prenom} ${d.nom}</div><div class="detail-grid">
+    <div class="dg-item"><div class="dg-label">Classe</div><div class="dg-val">${d.classe}</div></div>
+    <div class="dg-item"><div class="dg-label">Sexe</div><div class="dg-val">${d.sexe||"—"}</div></div>
+    <div class="dg-item"><div class="dg-label">Etablissement</div><div class="dg-val">${d.etab||"—"}</div></div>
+    <div class="dg-item"><div class="dg-label">Metier vise</div><div class="dg-val">${d.metier}</div></div>
+    <div class="dg-item"><div class="dg-label">WhatsApp</div><div class="dg-val">${d.tel}</div></div>
+    <div class="dg-item"><div class="dg-label">Preinscrit</div><div class="dg-val">${d.preinscrit==="oui"?"&#9989; Oui":"&#10060; Non"}</div></div>
+  </div><div style="font-weight:600;font-size:.85rem;margin-bottom:.5rem;">Notions — Detail</div><div class="notion-recap">`;
+  nok.forEach(n=>html+=`<div class="nr-row nr-nok"><span>&#128308; ${n}</span><span class="pill pill-nok">Difficulte</span></div>`);
+  ok.forEach(n=>html+=`<div class="nr-row nr-ok"><span>&#128994; ${n}</span><span class="pill pill-ok">Maitrise</span></div>`);
+  none.forEach(n=>html+=`<div class="nr-row nr-none"><span>${n}</span><span style="font-size:.72rem;color:#bbb">Non evalue</span></div>`);
+  html+=`</div><div style="margin-top:1rem;"><button onclick="generatePDF('${d.id}')" class="btn-pdf" style="width:100%;padding:.7rem;font-size:.88rem;border-radius:9px;justify-content:center;display:flex;align-items:center;gap:.4rem;">&#128229; Generer le PDF personnalise pour ${d.prenom}</button></div>`;
+  document.getElementById("detail-content").innerHTML=html;
   document.getElementById("detail-overlay").classList.add("open");
 };
 
-window.closeDetail = function(e) {
-  if(e.target===document.getElementById("detail-overlay"))
-    document.getElementById("detail-overlay").classList.remove("open");
-};
+window.closeDetail=function(e){ if(e.target===document.getElementById("detail-overlay")) document.getElementById("detail-overlay").classList.remove("open"); };
 
-window.exportCSV = function() {
-  var rows = [["Prenom","Nom","Sexe","Classe","Etablissement","Metier","Tel","Tel Parent","Preinscrit","ln_def","eq","ineq","poly3","limites","derivees","variation","etude","Semaine"]];
-  allData.forEach(function(d){
-    var row = [d.prenom,d.nom,d.sexe||"",d.classe,d.etab||"",d.metier,d.tel,d.tel_parent||"",d.preinscrit];
-    ["ln_def","eq","ineq","poly3","limites","derivees","variation","etude"].forEach(function(k){
-      var s = d.notions&&d.notions[k];
-      row.push(s?((s.level||"")+"|"+(s.type||"")):"");
+window.exportCSV=function(){
+  const rows=[["Prenom","Nom","Sexe","Classe","Etablissement","Metier","Tel","Tel Parent","Preinscrit","ln_def","eq","ineq","poly3","limites","derivees","variation","etude","Semaine"]];
+  allData.forEach(d=>{
+    const row=[d.prenom,d.nom,d.sexe||"",d.classe,d.etab||"",d.metier,d.tel,d.tel_parent||"",d.preinscrit];
+    ["ln_def","eq","ineq","poly3","limites","derivees","variation","etude"].forEach(k=>{
+      const s=d.notions&&d.notions[k]; row.push(s?(s.level||"")+"|"+(s.type||""):"");
     });
-    row.push(d.semaine||"");
-    rows.push(row);
+    row.push(d.semaine||""); rows.push(row);
   });
-  var csv = rows.map(function(r){return r.map(function(c){return '"'+(c||"").toString().replace(/"/g,'""')+'"';}).join(",");}).join("\n");
-  var blob = new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8;"});
-  var url = URL.createObjectURL(blob);
-  var a = document.createElement("a"); a.href=url; a.download="diagnostics_SE_Corp.csv"; a.click();
+  const csv=rows.map(r=>r.map(c=>'"'+(c||"").toString().replace(/"/g,'""')+'"').join(",")).join("\n");
+  const blob=new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8;"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a"); a.href=url; a.download="diagnostics_SE_Corp.csv"; a.click();
 };
 
-function getSemaine() {
-  var d = new Date(); var j = d.getDay()||7; var lundi = new Date(d);
-  lundi.setDate(d.getDate()-j+1); return lundi.toISOString().slice(0,10);
+function getSemaine(){
+  const d=new Date(),j=d.getDay()||7,l=new Date(d);
+  l.setDate(d.getDate()-j+1); return l.toISOString().slice(0,10);
 }
 </script>
 </body>
