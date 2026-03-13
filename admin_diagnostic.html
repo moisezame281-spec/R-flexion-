@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SE Corp — Admin Diagnostics</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 :root{--or:#c9a84c;--or2:#e8c96a;--noir:#0a0906;--fond:#f7f4ee;--gris:#6b6560;--blanc:#fff;--vert:#2d6a4f;--rouge:#c0392b;--bleu:#1a3a5c;}
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -15,8 +16,6 @@ body{font-family:"DM Sans",sans-serif;background:var(--fond);color:var(--noir);m
 .hdr h1{font-family:"Cormorant Garamond",serif;font-size:1.2rem;color:var(--blanc);}
 .hdr p{font-size:.7rem;color:#aaa;}
 .badge-admin{background:var(--or);color:var(--noir);font-size:.7rem;font-weight:700;padding:.2rem .6rem;border-radius:20px;}
-
-/* LOGIN */
 .login-wrap{max-width:400px;margin:4rem auto;padding:1rem;}
 .login-box{background:var(--blanc);border-radius:14px;padding:2rem;box-shadow:0 4px 24px rgba(0,0,0,.08);border-top:4px solid var(--or);text-align:center;}
 .login-box h2{font-family:"Cormorant Garamond",serif;font-size:1.5rem;font-weight:700;margin-bottom:.3rem;}
@@ -26,17 +25,11 @@ body{font-family:"DM Sans",sans-serif;background:var(--fond);color:var(--noir);m
 .btn-gold{background:var(--or);color:var(--noir);border:none;border-radius:9px;padding:.75rem 1.5rem;font-weight:600;font-size:.9rem;cursor:pointer;width:100%;}
 .btn-gold:hover{background:var(--or2);}
 .err-login{color:var(--rouge);font-size:.8rem;margin-top:.5rem;display:none;}
-
-/* DASHBOARD */
 .dash{display:none;padding:1.5rem;}
-
-/* STATS BAR */
 .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:.8rem;margin-bottom:1.5rem;}
 .stat-card{background:var(--blanc);border-radius:12px;padding:1rem;box-shadow:0 2px 12px rgba(0,0,0,.06);border-top:3px solid var(--or);text-align:center;}
 .stat-num{font-family:"Cormorant Garamond",serif;font-size:2rem;font-weight:700;color:var(--or);line-height:1;}
 .stat-lbl{font-size:.72rem;color:var(--gris);margin-top:.2rem;}
-
-/* FILTERS */
 .filters{background:var(--blanc);border-radius:12px;padding:1rem 1.2rem;box-shadow:0 2px 12px rgba(0,0,0,.06);margin-bottom:1.2rem;display:flex;gap:.8rem;flex-wrap:wrap;align-items:center;}
 .filters label{font-size:.72rem;font-weight:600;color:var(--gris);text-transform:uppercase;letter-spacing:.04em;}
 .filters select,.filters input[type=text]{padding:.45rem .8rem;border:1.5px solid #ddd;border-radius:8px;font-size:.82rem;background:var(--fond);}
@@ -45,8 +38,6 @@ body{font-family:"DM Sans",sans-serif;background:var(--fond);color:var(--noir);m
 .btn-sm{padding:.4rem .9rem;border:none;border-radius:8px;font-size:.78rem;font-weight:600;cursor:pointer;}
 .btn-refresh{background:var(--noir);color:var(--blanc);}
 .btn-export{background:var(--vert);color:var(--blanc);}
-
-/* TABLE */
 .table-wrap{background:var(--blanc);border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,.06);overflow:hidden;}
 .table-hdr{padding:.9rem 1.2rem;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:center;}
 .table-hdr h3{font-family:"Cormorant Garamond",serif;font-size:1.1rem;font-weight:700;}
@@ -62,8 +53,10 @@ tr:hover td{background:#fffdf8;}
 .pill-pi-oui{background:#e8f5ee;color:var(--vert);}
 .pill-pi-non{background:#fdecea;color:var(--rouge);}
 .pill-neutral{background:#f0ede6;color:var(--gris);}
-
-/* DETAIL PANEL */
+.btn-pdf{background:linear-gradient(135deg,#c9a84c,#e8c96a);color:var(--noir);border:none;border-radius:6px;padding:.3rem .7rem;font-size:.73rem;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:.3rem;transition:transform .15s,box-shadow .15s;}
+.btn-pdf:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(201,168,76,.4);}
+.btn-pdf:active{transform:translateY(0);}
+.btn-detail{background:var(--or);border:none;border-radius:6px;padding:.3rem .7rem;font-size:.75rem;font-weight:600;cursor:pointer;}
 .detail-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;z-index:100;align-items:center;justify-content:center;}
 .detail-overlay.open{display:flex;}
 .detail-box{background:var(--blanc);border-radius:14px;padding:1.8rem;max-width:580px;width:90%;max-height:85vh;overflow-y:auto;position:relative;}
@@ -81,6 +74,11 @@ tr:hover td{background:#fffdf8;}
 .loading{text-align:center;padding:3rem;color:var(--gris);}
 .spin{display:inline-block;width:24px;height:24px;border:3px solid #eee;border-top-color:var(--or);border-radius:50%;animation:spin .7s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg);}}
+
+/* PDF Generation Toast */
+.toast{position:fixed;bottom:2rem;right:2rem;background:var(--noir);color:var(--blanc);padding:.8rem 1.4rem;border-radius:10px;font-size:.82rem;font-weight:600;border-left:4px solid var(--or);transform:translateY(100px);opacity:0;transition:all .3s;z-index:999;}
+.toast.show{transform:translateY(0);opacity:1;}
+
 @media(max-width:900px){.stats-row{grid-template-columns:1fr 1fr;}.filters{flex-direction:column;align-items:flex-start;}}
 @media(max-width:600px){.stats-row{grid-template-columns:1fr 1fr;} table{font-size:.75rem;} td,th{padding:.5rem .5rem;}}
 </style>
@@ -95,7 +93,6 @@ tr:hover td{background:#fffdf8;}
   <span class="badge-admin">ADMIN</span>
 </div>
 
-<!-- LOGIN -->
 <div id="login-wrap" class="login-wrap">
   <div class="login-box">
     <div style="font-size:2rem;margin-bottom:.5rem;">&#128274;</div>
@@ -107,9 +104,7 @@ tr:hover td{background:#fffdf8;}
   </div>
 </div>
 
-<!-- DASHBOARD -->
 <div class="dash" id="dashboard">
-
   <div class="stats-row" id="stats-row">
     <div class="stat-card"><div class="stat-num" id="st-total">—</div><div class="stat-lbl">Diagnostics total</div></div>
     <div class="stat-card"><div class="stat-num" id="st-pi" style="color:var(--vert)">—</div><div class="stat-lbl">Pr&eacute;inscrits</div></div>
@@ -132,9 +127,7 @@ tr:hover td{background:#fffdf8;}
     </div>
     <div class="filter-group">
       <label>M&eacute;tier</label>
-      <select id="f-metier" onchange="applyFilters()">
-        <option value="">Tous</option>
-      </select>
+      <select id="f-metier" onchange="applyFilters()"><option value="">Tous</option></select>
     </div>
     <div class="filter-group">
       <label>Pr&eacute;inscription</label>
@@ -169,20 +162,18 @@ tr:hover td{background:#fffdf8;}
       <h3>&#128203; Liste des diagnostics</h3>
       <span class="count-lbl" id="count-lbl">Chargement...</span>
     </div>
-    <div id="table-area">
-      <div class="loading"><div class="spin"></div></div>
-    </div>
+    <div id="table-area"><div class="loading"><div class="spin"></div></div></div>
   </div>
-
 </div>
 
-<!-- DETAIL OVERLAY -->
 <div class="detail-overlay" id="detail-overlay" onclick="closeDetail(event)">
   <div class="detail-box" id="detail-box">
     <button class="detail-close" onclick="document.getElementById('detail-overlay').classList.remove('open')">&#10005;</button>
     <div id="detail-content"></div>
   </div>
 </div>
+
+<div class="toast" id="toast"></div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
@@ -205,9 +196,725 @@ var PWD = "SE2025admin";
 var allData = [];
 
 var NOTIONS_LABELS = {
-  ln_def:"Fonctions ln/exp", eq:"Equations", ineq:"In\u00e9quations",
-  poly3:"Polyn\u00f4me degr\u00e9 3", limites:"Limites", derivees:"D\u00e9riv\u00e9es",
-  variation:"Tableau variation", etude:"Etude compl\u00e8te"
+  ln_def:"Fonctions ln/exp", eq:"Equations", ineq:"Inequations",
+  poly3:"Polynome degre 3", limites:"Limites", derivees:"Derivees",
+  variation:"Tableau de variation", etude:"Etude complete"
+};
+
+// =============================================
+// CONTENU PEDAGOGIQUE PAR NOTION
+// Inspire de camerecole, sujetexa, scribd
+// =============================================
+var CONTENU_PEDAGOGIQUE = {
+
+  ln_def: {
+    titre: "Fonctions Logarithme et Exponentielle",
+    couleur: [26, 58, 92], // bleu fonce
+    intro: "La fonction logarithme neperien ln et la fonction exponentielle exp sont fondamentales en Terminale. Elles apparaissent dans de nombreux sujets du BAC.",
+    definition: [
+      "ln est definie sur ]0;+inf[ et ln(e) = 1, ln(1) = 0",
+      "exp(x) = e^x est definie sur R et exp(0) = 1",
+      "ln et exp sont des fonctions reciproques : ln(exp(x)) = x et exp(ln(x)) = x pour x > 0"
+    ],
+    proprietes: [
+      "ln(a x b) = ln(a) + ln(b)   (a,b > 0)",
+      "ln(a/b) = ln(a) - ln(b)      (a,b > 0)",
+      "ln(a^n) = n x ln(a)           (a > 0)",
+      "exp(a+b) = exp(a) x exp(b)",
+      "exp(a-b) = exp(a) / exp(b)",
+      "(exp(a))^n = exp(n x a)"
+    ],
+    exemples: [
+      {
+        enonce: "Simplifier : ln(e^3) + ln(1/e)",
+        solution: "ln(e^3) + ln(1/e) = 3 + ln(e^(-1)) = 3 + (-1) = 2"
+      },
+      {
+        enonce: "Resoudre : ln(2x - 1) = ln(5)",
+        solution: "ln est injective donc 2x - 1 = 5, soit x = 3. Verification : 2(3)-1 = 5 > 0. Solution : x = 3"
+      },
+      {
+        enonce: "Resoudre : e^(2x) = e^(x+3)",
+        solution: "exp est injective donc 2x = x + 3, soit x = 3. Solution : x = 3"
+      }
+    ],
+    exercices: [
+      { enonce: "Calculer ln(e^5) - ln(e^2)", corrige: "ln(e^5) - ln(e^2) = 5 - 2 = 3" },
+      { enonce: "Resoudre ln(x+2) = 1", corrige: "x + 2 = e, donc x = e - 2 (verif: e-2+2=e>0) OK" },
+      { enonce: "Simplifier exp(3ln(2))", corrige: "exp(ln(2^3)) = 2^3 = 8" },
+      { enonce: "Resoudre e^x = 7 (donner la solution avec ln)", corrige: "x = ln(7)" }
+    ],
+    bac_tip: "Au BAC, les equations avec ln ou exp arrivent souvent dans les etudes de fonctions (signe de la derivee). Pensez toujours a verifier le domaine de definition pour ln !"
+  },
+
+  eq: {
+    titre: "Equations du 2nd Degre et Equations Diverses",
+    couleur: [45, 106, 79], // vert
+    intro: "Resoudre une equation, c'est trouver toutes les valeurs de x qui verifient l'egalite. C'est une competence cle pour le BAC.",
+    definition: [
+      "Equation du 2nd degre : ax^2 + bx + c = 0 (a different de 0)",
+      "Discriminant : Delta = b^2 - 4ac",
+      "Si Delta > 0 : deux solutions x1 = (-b - racine(Delta))/(2a) et x2 = (-b + racine(Delta))/(2a)",
+      "Si Delta = 0 : une solution double x0 = -b/(2a)",
+      "Si Delta < 0 : pas de solution reelle"
+    ],
+    proprietes: [
+      "Somme des racines : x1 + x2 = -b/a",
+      "Produit des racines : x1 x x2 = c/a",
+      "Factorisation : ax^2 + bx + c = a(x - x1)(x - x2)"
+    ],
+    exemples: [
+      {
+        enonce: "Resoudre : x^2 - 5x + 6 = 0",
+        solution: "Delta = 25 - 24 = 1 > 0. x1 = (5-1)/2 = 2, x2 = (5+1)/2 = 3. Solutions : x = 2 ou x = 3"
+      },
+      {
+        enonce: "Resoudre : 2x^2 + 3x + 1 = 0",
+        solution: "Delta = 9 - 8 = 1. x1 = (-3-1)/4 = -1, x2 = (-3+1)/4 = -1/2. Solutions : x = -1 ou x = -1/2"
+      }
+    ],
+    exercices: [
+      { enonce: "Resoudre x^2 - 7x + 12 = 0", corrige: "Delta = 49-48 = 1. x = 3 ou x = 4" },
+      { enonce: "Resoudre x^2 + 4x + 4 = 0", corrige: "Delta = 16-16 = 0. x = -2 (racine double)" },
+      { enonce: "Resoudre x^2 + x + 1 = 0", corrige: "Delta = 1-4 = -3 < 0. Pas de solution reelle." },
+      { enonce: "Factoriser : x^2 - 4x + 3", corrige: "Delta = 4. Racines : 1 et 3. Factorisation : (x-1)(x-3)" }
+    ],
+    bac_tip: "Au BAC Cameroun, les equations apparaissent souvent dans les etudes de fonctions pour trouver les zeros. Maitrisez aussi les equations de la forme f(x) = k !"
+  },
+
+  ineq: {
+    titre: "Inequations",
+    couleur: [192, 57, 43], // rouge
+    intro: "Une inequation est une inegalite contenant une inconnue. La solution est un ensemble (intervalle) et non un nombre isole.",
+    definition: [
+      "Resoudre f(x) > 0 revient a trouver les intervalles ou f est positive",
+      "Methode : chercher les zeros de f, dresser le tableau de signes",
+      "ATTENTION : si on multiplie/divise par un nombre negatif, le sens de l'inegalite s'inverse"
+    ],
+    proprietes: [
+      "ax + b > 0 => x > -b/a si a > 0, x < -b/a si a < 0",
+      "Pour un produit : A x B > 0 si meme signe (++ ou --)",
+      "Pour un quotient : A/B > 0 meme regle que le produit"
+    ],
+    exemples: [
+      {
+        enonce: "Resoudre : 3x - 6 > 0",
+        solution: "3x > 6, x > 2. Solution : ]2 ; +inf["
+      },
+      {
+        enonce: "Resoudre : (x-1)(x+3) <= 0",
+        solution: "Zeros : x = 1 et x = -3. Tableau de signes : produit negatif entre -3 et 1. Solution : [-3 ; 1]"
+      },
+      {
+        enonce: "Resoudre : x^2 - 4 > 0",
+        solution: "x^2 - 4 = (x-2)(x+2). Zeros : x = -2 et x = 2. Solution : ]-inf ; -2[ U ]2 ; +inf["
+      }
+    ],
+    exercices: [
+      { enonce: "Resoudre 2x + 5 < 11", corrige: "2x < 6, x < 3. Solution : ]-inf ; 3[" },
+      { enonce: "Resoudre (x-2)(x-5) > 0", corrige: "Solution : ]-inf ; 2[ U ]5 ; +inf[" },
+      { enonce: "Resoudre x^2 - 9 <= 0", corrige: "(x-3)(x+3) <= 0. Solution : [-3 ; 3]" },
+      { enonce: "Resoudre (2x-1)/(x+2) >= 0", corrige: "Zeros : x=1/2 et x=-2 (exclu). Solution : ]-inf;-2[ U [1/2;+inf[" }
+    ],
+    bac_tip: "Les inequations sont souvent liees aux tableaux de variation au BAC. Maitrisez le tableau de signes : c'est la cle !"
+  },
+
+  poly3: {
+    titre: "Polynomes du 3eme Degre",
+    couleur: [90, 60, 140], // violet
+    intro: "Un polynome du 3eme degre a la forme P(x) = ax^3 + bx^2 + cx + d. On les etudie souvent via la factorisation.",
+    definition: [
+      "Theoreme : si P(r) = 0, alors (x - r) est un facteur de P(x)",
+      "Factorisation : P(x) = a(x - r)(x^2 + px + q)",
+      "Methode de division euclidienne ou identification des coefficients"
+    ],
+    proprietes: [
+      "Un polynome de degre 3 a au moins une racine reelle",
+      "Si r est racine : P(x) = (x - r) x Q(x) ou Q est de degre 2",
+      "Chercher les racines rationnelles parmi les diviseurs du terme constant"
+    ],
+    exemples: [
+      {
+        enonce: "Factoriser P(x) = x^3 - 6x^2 + 11x - 6",
+        solution: "P(1) = 1-6+11-6 = 0, donc (x-1) est facteur. Division : P(x) = (x-1)(x^2-5x+6) = (x-1)(x-2)(x-3)"
+      },
+      {
+        enonce: "Factoriser P(x) = 2x^3 - x^2 - 5x + 2 sachant que 2 est racine",
+        solution: "P(x) = (x-2)(2x^2+3x-1). Puis on resout 2x^2+3x-1=0 pour les autres racines."
+      }
+    ],
+    exercices: [
+      { enonce: "Verifier que 1 est racine de x^3 - 3x + 2 et factoriser", corrige: "P(1)=0. P(x)=(x-1)(x^2+x-2)=(x-1)(x-1)(x+2)=(x-1)^2(x+2)" },
+      { enonce: "Factoriser x^3 + 3x^2 - 4 sachant que 1 est racine", corrige: "P(x)=(x-1)(x^2+4x+4)=(x-1)(x+2)^2" },
+      { enonce: "Resoudre x^3 - x = 0", corrige: "x(x^2-1)=0. x(x-1)(x+1)=0. Solutions : x=0, x=1, x=-1" }
+    ],
+    bac_tip: "Au BAC, on vous donne souvent une racine evidente. Testez toujours x = 1, x = -1, x = 2 en premier !"
+  },
+
+  limites: {
+    titre: "Calcul de Limites",
+    couleur: [180, 120, 20], // or fonce
+    intro: "La limite d'une fonction en un point decrit son comportement au voisinage de ce point. C'est la base de l'analyse.",
+    definition: [
+      "lim(x->a) f(x) = L signifie que f(x) se rapproche de L quand x s'approche de a",
+      "Limite en +inf ou -inf : comportement asymptotique",
+      "Formes indeterminees : inf/inf, 0/0, inf - inf => il faut lever l'indetermination"
+    ],
+    proprietes: [
+      "Limites usuelles : lim(x->+inf) x^n = +inf, lim(x->-inf) x^n (selon parite)",
+      "Croissances comparees : ln(x)/x^n -> 0 et x^n/e^x -> 0 quand x -> +inf",
+      "Factoriser par le terme dominant pour les formes inf/inf",
+      "Conjuguee pour les formes avec racines carrees"
+    ],
+    exemples: [
+      {
+        enonce: "Calculer lim(x->+inf) (3x^2 - 2x + 1) / (x^2 + 5)",
+        solution: "Diviser par x^2 : (3 - 2/x + 1/x^2) / (1 + 5/x^2). Quand x->+inf : -> 3/1 = 3"
+      },
+      {
+        enonce: "Calculer lim(x->2) (x^2 - 4)/(x - 2)",
+        solution: "Forme 0/0. Factoriser : (x-2)(x+2)/(x-2) = x+2. Limite = 2+2 = 4"
+      },
+      {
+        enonce: "Calculer lim(x->+inf) (x - racine(x^2 + 1))",
+        solution: "Conjuguee : (x^2-(x^2+1))/(x+racine(x^2+1)) = -1/(x+racine(x^2+1)) -> 0"
+      }
+    ],
+    exercices: [
+      { enonce: "lim(x->+inf) (2x^3 - x) / (x^3 + 4)", corrige: "Diviser par x^3 -> 2/1 = 2" },
+      { enonce: "lim(x->3) (x^2 - 9)/(x - 3)", corrige: "= (x+3)(x-3)/(x-3) = x+3 -> 6" },
+      { enonce: "lim(x->+inf) x - racine(x)", corrige: "= racine(x)(racine(x)-1) -> +inf" },
+      { enonce: "lim(x->0) sin(x)/x", corrige: "Limite remarquable = 1" }
+    ],
+    bac_tip: "Les formes indeterminees sont quasi-systematiques au BAC. Apprenez les 4 methodes : factorisation, terme dominant, conjuguee, croissances comparees !"
+  },
+
+  derivees: {
+    titre: "Derivees de Fonctions",
+    couleur: [20, 100, 150], // bleu moyen
+    intro: "La derivee mesure la variation instantanee d'une fonction. Elle est essentielle pour les tableaux de variation et l'optimisation.",
+    definition: [
+      "f'(x) = lim(h->0) [f(x+h) - f(x)] / h",
+      "f'(a) represente la pente de la tangente a la courbe en x = a",
+      "Si f'(x) > 0 : f est croissante. Si f'(x) < 0 : f est decroissante"
+    ],
+    proprietes: [
+      "(u + v)' = u' + v'",
+      "(k x u)' = k x u'   (k constante)",
+      "(u x v)' = u'v + uv'",
+      "(u/v)' = (u'v - uv') / v^2",
+      "(u^n)' = n x u^(n-1) x u'",
+      "(ln u)' = u'/u",
+      "(exp u)' = u' x exp(u)",
+      "(racine(u))' = u' / (2 x racine(u))"
+    ],
+    exemples: [
+      {
+        enonce: "Calculer f'(x) si f(x) = 3x^2 - 2x + 5",
+        solution: "f'(x) = 6x - 2"
+      },
+      {
+        enonce: "Calculer f'(x) si f(x) = (2x+1)/(x-3)",
+        solution: "u=2x+1, v=x-3, u'=2, v'=1. f'(x) = (2(x-3) - (2x+1)(1))/(x-3)^2 = (2x-6-2x-1)/(x-3)^2 = -7/(x-3)^2"
+      },
+      {
+        enonce: "Calculer f'(x) si f(x) = ln(x^2 + 1)",
+        solution: "u = x^2+1, u' = 2x. f'(x) = 2x/(x^2+1)"
+      }
+    ],
+    exercices: [
+      { enonce: "Derivee de f(x) = x^3 - 4x^2 + 2", corrige: "f'(x) = 3x^2 - 8x" },
+      { enonce: "Derivee de f(x) = e^(3x+1)", corrige: "f'(x) = 3e^(3x+1)" },
+      { enonce: "Derivee de f(x) = x x ln(x)", corrige: "f'(x) = ln(x) + x x (1/x) = ln(x) + 1" },
+      { enonce: "Derivee de f(x) = racine(2x+3)", corrige: "f'(x) = 2/(2 x racine(2x+3)) = 1/racine(2x+3)" }
+    ],
+    bac_tip: "La derivee, c'est le coeur de l'etude de fonction. Sans la derivee = pas de tableau de variation = pas de maximum/minimum. Maitrisez TOUTES les formules !"
+  },
+
+  variation: {
+    titre: "Tableaux de Variation",
+    couleur: [60, 130, 60], // vert moyen
+    intro: "Le tableau de variation resume le comportement d'une fonction : sens de variation, extrema, limites aux bornes. C'est la synthese de l'etude.",
+    definition: [
+      "Etape 1 : Determiner le domaine de definition Df",
+      "Etape 2 : Calculer f'(x)",
+      "Etape 3 : Resoudre f'(x) = 0 et etudier son signe",
+      "Etape 4 : Calculer les limites aux bornes du domaine",
+      "Etape 5 : Dresser le tableau avec les fleches"
+    ],
+    proprietes: [
+      "Fleche montante (/) : f est croissante (f' > 0)",
+      "Fleche descendante (\\) : f est decroissante (f' < 0)",
+      "Maximum local : f' change de + a -",
+      "Minimum local : f' change de - a +"
+    ],
+    exemples: [
+      {
+        enonce: "Dresser le tableau de variation de f(x) = x^2 - 4x + 3",
+        solution: "f'(x) = 2x-4 = 0 => x=2. f'<0 sur ]-inf;2[, f'>0 sur ]2;+inf[. f(2) = 4-8+3 = -1. Minimum en x=2, valeur -1."
+      },
+      {
+        enonce: "Dresser le tableau de variation de f(x) = -x^3 + 3x sur R",
+        solution: "f'(x) = -3x^2+3 = -3(x^2-1) = -3(x-1)(x+1). Zeros : -1 et 1. f'<0 sur ]-inf;-1[, f'>0 sur ]-1;1[, f'<0 sur ]1;+inf[. f(-1)=-2, f(1)=2."
+      }
+    ],
+    exercices: [
+      { enonce: "Tableau de variation de f(x) = x^3 - 3x sur R", corrige: "f'=3x^2-3=3(x-1)(x+1). Min en -1 (f(-1)=2), Max en 1 (f(1)=-2). Attention signe !" },
+      { enonce: "Tableau de f(x) = e^x - x", corrige: "f'=e^x-1. Annule en x=0. Decr sur ]-inf;0[, croiss sur ]0;+inf[. Min f(0)=1." },
+      { enonce: "Dresser le tableau de variation de f(x) = ln(x) - x + 1 sur ]0;+inf[", corrige: "f'=1/x-1=(1-x)/x. Annule en x=1. Croiss sur ]0;1[, decr sur ]1;+inf[. Max f(1)=0." }
+    ],
+    bac_tip: "Le tableau de variation est quasi-obligatoire au BAC. Il faut etre propre : les limites aux bords, les valeurs aux extrema. Ne ratez aucune etape !"
+  },
+
+  etude: {
+    titre: "Etude Complète d'une Fonction",
+    couleur: [120, 50, 20], // brun
+    intro: "L'etude complete d'une fonction regroupe toutes les competences : domaine, limites, derivee, variation, et representation graphique.",
+    definition: [
+      "Etape 1 - Domaine Df : ensemble des x ou f est definie",
+      "Etape 2 - Parite : f paire (f(-x)=f(x)), impaire (f(-x)=-f(x)), ni l'un ni l'autre",
+      "Etape 3 - Limites aux bornes de Df et asymptotes",
+      "Etape 4 - Derivee f'(x), signe, zeros",
+      "Etape 5 - Tableau de variation complet",
+      "Etape 6 - Points remarquables (intersection axes)",
+      "Etape 7 - Representation graphique"
+    ],
+    proprietes: [
+      "Asymptote verticale en x=a si lim(x->a) f(x) = +/-inf",
+      "Asymptote horizontale en y=L si lim(x->+/-inf) f(x) = L",
+      "Asymptote oblique y=ax+b si lim(x->+inf) [f(x)-(ax+b)] = 0",
+      "Intersection avec l'axe x : resoudre f(x)=0",
+      "Intersection avec l'axe y : calculer f(0)"
+    ],
+    exemples: [
+      {
+        enonce: "Etude complete de f(x) = (x^2 - 1)/(x - 2)",
+        solution: "Df = R\\{2}. Pas de parite. lim(+inf)=+inf, lim(-inf)=-inf, lim(2+)=+inf, lim(2-)=-inf => AV : x=2. Division : f(x)=x+2+3/(x-2) => AO : y=x+2. f'(x)=(x^2-4x+1)/(x-2)^2. Zeros de f'... Tableau de variation complet."
+      }
+    ],
+    exercices: [
+      { enonce: "Df et asymptotes de f(x) = 1/(x^2-4)", corrige: "Df=R\\{-2;2}. AV en x=-2 et x=2. AH : y=0." },
+      { enonce: "Etudier la parite de f(x) = x^3 - x", corrige: "f(-x)=-x^3+x=-(x^3-x)=-f(x). Fonction IMPAIRE." },
+      { enonce: "Trouver l'asymptote oblique de f(x) = (2x^2+x-1)/(x+1)", corrige: "Division : 2x-1. AO : y=2x-1." },
+      { enonce: "Intersection avec les axes de f(x) = x^2 - 3x + 2", corrige: "f(0)=2 (axe y). f(x)=0 => x=1 ou x=2 (axe x)." }
+    ],
+    bac_tip: "L'etude complete est souvent le plus grand exercice du BAC (8-10 points). Suivez TOUJOURS les etapes dans l'ordre. Ne sautez aucune partie meme si vous n'etes pas sur !"
+  }
+};
+
+// =============================================
+// GENERATION PDF
+// =============================================
+window.generatePDF = function(id) {
+  var d = allData.find(function(x){return x.id===id;});
+  if(!d) return;
+
+  showToast("Generation du PDF en cours...");
+
+  var nok = [];
+  if(d.notions){
+    Object.keys(d.notions).forEach(function(k){
+      if(d.notions[k].level==="nok") nok.push(k);
+    });
+  }
+
+  if(nok.length === 0){
+    showToast("Aucune difficulte enregistree pour cet eleve.");
+    return;
+  }
+
+  var { jsPDF } = window.jspdf;
+  var doc = new jsPDF('p','mm','a4');
+  var pw = 210, ph = 297;
+  var margin = 18;
+  var y = 0;
+
+  // ---- PAGE DE GARDE ----
+  // Fond noir
+  doc.setFillColor(10, 9, 6);
+  doc.rect(0, 0, pw, ph, 'F');
+
+  // Bande decorative dorée en haut
+  doc.setFillColor(201, 168, 76);
+  doc.rect(0, 0, pw, 6, 'F');
+
+  // Bande decorative en bas
+  doc.rect(0, ph-6, pw, 6, 'F');
+
+  // Logo cercle
+  doc.setFillColor(201, 168, 76);
+  doc.circle(pw/2, 55, 22, 'F');
+  doc.setTextColor(10, 9, 6);
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(14);
+  doc.text("SE", pw/2, 58, {align:"center"});
+
+  // Titre principal
+  doc.setTextColor(201, 168, 76);
+  doc.setFontSize(9);
+  doc.setFont("helvetica", "normal");
+  doc.text("S . E .  C O R P O R A T I O N", pw/2, 92, {align:"center"});
+
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(22);
+  doc.setFont("helvetica", "bold");
+  doc.text("PLAN DE REMISE", pw/2, 110, {align:"center"});
+  doc.text("A NIVEAU", pw/2, 122, {align:"center"});
+
+  // Message percutant selon genre
+  var isFille = (d.sexe === "F");
+  var messages = [
+    isFille ? "Tu es capable. Ce plan est fait pour toi." : "Tu es capable. Ce plan est fait pour toi.",
+    isFille ? "Chaque difficulte est une victoire qui t'attend." : "Chaque difficulte est une victoire qui t'attend.",
+    isFille ? "La reussite se construit pas a pas. Commence maintenant." : "La reussite se construit pas a pas. Commence maintenant.",
+    isFille ? "Ton BAC commence ici. Ne lache pas." : "Ton BAC commence ici. Ne lache pas."
+  ];
+  var msg = messages[Math.floor(Math.random() * messages.length)];
+
+  // Cadre nom
+  doc.setFillColor(201, 168, 76);
+  doc.roundedRect(margin, 135, pw - 2*margin, 30, 4, 4, 'F');
+  doc.setTextColor(10, 9, 6);
+  doc.setFontSize(8);
+  doc.setFont("helvetica", "normal");
+  doc.text("PREPARE SPECIALEMENT POUR", pw/2, 143, {align:"center"});
+  doc.setFontSize(16);
+  doc.setFont("helvetica", "bold");
+  doc.text(d.prenom.toUpperCase() + " " + d.nom.toUpperCase(), pw/2, 156, {align:"center"});
+
+  // Message percutant
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(10);
+  doc.setFont("helvetica", "italic");
+  doc.text('"' + msg + '"', pw/2, 178, {align:"center"});
+
+  // Infos eleve
+  doc.setFillColor(30, 30, 30);
+  doc.roundedRect(margin, 190, pw - 2*margin, 42, 4, 4, 'F');
+  doc.setTextColor(201, 168, 76);
+  doc.setFontSize(7);
+  doc.setFont("helvetica", "bold");
+  doc.text("INFORMATIONS", margin+10, 200);
+  doc.setTextColor(200,200,200);
+  doc.setFont("helvetica","normal");
+  doc.setFontSize(8.5);
+  doc.text("Classe : " + d.classe, margin+10, 210);
+  doc.text("Etablissement : " + (d.etab || "—"), margin+10, 219);
+  if(d.metier) doc.text("Metier vise : " + d.metier, margin+10, 228);
+
+  // Notions a travailler
+  doc.setTextColor(255, 100, 100);
+  doc.setFontSize(7.5);
+  doc.setFont("helvetica", "bold");
+  doc.text("POINTS A TRAVAILLER : " + nok.map(function(k){return NOTIONS_LABELS[k]||k;}).join(" | "), margin+10, 240);
+
+  // Signature
+  doc.setTextColor(150,150,150);
+  doc.setFontSize(7);
+  doc.setFont("helvetica","normal");
+  doc.text("Ing. Moise Zame  —  S.E. Corporation  |  WhatsApp : +237 6 95 55 35 85", pw/2, 270, {align:"center"});
+  doc.text("Document confidentiel — Usage pedagogique exclusif", pw/2, 277, {align:"center"});
+
+  // ---- PAGES DE CONTENU ----
+  nok.forEach(function(notionKey) {
+    var contenu = CONTENU_PEDAGOGIQUE[notionKey];
+    if(!contenu) return;
+
+    var r = contenu.couleur[0], g = contenu.couleur[1], b = contenu.couleur[2];
+
+    // Nouvelle page
+    doc.addPage();
+    y = 0;
+
+    // Header de la page
+    doc.setFillColor(r, g, b);
+    doc.rect(0, 0, pw, 22, 'F');
+    doc.setTextColor(255,255,255);
+    doc.setFontSize(13);
+    doc.setFont("helvetica", "bold");
+    doc.text(contenu.titre, margin, 14);
+
+    // Sous-ligne avec nom eleve
+    doc.setFillColor(245, 242, 236);
+    doc.rect(0, 22, pw, 8, 'F');
+    doc.setTextColor(r, g, b);
+    doc.setFontSize(7);
+    doc.setFont("helvetica","italic");
+    doc.text("Plan personnalise pour " + d.prenom + " " + d.nom + "  |  " + d.classe, margin, 27.5);
+
+    y = 38;
+
+    // INTRO
+    doc.setFillColor(250, 248, 242);
+    doc.roundedRect(margin, y, pw-2*margin, 14, 3, 3, 'F');
+    doc.setDrawColor(r, g, b);
+    doc.setLineWidth(0.8);
+    doc.line(margin, y, margin, y+14);
+    doc.setTextColor(60, 60, 60);
+    doc.setFontSize(8.5);
+    doc.setFont("helvetica","italic");
+    var introLines = doc.splitTextToSize(contenu.intro, pw-2*margin-8);
+    doc.text(introLines, margin+5, y+7);
+    y += 20;
+
+    // DEFINITIONS
+    doc.setFillColor(r, g, b);
+    doc.roundedRect(margin, y, 40, 7, 2, 2, 'F');
+    doc.setTextColor(255,255,255);
+    doc.setFontSize(8);
+    doc.setFont("helvetica","bold");
+    doc.text("DEFINITIONS CLES", margin+3, y+5);
+    y += 11;
+
+    contenu.definition.forEach(function(def) {
+      doc.setFillColor(248, 246, 240);
+      doc.setDrawColor(r, g, b);
+      doc.setLineWidth(0.3);
+      var defLines = doc.splitTextToSize("• " + def, pw-2*margin-4);
+      var defH = defLines.length * 5 + 4;
+      doc.roundedRect(margin, y, pw-2*margin, defH, 2, 2, 'F');
+      doc.setTextColor(40, 40, 40);
+      doc.setFontSize(8);
+      doc.setFont("helvetica","normal");
+      doc.text(defLines, margin+3, y+5);
+      y += defH + 2;
+    });
+    y += 4;
+
+    // PROPRIETES
+    if(contenu.proprietes && contenu.proprietes.length > 0) {
+      doc.setFillColor(r, g, b);
+      doc.roundedRect(margin, y, 36, 7, 2, 2, 'F');
+      doc.setTextColor(255,255,255);
+      doc.setFontSize(8);
+      doc.setFont("helvetica","bold");
+      doc.text("PROPRIETES", margin+3, y+5);
+      y += 11;
+
+      doc.setFillColor(255, 255, 255);
+      doc.setDrawColor(r, g, b);
+      doc.setLineWidth(0.5);
+      var propH = contenu.proprietes.length * 7 + 6;
+      doc.roundedRect(margin, y, pw-2*margin, propH, 3, 3, 'FD');
+      contenu.proprietes.forEach(function(p, pi) {
+        doc.setTextColor(40, 40, 40);
+        doc.setFontSize(8.5);
+        doc.setFont("helvetica", pi===0?"bold":"normal");
+        var pLines = doc.splitTextToSize("  " + p, pw-2*margin-8);
+        doc.text(pLines, margin+4, y+7+pi*7);
+      });
+      y += propH + 6;
+    }
+
+    // Verifier si on a besoin d'une nouvelle page
+    if(y > 210) { doc.addPage(); y = 18; }
+
+    // EXEMPLES RESOLUS
+    doc.setFillColor(r, g, b);
+    doc.roundedRect(margin, y, 44, 7, 2, 2, 'F');
+    doc.setTextColor(255,255,255);
+    doc.setFontSize(8);
+    doc.setFont("helvetica","bold");
+    doc.text("EXEMPLES RESOLUS", margin+3, y+5);
+    y += 11;
+
+    contenu.exemples.forEach(function(ex, ei) {
+      // Enonce
+      doc.setFillColor(240, 248, 255);
+      doc.setDrawColor(r, g, b);
+      doc.setLineWidth(0.6);
+      var enonceLines = doc.splitTextToSize("Exemple " + (ei+1) + " : " + ex.enonce, pw-2*margin-8);
+      var enonceH = enonceLines.length * 5 + 6;
+
+      if(y + enonceH + 20 > ph-15) { doc.addPage(); y = 18; }
+
+      doc.roundedRect(margin, y, pw-2*margin, enonceH, 2, 2, 'F');
+      doc.setTextColor(r, g, b);
+      doc.setFontSize(8);
+      doc.setFont("helvetica","bold");
+      doc.text(enonceLines, margin+4, y+6);
+      y += enonceH + 1;
+
+      // Solution
+      doc.setFillColor(255, 255, 255);
+      var solLines = doc.splitTextToSize("Solution : " + ex.solution, pw-2*margin-8);
+      var solH = solLines.length * 5 + 6;
+      doc.roundedRect(margin+4, y, pw-2*margin-4, solH, 2, 2, 'F');
+      doc.setTextColor(60, 60, 60);
+      doc.setFont("helvetica","normal");
+      doc.text(solLines, margin+8, y+6);
+      y += solH + 5;
+    });
+
+    // Nouvelle page pour exercices
+    doc.addPage();
+    y = 0;
+
+    // Header page exercices
+    doc.setFillColor(40, 40, 40);
+    doc.rect(0, 0, pw, 18, 'F');
+    doc.setFillColor(r, g, b);
+    doc.rect(0, 0, 5, 18, 'F');
+    doc.setTextColor(255,255,255);
+    doc.setFontSize(11);
+    doc.setFont("helvetica","bold");
+    doc.text("EXERCICES D'APPLICATION", margin, 12);
+    doc.setTextColor(r, g, b);
+    doc.setFontSize(7);
+    doc.text(contenu.titre.toUpperCase(), pw-margin, 12, {align:"right"});
+
+    y = 26;
+
+    // Sous-titre
+    doc.setTextColor(100, 100, 100);
+    doc.setFontSize(8);
+    doc.setFont("helvetica","italic");
+    doc.text("Entrainement personnalise — " + d.prenom + " " + d.nom, margin, y);
+    y += 10;
+
+    // Exercices
+    contenu.exercices.forEach(function(ex, ei) {
+      if(y > 220) { doc.addPage(); y = 18; }
+
+      // Numero + enonce
+      doc.setFillColor(r, g, b);
+      doc.circle(margin+4, y+4, 4, 'F');
+      doc.setTextColor(255,255,255);
+      doc.setFontSize(9);
+      doc.setFont("helvetica","bold");
+      doc.text(String(ei+1), margin+4, y+5.5, {align:"center"});
+
+      doc.setTextColor(30, 30, 30);
+      doc.setFontSize(9);
+      doc.setFont("helvetica","bold");
+      var qLines = doc.splitTextToSize(ex.enonce, pw-2*margin-16);
+      doc.text(qLines, margin+12, y+5);
+      y += qLines.length * 5 + 4;
+
+      // Zone reponse
+      doc.setFillColor(252, 251, 248);
+      doc.setDrawColor(200, 200, 200);
+      doc.setLineWidth(0.3);
+      doc.roundedRect(margin+6, y, pw-2*margin-6, 22, 2, 2, 'FD');
+      doc.setTextColor(180,180,180);
+      doc.setFontSize(7.5);
+      doc.setFont("helvetica","italic");
+      doc.text("Votre solution ici...", margin+10, y+8);
+      doc.line(margin+10, y+14, pw-margin-4, y+14);
+      doc.line(margin+10, y+19, pw-margin-4, y+19);
+      y += 28;
+    });
+
+    y += 5;
+
+    // CORRIGE (separe)
+    if(y > 210) { doc.addPage(); y = 18; }
+
+    doc.setFillColor(40, 40, 40);
+    doc.roundedRect(margin, y, pw-2*margin, 8, 3, 3, 'F');
+    doc.setTextColor(201, 168, 76);
+    doc.setFontSize(8.5);
+    doc.setFont("helvetica","bold");
+    doc.text("CORRIGES", pw/2, y+5.5, {align:"center"});
+    y += 12;
+
+    contenu.exercices.forEach(function(ex, ei) {
+      if(y > 245) { doc.addPage(); y = 18; }
+      doc.setFillColor(248, 252, 248);
+      doc.setDrawColor(r, g, b);
+      doc.setLineWidth(0.4);
+      var corrLines = doc.splitTextToSize((ei+1) + ". " + ex.corrige, pw-2*margin-8);
+      var corrH = corrLines.length * 5 + 6;
+      doc.roundedRect(margin, y, pw-2*margin, corrH, 2, 2, 'FD');
+      doc.setTextColor(40, 100, 40);
+      doc.setFontSize(8);
+      doc.setFont("helvetica","normal");
+      doc.text(corrLines, margin+4, y+5);
+      y += corrH + 3;
+    });
+
+    y += 8;
+
+    // TIP BAC
+    if(y > 235) { doc.addPage(); y = 18; }
+    doc.setFillColor(255, 248, 220);
+    doc.setDrawColor(201, 168, 76);
+    doc.setLineWidth(1);
+    var tipLines = doc.splitTextToSize("CONSEIL BAC : " + contenu.bac_tip, pw-2*margin-12);
+    var tipH = tipLines.length * 5.5 + 10;
+    doc.roundedRect(margin, y, pw-2*margin, tipH, 4, 4, 'FD');
+    doc.setTextColor(150, 110, 0);
+    doc.setFontSize(8);
+    doc.setFont("helvetica","bold");
+    doc.text(tipLines, margin+6, y+8);
+  });
+
+  // PAGE FINALE - Motivation
+  doc.addPage();
+  doc.setFillColor(10, 9, 6);
+  doc.rect(0, 0, pw, ph, 'F');
+  doc.setFillColor(201, 168, 76);
+  doc.rect(0, 0, pw, 6, 'F');
+  doc.rect(0, ph-6, pw, 6, 'F');
+
+  doc.setTextColor(201, 168, 76);
+  doc.setFontSize(40);
+  doc.setFont("helvetica","bold");
+  doc.text("GO !", pw/2, 80, {align:"center"});
+
+  doc.setTextColor(255,255,255);
+  doc.setFontSize(14);
+  doc.setFont("helvetica","bold");
+  var finalName = d.prenom.toUpperCase();
+  doc.text(finalName + ", tu as tout ce qu'il faut.", pw/2, 105, {align:"center"});
+
+  doc.setFontSize(9);
+  doc.setFont("helvetica","normal");
+  doc.setTextColor(180, 180, 180);
+  var motivLines = [
+    "Ce document est ton point de depart.",
+    "Travaille chaque notion, une par une.",
+    "Reviens sur les exemples autant de fois que necessaire.",
+    "Fais tous les exercices avant de regarder le corrige.",
+    "",
+    "Le BAC se gagne dans la regularite, pas dans l'intensite d'un soir.",
+  ];
+  motivLines.forEach(function(line, li) {
+    doc.text(line, pw/2, 125 + li*10, {align:"center"});
+  });
+
+  doc.setFillColor(201, 168, 76);
+  doc.roundedRect(margin, 200, pw-2*margin, 20, 4, 4, 'F');
+  doc.setTextColor(10, 9, 6);
+  doc.setFontSize(9);
+  doc.setFont("helvetica","bold");
+  doc.text("Questions ? WhatsApp : +237 6 95 55 35 85", pw/2, 211, {align:"center"});
+  doc.text("Ing. Moise Zame  —  S.E. Corporation", pw/2, 218, {align:"center"});
+
+  // Sauvegarde
+  var filename = "Plan_" + d.prenom + "_" + d.nom + "_SE_Corp.pdf";
+  filename = filename.replace(/[^a-zA-Z0-9_\-\.]/g, '_');
+  doc.save(filename);
+  showToast("PDF de " + d.prenom + " " + d.nom + " telecharge !");
+};
+
+function showToast(msg) {
+  var t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  setTimeout(function(){t.classList.remove("show");}, 3500);
+}
+
+// =============================================
+// LOGIQUE EXISTANTE (inchangee)
+// =============================================
+var PWD = "SE2025admin";
+var allData = [];
+
+var NOTIONS_LABELS = {
+  ln_def:"Fonctions ln/exp", eq:"Equations", ineq:"Inequations",
+  poly3:"Polynome degre 3", limites:"Limites", derivees:"Derivees",
+  variation:"Tableau variation", etude:"Etude complete"
 };
 
 window.login = function() {
@@ -232,7 +939,7 @@ window.loadData = async function() {
     populateMetierFilter();
     applyFilters();
   } catch(e) {
-    document.getElementById("table-area").innerHTML = '<div class="loading">Erreur de chargement. V\u00e9rifie la connexion.</div>';
+    document.getElementById("table-area").innerHTML = '<div class="loading">Erreur de chargement.</div>';
     console.error(e);
   }
 };
@@ -265,29 +972,26 @@ window.applyFilters = function() {
   var metier = document.getElementById("f-metier").value;
   var pi = document.getElementById("f-pi").value;
   var notion = document.getElementById("f-notion").value;
-
   var filtered = allData.filter(function(d) {
-    if(search && !(d.prenom+d.nom+d.etab).toLowerCase().includes(search)) return false;
+    if(search && !(d.prenom+d.nom+(d.etab||"")).toLowerCase().includes(search)) return false;
     if(classe && d.classe !== classe) return false;
     if(metier && d.metier !== metier) return false;
     if(pi && d.preinscrit !== pi) return false;
     if(notion && d.notions && d.notions[notion] && d.notions[notion].level !== "nok") return false;
     return true;
   });
-
   renderTable(filtered);
-  document.getElementById("count-lbl").textContent = filtered.length + " / " + allData.length + " \u00e9l\u00e8ves";
+  document.getElementById("count-lbl").textContent = filtered.length + " / " + allData.length + " eleves";
 };
 
 function renderTable(data) {
   if(data.length===0){
-    document.getElementById("table-area").innerHTML = '<div class="loading">Aucun r\u00e9sultat.</div>';
+    document.getElementById("table-area").innerHTML = '<div class="loading">Aucun resultat.</div>';
     return;
   }
-
   var html = '<div style="overflow-x:auto"><table><thead><tr>' +
-    '<th>#</th><th>Nom complet</th><th>Classe</th><th>M\u00e9tier</th>' +
-    '<th>Pr\u00e9inscrit</th><th>Points faibles</th><th>T\u00e9l.</th><th>Date</th><th></th>' +
+    '<th>#</th><th>Nom complet</th><th>Classe</th><th>Metier</th>' +
+    '<th>Preinscrit</th><th>Points faibles</th><th>Tel.</th><th>Date</th><th>Actions</th>' +
     '</tr></thead><tbody>';
 
   data.forEach(function(d, i) {
@@ -302,7 +1006,7 @@ function renderTable(data) {
     var dateStr = d.date && d.date.toDate ? d.date.toDate().toLocaleDateString("fr-FR") : d.semaine||"—";
     var nokHtml = nok.length>0
       ? nok.map(function(n){return '<span class="pill pill-nok">'+n+'</span>';}).join(" ")
-      : '<span class="pill pill-neutral">Aucun signal\u00e9</span>';
+      : '<span class="pill pill-neutral">Aucun signale</span>';
 
     html += '<tr>' +
       '<td style="color:var(--gris);font-size:.75rem;">'+(i+1)+'</td>' +
@@ -310,12 +1014,14 @@ function renderTable(data) {
         (d.sexe?'<br><span style="font-size:.7rem;color:var(--gris)">'+d.sexe+'</span>':'')+'</td>' +
       '<td>'+d.classe+'</td>' +
       '<td>'+d.metier+'</td>' +
-      '<td><span class="pill '+piClass+'">'+piLbl+'</span>' +
-        (d.raison_non?'<br><span style="font-size:.68rem;color:var(--gris)">'+getRaisonLabel(d.raison_non)+'</span>':'')+'</td>' +
+      '<td><span class="pill '+piClass+'">'+piLbl+'</span></td>' +
       '<td>'+nokHtml+'</td>' +
       '<td style="font-size:.78rem;">'+d.tel+(d.tel_parent?'<br><span style="color:var(--bleu)">Parent: '+d.tel_parent+'</span>':'')+'</td>' +
       '<td style="font-size:.75rem;color:var(--gris);">'+dateStr+'</td>' +
-      '<td><button onclick="showDetail(\''+d.id+'\')" style="background:var(--or);border:none;border-radius:6px;padding:.3rem .7rem;font-size:.75rem;font-weight:600;cursor:pointer;">D\u00e9tail</button></td>' +
+      '<td style="display:flex;gap:.3rem;flex-wrap:wrap;">' +
+        '<button class="btn-detail" onclick="showDetail(\''+d.id+'\')">Detail</button>' +
+        '<button class="btn-pdf" onclick="generatePDF(\''+d.id+'\')" title="Generer le PDF personnalise">&#128229; PDF</button>' +
+      '</td>' +
     '</tr>';
   });
 
@@ -324,61 +1030,43 @@ function renderTable(data) {
 }
 
 function getRaisonLabel(r) {
-  var map = {
-    parent_decide:"Parent d\u00e9cide", pas_info:"Manque d'infos",
-    attendre_bac:"Attend le bac", pas_convaincu:"Pas convaincu", autre:"Autre"
-  };
+  var map = {parent_decide:"Parent decide",pas_info:"Manque d'infos",attendre_bac:"Attend le bac",pas_convaincu:"Pas convaincu",autre:"Autre"};
   return map[r]||r;
 }
 
 window.showDetail = function(id) {
   var d = allData.find(function(x){return x.id===id;});
   if(!d) return;
-
   var ok = [], nok = [], none = [];
   if(d.notions){
     Object.keys(d.notions).forEach(function(k){
       var s = d.notions[k];
       var lbl = NOTIONS_LABELS[k]||k;
-      var type = s.type==="def"?" (D\u00e9f.)":s.type==="app"?" (Applic.)":s.type==="both"?" (Les deux)":"";
+      var type = s.type==="def"?" (Def.)":s.type==="app"?" (Applic.)":s.type==="both"?" (Les deux)":"";
       if(s.level==="ok") ok.push(lbl);
       else if(s.level==="nok") nok.push(lbl+type);
       else none.push(lbl);
     });
   }
-
   var html = '<div class="detail-title">'+d.prenom+' '+d.nom+'</div>';
   html += '<div class="detail-grid">';
   html += '<div class="dg-item"><div class="dg-label">Classe</div><div class="dg-val">'+d.classe+'</div></div>';
   html += '<div class="dg-item"><div class="dg-label">Sexe</div><div class="dg-val">'+(d.sexe||"—")+'</div></div>';
   html += '<div class="dg-item"><div class="dg-label">Etablissement</div><div class="dg-val">'+(d.etab||"—")+'</div></div>';
-  html += '<div class="dg-item"><div class="dg-label">M\u00e9tier vis\u00e9</div><div class="dg-val">'+d.metier+'</div></div>';
+  html += '<div class="dg-item"><div class="dg-label">Metier vise</div><div class="dg-val">'+d.metier+'</div></div>';
   html += '<div class="dg-item"><div class="dg-label">WhatsApp</div><div class="dg-val">'+d.tel+'</div></div>';
-  html += '<div class="dg-item"><div class="dg-label">Pr\u00e9inscrit</div><div class="dg-val">'+(d.preinscrit==="oui"?"&#9989; Oui":"&#10060; Non")+'</div></div>';
+  html += '<div class="dg-item"><div class="dg-label">Preinscrit</div><div class="dg-val">'+(d.preinscrit==="oui"?"&#9989; Oui":"&#10060; Non")+'</div></div>';
   if(d.tel_parent) html += '<div class="dg-item" style="grid-column:span 2"><div class="dg-label">Tel parent</div><div class="dg-val" style="color:var(--bleu)">'+d.tel_parent+'</div></div>';
-  if(d.raison_non) html += '<div class="dg-item" style="grid-column:span 2"><div class="dg-label">Raison non-inscription</div><div class="dg-val">'+getRaisonLabel(d.raison_non)+(d.raison_autre?" — "+d.raison_autre:"")+'</div></div>';
   html += '</div>';
-
-  html += '<div style="font-weight:600;font-size:.85rem;margin-bottom:.5rem;">Notions &mdash; D\u00e9tail</div>';
+  html += '<div style="font-weight:600;font-size:.85rem;margin-bottom:.5rem;">Notions — Detail</div>';
   html += '<div class="notion-recap">';
-  nok.forEach(function(n){html+='<div class="nr-row nr-nok"><span>&#128308; '+n+'</span><span class="pill pill-nok">Difficult\u00e9</span></div>';});
-  ok.forEach(function(n){html+='<div class="nr-row nr-ok"><span>&#128994; '+n+'</span><span class="pill pill-ok">Ma\u00eetris\u00e9</span></div>';});
-  none.forEach(function(n){html+='<div class="nr-row nr-none"><span>'+n+'</span><span style="font-size:.72rem;color:#bbb">Non \u00e9valu\u00e9</span></div>';});
+  nok.forEach(function(n){html+='<div class="nr-row nr-nok"><span>&#128308; '+n+'</span><span class="pill pill-nok">Difficulte</span></div>';});
+  ok.forEach(function(n){html+='<div class="nr-row nr-ok"><span>&#128994; '+n+'</span><span class="pill pill-ok">Maitrise</span></div>';});
+  none.forEach(function(n){html+='<div class="nr-row nr-none"><span>'+n+'</span><span style="font-size:.72rem;color:#bbb">Non evalue</span></div>';});
   html += '</div>';
-
-  var msgWA = buildWAMessage(d, nok, ok);
-  html += '<div style="margin-top:1rem;"><div style="font-weight:600;font-size:.85rem;margin-bottom:.4rem;">Message WhatsApp pr\u00eat &#128172;</div>';
-  html += '<div style="background:#e9e9e9;border-radius:10px;padding:.8rem;font-size:.8rem;white-space:pre-wrap;line-height:1.6;border-left:3px solid #25D366;">'+msgWA+'</div>';
-  html += '<button onclick="copyMsg(\''+encodeURIComponent(msgWA)+'\')" style="margin-top:.5rem;background:#25D366;color:white;border:none;border-radius:7px;padding:.4rem .9rem;font-size:.78rem;font-weight:600;cursor:pointer;">&#128203; Copier</button></div>';
-
+  html += '<div style="margin-top:1rem;"><button onclick="generatePDF(\''+d.id+'\')" class="btn-pdf" style="width:100%;padding:.6rem;font-size:.85rem;border-radius:9px;">&#128229; Generer le PDF personnalise</button></div>';
   document.getElementById("detail-content").innerHTML = html;
   document.getElementById("detail-overlay").classList.add("open");
-};
-
-window.copyMsg = function(encoded) {
-  navigator.clipboard.writeText(decodeURIComponent(encoded)).then(function(){
-    alert("Message copi\u00e9 !");
-  });
 };
 
 window.closeDetail = function(e) {
@@ -386,36 +1074,10 @@ window.closeDetail = function(e) {
     document.getElementById("detail-overlay").classList.remove("open");
 };
 
-function buildWAMessage(d, nok, ok) {
-  var salut = d.sexe==="F" ? "Ma ch\u00e8re " : "Mon cher ";
-  var msg = salut + d.prenom + " \ud83d\udc4b\n\n";
-  msg += "J'ai analys\u00e9 ton diagnostic. Voici mon retour personnalis\u00e9.\n\n";
-
-  if(nok.length>0){
-    msg += "\u26a0\ufe0f Points \u00e0 travailler en priorit\u00e9 :\n";
-    nok.forEach(function(n){msg += "  \u2022 "+n+"\n";});
-    msg += "\nCes notions seront au c\u0153ur de tes exercices cette semaine.\n\n";
-  }
-  if(ok.length>0){
-    msg += "\u2705 Points forts :\n";
-    ok.forEach(function(n){msg += "  \u2022 "+n+"\n";});
-    msg += "\n";
-  }
-  if(d.metier && d.metier!=="RAS"){
-    msg += "\ud83c\udfaf Objectif "+d.metier+" : garde cet objectif en t\u00eate chaque matin.\n\n";
-  }
-  if(d.preinscrit==="non"){
-    msg += "\ud83d\udca1 Tu n'es pas encore pr\u00e9inscrit"+( d.sexe==="F"?"e":"")+". Si c'est ton parent qui d\u00e9cide, partage-lui ce num\u00e9ro : +237 695 535 585.\n\n";
-  }
-  msg += "On continue ensemble. Je suis l\u00e0.\nIng. Mo\u00efse Zame \u2014 S.E. Corporation";
-  return msg;
-}
-
 window.exportCSV = function() {
-  var filtered = getFiltered();
-  var rows = [["Prenom","Nom","Sexe","Classe","Etablissement","Metier","Tel","Tel Parent","Preinscrit","Raison","ln_def","eq","ineq","poly3","limites","derivees","variation","etude","Semaine"]];
-  filtered.forEach(function(d){
-    var row = [d.prenom,d.nom,d.sexe||"",d.classe,d.etab||"",d.metier,d.tel,d.tel_parent||"",d.preinscrit,d.raison_non||""];
+  var rows = [["Prenom","Nom","Sexe","Classe","Etablissement","Metier","Tel","Tel Parent","Preinscrit","ln_def","eq","ineq","poly3","limites","derivees","variation","etude","Semaine"]];
+  allData.forEach(function(d){
+    var row = [d.prenom,d.nom,d.sexe||"",d.classe,d.etab||"",d.metier,d.tel,d.tel_parent||"",d.preinscrit];
     ["ln_def","eq","ineq","poly3","limites","derivees","variation","etude"].forEach(function(k){
       var s = d.notions&&d.notions[k];
       row.push(s?((s.level||"")+"|"+(s.type||"")):"");
@@ -426,32 +1088,12 @@ window.exportCSV = function() {
   var csv = rows.map(function(r){return r.map(function(c){return '"'+(c||"").toString().replace(/"/g,'""')+'"';}).join(",");}).join("\n");
   var blob = new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8;"});
   var url = URL.createObjectURL(blob);
-  var a = document.createElement("a");
-  a.href=url; a.download="diagnostics_SE_Corp.csv"; a.click();
+  var a = document.createElement("a"); a.href=url; a.download="diagnostics_SE_Corp.csv"; a.click();
 };
 
-function getFiltered() {
-  var search = document.getElementById("f-search").value.toLowerCase();
-  var classe = document.getElementById("f-classe").value;
-  var metier = document.getElementById("f-metier").value;
-  var pi = document.getElementById("f-pi").value;
-  var notion = document.getElementById("f-notion").value;
-  return allData.filter(function(d){
-    if(search&&!(d.prenom+d.nom+d.etab||"").toLowerCase().includes(search)) return false;
-    if(classe&&d.classe!==classe) return false;
-    if(metier&&d.metier!==metier) return false;
-    if(pi&&d.preinscrit!==pi) return false;
-    if(notion&&d.notions&&d.notions[notion]&&d.notions[notion].level!=="nok") return false;
-    return true;
-  });
-}
-
 function getSemaine() {
-  var d = new Date();
-  var j = d.getDay()||7;
-  var lundi = new Date(d);
-  lundi.setDate(d.getDate()-j+1);
-  return lundi.toISOString().slice(0,10);
+  var d = new Date(); var j = d.getDay()||7; var lundi = new Date(d);
+  lundi.setDate(d.getDate()-j+1); return lundi.toISOString().slice(0,10);
 }
 </script>
 </body>
