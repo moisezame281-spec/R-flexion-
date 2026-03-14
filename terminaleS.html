@@ -444,12 +444,20 @@ window.QUIZ={duree:30*60,sections:[
   ]},
 ]};
 
-// ══ EXPIRATION : ouvert samedi 18h–20h45, SAUF admin ══
+// ══ EXPIRATION : ouvert samedi 18h–20h45 (fuseau Douala UTC+1) ══
+// ?admin=SECORP2026 → super-admin, toujours accessible, aucune restriction
+// ?admin=SE2025     → admin normal, soumis à la restriction horaire du samedi
+const _superAdminKey = 'SECORP2026';
+const _isSuperAdmin = new URLSearchParams(window.location.search).get('admin') === _superAdminKey;
+window._isSuperAdmin = _isSuperAdmin;
+if(_isSuperAdmin) window._isAdmin = true;
+
 (function checkExpiry(){
-  if(window._isAdmin) return;
+  if(window._isSuperAdmin) return; // SECORP2026 ignore toute restriction
   const now = new Date();
-  const day = now.getDay();
-  const h = now.getHours(), m = now.getMinutes();
+  const douala = new Date(now.toLocaleString('en-US', {timeZone: 'Africa/Douala'}));
+  const day = douala.getDay();
+  const h = douala.getHours(), m = douala.getMinutes();
   const isSaturday = day === 6;
   const afterOpen   = h > 18 || (h === 18 && m >= 0);
   const afterCutoff = h > 20 || (h === 20 && m >= 45);
