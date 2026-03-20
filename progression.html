@@ -1,465 +1,637 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>S.E. Corporation — Progression Hebdomadaire</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: #f0f4f8;
-      min-height: 100vh;
-      padding: 20px;
-    }
-    .header {
-      background: linear-gradient(135deg, #1a3a5c, #2d6a9f);
-      color: white;
-      text-align: center;
-      padding: 20px;
-      border-radius: 12px;
-      margin-bottom: 24px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-    }
-    .header .logo {
-      width: 48px; height: 48px;
-      background: white; color: #1a3a5c;
-      border-radius: 50%; font-weight: 900;
-      font-size: 18px; display: inline-flex;
-      align-items: center; justify-content: center;
-      margin-bottom: 10px;
-    }
-    .header h1 { font-size: 1.3rem; font-weight: 700; }
-    .header p { font-size: 0.85rem; opacity: 0.85; margin-top: 4px; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S.E. Corporation — Progression Hebdomadaire</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --or:#c9a84c;--or2:#e8c96a;--noir:#0a0906;--fond:#f7f4ee;
+  --gris:#6b6560;--blanc:#fff;--vert:#2d6a4f;--rouge:#c0392b;
+  --bleu:#1a3a5c;--bleu2:#2d6a9f;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:"DM Sans",sans-serif;background:var(--fond);color:var(--noir);min-height:100vh;}
 
-    .steps {
-      display: flex;
-      justify-content: center;
-      gap: 8px;
-      margin-bottom: 24px;
-      flex-wrap: wrap;
-    }
-    .step {
-      display: flex; align-items: center; gap: 6px;
-      font-size: 0.78rem; color: #888;
-    }
-    .step-num {
-      width: 26px; height: 26px;
-      border-radius: 50%; background: #ddd; color: #888;
-      display: flex; align-items: center; justify-content: center;
-      font-weight: 700; font-size: 0.75rem;
-    }
-    .step.active .step-num { background: #2d6a9f; color: white; }
-    .step.active { color: #2d6a9f; font-weight: 600; }
-    .step.done .step-num { background: #27ae60; color: white; }
-    .step-line { width: 30px; height: 2px; background: #ddd; }
-    .step-line.done { background: #27ae60; }
+/* ── HEADER ── */
+.hdr{background:var(--noir);padding:1.1rem 1.5rem;display:flex;align-items:center;gap:.8rem;border-bottom:3px solid var(--or);}
+.logo{width:42px;height:42px;border-radius:50%;background:var(--or);display:flex;align-items:center;justify-content:center;font-family:"Cormorant Garamond",serif;font-weight:700;font-size:1rem;color:var(--noir);flex-shrink:0;}
+.hdr h1{font-family:"Cormorant Garamond",serif;font-size:1.2rem;color:var(--blanc);}
+.hdr p{font-size:.72rem;color:#aaa;}
 
-    .card {
-      background: white;
-      border-radius: 14px;
-      padding: 28px;
-      max-width: 600px;
-      margin: 0 auto 20px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-      display: none;
-    }
-    .card.active { display: block; }
+/* ── STEPPER ── */
+.steps{display:flex;justify-content:center;gap:.3rem;padding:1rem;background:var(--blanc);border-bottom:1px solid #eee;overflow-x:auto;flex-wrap:wrap;}
+.step{display:flex;align-items:center;gap:.4rem;font-size:.72rem;font-weight:600;color:#ccc;white-space:nowrap;}
+.step.active{color:var(--or);}
+.step.done{color:var(--vert);}
+.step-num{width:22px;height:22px;border-radius:50%;border:2px solid currentColor;display:flex;align-items:center;justify-content:center;font-size:.68rem;flex-shrink:0;}
+.step-sep{width:18px;height:2px;background:#eee;margin:0 .1rem;}
+.step.done .step-sep{background:var(--vert);}
 
-    .card h2 {
-      font-size: 1.1rem;
-      color: #1a3a5c;
-      margin-bottom: 6px;
-    }
-    .card .subtitle {
-      font-size: 0.83rem;
-      color: #666;
-      margin-bottom: 20px;
-      line-height: 1.5;
-    }
+/* ── CARDS ── */
+.main{max-width:650px;margin:1.5rem auto;padding:0 1rem 3rem;}
+.card{background:var(--blanc);border-radius:14px;padding:1.8rem;box-shadow:0 4px 24px rgba(0,0,0,.07);border-top:4px solid var(--or);display:none;}
+.card.active{display:block;animation:fi .35s ease;}
+@keyframes fi{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+.card-title{font-family:"Cormorant Garamond",serif;font-size:1.4rem;font-weight:700;margin-bottom:.25rem;}
+.card-sub{font-size:.83rem;color:var(--gris);margin-bottom:1.3rem;line-height:1.6;}
 
-    label { font-size: 0.85rem; color: #444; font-weight: 600; display: block; margin-bottom: 6px; }
-    input, select, textarea {
-      width: 100%; padding: 11px 14px;
-      border: 1.5px solid #ddd; border-radius: 8px;
-      font-size: 0.9rem; color: #333;
-      transition: border-color 0.2s;
-      font-family: inherit;
-    }
-    input:focus, select:focus, textarea:focus {
-      outline: none; border-color: #2d6a9f;
-    }
-    textarea { resize: vertical; min-height: 80px; }
-    .field { margin-bottom: 18px; }
-    .error-msg {
-      font-size: 0.78rem; color: #e74c3c;
-      margin-top: 4px; display: none;
-    }
+/* ── FORM ── */
+label{display:block;font-size:.72rem;font-weight:600;color:var(--gris);margin:.85rem 0 .25rem;text-transform:uppercase;letter-spacing:.04em;}
+input,select,textarea{width:100%;padding:.65rem .9rem;border:1.5px solid #ddd;border-radius:9px;font-family:"DM Sans",sans-serif;font-size:.88rem;background:var(--fond);color:var(--noir);transition:border-color .2s;}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--or);}
+textarea{resize:vertical;min-height:70px;}
+.err{border-color:var(--rouge)!important;}
+.err-msg{font-size:.75rem;color:var(--rouge);margin-top:.2rem;display:none;}
 
-    /* Notions QCM */
-    .notions-info {
-      background: #eaf3fb;
-      border-left: 4px solid #2d6a9f;
-      border-radius: 6px;
-      padding: 12px 16px;
-      font-size: 0.83rem;
-      color: #1a3a5c;
-      margin-bottom: 20px;
-      line-height: 1.6;
-    }
-    .notion-card {
-      border: 1.5px solid #e0e0e0;
-      border-radius: 10px;
-      padding: 14px 16px;
-      margin-bottom: 12px;
-      transition: border-color 0.2s, box-shadow 0.2s;
-    }
-    .notion-card.evaluated { border-color: #2d6a9f; box-shadow: 0 0 0 3px rgba(45,106,159,0.08); }
-    .notion-title {
-      font-weight: 700; font-size: 0.9rem;
-      color: #1a3a5c; margin-bottom: 10px;
-    }
-    .notion-options {
-      display: flex; flex-wrap: wrap; gap: 8px;
-    }
-    .notion-btn {
-      padding: 7px 14px; border-radius: 20px;
-      border: 1.5px solid #ddd; background: white;
-      font-size: 0.8rem; cursor: pointer;
-      transition: all 0.15s; color: #555;
-    }
-    .notion-btn:hover { border-color: #2d6a9f; color: #2d6a9f; }
-    .notion-btn.selected-ok { background: #eafaf1; border-color: #27ae60; color: #27ae60; font-weight: 600; }
-    .notion-btn.selected-partial { background: #fef9e7; border-color: #f39c12; color: #e67e22; font-weight: 600; }
-    .notion-btn.selected-nok { background: #fdf0f0; border-color: #e74c3c; color: #e74c3c; font-weight: 600; }
+/* ── RADIO GRID ── */
+.radio-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:.4rem;}
+.radio-grid.col3{grid-template-columns:1fr 1fr 1fr;}
+.ro{position:relative;}
+.ro input{position:absolute;opacity:0;width:0;height:0;}
+.ro label{display:flex;align-items:center;gap:.5rem;padding:.6rem .9rem;border:1.5px solid #ddd;border-radius:9px;cursor:pointer;font-size:.83rem;transition:all .2s;background:var(--fond);margin:0;}
+.ro input:checked+label{border-color:var(--or);background:#fffdf5;font-weight:600;}
 
-    .progress-bar-wrap {
-      background: #eee; border-radius: 10px;
-      height: 8px; margin-bottom: 6px; overflow: hidden;
-    }
-    .progress-bar { height: 100%; background: linear-gradient(90deg, #2d6a9f, #27ae60); border-radius: 10px; transition: width 0.3s; }
-    .progress-label { font-size: 0.78rem; color: #888; text-align: right; margin-bottom: 16px; }
+/* ── PROGRESS BAR ── */
+.prog-wrap{background:#eee;border-radius:10px;height:7px;margin:.5rem 0;}
+.prog-bar{height:7px;border-radius:10px;background:linear-gradient(90deg,var(--or),var(--or2));transition:width .4s;}
 
-    /* Boutons */
-    .btn-primary {
-      background: linear-gradient(135deg, #1a3a5c, #2d6a9f);
-      color: white; border: none;
-      padding: 13px 28px; border-radius: 8px;
-      font-size: 0.95rem; font-weight: 600;
-      cursor: pointer; width: 100%;
-      transition: opacity 0.2s, transform 0.1s;
-    }
-    .btn-primary:hover { opacity: 0.92; transform: translateY(-1px); }
-    .btn-secondary {
-      background: white; color: #2d6a9f;
-      border: 1.5px solid #2d6a9f;
-      padding: 11px 20px; border-radius: 8px;
-      font-size: 0.9rem; font-weight: 600;
-      cursor: pointer; width: 100%; margin-bottom: 10px;
-      transition: all 0.2s;
-    }
-    .btn-secondary:hover { background: #eaf3fb; }
+/* ── SEMAINE BADGE ── */
+.semaine-badge{display:inline-block;background:#eaf3fb;color:var(--bleu);border:1px solid #b8d4ed;border-radius:20px;padding:4px 12px;font-size:.78rem;font-weight:600;margin-bottom:14px;}
 
-    /* Succès */
-    .success-icon {
-      font-size: 3rem; text-align: center; margin-bottom: 14px;
-    }
-    .success-title {
-      font-size: 1.3rem; font-weight: 800;
-      color: #1a3a5c; text-align: center; margin-bottom: 8px;
-    }
-    .success-msg {
-      font-size: 0.88rem; color: #555;
-      text-align: center; line-height: 1.6;
-      margin-bottom: 20px;
-    }
-    .footer-brand {
-      text-align: center; font-size: 0.78rem;
-      color: #888; margin-top: 6px; line-height: 1.6;
-    }
-    .footer-brand strong { color: #1a3a5c; }
+/* ── NOTION CARDS ── */
+.notion-list{display:flex;flex-direction:column;gap:.45rem;margin-top:.5rem;}
+.ni{background:var(--fond);border:1.5px solid #e8e3d8;border-radius:10px;overflow:hidden;transition:border-color .2s;}
+.ni.expanded{border-color:var(--or);}
+.ni.st-ok{border-color:var(--vert);}
+.ni.st-partial{border-color:#e67e22;}
+.ni.st-nok{border-color:var(--rouge);}
+.ni-hdr{display:flex;justify-content:space-between;align-items:center;padding:.7rem 1rem;cursor:pointer;user-select:none;}
+.ni-left{flex:1;}
+.ni-title{font-weight:600;font-size:.86rem;}
+.ni-sub{font-size:.74rem;color:var(--gris);margin-top:.1rem;}
+.ni-badge{font-size:.72rem;font-weight:600;padding:.2rem .6rem;border-radius:20px;flex-shrink:0;}
+.bOk{background:#e8f5ee;color:var(--vert);}
+.bPartial{background:#fef9e7;color:#e67e22;}
+.bNok{background:#fdecea;color:var(--rouge);}
+.ni-body{display:none;padding:.8rem 1rem .9rem;border-top:1px solid #f0ede6;}
+.ni.expanded .ni-body{display:block;}
+.q-label{font-size:.78rem;font-weight:600;color:var(--gris);margin:.5rem 0 .3rem;}
+.opt-row{display:flex;gap:.4rem;flex-wrap:wrap;}
+.opt-btn{padding:.38rem .85rem;border:1.5px solid #ddd;border-radius:20px;font-size:.78rem;font-weight:600;cursor:pointer;background:var(--fond);transition:all .2s;color:var(--gris);}
+.opt-btn:hover{border-color:var(--or);}
+.opt-btn.sel-ok{border-color:var(--vert);background:#e8f5ee;color:var(--vert);}
+.opt-btn.sel-partial{border-color:#e67e22;background:#fef9e7;color:#e67e22;}
+.opt-btn.sel-nok{border-color:var(--rouge);background:#fdecea;color:var(--rouge);}
+.opt-btn.sel-def{border-color:var(--bleu);background:#e8f0f8;color:var(--bleu);}
+.opt-btn.sel-app{border-color:#8b6000;background:#fdf5e0;color:#8b6000;}
+.opt-btn.sel-both{border-color:var(--rouge);background:#fdecea;color:var(--rouge);}
 
-    /* Semaine badge */
-    .semaine-badge {
-      display: inline-block;
-      background: #eaf3fb; color: #1a3a5c;
-      border: 1px solid #b8d4ed; border-radius: 20px;
-      padding: 4px 12px; font-size: 0.78rem; font-weight: 600;
-      margin-bottom: 16px;
-    }
-  </style>
+/* ── INFO BOX ── */
+.info-box{background:#eaf3fb;border-left:4px solid var(--bleu2);border-radius:6px;padding:12px 16px;font-size:.83rem;color:var(--bleu);margin-bottom:18px;line-height:1.6;}
+
+/* ── BUTTONS ── */
+.btn-row{display:flex;gap:.7rem;margin-top:1.4rem;flex-wrap:wrap;}
+.btn{padding:.75rem 1.3rem;border:none;border-radius:9px;font-family:"DM Sans",sans-serif;font-size:.88rem;font-weight:600;cursor:pointer;transition:all .2s;flex:1;}
+.btn-gold{background:var(--or);color:var(--noir);}
+.btn-gold:hover{background:var(--or2);}
+.btn-outline{background:none;border:1.5px solid var(--or);color:var(--or);}
+.btn-outline:hover{background:#fffdf5;}
+.btn:disabled{opacity:.5;cursor:not-allowed;}
+.spin{display:inline-block;width:18px;height:18px;border:2px solid rgba(0,0,0,.2);border-top-color:var(--noir);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:.4rem;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* ── SUCCESS ── */
+.merci-box{text-align:center;padding:2rem 1rem;}
+.merci-ico{font-size:3.5rem;margin-bottom:1rem;}
+.merci-title{font-family:"Cormorant Garamond",serif;font-size:1.8rem;font-weight:700;color:var(--or);margin-bottom:.5rem;}
+.merci-txt{font-size:.9rem;color:var(--gris);line-height:1.7;margin-bottom:1.2rem;}
+.merci-sig{background:var(--noir);border-radius:10px;padding:1rem;color:var(--blanc);font-size:.82rem;}
+.merci-sig strong{color:var(--or);display:block;margin-bottom:.2rem;}
+
+/* ── ERREUR ── */
+.alert-box{display:none;background:#fdecea;border-radius:8px;padding:.7rem 1rem;font-size:.83rem;color:var(--rouge);margin-top:.8rem;border-left:3px solid var(--rouge);}
+
+@media(max-width:500px){
+  .radio-grid{grid-template-columns:1fr;}
+  .radio-grid.col3{grid-template-columns:1fr 1fr;}
+  .steps{gap:.15rem;}
+  .step span{display:none;}
+}
+</style>
 </head>
 <body>
 
-<div class="header">
+<div class="hdr">
   <div class="logo">SE</div>
-  <h1>S.E. Corporation — Progression Hebdomadaire</h1>
-  <p>Suivi personnalisé • Baccalauréat • Grandes Écoles</p>
+  <div>
+    <h1>S.E. Corporation — Progression Hebdomadaire</h1>
+    <p>Suivi personnalisé &bull; Baccalauréat &bull; Grandes Écoles</p>
+  </div>
 </div>
 
-<div class="steps" id="stepsBar">
-  <div class="step active" id="s1"><div class="step-num">1</div> Profil</div>
-  <div class="step-line" id="line1"></div>
-  <div class="step" id="s2"><div class="step-num">2</div> Progression</div>
-  <div class="step-line" id="line2"></div>
-  <div class="step" id="s3"><div class="step-num">3</div> Terminé</div>
+<div class="steps">
+  <div class="step active" id="stp1"><div class="step-num">1</div><span>Profil</span></div>
+  <div class="step-sep"></div>
+  <div class="step" id="stp2"><div class="step-num">2</div><span>Progression</span></div>
+  <div class="step-sep"></div>
+  <div class="step" id="stp3"><div class="step-num">3</div><span>Diagnostic</span></div>
+  <div class="step-sep"></div>
+  <div class="step" id="stp4"><div class="step-num">4</div><span>Terminé</span></div>
 </div>
 
-<!-- ÉTAPE 1 : Profil -->
-<div class="card active" id="step1">
-  <h2>👤 Ton profil</h2>
-  <p class="subtitle">Remplis ces informations pour que ton suivi soit bien enregistré cette semaine.</p>
+<div class="main">
 
-  <div class="field">
-    <label>Prénom *</label>
-    <input type="text" id="prenom" placeholder="Ex: Jean" />
-    <div class="error-msg" id="err-prenom">Prénom invalide (minimum 2 lettres)</div>
-  </div>
-  <div class="field">
-    <label>Nom de famille *</label>
-    <input type="text" id="nom" placeholder="Ex: Mballa" />
-    <div class="error-msg" id="err-nom">Nom invalide (minimum 2 lettres)</div>
-  </div>
-  <div class="field">
-    <label>Classe *</label>
-    <select id="classe">
-      <option value="">-- Sélectionne ta classe --</option>
-      <option>Terminale C</option>
-      <option>Terminale D</option>
-      <option>Terminale A</option>
-      <option>Terminale A4</option>
-      <option>Terminale E</option>
-      <option>Terminale F</option>
-    </select>
-    <div class="error-msg" id="err-classe">Sélectionne ta classe</div>
-  </div>
-  <div class="field">
-    <label>Numéro WhatsApp *</label>
-    <input type="tel" id="whatsapp" placeholder="Ex: 6XXXXXXXX" />
-    <div class="error-msg" id="err-whatsapp">Numéro invalide (minimum 9 chiffres)</div>
+<!-- ÉTAPE 1 : PROFIL -->
+<div class="card active" id="card1">
+  <div class="card-title">👤 Ton profil</div>
+  <div class="card-sub">Remplis soigneusement. Ton suivi sera basé sur ces informations.<br><strong>Sois honnête — c'est pour toi !</strong></div>
+
+  <label>Prénom *</label>
+  <input type="text" id="f_prenom" placeholder="Ex : Jean-Paul" oninput="clearErr(this)">
+  <div class="err-msg" id="e_prenom">Prénom invalide (minimum 2 lettres, pas de chiffres)</div>
+
+  <label>Nom de famille *</label>
+  <input type="text" id="f_nom" placeholder="Ex : Mballa" oninput="clearErr(this)">
+  <div class="err-msg" id="e_nom">Nom invalide (minimum 2 lettres, pas de chiffres)</div>
+
+  <label>Sexe *</label>
+  <div class="radio-grid col3">
+    <div class="ro"><input type="radio" name="sexe" id="s_m" value="M"><label for="s_m">👨 Masculin</label></div>
+    <div class="ro"><input type="radio" name="sexe" id="s_f" value="F"><label for="s_f">👩 Féminin</label></div>
   </div>
 
-  <button class="btn-primary" onclick="goStep2()">Suivant →</button>
+  <label>Classe *</label>
+  <div class="radio-grid">
+    <div class="ro"><input type="radio" name="classe" id="cC" value="Tle C"><label for="cC">Terminale C</label></div>
+    <div class="ro"><input type="radio" name="classe" id="cD" value="Tle D"><label for="cD">Terminale D</label></div>
+    <div class="ro"><input type="radio" name="classe" id="cA" value="Tle A"><label for="cA">Terminale A</label></div>
+    <div class="ro"><input type="radio" name="classe" id="cA4" value="Tle A4"><label for="cA4">Terminale A4</label></div>
+    <div class="ro"><input type="radio" name="classe" id="cE" value="Tle E"><label for="cE">Terminale E</label></div>
+    <div class="ro"><input type="radio" name="classe" id="cF" value="Tle F"><label for="cF">Terminale F</label></div>
+  </div>
+
+  <label>Numéro WhatsApp *</label>
+  <input type="tel" id="f_tel" placeholder="Ex : 6XX XXX XXX" oninput="clearErr(this)">
+  <div class="err-msg" id="e_tel">Numéro invalide (minimum 9 chiffres)</div>
+
+  <label>Établissement (facultatif)</label>
+  <input type="text" id="f_etab" placeholder="Ex : Lycée de New-Bell Douala">
+
+  <div class="alert-box" id="alert1"></div>
+
+  <div class="btn-row">
+    <button class="btn btn-gold" id="btn1" onclick="goStep2()">Suivant →</button>
+  </div>
 </div>
 
-<!-- ÉTAPE 2 : Progression -->
-<div class="card" id="step2">
-  <h2>📊 Progression de la semaine</h2>
+<!-- ÉTAPE 2 : PROGRESSION SEMAINE -->
+<div class="card" id="card2">
+  <div class="card-title">📊 Progression de la semaine</div>
   <div id="semaineBadge" class="semaine-badge">📅 Semaine en cours</div>
-  <p class="subtitle">
-    Pour chaque notion du QCM, dis-nous où tu en es.<br>
+  <div class="card-sub">
+    Pour chaque notion, dis-nous où tu en es.<br>
     <strong>Sois honnête — c'est pour toi !</strong>
-  </p>
+  </div>
 
-  <div class="notions-info">
-    🎯 Clique sur chaque notion et choisis ton niveau :<br>
+  <div class="info-box">
+    🎯 Choisis ton niveau pour chaque notion :<br>
     ✅ <strong>Compris</strong> — je maîtrise<br>
     ⚠️ <strong>À revoir</strong> — je comprends un peu mais pas sûr(e)<br>
     ❌ <strong>Bloqué(e)</strong> — je n'ai pas compris
   </div>
 
-  <div class="progress-bar-wrap">
-    <div class="progress-bar" id="progressBar" style="width:0%"></div>
-  </div>
-  <div class="progress-label" id="progressLabel">0 / 0 évaluées</div>
+  <div class="prog-wrap"><div class="prog-bar" id="prog-bar2" style="width:0%"></div></div>
+  <div style="font-size:.73rem;color:var(--gris);text-align:right;margin-bottom:.8rem;" id="prog-txt2">0 / 0 évaluées</div>
 
-  <div id="notionsContainer">
-    <!-- Les notions sont chargées dynamiquement depuis le localStorage ou la config -->
-  </div>
+  <div class="notion-list" id="notions-progr"></div>
 
-  <div class="field" style="margin-top:16px;">
-    <label>📝 Ce que tu veux dire à Ing. Moïse (facultatif)</label>
-    <textarea id="commentaire" placeholder="Ex: J'ai du mal avec les limites en +∞, les dérivées ça va mieux..."></textarea>
+  <div style="margin-top:1.2rem;">
+    <label>📝 Message pour Ing. Moïse (facultatif)</label>
+    <textarea id="f_commentaire" placeholder="Ex : J'ai du mal avec les limites en +∞, les dérivées ça va mieux..."></textarea>
   </div>
 
-  <button class="btn-secondary" onclick="goBack1()">← Retour</button>
-  <button class="btn-primary" onclick="soumettre()">Envoyer ma progression ✓</button>
-</div>
-
-<!-- ÉTAPE 3 : Succès -->
-<div class="card" id="step3">
-  <div class="success-icon">🌟</div>
-  <div class="success-title">Merci !</div>
-  <div class="success-msg">
-    Ta progression a bien été enregistrée.<br>
-    <strong>Ing. Moïse Zame</strong> analysera tes résultats et te contactera personnellement sur WhatsApp.<br><br>
-    Continue de travailler avec courage — le bac se prépare pas à pas, et tu n'es pas seul(e). 💪
-  </div>
-  <div class="footer-brand">
-    <strong>Ing. Moïse Zame — S.E. Corporation</strong><br>
-    Master 1 Génie Civil • ENSPD Douala<br>
-    📞 +237 695 535 585 / 621 576 854 / 693 698 161<br>
-    Since 2015 • 100% de réussite au bac pour nos suivis
+  <div class="btn-row">
+    <button class="btn btn-outline" onclick="goCard(1,1)">← Retour</button>
+    <button class="btn btn-gold" onclick="goStep3()">Suivant →</button>
   </div>
 </div>
 
-<script>
-  // ============================================================
-  // CONFIG : Notions de la semaine (modifiables depuis l'admin)
-  // ============================================================
-  const STORAGE_KEY_NOTIONS = 'se_notions_semaine';
-  const STORAGE_KEY_SEMAINE = 'se_semaine_label';
-  const STORAGE_KEY_PROGRESSIONS = 'se_progressions';
+<!-- ÉTAPE 3 : DIAGNOSTIC NOTIONS -->
+<div class="card" id="card3">
+  <div class="card-title">🔬 Diagnostic détaillé</div>
+  <div class="card-sub">Pour chaque notion, précise où tu bloques exactement.<br>Ça permet à Ing. Moïse de cibler son aide.</div>
 
-  const notionsDefaut = [
-    "Fonctions ln / exp",
-    "Équations du 2ème degré",
-    "Inéquations",
-    "Polynôme degré 3",
-    "Limites",
-    "Dérivées",
-    "Tableau de variation",
-    "Étude complète de fonction"
-  ];
+  <div class="prog-wrap"><div class="prog-bar" id="diag-prog" style="width:0%"></div></div>
+  <div style="font-size:.73rem;color:var(--gris);text-align:right;margin-bottom:.8rem;" id="prog-txt3">0 / 0 évaluées</div>
 
-  let notions = [];
-  let reponsesNotions = {};
-  let currentStep = 1;
+  <div class="notion-list" id="notions-diag"></div>
 
-  function init() {
-    // Charger les notions depuis localStorage (définies par l'admin)
-    const saved = localStorage.getItem(STORAGE_KEY_NOTIONS);
-    notions = saved ? JSON.parse(saved) : notionsDefaut;
+  <div class="btn-row">
+    <button class="btn btn-outline" onclick="goCard(2,2)">← Retour</button>
+    <button class="btn btn-gold" id="btn_submit" onclick="soumettre()">Envoyer ma progression ✓</button>
+  </div>
+</div>
 
-    const semaine = localStorage.getItem(STORAGE_KEY_SEMAINE) || getSemaineLabel();
-    document.getElementById('semaineBadge').textContent = '📅 ' + semaine;
+<!-- ÉTAPE 4 : SUCCÈS -->
+<div class="card" id="card4">
+  <div class="merci-box">
+    <div class="merci-ico">🌟</div>
+    <div class="merci-title" id="merci_titre">Merci !</div>
+    <div class="merci-txt" id="merci_txt">
+      Ta progression a bien été enregistrée.<br>
+      Ing. Moïse Zame analysera tes résultats et te contactera personnellement sur WhatsApp.
+    </div>
+    <div class="merci-sig">
+      <strong>Ing. Moïse Zame — S.E. Corporation</strong>
+      Master 1 Génie Civil &bull; ENSPD Douala<br>
+      📞 +237 695 535 585 / 621 576 854 / 693 698 161<br>
+      <span style="color:#aaa;font-size:.75rem;">Since 2015 &bull; 100% de réussite au bac pour nos suivis</span>
+    </div>
+    <div style="margin-top:1rem;font-size:.8rem;color:var(--gris);">Courage — le bac se prépare pas à pas. Tu n'es pas seul(e) ! ☀️</div>
+  </div>
+</div>
 
-    renderNotions();
+</div><!-- /main -->
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, collection, addDoc, doc, getDoc, serverTimestamp }
+  from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+// ══════════════════════════════════════════
+// CONFIG FIREBASE
+// ══════════════════════════════════════════
+const firebaseConfig = {
+  apiKey: "AIzaSyAhSTl2OR5ztfoIwB2TgIqEaiMjD6TmrcI",
+  authDomain: "se-corporation-quiz-7187e.firebaseapp.com",
+  projectId: "se-corporation-quiz-7187e",
+  storageBucket: "se-corporation-quiz-7187e.firebasestorage.app",
+  messagingSenderId: "5773761325",
+  appId: "1:5773761325:web:e1d3cb01d88c3a73e611a4"
+};
+const app = initializeApp(firebaseConfig);
+const db  = getFirestore(app);
+
+// ══════════════════════════════════════════
+// NOTIONS PAR DÉFAUT (écrasées par Firebase si admin a configuré)
+// ══════════════════════════════════════════
+const NOTIONS_DEFAUT = [
+  { id: "ln",       titre: "Fonctions ln / exp",           sous: "Définition et propriétés" },
+  { id: "eq2",      titre: "Équations du 2ème degré",      sous: "Discriminant, racines" },
+  { id: "ineq",     titre: "Inéquations",                  sous: "Résolution, tableaux de signes" },
+  { id: "poly3",    titre: "Polynôme degré 3",              sous: "Factorisation, racines" },
+  { id: "limites",  titre: "Limites",                       sous: "Calcul, formes indéterminées" },
+  { id: "derivees", titre: "Dérivées",                      sous: "Fonctions composées ln/exp" },
+  { id: "variation",titre: "Tableau de variation",          sous: "Signe de f'(x)" },
+  { id: "etude",    titre: "Étude complète de fonction",    sous: "De A à Z" }
+];
+
+// ══════════════════════════════════════════
+// ÉTAT GLOBAL
+// ══════════════════════════════════════════
+let notions       = [];
+let repProgr      = {};   // { id: 'ok'|'partial'|'nok' }
+let repDiag       = {};   // { id: { type, level } }
+let studentData   = {};
+let semaineLabel  = "";
+
+// ══════════════════════════════════════════
+// INIT : chargement config Firebase
+// ══════════════════════════════════════════
+async function init() {
+  try {
+    const snap = await getDoc(doc(db, "config", "semaine"));
+    if (snap.exists()) {
+      const d = snap.data();
+      notions      = (d.notions && d.notions.length) ? d.notions : NOTIONS_DEFAUT;
+      semaineLabel = d.label || getSemaineLabel();
+    } else {
+      notions      = NOTIONS_DEFAUT;
+      semaineLabel = getSemaineLabel();
+    }
+  } catch(e) {
+    console.warn("Firebase config non disponible, utilisation des valeurs par défaut.", e);
+    notions      = NOTIONS_DEFAUT;
+    semaineLabel = getSemaineLabel();
   }
+  document.getElementById("semaineBadge").textContent = "📅 " + semaineLabel;
+  renderNotionsProgr();
+  renderNotionsDiag();
+}
+init();
 
-  function getSemaineLabel() {
-    const now = new Date();
-    const debut = new Date(now);
-    debut.setDate(now.getDate() - now.getDay() + 1);
-    const fin = new Date(debut);
-    fin.setDate(debut.getDate() + 6);
-    const fmt = (d) => d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
-    return `Semaine du ${fmt(debut)} au ${fmt(fin)}`;
-  }
-
-  function renderNotions() {
-    const container = document.getElementById('notionsContainer');
-    container.innerHTML = '';
-    notions.forEach((notion, i) => {
-      const div = document.createElement('div');
-      div.className = 'notion-card';
-      div.id = `notion-${i}`;
-      div.innerHTML = `
-        <div class="notion-title">${i+1}. ${notion}</div>
-        <div class="notion-options">
-          <button class="notion-btn" onclick="choisir(${i},'ok', this)">✅ Compris</button>
-          <button class="notion-btn" onclick="choisir(${i},'partial', this)">⚠️ À revoir</button>
-          <button class="notion-btn" onclick="choisir(${i},'nok', this)">❌ Bloqué(e)</button>
+// ══════════════════════════════════════════
+// RENDU NOTIONS — ÉTAPE 2 (progression simple)
+// ══════════════════════════════════════════
+function renderNotionsProgr() {
+  const c = document.getElementById("notions-progr");
+  c.innerHTML = "";
+  notions.forEach(n => {
+    repProgr[n.id] = repProgr[n.id] || null;
+    const div = document.createElement("div");
+    div.className = "ni";
+    div.id = "npr_" + n.id;
+    div.innerHTML = `
+      <div class="ni-hdr">
+        <div class="ni-left">
+          <div class="ni-title">${n.titre || n}</div>
+          <div class="ni-sub">${n.sous || ""}</div>
         </div>
-      `;
-      container.appendChild(div);
-    });
-    updateProgress();
+        <div id="pbadge_${n.id}"></div>
+      </div>
+      <div class="ni-body" style="display:block;border-top:none;padding-top:.5rem;">
+        <div class="opt-row">
+          <button class="opt-btn" id="pp_ok_${n.id}"   onclick="setProgr('${n.id}','ok')">✅ Compris</button>
+          <button class="opt-btn" id="pp_partial_${n.id}" onclick="setProgr('${n.id}','partial')">⚠️ À revoir</button>
+          <button class="opt-btn" id="pp_nok_${n.id}"  onclick="setProgr('${n.id}','nok')">❌ Bloqué(e)</button>
+        </div>
+      </div>`;
+    c.appendChild(div);
+  });
+  updateProgBar2();
+}
+
+window.setProgr = function(id, val) {
+  repProgr[id] = val;
+  const card = document.getElementById("npr_" + id);
+  card.classList.remove("st-ok","st-partial","st-nok");
+  card.classList.add("st-" + val);
+  ["ok","partial","nok"].forEach(v => {
+    const b = document.getElementById("pp_" + v + "_" + id);
+    if(b) b.className = "opt-btn" + (val === v ? " sel-" + v : "");
+  });
+  // Badge
+  const badge = document.getElementById("pbadge_" + id);
+  const labels = {ok:"✅ Compris", partial:"⚠️ À revoir", nok:"❌ Bloqué(e)"};
+  const cls    = {ok:"bOk", partial:"bPartial", nok:"bNok"};
+  badge.innerHTML = `<span class="ni-badge ${cls[val]}">${labels[val]}</span>`;
+  updateProgBar2();
+};
+
+function updateProgBar2() {
+  const total = notions.length;
+  const done  = Object.values(repProgr).filter(v => v !== null).length;
+  const pct   = total > 0 ? Math.round(done / total * 100) : 0;
+  document.getElementById("prog-bar2").style.width = pct + "%";
+  document.getElementById("prog-txt2").textContent = done + " / " + total + " évaluées";
+}
+
+// ══════════════════════════════════════════
+// RENDU NOTIONS — ÉTAPE 3 (diagnostic détaillé)
+// ══════════════════════════════════════════
+function renderNotionsDiag() {
+  const c = document.getElementById("notions-diag");
+  c.innerHTML = "";
+  notions.forEach(n => {
+    repDiag[n.id] = repDiag[n.id] || { type: null, level: null };
+    const nid = n.id || n;
+    const titre = n.titre || n;
+    const sous  = n.sous  || "";
+    const div = document.createElement("div");
+    div.className = "ni";
+    div.id = "nd_" + nid;
+    div.innerHTML = `
+      <div class="ni-hdr" onclick="toggleNi('${nid}')">
+        <div class="ni-left">
+          <div class="ni-title">${titre}</div>
+          <div class="ni-sub">${sous}</div>
+        </div>
+        <div id="dbadge_${nid}" style="margin-left:.5rem"></div>
+        <span style="margin-left:.5rem;color:var(--gris);font-size:.8rem" id="darr_${nid}">▼</span>
+      </div>
+      <div class="ni-body" id="dbody_${nid}">
+        <div class="q-label">Tu bloques plutôt sur :</div>
+        <div class="opt-row">
+          <button class="opt-btn" id="dt_def_${nid}"  onclick="setDiagType('${nid}','def')">📖 La définition</button>
+          <button class="opt-btn" id="dt_app_${nid}"  onclick="setDiagType('${nid}','app')">✏️ L'application</button>
+          <button class="opt-btn" id="dt_both_${nid}" onclick="setDiagType('${nid}','both')">🔴 Les deux</button>
+        </div>
+        <div class="q-label" style="margin-top:.7rem">Niveau global :</div>
+        <div class="opt-row">
+          <button class="opt-btn" id="dl_ok_${nid}"  onclick="setDiagLevel('${nid}','ok')">🟢 Je maîtrise</button>
+          <button class="opt-btn" id="dl_nok_${nid}" onclick="setDiagLevel('${nid}','nok')">🔴 J'ai du mal</button>
+        </div>
+      </div>`;
+    c.appendChild(div);
+  });
+  updateDiagBar();
+}
+
+window.toggleNi = function(id) {
+  const body = document.getElementById("dbody_" + id);
+  const arr  = document.getElementById("darr_" + id);
+  const open = body.style.display === "block";
+  document.querySelectorAll(".ni-body").forEach(b => b.style.display = "none");
+  document.querySelectorAll("[id^=darr_]").forEach(a => a.innerHTML = "▼");
+  if (!open) { body.style.display = "block"; arr.innerHTML = "▲"; }
+};
+
+window.setDiagType = function(id, type) {
+  repDiag[id].type = type;
+  ["def","app","both"].forEach(t => {
+    const b = document.getElementById("dt_" + t + "_" + id);
+    if(b) b.className = "opt-btn" + (type===t ? " sel-" + (t==="def"?"def":t==="app"?"app":"both") : "");
+  });
+  updateDiagBadge(id); updateDiagBar();
+};
+
+window.setDiagLevel = function(id, level) {
+  repDiag[id].level = level;
+  const card = document.getElementById("nd_" + id);
+  card.classList.remove("st-ok","st-nok");
+  card.classList.add("st-" + level);
+  ["ok","nok"].forEach(l => {
+    const b = document.getElementById("dl_" + l + "_" + id);
+    if(b) b.className = "opt-btn" + (level===l ? " sel-" + l : "");
+  });
+  updateDiagBadge(id); updateDiagBar();
+};
+
+function updateDiagBadge(id) {
+  const s = repDiag[id];
+  const b = document.getElementById("dbadge_" + id);
+  if(!b) return;
+  if(!s.level){ b.innerHTML=""; return; }
+  const cls = s.level==="ok" ? "bOk" : "bNok";
+  const lbl = s.level==="ok" ? "🟢 OK" : "🔴 Difficulté";
+  b.innerHTML = `<span class="ni-badge ${cls}">${lbl}</span>`;
+}
+
+function updateDiagBar() {
+  const total = notions.length;
+  const done  = Object.values(repDiag).filter(s => s.level !== null).length;
+  const pct   = total > 0 ? Math.round(done / total * 100) : 0;
+  document.getElementById("diag-prog").style.width = pct + "%";
+  document.getElementById("prog-txt3").textContent = done + " / " + total + " évaluées";
+}
+
+// ══════════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════════
+window.clearErr = function(el) { el.classList.remove("err"); };
+
+function showCard(n) {
+  [1,2,3,4].forEach(i => {
+    const c = document.getElementById("card" + i);
+    c.classList.remove("active");
+    c.style.display = "none";
+  });
+  const t = document.getElementById("card" + n);
+  t.style.display = "block";
+  t.classList.add("active");
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function setStep(n) {
+  [1,2,3,4].forEach(i => {
+    const el = document.getElementById("stp" + i);
+    el.classList.remove("active","done");
+    if(i < n) el.classList.add("done");
+    else if(i === n) el.classList.add("active");
+  });
+}
+
+window.goCard = function(card, step) { showCard(card); setStep(step); };
+
+// ══════════════════════════════════════════
+// ÉTAPE 1 → 2 : validation profil
+// ══════════════════════════════════════════
+window.goStep2 = function() {
+  const prenom = document.getElementById("f_prenom").value.trim();
+  const nom    = document.getElementById("f_nom").value.trim();
+  const classe = document.querySelector('input[name="classe"]:checked');
+  const tel    = document.getElementById("f_tel").value.trim();
+  let ok = true;
+
+  if (prenom.length < 2 || /\d/.test(prenom)) {
+    document.getElementById("f_prenom").classList.add("err");
+    document.getElementById("e_prenom").style.display = "block";
+    ok = false;
+  } else { document.getElementById("e_prenom").style.display = "none"; }
+
+  if (nom.length < 2 || /\d/.test(nom)) {
+    document.getElementById("f_nom").classList.add("err");
+    document.getElementById("e_nom").style.display = "block";
+    ok = false;
+  } else { document.getElementById("e_nom").style.display = "none"; }
+
+  if (!classe) {
+    showAlert("alert1", "Merci de sélectionner ta classe.");
+    ok = false;
   }
 
-  function choisir(index, valeur, btn) {
-    reponsesNotions[index] = valeur;
-    const card = document.getElementById(`notion-${index}`);
-    card.classList.add('evaluated');
-    const btns = card.querySelectorAll('.notion-btn');
-    btns.forEach(b => b.classList.remove('selected-ok','selected-partial','selected-nok'));
-    btn.classList.add(`selected-${valeur}`);
-    updateProgress();
+  // Validation WhatsApp camerounais : 9 chiffres minimum après nettoyage
+  const telClean = tel.replace(/\D/g, "");
+  if (telClean.length < 9) {
+    document.getElementById("f_tel").classList.add("err");
+    document.getElementById("e_tel").style.display = "block";
+    ok = false;
+  } else { document.getElementById("e_tel").style.display = "none"; }
+
+  if (!ok) return;
+
+  studentData = {
+    prenom,
+    nom,
+    sexe: (document.querySelector('input[name="sexe"]:checked') || { value: "?" }).value,
+    classe: classe.value,
+    etab: document.getElementById("f_etab").value.trim(),
+    whatsapp: tel,
+    key: (prenom + nom).toLowerCase().replace(/\s/g, "")
+  };
+
+  hideAlert("alert1");
+  showCard(2); setStep(2);
+};
+
+// ══════════════════════════════════════════
+// ÉTAPE 2 → 3
+// ══════════════════════════════════════════
+window.goStep3 = function() {
+  const done = Object.values(repProgr).filter(v => v !== null).length;
+  const total = notions.length;
+  if (done < total) {
+    if (!confirm(`Tu n'as évalué que ${done}/${total} notions. Continuer quand même ?`)) return;
   }
+  showCard(3); setStep(3);
+};
 
-  function updateProgress() {
-    const total = notions.length;
-    const done = Object.keys(reponsesNotions).length;
-    const pct = total > 0 ? Math.round((done / total) * 100) : 0;
-    document.getElementById('progressBar').style.width = pct + '%';
-    document.getElementById('progressLabel').textContent = `${done} / ${total} évaluées`;
-  }
+// ══════════════════════════════════════════
+// ÉTAPE 3 → SOUMETTRE
+// ══════════════════════════════════════════
+window.soumettre = async function() {
+  const btn = document.getElementById("btn_submit");
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spin"></span>Envoi en cours...';
 
-  // ============================================================
-  // Navigation
-  // ============================================================
-  function showStep(n) {
-    document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
-    document.getElementById('step' + n).classList.add('active');
-    for (let i = 1; i <= 3; i++) {
-      const s = document.getElementById('s' + i);
-      s.classList.remove('active','done');
-      if (i < n) s.classList.add('done');
-      else if (i === n) s.classList.add('active');
-      if (i < 3) {
-        const l = document.getElementById('line' + i);
-        l.classList.toggle('done', i < n);
-      }
-    }
-    currentStep = n;
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
-  function goBack1() { showStep(1); }
-
-  function goStep2() {
-    const prenom = document.getElementById('prenom').value.trim();
-    const nom = document.getElementById('nom').value.trim();
-    const classe = document.getElementById('classe').value;
-    const wa = document.getElementById('whatsapp').value.trim();
-    let ok = true;
-
-    if (prenom.length < 2 || /\d/.test(prenom)) {
-      document.getElementById('err-prenom').style.display = 'block'; ok = false;
-    } else { document.getElementById('err-prenom').style.display = 'none'; }
-
-    if (nom.length < 2 || /\d/.test(nom)) {
-      document.getElementById('err-nom').style.display = 'block'; ok = false;
-    } else { document.getElementById('err-nom').style.display = 'none'; }
-
-    if (!classe) {
-      document.getElementById('err-classe').style.display = 'block'; ok = false;
-    } else { document.getElementById('err-classe').style.display = 'none'; }
-
-    if (wa.replace(/\D/g,'').length < 9) {
-      document.getElementById('err-whatsapp').style.display = 'block'; ok = false;
-    } else { document.getElementById('err-whatsapp').style.display = 'none'; }
-
-    if (ok) showStep(2);
-  }
-
-  function soumettre() {
-    const total = notions.length;
-    const done = Object.keys(reponsesNotions).length;
-
-    if (done < total) {
-      if (!confirm(`Tu n'as évalué que ${done}/${total} notions. Envoyer quand même ?`)) return;
-    }
-
-    const prenom = document.getElementById('prenom').value.trim();
-    const nom = document.getElementById('nom').value.trim();
-    const classe = document.getElementById('classe').value;
-    const wa = document.getElementById('whatsapp').value.trim();
-    const commentaire = document.getElementById('commentaire').value.trim();
-    const semaine = localStorage.getItem(STORAGE_KEY_SEMAINE) || getSemaineLabel();
-
-    const entry = {
-      id: Date.now(),
-      date: new Date().toISOString(),
-      semaine,
-      prenom, nom, classe,
-      whatsapp: wa,
-      commentaire,
-      notions: notions.map((n, i) => ({
-        notion: n,
-        statut: reponsesNotions[i] || 'non-evalue'
-      }))
+  const notionsData = notions.map(n => {
+    const nid = n.id || n;
+    return {
+      id:     nid,
+      notion: n.titre || n,
+      // progression (étape 2)
+      statut: repProgr[nid] || "non-evalue",
+      // diagnostic (étape 3)
+      diag_type:  repDiag[nid] ? repDiag[nid].type  : null,
+      diag_level: repDiag[nid] ? repDiag[nid].level : null
     };
+  });
 
-    // Sauvegarder dans localStorage
-    const existing = JSON.parse(localStorage.getItem(STORAGE_KEY_PROGRESSIONS) || '[]');
-    existing.push(entry);
-    localStorage.setItem(STORAGE_KEY_PROGRESSIONS, JSON.stringify(existing));
+  const payload = {
+    ...studentData,
+    semaine:     semaineLabel,
+    commentaire: document.getElementById("f_commentaire").value.trim(),
+    notions:     notionsData,
+    date:        serverTimestamp(),
+    type:        "progression"
+  };
 
-    showStep(3);
+  try {
+    await addDoc(collection(db, "progressions"), payload);
+  } catch(e) {
+    console.error("Erreur Firebase:", e);
+    // On continue quand même pour ne pas bloquer l'élève
   }
 
-  init();
+  // Page de remerciement
+  const prenom = studentData.prenom;
+  const sexe   = studentData.sexe;
+  document.getElementById("merci_titre").textContent = "Merci " + prenom + " 🌟";
+  document.getElementById("merci_txt").innerHTML =
+    "Ta progression a bien été enregistrée.<br>" +
+    "Ing. Moïse Zame analysera tes résultats et te contactera personnellement sur WhatsApp.<br><br>" +
+    "Continue de travailler avec courage — le bac se prépare pas à pas, et tu n'es pas seul" +
+    (sexe === "F" ? "e" : "") + ".";
+
+  showCard(4); setStep(4);
+};
+
+// ══════════════════════════════════════════
+// UTILITAIRES
+// ══════════════════════════════════════════
+function getSemaineLabel() {
+  const now   = new Date();
+  const debut = new Date(now);
+  debut.setDate(now.getDate() - (now.getDay() || 7) + 1);
+  const fin = new Date(debut);
+  fin.setDate(debut.getDate() + 6);
+  const fmt = d => d.toLocaleDateString("fr-FR", { day: "numeric", month: "long" });
+  return "Semaine du " + fmt(debut) + " au " + fmt(fin);
+}
+
+function showAlert(id, msg) {
+  const el = document.getElementById(id);
+  el.textContent = msg;
+  el.style.display = "block";
+}
+function hideAlert(id) {
+  document.getElementById(id).style.display = "none";
+}
+
+// Init affichage
+showCard(1);
 </script>
 </body>
 </html>
