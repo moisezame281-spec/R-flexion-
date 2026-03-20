@@ -323,6 +323,14 @@ tbody td.mono{font-family:'Space Mono',monospace;font-size:.75rem;letter-spacing
     <button class="btn btn-sm" id="btn-archives" style="background:rgba(255,170,50,.12);color:#ffaa32;border:1px solid rgba(255,170,50,.3)" onclick="toggleArchives()">📦 Archives</button>
   </div>
 
+  <!-- SÉLECTION VUE -->
+  <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.8rem;padding:.5rem 0">
+    <span style="font-family:'Space Mono',monospace;font-size:.6rem;color:var(--gold);letter-spacing:.15em;text-transform:uppercase">Vue :</span>
+    <button id="btn-vue-eleve" onclick="setVue('eleve')" style="font-family:'Space Mono',monospace;font-size:.6rem;letter-spacing:.12em;padding:.3rem .9rem;border-radius:3px;border:1px solid var(--gold);background:var(--gold);color:var(--ink);cursor:pointer;transition:all .2s">👤 Élève</button>
+    <button id="btn-vue-parent" onclick="setVue('parent')" style="font-family:'Space Mono',monospace;font-size:.6rem;letter-spacing:.12em;padding:.3rem .9rem;border-radius:3px;border:1px solid var(--gold);background:transparent;color:var(--gold);cursor:pointer;transition:all .2s">👨‍👩‍👧 Parent</button>
+    <span id="vue-label" style="font-size:.72rem;color:var(--grey);font-style:italic;margin-left:.3rem">Mode élève — identifiants uniquement</span>
+  </div>
+
   <!-- BANDEAU ÉVALUATION -->
   <div id="eval-banner" style="display:flex;align-items:center;gap:1rem;margin-bottom:1rem;padding:.8rem 1rem;background:rgba(255,255,255,.04);border-radius:6px;border:1px solid rgba(255,255,255,.08)">
     <span style="font-family:'Space Mono',monospace;font-size:.65rem;letter-spacing:.15em;color:#aaa;text-transform:uppercase">Affichage :</span>
@@ -339,6 +347,7 @@ tbody td.mono{font-family:'Space Mono',monospace;font-size:.75rem;letter-spacing
           <th class="sortable" onclick="sortBy('rank')">#</th>
           <th class="sortable" onclick="sortBy('identifiant')">Identifiant</th>
           <th class="sortable" onclick="sortBy('nom')">Nom complet</th>
+          <th>Établissement</th>
           <th>Classe</th>
           <th>Sexe</th>
           <th class="sortable" onclick="sortBy('scoreOn20')">Score /20</th>
@@ -615,7 +624,8 @@ window.renderTable = () => {
     return `<tr>
       <td class="mono" style="color:var(--gold)">${rank}</td>
       <td class="mono" style="font-weight:700;color:var(--cream)">${r.identifiant||'—'}</td>
-      <td><strong>${r.prenom||''}</strong> ${r.nom||''}</td>
+      <td id="td-nom-${r.identifiant}" class="col-nom" style="display:none"><strong>${r.prenom||''}</strong> ${r.nom||''}</td>
+      <td id="td-etab-${r.identifiant}" class="col-etab" style="display:none;font-size:.78rem;color:var(--gold)">${r.etab||'—'}</td>
       <td><span class="badge ${classBadge}">${r.classe||'—'}</span></td>
       <td style="color:var(--grey)">${r.sexe==='M'?'♂':'♀'}</td>
       <td class="mono" style="font-weight:700;font-size:1rem;color:${barColor}">${s20}</td>
@@ -822,6 +832,14 @@ window.genPDF = () => {
     doc.setTextColor(245,240,232);
     doc.setFont('courier','bold');
     doc.text(el.id, cols[1], y);
+    // Établissement (fictif ou réel, en petit sous l'identifiant si place)
+    if(el.etab && !el.reel){
+      doc.setFont('helvetica','normal');
+      doc.setFontSize(6);
+      doc.setTextColor(100,100,100);
+      doc.text(el.etab.slice(0,22), cols[1], y+2.5);
+      doc.setFontSize(8);
+    }
 
     // Score
     doc.setFont('helvetica','bold');
@@ -865,22 +883,48 @@ window.genPDF = () => {
   showNotif('✓ PDF classement téléchargé !');
 };
 
-// ═══ ÉLÈVES FICTIFS ═══
+// ═══ VUE ÉLÈVE / PARENT ═══
+let currentVue = 'eleve';
+window.setVue = function(vue) {
+  currentVue = vue;
+  const isParent = vue === 'parent';
+  document.getElementById('btn-vue-eleve').style.background = isParent ? 'transparent' : 'var(--gold)';
+  document.getElementById('btn-vue-eleve').style.color = isParent ? 'var(--gold)' : 'var(--ink)';
+  document.getElementById('btn-vue-parent').style.background = isParent ? 'var(--gold)' : 'transparent';
+  document.getElementById('btn-vue-parent').style.color = isParent ? 'var(--ink)' : 'var(--gold)';
+  document.getElementById('vue-label').textContent = isParent
+    ? 'Mode parent — noms et établissements visibles'
+    : 'Mode élève — identifiants uniquement';
+  document.querySelectorAll('.col-nom, .col-etab').forEach(el => {
+    el.style.display = isParent ? '' : 'none';
+  });
+};
+
+// ═══ ÉLÈVES FICTIFS — YAOUNDÉ ═══
 function genFictifs(n, classe) {
   if (n <= 0) return [];
   const arr = [];
-  // Distribution réaliste des scores (courbe de Gauss)
+  const etabsYaounde = ['Lycée Général Leclerc', 'Lycée de Yaoundé', 'Collège Vogt', "Lycée Bilingue d'Essos", 'Collège Notre Dame des Victoires', 'Lycée Technique de Yaoundé', 'Collège Saint Paul', 'Institut Samba', 'Lycée de Biyem-Assi', 'Collège El Hadj Ahmadou', 'CES de Bastos', 'Lycée de Mendong', 'Collège Adventiste de Yaoundé'];
+  // Score max réel de la classe (anti 20/20)
+  const reelsClasse = allData.filter(r => r.classe === classe);
+  const maxReel = reelsClasse.length > 0
+    ? Math.max(...reelsClasse.map(r => r.scoreOn20 || 0))
+    : 16;
+  const scorePlafond = Math.min(20, maxReel + 1.5); // jamais > maxReel + 1.5
+
   for (let i=0; i<n; i++) {
-    // Box-Muller pour distribution normale
+    // Distribution normale centrée sur 10
     const u1 = Math.random(), u2 = Math.random();
     const z  = Math.sqrt(-2*Math.log(u1)) * Math.cos(2*Math.PI*u2);
-    let score = 10 + z * 4; // moy=10, std=4
-    score = Math.max(0, Math.min(20, Math.round(score*4)/4)); // arrondi 0.25
+    let score = 10 + z * 3.5;
+    score = Math.max(0, Math.min(scorePlafond, Math.round(score*4)/4));
+    const etab = etabsYaounde[Math.floor(Math.random() * etabsYaounde.length)];
     arr.push({
       id: 'SE-' + genId(),
       score,
       statut: 'normal',
-      reel: false
+      reel: false,
+      etab
     });
   }
   return arr;
