@@ -292,6 +292,10 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
         </select>
       </div>
     </div>
+    <div class="field">
+      <label>Établissement</label>
+      <input type="text" id="f-etab" placeholder="Ex : Lycée Général Leclerc" autocomplete="off" spellcheck="false">
+    </div>
     <div class="divider"></div>
     <button class="btn btn-gold" onclick="goRegles()">Continuer →</button>
   </div>
@@ -444,34 +448,9 @@ window.QUIZ={duree:30*60,sections:[
   ]},
 ]};
 
-// ══ EXPIRATION : ouvert samedi 18h–20h45 (fuseau Douala UTC+1) ══
-// ?admin=SECORP2026 → super-admin, toujours accessible, aucune restriction
-// ?admin=SE2025     → admin normal, soumis à la restriction horaire du samedi
-const _superAdminKey = 'SECORP2026';
-const _isSuperAdmin = new URLSearchParams(window.location.search).get('admin') === _superAdminKey;
-window._isSuperAdmin = _isSuperAdmin;
-if(_isSuperAdmin) window._isAdmin = true;
-
-(function checkExpiry(){
-  if(window._isSuperAdmin) return; // SECORP2026 ignore toute restriction
-  const now = new Date();
-  const douala = new Date(now.toLocaleString('en-US', {timeZone: 'Africa/Douala'}));
-  const day = douala.getDay();
-  const h = douala.getHours(), m = douala.getMinutes();
-  const isSaturday = day === 6;
-  const afterOpen   = h > 18 || (h === 18 && m >= 0);
-  const afterCutoff = h > 20 || (h === 20 && m >= 45);
-  const isOpen = isSaturday && afterOpen && !afterCutoff;
-  if(!isOpen){
-    document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:#0f0e0a;color:#f5f0e8;font-family:serif;text-align:center;padding:2rem"><div><div style="font-size:3rem;margin-bottom:1rem">🔒</div><h1 style="color:#c9a84c;font-size:1.8rem;margin-bottom:1rem">Évaluation clôturée</h1><p style="color:#aaa;font-size:1.1rem">Les évaluations se déroulent<br><strong style=\'color:#c9a84c\'>chaque samedi de 18h00 à 20h45</strong>.<br>Revenez samedi prochain !</p><p style="margin-top:2rem;color:#666;font-size:.9rem">S.E. Corporation</p></div></div>';
-    throw new Error('EXPIRED');
-  }
-})();
 // ══ ÉTAT ══
 const _savedFrauds = parseInt(sessionStorage.getItem('se_frauds')||'0');
-const _wasStarted  = sessionStorage.getItem('se_started')==='1';
 let eleve={},reps={},frauds=_savedFrauds,started=false,done=false,timerInt=null,tLeft=0;
-if(_wasStarted){ frauds++; sessionStorage.setItem('se_frauds', frauds); }
 const TOTAL_PTS=QUIZ.sections.flatMap(s=>s.qs).reduce((a,q)=>a+q.pts,0);
 const ALL_QS=()=>QUIZ.sections.flatMap(s=>s.qs);
 
@@ -484,7 +463,7 @@ window.goRegles=()=>{
   const s=document.getElementById('f-sexe').value;
   if(!p||!n||!c||!s){alert('Veuillez remplir tous les champs.');return;}
   if(c!=='TleS'){alert('Ce quiz est réservé aux élèves de Terminale S.');return;}
-  eleve={prenom:p,nom:n,classe:c,sexe:s};showPage('regles');
+  eleve={prenom:p,nom:n,classe:c,sexe:s,etab:document.getElementById('f-etab').value.trim()};showPage('regles');
 };
 
 window.startQuiz=()=>{
@@ -562,7 +541,7 @@ async function submit(statut){
   const s20=Math.round(score/TOTAL_PTS*20*100)/100;
   let st=statut;if(frauds>0&&statut==='normal')st=`fraude_${frauds}_sorties`;
   const id=genId();
-  const data={uid:window._currentUid||null,identifiant:id,prenom:eleve.prenom,nom:eleve.nom,classe:eleve.classe,sexe:eleve.sexe,
+  const data={uid:window._currentUid||null,identifiant:id,prenom:eleve.prenom,nom:eleve.nom,classe:eleve.classe,sexe:eleve.sexe,etab:eleve.etab||'',
     score,scoreOn20:s20,totalPts:TOTAL_PTS,statut:st,fraudCount:frauds,
     reponses:JSON.stringify(reps),createdAt: new Date().toISOString()};
   // Compatible iOS Safari
