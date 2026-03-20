@@ -233,8 +233,6 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
   <p style="color:#666;font-size:.82rem;font-family:monospace">S.E. Corporation — Accès sécurisé</p>
 </div>
 
-<div id="auth-overlay" style="display:none;position:fixed;inset:0;z-index:99999;background:#0f0e0a;justify-content:center;align-items:center;flex-direction:column;gap:1.2rem">
-  <div style="width:48px;height:48px;border:3px solid rgba(42,184,200,.3);border-top-color:#2ab8c8;border-radius:50%;animation:spin 1s linear infinite"></div>
 <div id="fraud-overlay">
   <div class="fraud-title">⚠️ Sortie détectée !</div>
   <div class="fraud-body">
@@ -359,7 +357,6 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth, signInWithPopup, signInWithRedirect, getRedirectResult, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { getFirestore, collection, addDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -372,8 +369,6 @@ const firebaseConfig = {
 };
 const app=initializeApp(firebaseConfig);
 const db=getFirestore(app);
-const auth=getAuth(app);
-const provider=new GoogleAuthProvider();
 
 
 // ══ MODE ADMIN ══
@@ -381,75 +376,6 @@ const ADMIN_KEY='SE2025';
 const urlParams=new URLSearchParams(window.location.search);
 const isAdmin=urlParams.get('admin')===ADMIN_KEY;
 window._isAdmin=isAdmin;
-
-function getLundiSemaine(){
-  const d=new Date(); const day=d.getDay()||7;
-  d.setHours(0,0,0,0); d.setDate(d.getDate()-(day-1));
-  return d.toISOString();
-}
-async function verifierDoublure(uid){
-  const lundi=getLundiSemaine();
-  const q=query(collection(db,'resultats'),where('uid','==',uid),where('createdAt','>=',lundi));
-  const snap=await getDocs(q); return !snap.empty;
-}
-
-// ══ AUTH GOOGLE pour élèves seulement ══
-if(!isAdmin){
-  const overlay=document.getElementById('auth-overlay');
-  const msg=document.getElementById('auth-msg');
-  overlay.style.display='flex';
-  msg.textContent='Connexion en cours…';
-
-  // Détection mobile
-  const isMobile=/Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
-
-  async function handleUser(user){
-    window._currentUid=user.uid;
-    msg.textContent='Vérification…';
-    try{
-      const dejaCompose=await verifierDoublure(user.uid);
-      if(dejaCompose){
-        overlay.innerHTML=`<div style="text-align:center;padding:2rem"><div style="font-size:3rem;margin-bottom:1rem">🔒</div><h2 style="color:#c9a84c;font-family:serif;font-size:1.6rem;margin-bottom:1rem">Déjà participé</h2><p style="color:#aaa;font-size:1.05rem;line-height:1.7">Vous avez déjà composé cette semaine.<br><strong style="color:#f5f0e8">Une seule participation autorisée.</strong></p><p style="margin-top:2rem;color:#666;font-size:.9rem">S.E. Corporation</p></div>`;
-        return;
-      }
-      overlay.style.display='none';
-    }catch(e){
-      console.warn('Vérification doublon échouée:', e);
-      overlay.style.display='none'; // Laisser passer en cas d'erreur Firebase
-    }
-  }
-
-  (async()=>{
-    try{
-      // Tenter d'abord de récupérer un résultat de redirect (retour après redirect mobile)
-      const redirectResult=await getRedirectResult(auth);
-      if(redirectResult && redirectResult.user){
-        await handleUser(redirectResult.user);
-        return;
-      }
-      // Pas de résultat redirect : lancer l'auth
-      if(isMobile){
-        // Mobile : redirect (pas de popup)
-        msg.textContent='Redirection vers Google…';
-        await signInWithRedirect(auth,provider);
-        // La page se recharge, getRedirectResult sera appelé au retour
-      } else {
-        // Desktop : popup classique
-        const result=await signInWithPopup(auth,provider);
-        await handleUser(result.user);
-      }
-    }catch(e){
-      console.warn('Auth error:', e.code, e.message);
-      if(e.code==='auth/popup-blocked'||e.code==='auth/popup-closed-by-user'){
-        // Fallback : essayer redirect
-        msg.textContent='Popup bloqué — redirection…';
-        setTimeout(()=>signInWithRedirect(auth,provider), 1500);
-      } else {
-        msg.innerHTML='Connexion échouée.<br><button onclick="location.reload()" style="margin-top:.8rem;padding:.5rem 1.2rem;background:#c9a84c;color:#0f0e0a;border:none;border-radius:4px;cursor:pointer;font-family:monospace">↺ Réessayer</button>';
-      }
-    }
-  })();
-}
 
 window.QUIZ={duree:30*60,sections:[
   {badge:"EXERCICE 1 — Partie A",titre:"Dé truqué — Suite géométrique",qs:[
