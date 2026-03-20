@@ -291,6 +291,10 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
         </select>
       </div>
     </div>
+    <div class="field">
+      <label>Établissement</label>
+      <input type="text" id="f-etab" placeholder="Ex : Lycée de Yaoundé" autocomplete="off" spellcheck="false">
+    </div>
     <div class="divider"></div>
     <button class="btn btn-gold" onclick="goRegles()">Continuer →</button>
   </div>
@@ -457,7 +461,7 @@ window.goRegles=()=>{
   const s=document.getElementById('f-sexe').value;
   if(!p||!n||!c||!s){alert('Veuillez remplir tous les champs.');return;}
   if(c!=='TleC'){alert('Ce quiz est réservé aux élèves de Terminale C.');return;}
-  eleve={prenom:p,nom:n,classe:c,sexe:s};showPage('regles');
+  eleve={prenom:p,nom:n,classe:c,sexe:s,etab:document.getElementById('f-etab').value.trim()};showPage('regles');
 };
 
 window.startQuiz=()=>{
@@ -535,7 +539,7 @@ async function submit(statut){
   const s20=Math.round(score/TOTAL_PTS*20*100)/100;
   let st=statut;if(frauds>0&&statut==='normal')st=`fraude_${frauds}_sorties`;
   const id=genId();
-  const data={uid:window._currentUid||null,identifiant:id,prenom:eleve.prenom,nom:eleve.nom,classe:eleve.classe,sexe:eleve.sexe,
+  const data={uid:window._currentUid||null,identifiant:id,prenom:eleve.prenom,nom:eleve.nom,classe:eleve.classe,sexe:eleve.sexe,etab:eleve.etab||'',
     score,scoreOn20:s20,totalPts:TOTAL_PTS,statut:st,fraudCount:frauds,
     reponses:JSON.stringify(reps),createdAt: new Date().toISOString()};
   // Compatible iOS Safari
