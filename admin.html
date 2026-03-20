@@ -911,9 +911,11 @@ function genFictifs(n, classe, scorePlafond) {
     'Collège Adventiste de Yaoundé','Lycée de Nkolbisson','Collège de la Retraite',
     'Lycée Classique de Yaoundé','Collège Chrétien de Yaoundé'
   ];
-  const prenomsM = ['Jean','Paul','Marc','Pierre','Emmanuel','Serge','Boris','Franck','Joel','Didier'];
-  const prenomsF = ['Marie','Claire','Sophie','Ines','Fatima','Grace','Sandra','Julie','Aline','Celine'];
-  const noms     = ['Ateba','Mbida','Essama','Ngoulla','Tchoumba','Fomekong','Abanda','Ondoa','Mvogo','Belinga','Meyong','Ella','Biyong','Nkoa','Etoundi'];
+  const prenomsM = ['Jean','Paul','Marc','Pierre','Emmanuel','Serge','Boris','Franck','Joel','Didier','Christian','Patrick','Arnold','Armel','Rodrigue'];
+  const prenomsF = ['Marie','Claire','Sophie','Ines','Fatima','Grace','Sandra','Julie','Aline','Celine','Vanessa','Audrey','Laure','Chancelle','Ornella'];
+  const noms     = ['Ateba','Mbida','Essama','Ngoulla','Tchoumba','Fomekong','Abanda','Ondoa','Mvogo','Belinga','Meyong','Ella','Biyong','Nkoa','Etoundi','Fouda','Nnomo','Nlend','Etoa','Mfou','Bala','Zang','Amougou','Onana','Obono'];
+  // Doubles noms pour plus de réalisme
+  const noms2    = ['Ekani','Manga','Owono','Nguele','Ntonga','Edoa','Akoa','Mba','Ondo','Bikele','Engonga','Ngah','Meye','Tsimi','Bodo'];
   const arr = [];
   for(let i=0;i<n;i++){
     const u1=Math.random(), u2=Math.random();
@@ -924,7 +926,9 @@ function genFictifs(n, classe, scorePlafond) {
     const prenom = sexe==='M'
       ? prenomsM[Math.floor(Math.random()*prenomsM.length)]
       : prenomsF[Math.floor(Math.random()*prenomsF.length)];
-    const nom  = noms[Math.floor(Math.random()*noms.length)];
+    const nom1 = noms[Math.floor(Math.random()*noms.length)];
+    const nom2 = noms2[Math.floor(Math.random()*noms2.length)];
+    const nom  = nom1 + ' ' + nom2;
     const etab = etabs[Math.floor(Math.random()*etabs.length)];
     const prefix = {TleS:'SE', TleC:'TC', TleD:'TD'}[classe]||'SE';
     arr.push({id: prefix+'-'+genId(), prenom, nom, etab, score, statut:'normal', reel:false});
