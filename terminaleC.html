@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>S.E. Corporation — Évaluation Terminale D</title>
+<title>S.E. Corporation — Évaluation Terminale C</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
@@ -260,7 +260,7 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
     <div class="logo-since">Since 2015 — Excellence académique</div>
   </div>
 
-  <h1 class="acc-title">Évaluation Hebdomadaire<br>Terminale D</h1>
+  <h1 class="acc-title">Évaluation Hebdomadaire<br>Terminale C</h1>
   <p class="acc-sub">Mathématiques — Probabilités &amp; Analyse</p>
 
   <div class="form-box">
@@ -277,7 +277,7 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
         <label>Classe</label>
         <select id="f-classe">
           <option value="">— Choisir —</option>
-          <option value="TleD">Terminale D</option>
+          <option value="TleC">Terminale C</option>
         </select>
       </div>
       <div class="field">
@@ -322,7 +322,7 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
 <!-- PAGE QUIZ -->
 <div class="page" id="pg-quiz">
   <div class="topbar">
-    <div class="topbar-l">S.E. CORPORATION — TERMINALE D — MATHÉMATIQUES</div>
+    <div class="topbar-l">S.E. CORPORATION — TERMINALE C — MATHÉMATIQUES</div>
     <div class="timer" id="timer-box">
       <div class="timer-dot"></div>
       <span id="timer-display">30:00</span>
@@ -378,36 +378,35 @@ const isAdmin=urlParams.get('admin')===ADMIN_KEY;
 window._isAdmin=isAdmin;
 
 window.QUIZ={duree:30*60,sections:[
-  {badge:"EXERCICE 1 — Partie A",titre:"Dé truqué — Suite géométrique",qs:[
-    {id:"A1",pts:1,txt:"Les probabilités P₁;P₂;P₃;P₄;P₅;P₆ forment une suite géométrique de raison 2/3.\n\nLaquelle de ces expressions donne la somme P₁+P₂+P₃+P₄+P₅+P₆ ?",opts:["P₁ × (1 − (2/3)⁶) / (1 − 2/3)","P₁ × (2/3)⁶","P₁ / (1 − 2/3)","6 × P₁"],rep:0},
-    {id:"A2",pts:1,txt:"On a montré que P₁ = 243/665.\n\nQuelle est la valeur de P₃ ?",opts:["162/665","108/665","72/665","48/665"],rep:1},
-    {id:"A3",pts:1,txt:"Quelle est la valeur de P(face paire) = P₂ + P₄ + P₆ ?",opts:["3/5","2/5","1/2","266/665"],rep:1},
-    {id:"A4",pts:1,txt:"Quelle est la valeur de P(face impaire) = P₁ + P₃ + P₅ ?",opts:["2/5","1/2","3/5","399/665"],rep:2},
-    {id:"A5",pts:1,txt:"Vérification : P(pair) + P(impair) = ?",opts:["665/665 = 1 ✓","664/665","2/3","5/6"],rep:0},
+  {badge:"EXERCICE 1 — Probabilités",titre:"Dé truqué — Suite géométrique",qs:[
+    {id:"A1",pts:1,txt:"P₁;P₂;P₃;P₄;P₅;P₆ forment une suite géométrique de raison 2/3.\n\nQuelle expression donne la somme P₁+...+P₆ ?",opts:["P₁ × (1 − (2/3)⁶) / (1 − 2/3)","P₁ × (2/3)⁶","P₁ / (1 − 2/3)","6 × P₁"],rep:0},
+    {id:"A2",pts:1,txt:"On a P₁ = 243/665.\n\nQuelle est la valeur de P₂ ?",opts:["108/665","72/665","162/665","48/665"],rep:2},
+    {id:"A3",pts:1,txt:"Quelle est la valeur de P(face paire) = P₂ + P₄ + P₆ ?",opts:["3/5","2/5","1/2","399/665"],rep:1},
+    {id:"A4",pts:1,txt:"Quelle est la valeur de P(face impaire) = P₁ + P₃ + P₅ ?",opts:["2/5","1/2","3/5","266/665"],rep:2},
+    {id:"A5",pts:1,txt:"Un joueur fait 3 lancers : +1500 FCFA si pair, −1000 FCFA si impair.\n\nQuelle est la valeur de X pour 3 faces impaires ?",opts:["−1000 FCFA","−2000 FCFA","−3000 FCFA","+1500 FCFA"],rep:2},
   ]},
-  {badge:"EXERCICE 1 — Partie B",titre:"Variable aléatoire X — Gain algébrique",qs:[
-    {id:"B1",pts:1,txt:"Un joueur fait 3 lancers. Il gagne 1500 FCFA si pair, perd 1000 FCFA si impair.\n\nQuelle est la valeur de X quand les 3 faces sont impaires ?",opts:["-1000 FCFA","-2000 FCFA","-3000 FCFA","+3000 FCFA"],rep:2},
-    {id:"B2",pts:1,txt:"Quelle est la probabilité P(X = −3000) (3 faces impaires) ?",opts:["8/125","27/125","54/125","36/125"],rep:1},
-    {id:"B3",pts:1,txt:"Quelle est la probabilité P(X = −500) ?\n(2 impairs + 1 pair ; X = −1000−1000+1500)",opts:["27/125","36/125","54/125","8/125"],rep:2},
-    {id:"B4",pts:1,txt:"L'espérance mathématique E(X) vaut :",opts:["500 FCFA","−500 FCFA","0 FCFA","1000 FCFA"],rep:2},
-    {id:"B5",pts:1,txt:"D'après E(X) = 0, ce jeu est :",opts:["Favorable au joueur","Défavorable au joueur","Équitable","Impossible à déterminer"],rep:2},
+  {badge:"EXERCICE 1 — Variable aléatoire X",titre:"Loi de probabilité et espérance",qs:[
+    {id:"B1",pts:1,txt:"Quelle est la probabilité P(X = −3000) ?\n(3 faces impaires, p_impair = 3/5)",opts:["8/125","36/125","54/125","27/125"],rep:3},
+    {id:"B2",pts:1,txt:"X = −500 correspond à 1 pair et 2 impairs.\n\nQuelle est P(X = −500) ?",opts:["27/125","54/125","36/125","8/125"],rep:1},
+    {id:"B3",pts:1,txt:"X = +2000 correspond à 2 pairs et 1 impair.\n\nQuelle est P(X = +2000) ?",opts:["54/125","8/125","27/125","36/125"],rep:3},
+    {id:"B4",pts:1,txt:"L'espérance mathématique E(X) vaut :",opts:["500 FCFA","−500 FCFA","0 FCFA","250 FCFA"],rep:2},
+    {id:"B5",pts:1,txt:"E(X) = 0, donc ce jeu est :",opts:["Favorable au joueur","Défavorable au joueur","Équitable","Impossible à analyser"],rep:2},
   ]},
-  {badge:"EXERCICE 2 — Partie A",titre:"f(x) = ln(eˣ + x) − x : dérivée et variations",qs:[
-    {id:"C1",pts:1,txt:"Calculer f′(x) pour f(x) = ln(eˣ + x) − x :",opts:["f′(x) = eˣ/(eˣ + x)","f′(x) = (1 − x)/(eˣ + x)","f′(x) = (eˣ + 1)/(eˣ + x)","f′(x) = 1 − x"],rep:1},
-    {id:"C2",pts:1,txt:"f′(x) = (1 − x)/(eˣ + x)\n\nSur [0 ; +∞[, quel est le signe de (eˣ + x) ?",opts:["Toujours négatif","Toujours positif","Nul en x = 1","Dépend de x"],rep:1},
-    {id:"C3",pts:1,txt:"En quel point f′(x) = 0 sur [0 ; +∞[ ?",opts:["x = 0","x = e","x = 1","x = ln 2"],rep:2},
-    {id:"C4",pts:1,txt:"Sur ]1 ; +∞[, f′(x) < 0 donc f est :",opts:["Croissante","Constante","Décroissante","Nulle"],rep:2},
-    {id:"C5",pts:1,txt:"f admet un maximum en x = 1. Quelle est la valeur f(1) ?",opts:["ln(e + 1) − 1","ln 2","1","0"],rep:0},
+  {badge:"EXERCICE 2 — f(x) = e⁻ˣcos(x)",titre:"Dérivées et relation f″ + 2f′ + 2f = 0",qs:[
+    {id:"C1",pts:1,txt:"f(x) = e⁻ˣcos(x).\n\nCalculer f′(x) :",opts:["f′(x) = e⁻ˣsin(x)","f′(x) = −e⁻ˣ(cos(x) + sin(x))","f′(x) = e⁻ˣ(cos(x) − sin(x))","f′(x) = −e⁻ˣcos(x)"],rep:1},
+    {id:"C2",pts:1,txt:"f″(x) = e⁻ˣ · 2sin(x)\nf′(x) = −e⁻ˣ(cos(x) + sin(x))\nf(x) = e⁻ˣcos(x)\n\nQue vaut f″ + 2f′ + 2f ?",opts:["2e⁻ˣ","e⁻ˣ","−e⁻ˣ","0"],rep:3},
+    {id:"C3",pts:1,txt:"f′(x) = −e⁻ˣ(cos(x) + sin(x)) = −√2·e⁻ˣ·sin(x + π/4)\n\nSur [0 ; 2π], f′(x) = 0 pour :",opts:["x = π/4 et x = 5π/4","x = π/2 et x = 3π/2","x = 3π/4 et x = 7π/4","x = 0 et x = π"],rep:2},
+    {id:"C4",pts:1,txt:"f(3π/4) = e^(−3π/4) × cos(3π/4).\n\nCos(3π/4) vaut :",opts:["√2/2","1","−√2/2","0"],rep:2},
+    {id:"C5",pts:1,txt:"D'après le tableau de variations de f sur [0;2π],\nf admet un minimum local en :",opts:["x = 0","x = π/4","x = 3π/4","x = 7π/4"],rep:2},
   ]},
-  {badge:"EXERCICE 2 — Partie B",titre:"Limite, asymptote et tangente",qs:[
-    {id:"D1",pts:1,txt:"On montre que f(x) = ln(1 + x/eˣ).\n\nQue vaut x/eˣ quand x → +∞ ?",opts:["1","0","+∞","e"],rep:1},
-    {id:"D2",pts:1,txt:"En déduire : lim f(x) quand x → +∞ =",opts:["ln 2","1","0","+∞"],rep:2},
-    {id:"D3",pts:1,txt:"La courbe (C) admet une asymptote en +∞. Laquelle ?",opts:["x = 0","y = 1","y = x","y = 0"],rep:3},
-    {id:"D4",pts:1,txt:"f(0) = ln(e⁰ + 0) − 0 = ?",opts:["1","0","ln 2","e"],rep:1},
-    {id:"D5",pts:1,txt:"f′(0) = (1 − 0)/(e⁰ + 0) = 1\n\nL'équation de la tangente (D) à (C) en O(0,0) est :",opts:["y = 0","y = x + 1","y = x","y = −x"],rep:2},
+  {badge:"EXERCICE 2 — Encadrement et intersections",titre:"−e⁻ˣ ≤ f(x) ≤ e⁻ˣ",qs:[
+    {id:"D1",pts:1,txt:"On sait que −1 ≤ cos(x) ≤ 1 et e⁻ˣ > 0.\n\nOn multiplie par e⁻ˣ, on obtient :",opts:["0 ≤ f(x) ≤ e⁻ˣ","−e⁻ˣ ≤ f(x) ≤ e⁻ˣ","−1 ≤ f(x) ≤ 1","f(x) = e⁻ˣ"],rep:1},
+    {id:"D2",pts:1,txt:"La courbe (Cf) intersecte y = e⁻ˣ quand f(x) = e⁻ˣ.\n\nCela impose :",opts:["sin(x) = 1","cos(x) = 0","cos(x) = 1","cos(x) = −1"],rep:2},
+    {id:"D3",pts:1,txt:"cos(x) = 1 sur [0 ; 2π] donne x = 0 et x = 2π.\n\nQuelle est la coordonnée y du point en x = 2π ?",opts:["1","e^(−π)","e^(−2π)","0"],rep:2},
+    {id:"D4",pts:1,txt:"La courbe (Cf) intersecte y = −e⁻ˣ quand cos(x) = −1.\n\nSur [0 ; 2π], cela donne x = ?",opts:["x = π/2","x = π","x = 3π/2","x = 2π"],rep:1},
+    {id:"D5",pts:1,txt:"Les coordonnées du point d'intersection de (Cf) avec y = −e⁻ˣ sont :",opts:["(π/2 ; 0)","(π ; −e⁻π)","(π ; e⁻π)","(2π ; −e⁻²π)"],rep:1},
   ]},
 ]}
-
 // ══ ÉTAT ══
 const _savedFrauds = parseInt(sessionStorage.getItem('se_frauds')||'0');
 let eleve={},reps={},frauds=_savedFrauds,started=false,done=false,timerInt=null,tLeft=0;
@@ -422,7 +421,7 @@ window.goRegles=()=>{
   const c=document.getElementById('f-classe').value;
   const s=document.getElementById('f-sexe').value;
   if(!p||!n||!c||!s){alert('Veuillez remplir tous les champs.');return;}
-  if(c!=='TleD'){alert('Ce quiz est réservé aux élèves de Terminale D.');return;}
+  if(c!=='TleC'){alert('Ce quiz est réservé aux élèves de Terminale C.');return;}
   eleve={prenom:p,nom:n,classe:c,sexe:s,etab:document.getElementById('f-etab').value.trim()};showPage('regles');
 };
 
@@ -507,7 +506,7 @@ async function submit(statut){
   // Compatible iOS Safari
   const saveData = async () => {
     try {
-      await addDoc(collection(db,'resultats_d'), data);
+      await addDoc(collection(db,'resultats_c'), data);
       console.log('Firebase OK');
     } catch(e) {
       console.warn('Firebase fallback:', e.message);
@@ -531,7 +530,7 @@ async function submit(statut){
   showPage('fin');
 }
 
-function genId(){const c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';return 'TD-'+[...Array(4)].map(()=>c[Math.floor(Math.random()*c.length)]).join('');}
+function genId(){const c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';return 'TC-'+[...Array(4)].map(()=>c[Math.floor(Math.random()*c.length)]).join('');}
 </script>
 </body>
 </html>
