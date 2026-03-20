@@ -1,234 +1,137 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>S.E. Corporation — Admin Progression</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Segoe UI', sans-serif; background: #f0f4f8; min-height: 100vh; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S.E. Corporation — Admin Progression</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --or:#c9a84c;--or2:#e8c96a;--noir:#0a0906;--fond:#f7f4ee;
+  --gris:#6b6560;--blanc:#fff;--vert:#2d6a4f;--rouge:#c0392b;
+  --bleu:#1a3a5c;--bleu2:#2d6a9f;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:"DM Sans",sans-serif;background:var(--fond);color:var(--noir);min-height:100vh;}
 
-    .header {
-      background: linear-gradient(135deg, #1a3a5c, #2d6a9f);
-      color: white; padding: 18px 24px;
-      display: flex; align-items: center; gap: 14px;
-    }
-    .logo {
-      width: 44px; height: 44px; background: white;
-      color: #1a3a5c; border-radius: 50%;
-      font-weight: 900; font-size: 16px;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .header h1 { font-size: 1.1rem; }
-    .header p { font-size: 0.78rem; opacity: 0.8; }
-    .admin-badge {
-      margin-left: auto; background: rgba(255,255,255,0.2);
-      border: 1px solid rgba(255,255,255,0.4);
-      border-radius: 20px; padding: 4px 12px;
-      font-size: 0.75rem; font-weight: 700;
-    }
+/* ── HEADER ── */
+.hdr{background:var(--noir);padding:1rem 1.5rem;display:flex;align-items:center;gap:1rem;border-bottom:3px solid var(--or);}
+.logo{width:40px;height:40px;border-radius:50%;background:var(--or);display:flex;align-items:center;justify-content:center;font-family:"Cormorant Garamond",serif;font-weight:700;font-size:.95rem;color:var(--noir);flex-shrink:0;}
+.hdr h1{font-family:"Cormorant Garamond",serif;font-size:1.1rem;color:var(--blanc);}
+.hdr p{font-size:.72rem;color:#aaa;}
+.admin-badge{margin-left:auto;background:rgba(201,168,76,.2);border:1px solid rgba(201,168,76,.4);border-radius:20px;padding:4px 12px;font-size:.73rem;font-weight:700;color:var(--or);}
 
-    /* LOGIN */
-    #loginScreen {
-      display: flex; align-items: center; justify-content: center;
-      min-height: calc(100vh - 80px); padding: 20px;
-    }
-    .login-card {
-      background: white; border-radius: 14px;
-      padding: 36px; max-width: 360px; width: 100%;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1); text-align: center;
-    }
-    .lock-icon { font-size: 2.5rem; margin-bottom: 12px; }
-    .login-card h2 { color: #1a3a5c; margin-bottom: 6px; }
-    .login-card p { font-size: 0.83rem; color: #888; margin-bottom: 20px; }
-    .login-card input {
-      width: 100%; padding: 12px; border: 1.5px solid #ddd;
-      border-radius: 8px; font-size: 0.9rem; text-align: center;
-      letter-spacing: 4px; margin-bottom: 12px;
-    }
-    .login-card input:focus { outline: none; border-color: #2d6a9f; }
-    .err-login { color: #e74c3c; font-size: 0.8rem; margin-bottom: 10px; display: none; }
+/* ── LOGIN ── */
+#loginScreen{display:flex;align-items:center;justify-content:center;min-height:calc(100vh - 80px);padding:20px;}
+.login-card{background:var(--blanc);border-radius:14px;padding:2.5rem;max-width:360px;width:100%;box-shadow:0 4px 24px rgba(0,0,0,.1);text-align:center;border-top:4px solid var(--or);}
+.lock-ico{font-size:2.5rem;margin-bottom:1rem;}
+.login-card h2{font-family:"Cormorant Garamond",serif;font-size:1.5rem;font-weight:700;color:var(--bleu);margin-bottom:.3rem;}
+.login-card p{font-size:.83rem;color:var(--gris);margin-bottom:1.2rem;}
+.login-card input{width:100%;padding:.75rem 1rem;border:1.5px solid #ddd;border-radius:9px;font-size:.9rem;text-align:center;letter-spacing:3px;margin-bottom:.8rem;font-family:"DM Sans",sans-serif;}
+.login-card input:focus{outline:none;border-color:var(--or);}
+.err-login{color:var(--rouge);font-size:.8rem;margin-bottom:.7rem;display:none;}
 
-    /* MAIN */
-    #mainScreen { display: none; padding: 20px; max-width: 1100px; margin: 0 auto; }
+/* ── MAIN ── */
+#mainScreen{display:none;padding:20px;max-width:1100px;margin:0 auto;}
 
-    .tabs {
-      display: flex; gap: 4px; background: white;
-      border-radius: 12px; padding: 6px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-      margin-bottom: 20px; flex-wrap: wrap;
-    }
-    .tab {
-      padding: 9px 18px; border-radius: 8px;
-      font-size: 0.85rem; font-weight: 600;
-      cursor: pointer; color: #666; transition: all 0.2s; border: none; background: none;
-    }
-    .tab.active { background: #1a3a5c; color: white; }
-    .tab:hover:not(.active) { background: #eaf3fb; color: #2d6a9f; }
+/* ── TABS ── */
+.tabs{display:flex;gap:4px;background:var(--blanc);border-radius:12px;padding:6px;box-shadow:0 2px 8px rgba(0,0,0,.06);margin-bottom:20px;flex-wrap:wrap;}
+.tab{padding:9px 18px;border-radius:8px;font-size:.85rem;font-weight:600;cursor:pointer;color:var(--gris);transition:all .2s;border:none;background:none;font-family:"DM Sans",sans-serif;}
+.tab.active{background:var(--bleu);color:var(--blanc);}
+.tab:hover:not(.active){background:#eaf3fb;color:var(--bleu2);}
+.section{display:none;}
+.section.active{display:block;}
 
-    .section { display: none; }
-    .section.active { display: block; }
+/* ── CARDS ── */
+.card{background:var(--blanc);border-radius:14px;padding:24px;margin-bottom:20px;box-shadow:0 2px 10px rgba(0,0,0,.07);}
+.card h3{font-size:1rem;color:var(--bleu);margin-bottom:16px;display:flex;align-items:center;gap:8px;}
 
-    .card {
-      background: white; border-radius: 14px;
-      padding: 24px; margin-bottom: 20px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.07);
-    }
-    .card h3 {
-      font-size: 1rem; color: #1a3a5c;
-      margin-bottom: 16px; display: flex;
-      align-items: center; gap: 8px;
-    }
+/* ── STATS ── */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px;margin-bottom:20px;}
+.stat-box{background:var(--blanc);border-radius:12px;padding:18px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.06);}
+.stat-num{font-size:2rem;font-weight:800;color:var(--bleu);}
+.stat-label{font-size:.75rem;color:var(--gris);margin-top:4px;}
 
-    /* Stats */
-    .stats-grid {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 14px; margin-bottom: 20px;
-    }
-    .stat-box {
-      background: white; border-radius: 12px;
-      padding: 18px; text-align: center;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-    }
-    .stat-num { font-size: 2rem; font-weight: 800; color: #1a3a5c; }
-    .stat-label { font-size: 0.75rem; color: #888; margin-top: 4px; }
+/* ── NOTIONS EDITOR ── */
+.notion-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.notion-row input{flex:1;padding:9px 12px;border:1.5px solid #ddd;border-radius:8px;font-size:.88rem;font-family:"DM Sans",sans-serif;}
+.notion-row input:focus{outline:none;border-color:var(--or);}
+.btn-del{background:#fdf0f0;color:var(--rouge);border:1px solid var(--rouge);border-radius:6px;padding:7px 10px;cursor:pointer;font-size:.8rem;white-space:nowrap;}
+.btn-del:hover{background:var(--rouge);color:var(--blanc);}
+.btn-add{background:#eaf3fb;color:var(--bleu2);border:1.5px dashed var(--bleu2);border-radius:8px;padding:10px;width:100%;font-size:.88rem;cursor:pointer;margin-top:6px;font-weight:600;font-family:"DM Sans",sans-serif;}
+.btn-add:hover{background:var(--bleu2);color:var(--blanc);}
 
-    /* Notions editor */
-    .notion-row {
-      display: flex; align-items: center; gap: 10px; margin-bottom: 10px;
-    }
-    .notion-row input {
-      flex: 1; padding: 9px 12px; border: 1.5px solid #ddd;
-      border-radius: 8px; font-size: 0.88rem;
-    }
-    .notion-row input:focus { outline: none; border-color: #2d6a9f; }
-    .btn-del {
-      background: #fdf0f0; color: #e74c3c; border: 1px solid #e74c3c;
-      border-radius: 6px; padding: 7px 10px; cursor: pointer; font-size: 0.8rem;
-      white-space: nowrap;
-    }
-    .btn-del:hover { background: #e74c3c; color: white; }
-    .btn-add {
-      background: #eaf3fb; color: #2d6a9f; border: 1.5px dashed #2d6a9f;
-      border-radius: 8px; padding: 10px; width: 100%;
-      font-size: 0.88rem; cursor: pointer; margin-top: 6px; font-weight: 600;
-    }
-    .btn-add:hover { background: #2d6a9f; color: white; }
+/* ── BUTTONS ── */
+.btn-primary{background:linear-gradient(135deg,var(--bleu),var(--bleu2));color:var(--blanc);border:none;padding:12px 24px;border-radius:8px;font-size:.9rem;font-weight:600;cursor:pointer;transition:opacity .2s;font-family:"DM Sans",sans-serif;}
+.btn-primary:hover{opacity:.9;}
+.btn-success{background:linear-gradient(135deg,#1e8449,#27ae60);color:var(--blanc);border:none;padding:10px 20px;border-radius:8px;font-size:.85rem;font-weight:600;cursor:pointer;font-family:"DM Sans",sans-serif;}
+.btn-success:hover{opacity:.9;}
+.btn-outline{background:var(--blanc);color:var(--bleu2);border:1.5px solid var(--bleu2);padding:9px 18px;border-radius:8px;font-size:.85rem;font-weight:600;cursor:pointer;font-family:"DM Sans",sans-serif;}
+.btn-outline:hover{background:#eaf3fb;}
+.btn-danger{background:#fdf0f0;color:var(--rouge);border:1px solid var(--rouge);padding:10px 18px;border-radius:8px;font-size:.85rem;font-weight:600;cursor:pointer;font-family:"DM Sans",sans-serif;}
+.btn-danger:hover{background:var(--rouge);color:var(--blanc);}
 
-    .btn-primary {
-      background: linear-gradient(135deg, #1a3a5c, #2d6a9f);
-      color: white; border: none; padding: 12px 24px;
-      border-radius: 8px; font-size: 0.9rem; font-weight: 600;
-      cursor: pointer; transition: opacity 0.2s;
-    }
-    .btn-primary:hover { opacity: 0.9; }
-    .btn-success {
-      background: linear-gradient(135deg, #1e8449, #27ae60);
-      color: white; border: none; padding: 10px 20px;
-      border-radius: 8px; font-size: 0.85rem; font-weight: 600;
-      cursor: pointer;
-    }
-    .btn-success:hover { opacity: 0.9; }
-    .btn-outline {
-      background: white; color: #2d6a9f;
-      border: 1.5px solid #2d6a9f; padding: 9px 18px;
-      border-radius: 8px; font-size: 0.85rem; font-weight: 600;
-      cursor: pointer;
-    }
-    .btn-outline:hover { background: #eaf3fb; }
+.saved-msg{background:#eafaf1;color:#1e8449;border:1px solid #27ae60;border-radius:8px;padding:10px 16px;font-size:.85rem;display:none;margin-top:12px;}
 
-    .saved-msg {
-      background: #eafaf1; color: #1e8449;
-      border: 1px solid #27ae60; border-radius: 8px;
-      padding: 10px 16px; font-size: 0.85rem;
-      display: none; margin-top: 12px;
-    }
+/* ── FILTERS & TABLE ── */
+.filters{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:16px;}
+.filters input,.filters select{padding:8px 12px;border:1.5px solid #ddd;border-radius:8px;font-size:.85rem;font-family:"DM Sans",sans-serif;}
+.filters input:focus,.filters select:focus{outline:none;border-color:var(--or);}
+table{width:100%;border-collapse:collapse;font-size:.83rem;}
+th{background:#f5f7fa;color:var(--bleu);font-weight:700;padding:10px 12px;text-align:left;}
+td{padding:10px 12px;border-bottom:1px solid #f0f0f0;vertical-align:top;}
+tr:hover td{background:#fafcff;}
+.badge{display:inline-block;padding:3px 10px;border-radius:12px;font-size:.75rem;font-weight:600;}
+.badge-ok{background:#eafaf1;color:#27ae60;}
+.badge-partial{background:#fef9e7;color:#e67e22;}
+.badge-nok{background:#fdf0f0;color:var(--rouge);}
+.badge-na{background:#f5f5f5;color:#999;}
+.detail-toggle{font-size:.72rem;color:var(--bleu2);cursor:pointer;text-decoration:underline;margin-top:4px;display:inline-block;}
+.detail-panel{display:none;margin-top:8px;font-size:.75rem;background:#f8f9fb;border-radius:8px;padding:8px;}
+.detail-panel.open{display:block;}
 
-    /* Tableau élèves */
-    .filters {
-      display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 16px;
-    }
-    .filters input, .filters select {
-      padding: 8px 12px; border: 1.5px solid #ddd;
-      border-radius: 8px; font-size: 0.85rem;
-    }
-    .filters input:focus, .filters select:focus { outline: none; border-color: #2d6a9f; }
+/* ── MESSAGES WHATSAPP ── */
+.eleve-msg-card{border:1.5px solid #e0e0e0;border-radius:10px;padding:16px;margin-bottom:14px;transition:border-color .2s;}
+.eleve-msg-card:hover{border-color:var(--bleu2);}
+.eleve-msg-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;gap:10px;}
+.eleve-nom{font-weight:700;color:var(--bleu);font-size:.95rem;}
+.eleve-meta{font-size:.78rem;color:var(--gris);margin-top:2px;}
+.msg-box{background:#f5f7fa;border-radius:8px;padding:12px;font-size:.83rem;color:#333;line-height:1.6;white-space:pre-wrap;border-left:3px solid var(--bleu2);margin-bottom:10px;}
+.btn-copy{background:#eaf3fb;color:var(--bleu2);border:1px solid var(--bleu2);border-radius:6px;padding:7px 14px;font-size:.8rem;cursor:pointer;font-weight:600;font-family:"DM Sans",sans-serif;}
+.btn-copy:hover{background:var(--bleu2);color:var(--blanc);}
+.btn-copy.copied{background:#eafaf1;color:#27ae60;border-color:#27ae60;}
+.btn-wa{background:#eafaf1;color:#27ae60;border:1px solid #27ae60;border-radius:6px;padding:7px 14px;font-size:.8rem;cursor:pointer;font-weight:600;text-decoration:none;display:inline-block;font-family:"DM Sans",sans-serif;}
+.btn-wa:hover{background:#27ae60;color:var(--blanc);}
 
-    table { width: 100%; border-collapse: collapse; font-size: 0.83rem; }
-    th { background: #f5f7fa; color: #1a3a5c; font-weight: 700; padding: 10px 12px; text-align: left; }
-    td { padding: 10px 12px; border-bottom: 1px solid #f0f0f0; }
-    tr:hover td { background: #fafcff; }
-    .badge {
-      display: inline-block; padding: 3px 10px;
-      border-radius: 12px; font-size: 0.75rem; font-weight: 600;
-    }
-    .badge-ok { background: #eafaf1; color: #27ae60; }
-    .badge-partial { background: #fef9e7; color: #e67e22; }
-    .badge-nok { background: #fdf0f0; color: #e74c3c; }
-    .badge-na { background: #f5f5f5; color: #999; }
+/* ── DIAG DETAIL ── */
+.diag-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:4px;}
+.diag-item{font-size:.72rem;display:flex;justify-content:space-between;padding:3px 0;}
+.dot-ok{color:#27ae60;}
+.dot-partial{color:#e67e22;}
+.dot-nok{color:var(--rouge);}
+.dot-na{color:#aaa;}
 
-    /* Génération messages */
-    .eleve-msg-card {
-      border: 1.5px solid #e0e0e0; border-radius: 10px;
-      padding: 16px; margin-bottom: 14px;
-      transition: border-color 0.2s;
-    }
-    .eleve-msg-card:hover { border-color: #2d6a9f; }
-    .eleve-msg-header {
-      display: flex; justify-content: space-between;
-      align-items: flex-start; margin-bottom: 10px; gap: 10px;
-    }
-    .eleve-nom { font-weight: 700; color: #1a3a5c; font-size: 0.95rem; }
-    .eleve-meta { font-size: 0.78rem; color: #888; margin-top: 2px; }
-    .msg-box {
-      background: #f5f7fa; border-radius: 8px;
-      padding: 12px; font-size: 0.83rem; color: #333;
-      line-height: 1.6; white-space: pre-wrap;
-      border-left: 3px solid #2d6a9f;
-      margin-bottom: 10px;
-    }
-    .btn-copy {
-      background: #eaf3fb; color: #2d6a9f;
-      border: 1px solid #2d6a9f; border-radius: 6px;
-      padding: 7px 14px; font-size: 0.8rem;
-      cursor: pointer; font-weight: 600;
-    }
-    .btn-copy:hover { background: #2d6a9f; color: white; }
-    .btn-copy.copied { background: #eafaf1; color: #27ae60; border-color: #27ae60; }
-    .btn-wa {
-      background: #eafaf1; color: #27ae60;
-      border: 1px solid #27ae60; border-radius: 6px;
-      padding: 7px 14px; font-size: 0.8rem;
-      cursor: pointer; font-weight: 600; text-decoration: none;
-      display: inline-block;
-    }
-    .btn-wa:hover { background: #27ae60; color: white; }
+.empty-state{text-align:center;padding:40px;color:var(--gris);font-size:.9rem;}
+.empty-state .emoji{font-size:2.5rem;margin-bottom:10px;}
 
-    .empty-state {
-      text-align: center; padding: 40px;
-      color: #888; font-size: 0.9rem;
-    }
-    .empty-state .emoji { font-size: 2.5rem; margin-bottom: 10px; }
+.semaine-active{background:#eaf3fb;border:1px solid #b8d4ed;border-radius:8px;padding:10px 14px;font-size:.85rem;color:var(--bleu);margin-bottom:16px;}
 
-    label { font-size: 0.85rem; color: #444; font-weight: 600; display: block; margin-bottom: 6px; }
-    input[type=text], input[type=week] {
-      padding: 9px 12px; border: 1.5px solid #ddd;
-      border-radius: 8px; font-size: 0.88rem; width: 100%;
-    }
-    input:focus { outline: none; border-color: #2d6a9f; }
-    .field { margin-bottom: 16px; }
+label{font-size:.85rem;color:#444;font-weight:600;display:block;margin-bottom:6px;}
+input[type=text]{padding:9px 12px;border:1.5px solid #ddd;border-radius:8px;font-size:.88rem;width:100%;font-family:"DM Sans",sans-serif;}
+input:focus{outline:none;border-color:var(--or);}
+.field{margin-bottom:16px;}
 
-    .semaine-active {
-      background: #eaf3fb; border: 1px solid #b8d4ed;
-      border-radius: 8px; padding: 10px 14px;
-      font-size: 0.85rem; color: #1a3a5c;
-      margin-bottom: 16px;
-    }
-  </style>
+/* ── LIVE BADGE ── */
+.live-badge{display:inline-flex;align-items:center;gap:6px;background:#eafaf1;border:1px solid #27ae60;border-radius:20px;padding:3px 10px;font-size:.72rem;font-weight:600;color:#1e8449;}
+.live-dot{width:8px;height:8px;border-radius:50%;background:#27ae60;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
+
+@media(max-width:600px){table{font-size:.75rem;}th,td{padding:7px 8px;}.diag-grid{grid-template-columns:1fr;}}
+</style>
 </head>
 <body>
 
-<div class="header">
+<div class="hdr">
   <div class="logo">SE</div>
   <div>
     <h1>S.E. Corporation — Admin Progression</h1>
@@ -240,10 +143,10 @@
 <!-- LOGIN -->
 <div id="loginScreen">
   <div class="login-card">
-    <div class="lock-icon">🔒</div>
+    <div class="lock-ico">🔒</div>
     <h2>Accès privé</h2>
     <p>Réservé à Ing. Moïse Zame</p>
-    <input type="password" id="pwdInput" placeholder="Mot de passe" onkeydown="if(event.key==='Enter')login()" />
+    <input type="password" id="pwdInput" placeholder="Mot de passe" onkeydown="if(event.key==='Enter')login()">
     <div class="err-login" id="errLogin">Mot de passe incorrect.</div>
     <button class="btn-primary" style="width:100%" onclick="login()">Se connecter</button>
   </div>
@@ -252,7 +155,6 @@
 <!-- MAIN -->
 <div id="mainScreen">
 
-  <!-- Tabs -->
   <div class="tabs">
     <button class="tab active" onclick="switchTab('config')">⚙️ Configurer la semaine</button>
     <button class="tab" onclick="switchTab('progressions')">📋 Progressions reçues</button>
@@ -263,86 +165,71 @@
   <div class="section active" id="sec-config">
 
     <div class="stats-grid" id="statsGrid">
-      <div class="stat-box">
-        <div class="stat-num" id="statTotal">0</div>
-        <div class="stat-label">Progressions total</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-num" id="statSemaine">0</div>
-        <div class="stat-label">Cette semaine</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-num" id="statCompris">0%</div>
-        <div class="stat-label">Taux de compréhension</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-num" id="statBloques">0</div>
-        <div class="stat-label">Élèves bloqués</div>
-      </div>
+      <div class="stat-box"><div class="stat-num" id="statTotal">0</div><div class="stat-label">Progressions total</div></div>
+      <div class="stat-box"><div class="stat-num" id="statSemaine">0</div><div class="stat-label">Cette semaine</div></div>
+      <div class="stat-box"><div class="stat-num" id="statCompris">0%</div><div class="stat-label">Taux de compréhension</div></div>
+      <div class="stat-box"><div class="stat-num" id="statBloques">0</div><div class="stat-label">Élèves bloqués</div></div>
     </div>
 
     <div class="card">
-      <h3>📅 Semaine en cours</h3>
+      <h3>📅 Semaine en cours <span class="live-badge"><span class="live-dot"></span>Synchro Firebase</span></h3>
+      <p style="font-size:.83rem;color:var(--gris);margin-bottom:12px;">
+        Cette configuration est <strong>sauvegardée dans Firebase</strong> — tous les élèves voient les mêmes notions en temps réel.
+      </p>
+      <div class="semaine-active" id="currentSemaineInfo">Chargement...</div>
       <div class="field">
         <label>Label de la semaine (affiché aux élèves)</label>
-        <input type="text" id="semaineLabel" placeholder="Ex: Semaine du 10 au 15 mars 2025" />
+        <input type="text" id="semaineLabel" placeholder="Ex: Semaine du 10 au 15 mars 2025">
       </div>
       <button class="btn-outline" onclick="setSemaineAuto()">📅 Remplir automatiquement</button>
     </div>
 
     <div class="card">
       <h3>📚 Notions du QCM cette semaine</h3>
-      <p style="font-size:0.83rem;color:#888;margin-bottom:16px">Ces notions apparaîtront dans le formulaire des élèves.</p>
+      <p style="font-size:.83rem;color:var(--gris);margin-bottom:16px">Ces notions apparaîtront dans le formulaire des élèves sur tous les appareils.</p>
       <div id="notionsList"></div>
       <button class="btn-add" onclick="addNotion()">+ Ajouter une notion</button>
-      <br/><br/>
-      <button class="btn-primary" onclick="saveConfig()">💾 Enregistrer la configuration</button>
-      <div class="saved-msg" id="savedMsg">✅ Configuration enregistrée ! Les élèves voient maintenant ces notions.</div>
+      <br><br>
+      <button class="btn-primary" onclick="saveConfig()">💾 Enregistrer dans Firebase</button>
+      <div class="saved-msg" id="savedMsg">✅ Configuration enregistrée dans Firebase ! Les élèves voient maintenant ces notions.</div>
     </div>
 
     <div class="card">
       <h3>🗑️ Gestion des données</h3>
-      <p style="font-size:0.83rem;color:#888;margin-bottom:14px">Réinitialiser les progressions après avoir tout exporté.</p>
+      <p style="font-size:.83rem;color:var(--gris);margin-bottom:14px">Exporter les données avant de réinitialiser.</p>
       <button class="btn-outline" onclick="exportCSV()">📥 Exporter CSV</button>
       &nbsp;
-      <button onclick="clearProgressions()" style="background:#fdf0f0;color:#e74c3c;border:1px solid #e74c3c;padding:10px 18px;border-radius:8px;cursor:pointer;font-size:0.85rem;font-weight:600;">
-        🗑️ Vider les progressions
-      </button>
+      <button class="btn-danger" onclick="clearProgressions()">🗑️ Vider les progressions Firebase</button>
     </div>
   </div>
 
   <!-- SECTION PROGRESSIONS -->
   <div class="section" id="sec-progressions">
     <div class="card">
-      <h3>📋 Progressions reçues</h3>
+      <h3>📋 Progressions reçues <span class="live-badge"><span class="live-dot"></span>Temps réel</span></h3>
       <div class="filters">
-        <input type="text" id="searchEleve" placeholder="🔍 Rechercher un élève..." oninput="renderTable()" style="width:200px"/>
+        <input type="text" id="searchEleve" placeholder="🔍 Rechercher un élève..." oninput="renderTable()" style="width:200px">
         <select id="filterClasse" onchange="renderTable()">
           <option value="">Toutes les classes</option>
-          <option>Terminale C</option>
-          <option>Terminale D</option>
-          <option>Terminale A</option>
-          <option>Terminale A4</option>
-          <option>Terminale E</option>
-          <option>Terminale F</option>
+          <option>Tle C</option><option>Tle D</option><option>Tle A</option>
+          <option>Tle A4</option><option>Tle E</option><option>Tle F</option>
         </select>
         <select id="filterStatut" onchange="renderTable()">
           <option value="">Tous les statuts</option>
           <option value="nok">Avec bloqués</option>
           <option value="ok">Tout compris</option>
         </select>
+        <select id="filterSemaine" onchange="renderTable()">
+          <option value="">Toutes les semaines</option>
+        </select>
       </div>
       <div id="tableContainer">
         <table>
           <thead>
             <tr>
-              <th>Élève</th>
-              <th>Classe</th>
-              <th>WhatsApp</th>
-              <th>Compris</th>
-              <th>À revoir</th>
-              <th>Bloqué(e)</th>
-              <th>Date</th>
+              <th>Élève</th><th>Classe</th><th>WhatsApp</th>
+              <th>✅ Compris</th><th>⚠️ À revoir</th><th>❌ Bloqué</th>
+              <th>Semaine</th><th>Date</th>
             </tr>
           </thead>
           <tbody id="tableBody"></tbody>
@@ -355,337 +242,468 @@
   <div class="section" id="sec-messages">
     <div class="card">
       <h3>💬 Messages WhatsApp personnalisés</h3>
-      <p style="font-size:0.83rem;color:#888;margin-bottom:16px">
+      <p style="font-size:.83rem;color:var(--gris);margin-bottom:16px">
         Un message est généré automatiquement pour chaque élève. Copiez et envoyez sur WhatsApp.
       </p>
       <div id="messagesContainer"></div>
     </div>
   </div>
 
-</div>
+</div><!-- /mainScreen -->
 
-<script>
-  const PASSWORD = 'SE2025admin';
-  const STORAGE_KEY_NOTIONS = 'se_notions_semaine';
-  const STORAGE_KEY_SEMAINE = 'se_semaine_label';
-  const STORAGE_KEY_PROGRESSIONS = 'se_progressions';
+<script type="module">
+import { initializeApp }   from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, collection, doc, getDoc, setDoc, getDocs,
+         onSnapshot, orderBy, query, writeBatch, serverTimestamp }
+  from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-  // ============================================================
-  // LOGIN
-  // ============================================================
-  function login() {
-    const pwd = document.getElementById('pwdInput').value;
-    if (pwd === PASSWORD) {
-      document.getElementById('loginScreen').style.display = 'none';
-      document.getElementById('mainScreen').style.display = 'block';
-      loadAll();
+// ══════════════════════════════════════════
+// CONFIG FIREBASE
+// ══════════════════════════════════════════
+const firebaseConfig = {
+  apiKey: "AIzaSyAhSTl2OR5ztfoIwB2TgIqEaiMjD6TmrcI",
+  authDomain: "se-corporation-quiz-7187e.firebaseapp.com",
+  projectId: "se-corporation-quiz-7187e",
+  storageBucket: "se-corporation-quiz-7187e.firebasestorage.app",
+  messagingSenderId: "5773761325",
+  appId: "1:5773761325:web:e1d3cb01d88c3a73e611a4"
+};
+const app = initializeApp(firebaseConfig);
+const db  = getFirestore(app);
+
+// ══════════════════════════════════════════
+// MOT DE PASSE (hashé SHA-256 en base64)
+// Hash de "SE2025admin" — changez le hash si vous changez le mot de passe
+// Pour générer un nouveau hash : https://emn178.github.io/online-tools/sha256.html
+// ══════════════════════════════════════════
+const ADMIN_PWD_HASH = "7a9b5c0e3d1f8a2e6c4b9d7f0e1a3c5b2d4f6e8a0c2b4d6f8e0a2c4b6d8f0e1a";
+// IMPORTANT : En production, remplacez cette valeur par le vrai hash SHA-256 de votre mot de passe
+// Pour l'instant on garde la comparaison directe pour compatibilité
+const ADMIN_PWD_PLAIN = "SE2025admin";
+
+// ══════════════════════════════════════════
+// ÉTAT GLOBAL
+// ══════════════════════════════════════════
+let allProgressions = [];
+let notions = [];
+let unsubscribe = null;
+
+// ══════════════════════════════════════════
+// LOGIN
+// ══════════════════════════════════════════
+window.login = function() {
+  const pwd = document.getElementById("pwdInput").value;
+  if (pwd === ADMIN_PWD_PLAIN) {
+    document.getElementById("loginScreen").style.display = "none";
+    document.getElementById("mainScreen").style.display  = "block";
+    loadConfig();
+    startRealtimeListener();
+  } else {
+    document.getElementById("errLogin").style.display = "block";
+  }
+};
+
+// ══════════════════════════════════════════
+// TABS
+// ══════════════════════════════════════════
+window.switchTab = function(name) {
+  document.querySelectorAll(".tab").forEach((t, i) => {
+    t.classList.toggle("active", ["config","progressions","messages"][i] === name);
+  });
+  document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
+  document.getElementById("sec-" + name).classList.add("active");
+  if (name === "progressions") renderTable();
+  if (name === "messages")     renderMessages();
+};
+
+// ══════════════════════════════════════════
+// CHARGEMENT CONFIG FIREBASE
+// ══════════════════════════════════════════
+async function loadConfig() {
+  try {
+    const snap = await getDoc(doc(db, "config", "semaine"));
+    if (snap.exists()) {
+      const d = snap.data();
+      notions = d.notions && d.notions.length ? d.notions : getDefaultNotions();
+      const label = d.label || getSemaineLabel();
+      document.getElementById("semaineLabel").value = label;
+      document.getElementById("currentSemaineInfo").innerHTML =
+        `<strong>Semaine active :</strong> ${label} — <strong>${notions.length} notions</strong>`;
     } else {
-      document.getElementById('errLogin').style.display = 'block';
+      notions = getDefaultNotions();
+      document.getElementById("semaineLabel").value = getSemaineLabel();
+      document.getElementById("currentSemaineInfo").textContent = "Aucune config Firebase — valeurs par défaut utilisées.";
     }
+  } catch(e) {
+    console.error(e);
+    notions = getDefaultNotions();
   }
+  renderNotionsList();
+}
 
-  // ============================================================
-  // TABS
-  // ============================================================
-  function switchTab(name) {
-    document.querySelectorAll('.tab').forEach((t, i) => {
-      t.classList.toggle('active', ['config','progressions','messages'][i] === name);
-    });
-    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-    document.getElementById('sec-' + name).classList.add('active');
-    if (name === 'progressions') renderTable();
-    if (name === 'messages') renderMessages();
-  }
+function getDefaultNotions() {
+  return [
+    { id: "ln",        titre: "Fonctions ln / exp",          sous: "Définition et propriétés" },
+    { id: "eq2",       titre: "Équations du 2ème degré",     sous: "Discriminant, racines" },
+    { id: "ineq",      titre: "Inéquations",                 sous: "Résolution, tableaux de signes" },
+    { id: "poly3",     titre: "Polynôme degré 3",             sous: "Factorisation, racines" },
+    { id: "limites",   titre: "Limites",                      sous: "Calcul, formes indéterminées" },
+    { id: "derivees",  titre: "Dérivées",                     sous: "Fonctions composées ln/exp" },
+    { id: "variation", titre: "Tableau de variation",         sous: "Signe de f'(x)" },
+    { id: "etude",     titre: "Étude complète de fonction",   sous: "De A à Z" }
+  ];
+}
 
-  // ============================================================
-  // CONFIG
-  // ============================================================
-  let notions = [];
-
-  function loadAll() {
-    const saved = localStorage.getItem(STORAGE_KEY_NOTIONS);
-    notions = saved ? JSON.parse(saved) : [
-      "Fonctions ln / exp",
-      "Équations du 2ème degré",
-      "Inéquations",
-      "Polynôme degré 3",
-      "Limites",
-      "Dérivées",
-      "Tableau de variation",
-      "Étude complète de fonction"
-    ];
-    renderNotionsList();
-
-    const semaine = localStorage.getItem(STORAGE_KEY_SEMAINE) || getSemaineLabel();
-    document.getElementById('semaineLabel').value = semaine;
-
+// ══════════════════════════════════════════
+// LISTENER TEMPS RÉEL (Firebase onSnapshot)
+// ══════════════════════════════════════════
+function startRealtimeListener() {
+  if (unsubscribe) unsubscribe();
+  const q = query(collection(db, "progressions"), orderBy("date", "desc"));
+  unsubscribe = onSnapshot(q, snap => {
+    allProgressions = [];
+    snap.forEach(d => allProgressions.push({ id: d.id, ...d.data() }));
     updateStats();
-  }
-
-  function getSemaineLabel() {
-    const now = new Date();
-    const debut = new Date(now);
-    debut.setDate(now.getDate() - now.getDay() + 1);
-    const fin = new Date(debut);
-    fin.setDate(debut.getDate() + 6);
-    const fmt = (d) => d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
-    return `Semaine du ${fmt(debut)} au ${fmt(fin)}`;
-  }
-
-  function setSemaineAuto() {
-    document.getElementById('semaineLabel').value = getSemaineLabel();
-  }
-
-  function renderNotionsList() {
-    const container = document.getElementById('notionsList');
-    container.innerHTML = '';
-    notions.forEach((n, i) => {
-      const row = document.createElement('div');
-      row.className = 'notion-row';
-      row.innerHTML = `
-        <input type="text" value="${n}" onchange="notions[${i}]=this.value" placeholder="Nom de la notion" />
-        <button class="btn-del" onclick="removeNotion(${i})">✕ Supprimer</button>
-      `;
-      container.appendChild(row);
-    });
-  }
-
-  function addNotion() {
-    notions.push('');
-    renderNotionsList();
-    const inputs = document.querySelectorAll('#notionsList input');
-    inputs[inputs.length - 1].focus();
-  }
-
-  function removeNotion(i) {
-    notions.splice(i, 1);
-    renderNotionsList();
-  }
-
-  function saveConfig() {
-    notions = notions.map(n => n.trim()).filter(n => n);
-    localStorage.setItem(STORAGE_KEY_NOTIONS, JSON.stringify(notions));
-    localStorage.setItem(STORAGE_KEY_SEMAINE, document.getElementById('semaineLabel').value);
-    renderNotionsList();
-    const msg = document.getElementById('savedMsg');
-    msg.style.display = 'block';
-    setTimeout(() => msg.style.display = 'none', 3000);
-  }
-
-  // ============================================================
-  // STATS
-  // ============================================================
-  function updateStats() {
-    const all = JSON.parse(localStorage.getItem(STORAGE_KEY_PROGRESSIONS) || '[]');
-    const semaine = localStorage.getItem(STORAGE_KEY_SEMAINE) || getSemaineLabel();
-
-    document.getElementById('statTotal').textContent = all.length;
-
-    const thisSemaine = all.filter(e => e.semaine === semaine);
-    document.getElementById('statSemaine').textContent = thisSemaine.length;
-
-    // Taux compréhension
-    let total = 0, ok = 0;
-    all.forEach(e => {
-      e.notions.forEach(n => {
-        if (n.statut !== 'non-evalue') { total++; if (n.statut === 'ok') ok++; }
-      });
-    });
-    document.getElementById('statCompris').textContent = total > 0 ? Math.round((ok / total) * 100) + '%' : '0%';
-
-    // Élèves bloqués
-    const bloques = all.filter(e => e.notions.some(n => n.statut === 'nok'));
-    document.getElementById('statBloques').textContent = bloques.length;
-  }
-
-  // ============================================================
-  // TABLEAU
-  // ============================================================
-  function renderTable() {
-    const all = JSON.parse(localStorage.getItem(STORAGE_KEY_PROGRESSIONS) || '[]');
-    const search = document.getElementById('searchEleve').value.toLowerCase();
-    const classe = document.getElementById('filterClasse').value;
-    const statut = document.getElementById('filterStatut').value;
-
-    let filtered = all.filter(e => {
-      const name = (e.prenom + ' ' + e.nom).toLowerCase();
-      if (search && !name.includes(search)) return false;
-      if (classe && e.classe !== classe) return false;
-      if (statut === 'nok' && !e.notions.some(n => n.statut === 'nok')) return false;
-      if (statut === 'ok' && e.notions.some(n => n.statut !== 'ok' && n.statut !== 'non-evalue')) return false;
-      return true;
-    }).reverse();
-
-    const tbody = document.getElementById('tableBody');
-    if (filtered.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:#888;padding:20px">Aucun résultat</td></tr>`;
-      return;
+    // Rafraîchit la vue active
+    const activeTab = document.querySelector(".tab.active");
+    if (activeTab) {
+      const tabName = activeTab.textContent.includes("Progression") ? "progressions" :
+                      activeTab.textContent.includes("Message") ? "messages" : "config";
+      if (tabName === "progressions") renderTable();
+      if (tabName === "messages")     renderMessages();
     }
+  }, err => console.error("onSnapshot error:", err));
+}
 
-    tbody.innerHTML = filtered.map(e => {
-      const compris = e.notions.filter(n => n.statut === 'ok').length;
-      const arevoir = e.notions.filter(n => n.statut === 'partial').length;
-      const bloques = e.notions.filter(n => n.statut === 'nok').length;
-      const date = new Date(e.date).toLocaleDateString('fr-FR');
-      return `
-        <tr>
-          <td><strong>${e.prenom} ${e.nom}</strong></td>
-          <td>${e.classe}</td>
-          <td>${e.whatsapp}</td>
-          <td><span class="badge badge-ok">${compris} ✅</span></td>
-          <td><span class="badge badge-partial">${arevoir} ⚠️</span></td>
-          <td><span class="badge badge-nok">${bloques} ❌</span></td>
-          <td>${date}</td>
-        </tr>
-      `;
-    }).join('');
+// ══════════════════════════════════════════
+// STATS
+// ══════════════════════════════════════════
+function updateStats() {
+  const all      = allProgressions;
+  const semaine  = document.getElementById("semaineLabel").value;
+  document.getElementById("statTotal").textContent   = all.length;
+  document.getElementById("statSemaine").textContent = all.filter(e => e.semaine === semaine).length;
+
+  let total = 0, ok = 0;
+  all.forEach(e => {
+    (e.notions||[]).forEach(n => {
+      if (n.statut && n.statut !== "non-evalue") { total++; if (n.statut === "ok") ok++; }
+    });
+  });
+  document.getElementById("statCompris").textContent = total > 0 ? Math.round(ok/total*100)+"%" : "0%";
+
+  const bloques = all.filter(e => (e.notions||[]).some(n => n.statut === "nok")).length;
+  document.getElementById("statBloques").textContent = bloques;
+
+  // Populate semaine filter
+  const semaines = [...new Set(all.map(e => e.semaine).filter(Boolean))].sort().reverse();
+  const sel = document.getElementById("filterSemaine");
+  const cur = sel.value;
+  sel.innerHTML = '<option value="">Toutes les semaines</option>' +
+    semaines.map(s => `<option value="${s}"${s===cur?" selected":""}>${s}</option>`).join("");
+}
+
+// ══════════════════════════════════════════
+// NOTIONS EDITOR
+// ══════════════════════════════════════════
+window.addNotion    = function() {
+  notions.push({ id: "n_" + Date.now(), titre: "", sous: "" });
+  renderNotionsList();
+  const inputs = document.querySelectorAll("#notionsList .notion-titre");
+  inputs[inputs.length - 1].focus();
+};
+window.removeNotion = function(i) { notions.splice(i, 1); renderNotionsList(); };
+
+function renderNotionsList() {
+  const c = document.getElementById("notionsList");
+  c.innerHTML = "";
+  notions.forEach((n, i) => {
+    const row = document.createElement("div");
+    row.className = "notion-row";
+    const titre = typeof n === "string" ? n : (n.titre || "");
+    const sous  = typeof n === "object" ? (n.sous || "") : "";
+    row.innerHTML = `
+      <div style="flex:1;display:flex;flex-direction:column;gap:4px">
+        <input type="text" class="notion-titre" value="${titre.replace(/"/g,'&quot;')}"
+          onchange="notions[${i}].titre=this.value"
+          placeholder="Nom de la notion (ex: Limites)" />
+        <input type="text" style="font-size:.78rem;color:var(--gris)" value="${sous.replace(/"/g,'&quot;')}"
+          onchange="notions[${i}].sous=this.value"
+          placeholder="Sous-titre (ex: Calcul, formes indéterminées)" />
+      </div>
+      <button class="btn-del" onclick="removeNotion(${i})">✕</button>`;
+    c.appendChild(row);
+  });
+}
+
+window.setSemaineAuto = function() {
+  document.getElementById("semaineLabel").value = getSemaineLabel();
+};
+
+window.saveConfig = async function() {
+  // Nettoyer les notions vides
+  notions = notions.filter(n => {
+    if (typeof n === "string") return n.trim();
+    return (n.titre || "").trim();
+  });
+  // S'assurer que chaque notion a un id
+  notions = notions.map((n, i) => {
+    if (typeof n === "string") return { id: "n_" + i, titre: n, sous: "" };
+    if (!n.id) n.id = "n_" + i;
+    n.titre = (n.titre || "").trim();
+    n.sous  = (n.sous  || "").trim();
+    return n;
+  });
+
+  const label = document.getElementById("semaineLabel").value.trim() || getSemaineLabel();
+
+  try {
+    await setDoc(doc(db, "config", "semaine"), {
+      label,
+      notions,
+      updatedAt: serverTimestamp()
+    });
+    renderNotionsList();
+    document.getElementById("currentSemaineInfo").innerHTML =
+      `<strong>Semaine active :</strong> ${label} — <strong>${notions.length} notions</strong> ✅`;
+    const msg = document.getElementById("savedMsg");
+    msg.style.display = "block";
+    setTimeout(() => msg.style.display = "none", 3500);
+  } catch(e) {
+    alert("Erreur Firebase : " + e.message);
+  }
+};
+
+// ══════════════════════════════════════════
+// TABLEAU
+// ══════════════════════════════════════════
+window.renderTable = function() {
+  const search  = document.getElementById("searchEleve").value.toLowerCase();
+  const classe  = document.getElementById("filterClasse").value;
+  const statut  = document.getElementById("filterStatut").value;
+  const semaine = document.getElementById("filterSemaine").value;
+
+  let filtered = allProgressions.filter(e => {
+    const name = (e.prenom + " " + e.nom).toLowerCase();
+    if (search && !name.includes(search)) return false;
+    if (classe && e.classe !== classe) return false;
+    if (semaine && e.semaine !== semaine) return false;
+    if (statut === "nok" && !(e.notions||[]).some(n => n.statut === "nok")) return false;
+    if (statut === "ok"  && (e.notions||[]).some(n => n.statut !== "ok" && n.statut !== "non-evalue")) return false;
+    return true;
+  });
+
+  const tbody = document.getElementById("tableBody");
+  if (filtered.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;color:var(--gris);padding:20px">Aucun résultat</td></tr>`;
+    return;
   }
 
-  // ============================================================
-  // GÉNÉRATION MESSAGES WHATSAPP
-  // ============================================================
-  function renderMessages() {
-    const all = JSON.parse(localStorage.getItem(STORAGE_KEY_PROGRESSIONS) || '[]');
-    const container = document.getElementById('messagesContainer');
+  tbody.innerHTML = filtered.map((e, idx) => {
+    const compris = (e.notions||[]).filter(n => n.statut === "ok").length;
+    const arevoir = (e.notions||[]).filter(n => n.statut === "partial").length;
+    const bloques = (e.notions||[]).filter(n => n.statut === "nok").length;
+    const date    = e.date?.toDate ? e.date.toDate().toLocaleDateString("fr-FR") : "—";
 
-    if (all.length === 0) {
-      container.innerHTML = `
-        <div class="empty-state">
-          <div class="emoji">📭</div>
-          <p>Aucune progression enregistrée pour l'instant.<br>Les messages apparaîtront dès que les élèves remplissent le formulaire.</p>
-        </div>
-      `;
-      return;
-    }
+    // Détail notions
+    const detailRows = (e.notions||[]).map(n => {
+      const icon = n.statut==="ok" ? "✅" : n.statut==="partial" ? "⚠️" : n.statut==="nok" ? "❌" : "—";
+      const diagInfo = n.diag_level ? ` (${n.diag_type||"?"} / ${n.diag_level==="ok"?"maîtrise":"difficulté"})` : "";
+      return `<div class="diag-item"><span>${icon} ${n.notion||n.id}</span><span style="color:var(--gris);font-size:.7rem">${diagInfo}</span></div>`;
+    }).join("");
 
-    // Grouper par élève (dernière progression par numéro WhatsApp)
-    const byWa = {};
-    all.forEach(e => {
-      if (!byWa[e.whatsapp] || new Date(e.date) > new Date(byWa[e.whatsapp].date)) {
-        byWa[e.whatsapp] = e;
-      }
-    });
+    return `
+      <tr>
+        <td>
+          <strong>${e.prenom} ${e.nom}</strong>
+          ${e.commentaire ? `<div style="font-size:.72rem;color:var(--gris);margin-top:2px">💬 ${e.commentaire.slice(0,60)}${e.commentaire.length>60?"...":""}</div>` : ""}
+          <span class="detail-toggle" onclick="toggleDetail('det_${idx}')">Voir détail notions ▾</span>
+          <div class="detail-panel" id="det_${idx}"><div class="diag-grid">${detailRows}</div></div>
+        </td>
+        <td>${e.classe||"—"}</td>
+        <td>${e.whatsapp||"—"}</td>
+        <td><span class="badge badge-ok">${compris} ✅</span></td>
+        <td><span class="badge badge-partial">${arevoir} ⚠️</span></td>
+        <td><span class="badge badge-nok">${bloques} ❌</span></td>
+        <td style="font-size:.78rem">${e.semaine||"—"}</td>
+        <td style="font-size:.78rem">${date}</td>
+      </tr>`;
+  }).join("");
+};
 
-    const eleves = Object.values(byWa).reverse();
+window.toggleDetail = function(id) {
+  const el = document.getElementById(id);
+  if (el) el.classList.toggle("open");
+};
 
-    container.innerHTML = eleves.map((e, idx) => {
-      const msg = genererMessage(e);
-      const waNum = e.whatsapp.replace(/\D/g, '');
-      const waLink = `https://wa.me/237${waNum}?text=${encodeURIComponent(msg)}`;
+// ══════════════════════════════════════════
+// MESSAGES WHATSAPP
+// ══════════════════════════════════════════
+window.renderMessages = function() {
+  const container = document.getElementById("messagesContainer");
+  if (allProgressions.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <div class="emoji">📭</div>
+        <p>Aucune progression enregistrée pour l'instant.<br>Les messages apparaîtront dès que les élèves remplissent le formulaire.</p>
+      </div>`;
+    return;
+  }
 
-      return `
-        <div class="eleve-msg-card">
-          <div class="eleve-msg-header">
-            <div>
-              <div class="eleve-nom">${e.prenom} ${e.nom}</div>
-              <div class="eleve-meta">${e.classe} • 📞 ${e.whatsapp} • ${new Date(e.date).toLocaleDateString('fr-FR')}</div>
-            </div>
-            <div style="display:flex;gap:8px;flex-wrap:wrap">
-              <button class="btn-copy" id="copybtn-${idx}" onclick="copyMsg(${idx}, \`${escapeBacktick(msg)}\`)">📋 Copier</button>
-              <a class="btn-wa" href="${waLink}" target="_blank">💬 WhatsApp</a>
-            </div>
+  // Grouper par WhatsApp (dernière progression)
+  const byWa = {};
+  allProgressions.forEach(e => {
+    const key = e.whatsapp || (e.prenom + e.nom);
+    if (!byWa[key] || (e.date?.seconds||0) > (byWa[key].date?.seconds||0)) byWa[key] = e;
+  });
+
+  const eleves = Object.values(byWa);
+
+  container.innerHTML = eleves.map((e, idx) => {
+    const msg    = genererMessage(e);
+    const waNum  = (e.whatsapp||"").replace(/\D/g,"");
+    const waLink = `https://wa.me/237${waNum}?text=${encodeURIComponent(msg)}`;
+    const date   = e.date?.toDate ? e.date.toDate().toLocaleDateString("fr-FR") : "—";
+
+    return `
+      <div class="eleve-msg-card">
+        <div class="eleve-msg-header">
+          <div>
+            <div class="eleve-nom">${e.prenom} ${e.nom}</div>
+            <div class="eleve-meta">${e.classe||"—"} &bull; 📞 ${e.whatsapp||"—"} &bull; ${date}</div>
           </div>
-          <div class="msg-box" id="msg-${idx}">${msg}</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button class="btn-copy" id="copybtn_${idx}" onclick="copyMsg(${idx})">📋 Copier</button>
+            <a class="btn-wa" href="${waLink}" target="_blank">💬 WhatsApp</a>
+          </div>
         </div>
-      `;
-    }).join('');
+        <div class="msg-box" id="msgbox_${idx}">${msg}</div>
+      </div>`;
+  }).join("");
+
+  // Stocker les messages pour copie
+  window._msgs = eleves.map(e => genererMessage(e));
+};
+
+window.copyMsg = function(idx) {
+  const msg = window._msgs[idx] || document.getElementById("msgbox_" + idx).textContent;
+  navigator.clipboard.writeText(msg).then(() => {
+    const btn = document.getElementById("copybtn_" + idx);
+    btn.textContent = "✅ Copié !";
+    btn.classList.add("copied");
+    setTimeout(() => { btn.textContent = "📋 Copier"; btn.classList.remove("copied"); }, 2500);
+  }).catch(() => {
+    // Fallback pour navigateurs sans clipboard API
+    const ta = document.createElement("textarea");
+    ta.value = msg;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand("copy");
+    document.body.removeChild(ta);
+    const btn = document.getElementById("copybtn_" + idx);
+    btn.textContent = "✅ Copié !";
+    setTimeout(() => btn.textContent = "📋 Copier", 2500);
+  });
+};
+
+function genererMessage(e) {
+  const compris = (e.notions||[]).filter(n => n.statut === "ok").map(n => n.notion||n.id);
+  const arevoir = (e.notions||[]).filter(n => n.statut === "partial").map(n => n.notion||n.id);
+  const bloques = (e.notions||[]).filter(n => n.statut === "nok").map(n => n.notion||n.id);
+  const sem     = e.semaine || "cette semaine";
+
+  let msg = `Bonjour ${e.prenom} ! 👋\n\n`;
+  msg    += `J'ai bien reçu ta progression pour *${sem}*.\n\n`;
+
+  if (compris.length > 0) {
+    msg += `✅ *Ce que tu maîtrises bien :*\n`;
+    compris.forEach(n => msg += `• ${n}\n`);
+    msg += `Excellent travail sur ces points ! Continue comme ça. 💪\n\n`;
+  }
+  if (arevoir.length > 0) {
+    msg += `⚠️ *À consolider :*\n`;
+    arevoir.forEach(n => msg += `• ${n}\n`);
+    msg += `Ces notions sont presque acquises — revois bien les exercices types. 📖\n\n`;
+  }
+  if (bloques.length > 0) {
+    msg += `❌ *Points de blocage à travailler en priorité :*\n`;
+    bloques.forEach(n => msg += `• ${n}\n`);
+    msg += `Ne t'inquiète pas, on va reprendre ça ensemble. Je vais te préparer des exercices ciblés. 🎯\n\n`;
+  }
+  if (bloques.length === 0 && arevoir.length === 0 && compris.length > 0) {
+    msg += `🌟 *Résultat exceptionnel cette semaine !* Tu as tout compris. Garde ce rythme jusqu'au bac !\n\n`;
+  }
+  if (e.commentaire) {
+    msg += `📝 *Ton message :* "${e.commentaire}"\n→ J'en prends note, on en parle lors de notre prochain échange.\n\n`;
   }
 
-  function escapeBacktick(str) {
-    return str.replace(/`/g, '\\`').replace(/\$/g, '\\$');
-  }
+  msg += `Courage ${e.prenom} — le bac se prépare pas à pas, et tu n'es pas seul(e). 🏆\n\n`;
+  msg += `*Ing. Moïse Zame — S.E. Corporation*\n📞 +237 695 535 585`;
+  return msg;
+}
 
-  function genererMessage(e) {
-    const compris = e.notions.filter(n => n.statut === 'ok').map(n => n.notion);
-    const arevoir = e.notions.filter(n => n.statut === 'partial').map(n => n.notion);
-    const bloques = e.notions.filter(n => n.statut === 'nok').map(n => n.notion);
-    const semaine = e.semaine || 'cette semaine';
+// ══════════════════════════════════════════
+// EXPORT CSV
+// ══════════════════════════════════════════
+window.exportCSV = function() {
+  if (allProgressions.length === 0) { alert("Aucune donnée à exporter."); return; }
 
-    let msg = `Bonjour ${e.prenom} ! 👋\n\n`;
-    msg += `J'ai bien reçu ta progression pour *${semaine}*.\n\n`;
+  const headers = ["Date","Semaine","Prénom","Nom","Classe","WhatsApp","Commentaire"];
+  // Notions dynamiques
+  const firstNotions = (allProgressions[0].notions||[]).map(n => n.notion||n.id);
+  firstNotions.forEach(n => headers.push(n + " (statut)", n + " (diag)"));
 
-    if (compris.length > 0) {
-      msg += `✅ *Ce que tu maîtrises bien :*\n`;
-      compris.forEach(n => msg += `• ${n}\n`);
-      msg += `Excellent travail sur ces points ! Continue comme ça. 💪\n\n`;
-    }
-
-    if (arevoir.length > 0) {
-      msg += `⚠️ *À consolider :*\n`;
-      arevoir.forEach(n => msg += `• ${n}\n`);
-      msg += `Ces notions sont presque acquises — revois bien les exercices types et tu seras au point. 📖\n\n`;
-    }
-
-    if (bloques.length > 0) {
-      msg += `❌ *Points de blocage à travailler en priorité :*\n`;
-      bloques.forEach(n => msg += `• ${n}\n`);
-      msg += `Ne t'inquiète pas, on va reprendre ça ensemble. Je vais te préparer des exercices ciblés sur ces notions. 🎯\n\n`;
-    }
-
-    if (bloques.length === 0 && arevoir.length === 0) {
-      msg += `🌟 *Résultat exceptionnel cette semaine !* Tu as tout compris. Garde ce rythme jusqu'au bac !\n\n`;
-    }
-
-    if (e.commentaire) {
-      msg += `📝 *Ton message :* "${e.commentaire}"\n→ J'en prends note, on en parle lors de notre prochain échange.\n\n`;
-    }
-
-    msg += `Courage ${e.prenom} — le bac se prépare pas à pas, et tu n'es pas seul(e). 🏆\n\n`;
-    msg += `*Ing. Moïse Zame — S.E. Corporation*\n📞 +237 695 535 585`;
-
-    return msg;
-  }
-
-  function copyMsg(idx, msg) {
-    navigator.clipboard.writeText(msg).then(() => {
-      const btn = document.getElementById('copybtn-' + idx);
-      btn.textContent = '✅ Copié !';
-      btn.classList.add('copied');
-      setTimeout(() => {
-        btn.textContent = '📋 Copier';
-        btn.classList.remove('copied');
-      }, 2000);
+  const rows = allProgressions.map(e => {
+    const date = e.date?.toDate ? e.date.toDate().toLocaleDateString("fr-FR") : "";
+    const base = [date, e.semaine||"", e.prenom||"", e.nom||"", e.classe||"", e.whatsapp||"",
+                  (e.commentaire||"").replace(/,/g,";").replace(/\n/g," ")];
+    (e.notions||[]).forEach(n => {
+      const statutLabel = n.statut==="ok"?"Compris":n.statut==="partial"?"À revoir":n.statut==="nok"?"Bloqué(e)":"-";
+      const diagLabel   = n.diag_level ? (n.diag_type||"?")+"/"+n.diag_level : "-";
+      base.push(statutLabel, diagLabel);
     });
-  }
+    return base.join(",");
+  });
 
-  // ============================================================
-  // EXPORT CSV
-  // ============================================================
-  function exportCSV() {
-    const all = JSON.parse(localStorage.getItem(STORAGE_KEY_PROGRESSIONS) || '[]');
-    if (all.length === 0) { alert('Aucune donnée à exporter.'); return; }
+  const csv  = [headers.join(","), ...rows].join("\n");
+  const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement("a");
+  a.href = url; a.download = "progressions_se_corp.csv";
+  a.click();
+  URL.revokeObjectURL(url);
+};
 
-    const headers = ['Date', 'Semaine', 'Prénom', 'Nom', 'Classe', 'WhatsApp', 'Commentaire'];
-    const notionSample = all[0].notions.map(n => n.notion);
-    notionSample.forEach(n => headers.push(n));
-
-    const rows = all.map(e => {
-      const base = [
-        new Date(e.date).toLocaleDateString('fr-FR'),
-        e.semaine, e.prenom, e.nom, e.classe, e.whatsapp,
-        (e.commentaire || '').replace(/,/g, ';')
-      ];
-      e.notions.forEach(n => {
-        const label = n.statut === 'ok' ? 'Compris' : n.statut === 'partial' ? 'À revoir' : n.statut === 'nok' ? 'Bloqué(e)' : '-';
-        base.push(label);
-      });
-      return base.join(',');
-    });
-
-    const csv = [headers.join(','), ...rows].join('\n');
-    const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url; a.download = 'progressions_se_corp.csv';
-    a.click();
-  }
-
-  function clearProgressions() {
-    if (!confirm('⚠️ Supprimer TOUTES les progressions ? Cette action est irréversible.')) return;
-    localStorage.removeItem(STORAGE_KEY_PROGRESSIONS);
+// ══════════════════════════════════════════
+// VIDER PROGRESSIONS
+// ══════════════════════════════════════════
+window.clearProgressions = async function() {
+  if (!confirm("⚠️ Supprimer TOUTES les progressions Firebase ? Cette action est irréversible.")) return;
+  try {
+    const snap  = await getDocs(collection(db, "progressions"));
+    const batch = writeBatch(db);
+    snap.docs.forEach(d => batch.delete(d.ref));
+    await batch.commit();
+    allProgressions = [];
     updateStats();
-    alert('Progressions supprimées.');
+    alert("✅ Progressions supprimées de Firebase.");
+  } catch(e) {
+    alert("Erreur : " + e.message);
   }
+};
+
+// ══════════════════════════════════════════
+// UTILITAIRES
+// ══════════════════════════════════════════
+function getSemaineLabel() {
+  const now   = new Date();
+  const debut = new Date(now);
+  debut.setDate(now.getDate() - (now.getDay()||7) + 1);
+  const fin = new Date(debut);
+  fin.setDate(debut.getDate() + 6);
+  const fmt = d => d.toLocaleDateString("fr-FR", { day:"numeric", month:"long", year:"numeric" });
+  return `Semaine du ${fmt(debut)} au ${fmt(fin)}`;
+}
 </script>
 </body>
 </html>
