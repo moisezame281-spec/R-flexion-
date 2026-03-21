@@ -194,20 +194,32 @@ window.switchTab = name => {
   if (name==='messages') renderMessages();
 };
 
-// ── CHARGER CONFIG ──
-async function loadConfig() {
-  try {
-    const snap = await getDoc(doc(db,'config','semaine'));
+// ── CHARGER CONFIG (temps réel) ──
+function loadConfig() {
+  // Écoute temps réel du doc config/semaine
+  const configRef = doc(db,'config','semaine');
+  onSnapshot(configRef, snap => {
     if (snap.exists()) {
       const d = snap.data();
       notions = d.notions || getDefault();
-      document.getElementById('semaineLabel').value = d.label || autoLabel();
+      const lbl = document.getElementById('semaineLabel');
+      // Ne pas écraser si l'admin est en train de taper
+      if (document.activeElement !== lbl) {
+        lbl.value = d.label || autoLabel();
+      }
     } else {
       notions = getDefault();
-      document.getElementById('semaineLabel').value = autoLabel();
+      if (document.activeElement !== document.getElementById('semaineLabel')) {
+        document.getElementById('semaineLabel').value = autoLabel();
+      }
     }
-  } catch(e) { notions = getDefault(); document.getElementById('semaineLabel').value = autoLabel(); }
-  renderNotionsList();
+    renderNotionsList();
+  }, err => {
+    console.warn('Config Firebase err:', err);
+    notions = getDefault();
+    document.getElementById('semaineLabel').value = autoLabel();
+    renderNotionsList();
+  });
 }
 
 function getDefault() {
@@ -237,8 +249,18 @@ function renderNotionsList() {
   notions.forEach((n,i) => {
     const row = document.createElement('div');
     row.className = 'notion-row';
-    row.innerHTML = `<input type="text" value="${(n||'').replace(/"/g,'&quot;')}" onchange="notions[${i}]=this.value" placeholder="Nom de la notion"/>
-      <button class="btn-del" onclick="removeNotion(${i})">✕ Supprimer</button>`;
+    const inp = document.createElement('input');
+    inp.type = 'text';
+    inp.value = n || '';
+    inp.placeholder = 'Nom de la notion';
+    inp.setAttribute('data-idx', i);
+    inp.addEventListener('input', e => { notions[parseInt(e.target.getAttribute('data-idx'))] = e.target.value; });
+    const btn = document.createElement('button');
+    btn.className = 'btn-del';
+    btn.textContent = '✕ Supprimer';
+    btn.onclick = () => removeNotion(i);
+    row.appendChild(inp);
+    row.appendChild(btn);
     c.appendChild(row);
   });
 }
@@ -254,6 +276,9 @@ window.removeNotion = i => { notions.splice(i,1); renderNotionsList(); };
 
 // ── SAUVEGARDER CONFIG FIREBASE ──
 window.saveConfig = async () => {
+  // Lire les valeurs actuelles des inputs (évite le bug d'index figé)
+  const inputs = document.querySelectorAll('#notionsList input[data-idx]');
+  inputs.forEach(inp => { notions[parseInt(inp.getAttribute('data-idx'))] = inp.value; });
   notions = notions.map(n=>(n||'').trim()).filter(n=>n);
   const label = document.getElementById('semaineLabel').value.trim();
   try {
