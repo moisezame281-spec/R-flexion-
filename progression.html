@@ -119,7 +119,7 @@
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, doc, getDoc, collection, addDoc, serverTimestamp }
+import { getFirestore, doc, onSnapshot, collection, addDoc, serverTimestamp }
   from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const app = initializeApp({
@@ -135,9 +135,8 @@ const db = getFirestore(app);
 let notions = [];
 let reponses = {};
 
-async function init() {
-  try {
-    const snap = await getDoc(doc(db,'config','semaine'));
+function init() {
+  onSnapshot(doc(db,'config','semaine'), snap => {
     if (snap.exists()) {
       const d = snap.data();
       notions = d.notions || defaut();
@@ -146,11 +145,19 @@ async function init() {
       notions = defaut();
       document.getElementById('semaineBadge').textContent = '📅 ' + autoLabel();
     }
-  } catch(e) {
+    // Ne re-rendre que si pas déjà sur l'étape résultat
+    const step2 = document.getElementById('step2');
+    if (step2 && step2.classList.contains('active')) {
+      reponses = {};
+      renderNotions();
+    } else if (!document.getElementById('step3').classList.contains('active')) {
+      renderNotions();
+    }
+  }, err => {
     notions = defaut();
     document.getElementById('semaineBadge').textContent = '📅 ' + autoLabel();
-  }
-  renderNotions();
+    renderNotions();
+  });
 }
 
 function defaut() {
