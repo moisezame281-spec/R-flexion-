@@ -573,23 +573,34 @@ window.confirmArchiveEval = () => {
 async function archiveCurrentEval() {
   showNotif('📦 Archivage en cours...');
   try {
-    let allDocs2 = [];
+    // Récupérer tous les docs non archivés dans les 3 collections
+    let toArchive = [];
     for(const col of COLLECTIONS){
-      const s2 = await getDocs(collection(db, col));
-      s2.docs.forEach(d2 => allDocs2.push({col, id:d2.id}));
+      const snap = await getDocs(collection(db, col));
+      snap.docs.forEach(d => {
+        if(d.data().evaluation !== 'archived') {
+          toArchive.push({col, id: d.id});
+        }
+      });
     }
-    for(const item of allDocs2){
-      batch.update(doc(db, item.col, item.id), { evaluation: 'archived' });
+    if(toArchive.length === 0) {
+      showNotif('⚠ Aucun résultat à archiver');
+      return;
     }
-    // dummy snap pour la suite
-    const snap = { docs: allDocs2.map(x=>({id:x.id})) };
-    if(false){ // skip old loopbatch.commit();
+    // Archiver par lots de 500 (limite Firestore)
+    const batchSize = 450;
+    for(let i = 0; i < toArchive.length; i += batchSize) {
+      const batch = writeBatch(db);
+      toArchive.slice(i, i + batchSize).forEach(item => {
+        batch.update(doc(db, item.col, item.id), { evaluation: 'archived' });
+      });
+      await batch.commit();
     }
     showArchives = false;
-    showNotif('✓ ' + toArchive.length + ' résultats archivés avec succès !');
+    showNotif('✓ ' + toArchive.length + ' résultat(s) archivé(s) avec succès !');
   } catch(e) {
-    console.error(e);
-    showNotif('❌ Erreur archivage');
+    console.error('Archivage:', e);
+    showNotif('❌ Erreur archivage : ' + e.message);
   }
 }
 
