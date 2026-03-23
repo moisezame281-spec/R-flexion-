@@ -321,6 +321,7 @@ tbody td.mono{font-family:'Space Mono',monospace;font-size:.75rem;letter-spacing
     <button class="btn btn-gold btn-sm" onclick="exportCSV()">↓ CSV</button>
     <button class="btn btn-blue btn-sm" onclick="showPdfSection()">↓ PDF Classement</button>
     <button class="btn btn-sm" id="btn-archives" style="background:rgba(255,170,50,.12);color:#ffaa32;border:1px solid rgba(255,170,50,.3)" onclick="toggleArchives()">📦 Archives</button>
+    <button class="btn btn-sm" style="background:rgba(42,184,200,.12);color:#2ab8c8;border:1px solid rgba(42,184,200,.3)" onclick="showGuidePanel()">🧭 Guide & Suggestions</button>
   </div>
 
   <!-- BANDEAU ÉVALUATION -->
@@ -390,6 +391,39 @@ tbody td.mono{font-family:'Space Mono',monospace;font-size:.75rem;letter-spacing
     </div>
   </div>
 
+  <!-- PANEL GUIDE & SUGGESTIONS -->
+  <div id="guide-panel" style="display:none;margin-top:1.5rem">
+
+    <!-- Stats rapides -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;margin-bottom:1.5rem" id="guide-stats-row"></div>
+
+    <!-- Tabs internes -->
+    <div style="display:flex;gap:4px;background:rgba(255,255,255,.04);border-radius:6px;padding:5px;margin-bottom:1.2rem;flex-wrap:wrap">
+      <button onclick="guideTab('sessions')" id="gtab-sessions" style="padding:7px 14px;border-radius:4px;border:none;background:rgba(42,184,200,.15);color:#2ab8c8;font-family:'Space Mono',monospace;font-size:.62rem;letter-spacing:.12em;cursor:pointer">💬 Sessions Guide</button>
+      <button onclick="guideTab('suggestions')" id="gtab-suggestions" style="padding:7px 14px;border-radius:4px;border:none;background:transparent;color:var(--grey);font-family:'Space Mono',monospace;font-size:.62rem;letter-spacing:.12em;cursor:pointer">💡 Suggestions</button>
+    </div>
+
+    <!-- Sessions -->
+    <div id="gpanel-sessions">
+      <div style="display:flex;gap:.6rem;margin-bottom:1rem;flex-wrap:wrap">
+        <input type="text" id="guide-search" placeholder="Rechercher..." oninput="renderGuideSessions()"
+          style="padding:7px 12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:3px;color:var(--cream);font-family:'Space Mono',monospace;font-size:.65rem;outline:none;width:200px">
+        <select id="guide-filter-classe" onchange="renderGuideSessions()"
+          style="padding:7px 12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:3px;color:var(--cream);font-family:'Cormorant Garamond',serif;font-size:.9rem;outline:none">
+          <option value="">Toutes les classes</option>
+          <option>Terminale C</option><option>Terminale D</option><option>Terminale S</option>
+          <option>Terminale A</option><option>Terminale A4</option><option>Terminale L</option>
+        </select>
+      </div>
+      <div id="guide-sessions-list"></div>
+    </div>
+
+    <!-- Suggestions -->
+    <div id="gpanel-suggestions" style="display:none">
+      <div id="suggestions-list"></div>
+    </div>
+  </div>
+
 </div><!-- fin pg-admin -->
 
 <!-- WRAPPERS GLOBAUX (avant le module) -->
@@ -410,7 +444,7 @@ function logout() {
 <script type="module">
 import { initializeApp }    from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getFirestore, collection, onSnapshot, orderBy, query,
-                             writeBatch, doc, getDocs }
+                             writeBatch, doc, getDocs, limit }
                              from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -956,6 +990,111 @@ window.setVue = function(vue){
 };
 
 
+
+// ═══ GUIDE & SUGGESTIONS ═══
+let guideSessions    = [];
+let guideSuggestions = [];
+
+window.showGuidePanel = function() {
+  const panel = document.getElementById('guide-panel');
+  const isVisible = panel.style.display !== 'none';
+  panel.style.display = isVisible ? 'none' : 'block';
+  if (!isVisible) {
+    loadGuideSessions();
+    loadGuideSuggestions();
+    panel.scrollIntoView({behavior:'smooth'});
+  }
+};
+
+window.guideTab = function(tab) {
+  document.getElementById('gpanel-sessions').style.display    = tab==='sessions'    ? 'block' : 'none';
+  document.getElementById('gpanel-suggestions').style.display = tab==='suggestions' ? 'block' : 'none';
+  document.getElementById('gtab-sessions').style.background    = tab==='sessions'    ? 'rgba(42,184,200,.15)' : 'transparent';
+  document.getElementById('gtab-sessions').style.color         = tab==='sessions'    ? '#2ab8c8' : 'var(--grey)';
+  document.getElementById('gtab-suggestions').style.background = tab==='suggestions' ? 'rgba(42,184,200,.15)' : 'transparent';
+  document.getElementById('gtab-suggestions').style.color      = tab==='suggestions' ? '#2ab8c8' : 'var(--grey)';
+};
+
+function loadGuideSessions() {
+  const q = query(collection(db,'guide_sessions'), orderBy('date','desc'));
+  onSnapshot(q, snap => {
+    guideSessions = snap.docs.map(d=>({id:d.id,...d.data()}));
+    renderGuideSessions();
+    renderGuideStats();
+  });
+}
+
+function loadGuideSuggestions() {
+  const q = query(collection(db,'suggestions_cours'), orderBy('date','desc'));
+  onSnapshot(q, snap => {
+    guideSuggestions = snap.docs.map(d=>({id:d.id,...d.data()}));
+    renderGuideSuggestions();
+  });
+}
+
+window.renderGuideSessions = function() {
+  const search = (document.getElementById('guide-search')||{}).value?.toLowerCase()||'';
+  const classe = (document.getElementById('guide-filter-classe')||{}).value||'';
+  let filtered = guideSessions.filter(s => {
+    if (search && !(s.prenom||'').toLowerCase().includes(search) && !(s.classe||'').toLowerCase().includes(search)) return false;
+    if (classe && s.classe !== classe) return false;
+    return true;
+  });
+  const cont = document.getElementById('guide-sessions-list');
+  if (!cont) return;
+  if (!filtered.length) { cont.innerHTML='<p style="color:var(--grey);padding:1.5rem;text-align:center;font-style:italic">Aucune session guide pour l\'instant.</p>'; return; }
+
+  cont.innerHTML = filtered.map(s => {
+    const dt = s.date?.toDate ? s.date.toDate().toLocaleDateString('fr-FR') : '—';
+    const blocages = (s.blocages||[]).join(', ') || '—';
+    const programme = s.programme ? `<div style="margin-top:.8rem;padding:.8rem;background:rgba(42,184,200,.06);border:1px solid rgba(42,184,200,.15);border-radius:3px"><div style="font-family:'Space Mono',monospace;font-size:.6rem;color:#2ab8c8;letter-spacing:.2em;margin-bottom:.4rem">PROGRAMME PROPOSÉ</div><pre style="font-size:.82rem;color:rgba(245,240,232,.75);white-space:pre-wrap;line-height:1.7">${s.programme}</pre></div>` : '';
+    return `<div style="background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.07);border-radius:4px;padding:1.2rem;margin-bottom:.8rem">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:.5rem;margin-bottom:.8rem;flex-wrap:wrap">
+        <div>
+          <div style="font-family:'Space Mono',monospace;font-size:.68rem;color:var(--cream);font-weight:700">${s.prenom||'Anonyme'}</div>
+          <div style="font-size:.78rem;color:var(--grey);margin-top:.2rem">${s.classe||'—'} · 📞 ${s.whatsapp||'—'} · ${dt}</div>
+        </div>
+        <span style="font-family:'Space Mono',monospace;font-size:.58rem;background:rgba(42,184,200,.1);color:#2ab8c8;border:1px solid rgba(42,184,200,.25);padding:3px 10px;border-radius:20px">Guide</span>
+      </div>
+      <div style="font-size:.85rem;color:var(--grey);margin-bottom:.5rem"><strong style="color:rgba(245,240,232,.6)">Blocages :</strong> ${blocages}</div>
+      <div style="font-size:.88rem;color:rgba(245,240,232,.8);line-height:1.6;margin-bottom:.5rem"><strong style="color:rgba(245,240,232,.6)">Difficultés :</strong> ${s.difficultes||'—'}</div>
+      <div style="font-size:.88rem;color:rgba(245,240,232,.8);line-height:1.6"><strong style="color:var(--gold)">Message pour Ing. Moïse :</strong> ${s.messagePourMoise||'—'}</div>
+      ${programme}
+    </div>`;
+  }).join('');
+};
+
+function renderGuideStats() {
+  const row = document.getElementById('guide-stats-row');
+  if (!row) return;
+  const total = guideSessions.length;
+  const blocageCount = {};
+  guideSessions.forEach(s => (s.blocages||[]).forEach(b => { blocageCount[b]=(blocageCount[b]||0)+1; }));
+  const topBlocage = Object.entries(blocageCount).sort((a,b)=>b[1]-a[1])[0];
+  const classes = [...new Set(guideSessions.map(s=>s.classe).filter(Boolean))].length;
+  row.innerHTML = [
+    ['Sessions total', total, '#2ab8c8'],
+    ['Classes touchées', classes, 'var(--gold)'],
+    ['Blocage #1', topBlocage?topBlocage[0].replace('_',' '):'—', '#e05555'],
+    ['Suggestions', guideSuggestions.length, '#3ab03a'],
+  ].map(([lbl,val,col])=>`<div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:4px;padding:1rem;text-align:center">
+    <div style="font-size:1.8rem;font-weight:800;color:${col};font-family:'Playfair Display',serif">${val}</div>
+    <div style="font-size:.7rem;color:var(--grey);font-family:'Space Mono',monospace;letter-spacing:.1em;margin-top:.3rem">${lbl}</div>
+  </div>`).join('');
+}
+
+function renderGuideSuggestions() {
+  const cont = document.getElementById('suggestions-list');
+  if (!cont) return;
+  if (!guideSuggestions.length) { cont.innerHTML='<p style="color:var(--grey);padding:1.5rem;text-align:center;font-style:italic">Aucune suggestion pour l\'instant.</p>'; return; }
+  cont.innerHTML = guideSuggestions.map(s => {
+    const dt = s.date?.toDate ? s.date.toDate().toLocaleDateString('fr-FR') : '—';
+    return `<div style="background:rgba(201,168,76,.04);border:1px solid rgba(201,168,76,.15);border-radius:4px;padding:1.2rem;margin-bottom:.8rem">
+      <div style="font-family:'Space Mono',monospace;font-size:.6rem;color:var(--gold);letter-spacing:.18em;margin-bottom:.5rem">${s.prenom||'Anonyme'} · ${s.classe||'—'} · ${dt}</div>
+      <p style="font-size:.95rem;color:rgba(245,240,232,.85);line-height:1.7">${s.suggestion}</p>
+    </div>`;
+  }).join('');
+}
 
 // ═══ NOTIFICATION ═══
 window.showNotif = (msg) => {
