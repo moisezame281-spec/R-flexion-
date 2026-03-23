@@ -777,33 +777,41 @@ window.envoyerGuide = async function() {
   document.getElementById('aiResponse').scrollIntoView({behavior:'smooth', block:'start'});
 
   // ── Appel API Claude ──
-  const systemPrompt = `Tu es le guide bienveillant de S.E. Corporation, créée par Ing. Moïse Zame. 
-Tu es à la fois psychologue, philosophe et pédagogue. Tu parles comme un ami sage, pas comme un robot.
-Tu dois :
-1. Accueillir l'élève avec chaleur et empathie selon ce qu'il a partagé
-2. Nommer précisément ce qui le bloque et lui expliquer pourquoi c'est normal
-3. Lui donner 2-3 conseils concrets et humains (pas génériques)
-4. Lui proposer un programme hebdomadaire RÉALISTE et PRÉCIS basé sur le temps qu'il a et ses difficultés
-5. Terminer par une phrase de philosophie ou d'encouragement qui lui parle
+  // ── Appel API Claude ──
+  const systemPrompt = `Tu es le guide bienveillant de S.E. Corporation, créée par Ing. Moïse Zame (Ing. Génie Civil, ENSPD Douala).
+Tu es à la fois psychologue, philosophe et pédagogue de haut niveau. Tu parles comme un ami sage, chaleureux et direct — pas comme un robot.
 
-IMPORTANT : 
-- Utilise "je" (Guide S.E.) et "tu" (l'élève)
-- Sois précis : cite ses blocages spécifiques
-- Le programme doit être un vrai planning (Lundi : ..., Mardi : ...) pas des généralités
-- Maximum 400 mots pour la réponse principale
-- Le programme doit être séparé de la réponse, format : "PROGRAMME_DEBUT\n[contenu]\nPROGRAMME_FIN"
-- À la fin, OBLIGATOIREMENT demande-lui une suggestion pour améliorer les cours, sur une nouvelle ligne, format : "SUGGESTION_DEMANDE"`;
+Voici exactement ce que tu dois faire dans ta réponse, dans cet ordre :
 
-  const userContent = `Profil élève :
-- Prénom/identité : ${prenom || 'Anonyme'}
+PARTIE 1 — ACCUEIL ET DIAGNOSTIC (environ 150 mots)
+- Accueille l'élève par son prénom avec chaleur
+- Nomme précisément ce qui le bloque (cite ses propres mots) et explique-lui pourquoi c'est normal
+- Donne-lui 2 conseils concrets et humains adaptés à SES blocages spécifiques
+
+PARTIE 2 — LE PROGRAMME (sous forme de JSON valide uniquement, rien d'autre autour)
+Après ta réponse principale, écris EXACTEMENT cette structure JSON sur une ligne séparée :
+|||PROGRAMME|||{"lundi":"...","mardi":"...","mercredi":"...","jeudi":"...","vendredi":"...","samedi":"...","dimanche":"...","condition":"Pour recevoir ce programme chaque semaine, tu devras envoyer à Ing. Moïse un rapport précis de ce que tu as accompli : exercices faits, difficultés rencontrées, temps travaillé. C'est le pacte."}|||FIN|||
+
+PARTIE 3 — CONCLUSION
+- Une phrase philosophique ou citation courte qui lui parle
+- Rappelle-lui qu'Ing. Moïse lira son message personnellement
+
+RÈGLES ABSOLUES :
+- Maximum 200 mots pour la partie 1
+- Le JSON du programme doit être 100% valide, sans retours à la ligne dans les valeurs
+- Adapte le programme au temps disponible de l'élève (${temps.join(', ') || 'non précisé'})
+- Sois précis dans le programme : cite les notions exactes à travailler
+- Ne mets RIEN entre |||PROGRAMME||| et |||FIN|||, seulement le JSON`;
+
+  const userContent = `Profil de l'élève :
+- Prénom : ${prenom || 'un élève'}
 - Classe : ${classe}
-- WhatsApp : ${wa || 'non fourni'}
-- Blocages cochés : ${blocages.join(', ') || 'aucun coché'}
+- Blocages : ${blocages.join(', ') || 'non précisé'}
 - Temps disponible : ${temps.join(', ') || 'non précisé'}
 - Difficultés en maths : ${diff}
-- Message à Ing. Moïse : ${msg}
+- Message pour Ing. Moïse : ${msg}
 
-Réponds-lui de manière humaine, personnalisée et bienveillante.`;
+Réponds selon les instructions.`;
 
   try {
     const resp = await fetch('https://api.anthropic.com/v1/messages', {
@@ -811,53 +819,63 @@ Réponds-lui de manière humaine, personnalisée et bienveillante.`;
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
+        max_tokens: 1200,
         system: systemPrompt,
         messages: [{ role: 'user', content: userContent }]
       })
     });
 
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
     const data = await resp.json();
-    const fullText = data.content?.[0]?.text || '';
+    if (data.error) throw new Error(data.error.message || 'Erreur API');
+    const fullText = (data.content?.[0]?.text || '').trim();
+    if (!fullText) throw new Error('Réponse vide');
 
-    // Parser la réponse
-    let mainText = fullText;
-    let programmeText = '';
+    // ── Parser proprement ──
+    let mainText    = fullText;
+    let programme   = null;
 
-    if (fullText.includes('PROGRAMME_DEBUT')) {
-      const pStart = fullText.indexOf('PROGRAMME_DEBUT') + 'PROGRAMME_DEBUT'.length;
-      const pEnd   = fullText.indexOf('PROGRAMME_FIN');
-      programmeText = pEnd > pStart ? fullText.slice(pStart, pEnd).trim() : '';
-      mainText = fullText.slice(0, fullText.indexOf('PROGRAMME_DEBUT')).trim();
-      if (pEnd > 0) {
-        const afterProg = fullText.slice(pEnd + 'PROGRAMME_FIN'.length);
-        mainText += '\n\n' + afterProg.replace('SUGGESTION_DEMANDE','').trim();
-      }
+    const markerStart = '|||PROGRAMME|||';
+    const markerEnd   = '|||FIN|||';
+    const idxStart    = fullText.indexOf(markerStart);
+    const idxEnd      = fullText.indexOf(markerEnd);
+
+    if (idxStart !== -1 && idxEnd > idxStart) {
+      const jsonStr = fullText.slice(idxStart + markerStart.length, idxEnd).trim();
+      try { programme = JSON.parse(jsonStr); } catch(pe) { console.warn('JSON parse err:', pe, jsonStr); }
+      mainText = (fullText.slice(0, idxStart) + fullText.slice(idxEnd + markerEnd.length)).trim();
     }
 
-    // Afficher réponse principale
+    // ── Afficher réponse principale lettre par lettre ──
     document.getElementById('aiThinking').style.display = 'none';
-    document.getElementById('aiStatus').textContent = 'Message reçu';
+    document.getElementById('aiStatus').textContent = 'Message reçu ✓';
     const aiText = document.getElementById('aiText');
     aiText.style.display = 'block';
     aiText.textContent = '';
 
-    // Affichage progressif lettre par lettre
-    let i = 0;
-    const cleaned = mainText.replace('SUGGESTION_DEMANDE','').trim();
+    let ci = 0;
     const interval = setInterval(() => {
-      aiText.textContent += cleaned[i] || '';
-      i++;
-      if (i >= cleaned.length) {
+      if (ci < mainText.length) {
+        aiText.textContent += mainText[ci];
+        ci++;
+      } else {
         clearInterval(interval);
-        if (programmeText) {
-          document.getElementById('programmeText').textContent = programmeText;
+
+        // ── Afficher le programme ──
+        if (programme) {
+          const jours = ['lundi','mardi','mercredi','jeudi','vendredi','samedi','dimanche'];
+          const joursLabels = {lundi:'Lun',mardi:'Mar',mercredi:'Mer',jeudi:'Jeu',vendredi:'Ven',samedi:'Sam',dimanche:'Dim'};
+          const lignes = jours.map(j => programme[j] ? `${joursLabels[j]}. — ${programme[j]}` : null).filter(Boolean);
+          document.getElementById('programmeText').innerHTML =
+            lignes.map(l => `<div style="padding:.35rem 0;border-bottom:1px solid rgba(201,168,76,.1)">${l}</div>`).join('') +
+            (programme.condition ? `<div style="margin-top:1rem;padding:.8rem;background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.2);border-radius:3px;font-style:italic;font-size:.9rem;color:var(--gold)">${programme.condition}</div>` : '');
           document.getElementById('programmeBox').style.display = 'block';
         }
+
         document.getElementById('suggestionBox').style.display = 'block';
         document.getElementById('suggestionBox').scrollIntoView({behavior:'smooth',block:'nearest'});
       }
-    }, 18);
+    }, 15);
 
     // ── Sauvegarder dans Firebase ──
     await addDoc(collection(db,'guide_sessions'), {
@@ -867,10 +885,10 @@ Réponds-lui de manière humaine, personnalisée et bienveillante.`;
       whatsapp: wa || '',
       blocages,
       temps,
-      difficultes: diff,
+      difficultes:     diff,
       messagePourMoise: msg,
-      reponseGuide: fullText,
-      programme: programmeText,
+      reponseGuide:    mainText,
+      programme:       programme ? JSON.stringify(programme) : '',
     });
 
     btn.textContent = '✓ Envoyé';
