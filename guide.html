@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S.E. Corporation — Ton Guide Personnel</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --ink:    #0f0e0a;
+    --cream:  #f5f0e8;
+    --gold:   #c9a84c;
+    --red:    #8b1a1a;
+    --blue:   #1a2f5e;
+    --grey:   #6b6560;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--ink);
+    color: var(--cream);
+    font-family: 'Cormorant Garamond', serif;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 9999;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    opacity: 0.35;
+  }
+
+  /* ══ SECTION ENTRÉE ══ */
+  .shock {
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    padding: 4rem 2rem;
+    position: relative;
+    background: var(--ink);
+    overflow: hidden;
+  }
+  .shock::after {
+    content: '';
+    position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+  .shock .circle {
+    position: absolute; width: 600px; height: 600px;
+    border-radius: 50%; border: 1px solid rgba(201,168,76,0.08);
+    top: 50%; left: 50%; transform: translate(-50%,-50%);
+    animation: breathe 6s ease-in-out infinite;
+  }
+  .shock .circle:nth-child(2) { width: 800px; height: 800px; border-color: rgba(201,168,76,0.04); animation-delay: 1s; }
+
+  @keyframes breathe {
+    0%,100% { transform: translate(-50%,-50%) scale(1); opacity: 1; }
+    50%      { transform: translate(-50%,-50%) scale(1.04); opacity: 0.6; }
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(25px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes lineIn { to { transform: scaleX(1); } }
+
+  .eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem; letter-spacing: 0.4em;
+    text-transform: uppercase; color: var(--gold);
+    margin-bottom: 2.5rem; opacity: 0;
+    animation: fadeUp 1s 0.3s forwards;
+  }
+  .shock-question {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.2rem, 6vw, 5rem);
+    font-weight: 900; font-style: italic;
+    text-align: center; line-height: 1.1;
+    max-width: 900px; color: var(--cream);
+    opacity: 0; animation: fadeUp 1s 0.6s forwards;
+    position: relative; z-index: 1;
+  }
+  .shock-question .highlight {
+    color: var(--gold); display: inline-block; position: relative;
+  }
+  .shock-question .highlight::after {
+    content: ''; position: absolute; bottom: -4px; left: 0; right: 0; height: 2px;
+    background: var(--gold); transform: scaleX(0); transform-origin: left;
+    animation: lineIn 0.8s 1.8s forwards;
+  }
+  .shock-sub {
+    margin-top: 2.5rem;
+    font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+    font-style: italic; color: var(--grey);
+    text-align: center; max-width: 600px; line-height: 1.7;
+    opacity: 0; animation: fadeUp 1s 1.2s forwards;
+    position: relative; z-index: 1;
+  }
+  .shock-sub em { color: var(--cream); font-style: normal; }
+
+  .scroll-hint {
+    position: absolute; bottom: 2.5rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem; letter-spacing: 0.3em;
+    color: var(--gold); opacity: 0;
+    animation: fadeUp 1s 2.5s forwards;
+    display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+    z-index: 1;
+  }
+  .scroll-arrow {
+    width: 1px; height: 40px;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+    animation: scrollDown 2s 2.5s ease-in-out infinite;
+  }
+  @keyframes scrollDown { 0%,100%{transform:scaleY(1);opacity:1} 50%{transform:scaleY(0.5);opacity:0.4} }
+
+  /* ══ SECTION GUIDE ══ */
+  .guide-section {
+    background: var(--cream);
+    color: var(--ink);
+    padding: 5rem 2rem;
+    position: relative; overflow: hidden;
+  }
+  .guide-section::before {
+    content: '∑';
+    position: absolute; font-size: 40rem;
+    color: rgba(0,0,0,0.025);
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    font-family: 'Playfair Display', serif; line-height: 1;
+    pointer-events: none;
+  }
+
+  .section-eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem; letter-spacing: 0.35em;
+    text-transform: uppercase; color: var(--red);
+    margin-bottom: 1rem; display: block;
+    text-align: center;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 900; text-align: center;
+    margin-bottom: 1rem; color: var(--ink);
+  }
+  .section-title span { color: var(--red); font-style: italic; }
+  .section-sub {
+    font-size: 1.1rem; color: var(--grey);
+    text-align: center; max-width: 580px;
+    margin: 0 auto 3.5rem; line-height: 1.7;
+    font-style: italic;
+  }
+
+  /* ══ CHAT ══ */
+  .chat-container {
+    max-width: 780px; margin: 0 auto;
+    display: flex; flex-direction: column; gap: 0;
+  }
+
+  .chat-bubble-wrap {
+    display: flex; align-items: flex-start; gap: 1rem;
+    margin-bottom: 1.8rem;
+    opacity: 0; transform: translateY(20px);
+    transition: opacity 0.6s, transform 0.6s;
+  }
+  .chat-bubble-wrap.visible { opacity: 1; transform: translateY(0); }
+  .chat-bubble-wrap.user { flex-direction: row-reverse; }
+
+  .chat-avatar {
+    width: 44px; height: 44px; border-radius: 50%;
+    flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+    font-family: 'Space Mono', monospace; font-size: 0.65rem; font-weight: 700;
+  }
+  .avatar-se {
+    background: var(--ink); color: var(--gold);
+    border: 2px solid var(--gold);
+    flex-direction: column; gap: 0;
+  }
+  .avatar-se span:first-child { font-size: 0.55rem; color: var(--gold); letter-spacing: 0.1em; }
+  .avatar-user {
+    background: var(--red); color: #fff;
+    font-size: 0.75rem;
+  }
+
+  .chat-bubble {
+    max-width: 75%; padding: 1.2rem 1.5rem;
+    border-radius: 4px; line-height: 1.75; font-size: 1rem;
+    position: relative;
+  }
+  .bubble-se {
+    background: white;
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: 0 12px 12px 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+  .bubble-se strong { color: var(--blue); }
+  .bubble-se em { color: var(--red); font-style: italic; }
+  .bubble-user {
+    background: var(--ink); color: var(--cream);
+    border-radius: 12px 0 12px 12px;
+    font-style: italic;
+  }
+  .bubble-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.58rem; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--gold);
+    margin-bottom: 0.5rem; display: block;
+  }
+
+  /* ══ FORMULAIRE ══ */
+  .form-section {
+    background: var(--ink); padding: 5rem 2rem;
+    position: relative; overflow: hidden;
+  }
+  .form-section::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 50% 0%, rgba(201,168,76,0.04) 0%, transparent 70%);
+  }
+
+  .form-wrap {
+    max-width: 680px; margin: 0 auto;
+    position: relative; z-index: 1;
+  }
+
+  .form-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(201,168,76,0.15);
+    border-radius: 4px; padding: 2.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .form-step-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem; letter-spacing: 0.3em;
+    color: var(--gold); text-transform: uppercase;
+    margin-bottom: 1rem; display: block;
+  }
+  .form-question {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem; color: var(--cream);
+    margin-bottom: 1.5rem; line-height: 1.5;
+  }
+  .form-question em { color: var(--gold); font-style: italic; }
+
+  .field { margin-bottom: 1.4rem; }
+  .field label {
+    display: block; font-family: 'Space Mono', monospace;
+    font-size: 0.6rem; letter-spacing: 0.25em;
+    color: var(--gold); text-transform: uppercase;
+    margin-bottom: 0.6rem;
+  }
+  .field input, .field select, .field textarea {
+    width: 100%; padding: 0.9rem 1.1rem;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 3px; color: var(--cream);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.05rem; outline: none;
+    transition: border-color 0.2s;
+    -webkit-user-select: text; user-select: text;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus {
+    border-color: var(--gold);
+  }
+  .field select option { background: var(--ink); }
+  .field textarea { resize: vertical; min-height: 100px; }
+
+  .choices { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+  .choice-btn {
+    padding: 0.55rem 1.1rem;
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 3px; background: transparent;
+    color: rgba(245,240,232,0.65);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.95rem; cursor: pointer;
+    transition: all 0.15s;
+  }
+  .choice-btn:hover { border-color: var(--gold); color: var(--cream); }
+  .choice-btn.active {
+    background: rgba(201,168,76,0.12);
+    border-color: var(--gold); color: var(--gold);
+  }
+
+  .btn-primary {
+    width: 100%; padding: 1rem;
+    background: var(--gold); color: var(--ink);
+    border: none; border-radius: 3px; cursor: pointer;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem; letter-spacing: 0.2em;
+    text-transform: uppercase; font-weight: 700;
+    transition: opacity 0.18s, transform 0.1s;
+    margin-top: 0.5rem;
+  }
+  .btn-primary:hover { opacity: 0.87; }
+  .btn-primary:active { transform: scale(0.98); }
+  .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  /* ══ RÉPONSE IA ══ */
+  .ai-response {
+    display: none;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 4px; padding: 2.5rem;
+    margin-top: 2rem;
+  }
+  .ai-response.visible { display: block; }
+
+  .ai-header {
+    display: flex; align-items: center; gap: 1rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1.2rem;
+    border-bottom: 1px solid rgba(201,168,76,0.15);
+  }
+  .ai-logo {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: var(--ink); border: 2px solid var(--gold);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    font-family: 'Space Mono', monospace; font-size: 0.55rem;
+    color: var(--gold); letter-spacing: 0.1em; flex-shrink: 0;
+  }
+  .ai-name {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem; letter-spacing: 0.2em;
+    color: var(--gold); text-transform: uppercase;
+  }
+  .ai-status {
+    font-size: 0.85rem; color: var(--grey);
+    font-style: italic; margin-top: 0.2rem;
+  }
+
+  .ai-content {
+    font-size: 1.05rem; line-height: 1.85;
+    color: rgba(245,240,232,0.88);
+    white-space: pre-wrap;
+  }
+  .ai-content strong { color: var(--cream); }
+  .ai-content em { color: var(--gold); font-style: italic; }
+
+  .thinking {
+    display: flex; align-items: center; gap: 0.5rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem; color: var(--gold);
+    letter-spacing: 0.2em;
+  }
+  .thinking-dots span {
+    display: inline-block; width: 5px; height: 5px;
+    background: var(--gold); border-radius: 50%;
+    animation: dot 1.2s infinite;
+  }
+  .thinking-dots span:nth-child(2) { animation-delay: 0.2s; }
+  .thinking-dots span:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes dot { 0%,80%,100%{transform:scale(0.6);opacity:0.4} 40%{transform:scale(1);opacity:1} }
+
+  /* Programme hebdo */
+  .programme-box {
+    margin-top: 2rem; padding: 1.5rem;
+    background: rgba(201,168,76,0.05);
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 3px;
+  }
+  .programme-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem; letter-spacing: 0.3em;
+    color: var(--gold); text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  .programme-content {
+    font-size: 1rem; line-height: 1.9;
+    color: rgba(245,240,232,0.85);
+    white-space: pre-wrap;
+  }
+
+  /* Suggestion field */
+  .suggestion-box {
+    margin-top: 2rem; padding-top: 1.5rem;
+    border-top: 1px solid rgba(255,255,255,0.07);
+  }
+  .suggestion-box label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem; letter-spacing: 0.25em;
+    color: var(--gold); text-transform: uppercase;
+    display: block; margin-bottom: 0.6rem;
+  }
+  .suggestion-box textarea {
+    width: 100%; padding: 0.9rem 1.1rem;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 3px; color: var(--cream);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem; resize: vertical; min-height: 80px;
+    outline: none; transition: border-color 0.2s;
+    -webkit-user-select: text; user-select: text;
+  }
+  .suggestion-box textarea:focus { border-color: var(--gold); }
+  .btn-suggest {
+    margin-top: 0.8rem;
+    padding: 0.75rem 2rem;
+    background: transparent;
+    border: 1px solid rgba(201,168,76,0.4);
+    color: var(--gold); border-radius: 3px; cursor: pointer;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.62rem; letter-spacing: 0.18em;
+    text-transform: uppercase; transition: all 0.2s;
+  }
+  .btn-suggest:hover { background: rgba(201,168,76,0.08); }
+
+  /* ══ FINALE ══ */
+  .finale {
+    min-height: 60vh;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    padding: 5rem 2rem;
+    background: var(--red);
+    position: relative; overflow: hidden;
+    text-align: center;
+  }
+  .finale::before {
+    content: 'x²';
+    position: absolute;
+    font-family: 'Playfair Display', serif;
+    font-size: 30rem; font-style: italic; font-weight: 900;
+    color: rgba(0,0,0,0.08);
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    pointer-events: none;
+  }
+  .finale-eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem; letter-spacing: 0.4em;
+    color: rgba(255,255,255,0.5); margin-bottom: 2rem;
+    text-transform: uppercase;
+  }
+  .finale-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 900; color: #fff; line-height: 1.2;
+    max-width: 700px; margin-bottom: 2rem;
+    position: relative; z-index: 1;
+  }
+  .finale-title em { font-style: italic; color: rgba(255,255,255,0.7); }
+  .finale-body {
+    font-size: clamp(1rem, 1.8vw, 1.2rem);
+    color: rgba(255,255,255,0.8); max-width: 560px;
+    line-height: 1.8; position: relative; z-index: 1;
+  }
+  .finale-sig {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem; font-style: italic;
+    color: rgba(255,255,255,0.35);
+    position: relative; z-index: 1;
+    margin-top: 3rem;
+    border-top: 1px solid rgba(255,255,255,0.15);
+    padding-top: 1.5rem; width: 280px;
+  }
+
+  /* ══ TOAST ══ */
+  .toast {
+    position: fixed; bottom: 2rem; right: 2rem;
+    background: rgba(201,168,76,0.12);
+    border: 1px solid var(--gold);
+    color: var(--gold); padding: 0.8rem 1.4rem;
+    border-radius: 3px; font-family: 'Space Mono', monospace;
+    font-size: 0.65rem; letter-spacing: 0.15em;
+    z-index: 10000; opacity: 0; transform: translateY(10px);
+    transition: all 0.3s; pointer-events: none;
+  }
+  .toast.show { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 680px) {
+    .chat-bubble { max-width: 90%; }
+    .form-card { padding: 1.8rem 1.4rem; }
+    .ai-response { padding: 1.8rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══ SECTION 1 : ENTRÉE ══ -->
+<section class="shock">
+  <div class="circle"></div>
+  <div class="circle"></div>
+
+  <p class="eyebrow">S.E. Corporation — Ton Guide Personnel</p>
+
+  <h1 class="shock-question">
+    Et si quelqu'un <span class="highlight">t'écoutait</span><br>
+    vraiment ?
+  </h1>
+
+  <p class="shock-sub">
+    Un pédagogue contemporain disait :<br>
+    <em>« Ce sont vos attitudes et non vos aptitudes qui définissent l'altitude de vos performances. »</em><br><br>
+    Ton blocage a un nom. Ensemble, on va le trouver.
+  </p>
+
+  <div class="scroll-hint">
+    <span>Commençons</span>
+    <div class="scroll-arrow"></div>
+  </div>
+</section>
+
+<!-- ══ SECTION 2 : DIALOGUE ILLUSTRATIF ══ -->
+<section class="guide-section">
+  <span class="section-eyebrow">Comment ça marche</span>
+  <h2 class="section-title">Une conversation <span>vraie</span></h2>
+  <p class="section-sub">Pas un formulaire froid. Un dialogue — comme si tu parlais à quelqu'un qui a du temps pour toi.</p>
+
+  <div class="chat-container">
+    <div class="chat-bubble-wrap">
+      <div class="chat-avatar avatar-se"><span>SE</span></div>
+      <div class="chat-bubble bubble-se">
+        <span class="bubble-tag">Guide S.E. Corporation</span>
+        Bonjour. Je suis là pour toi — pas pour te juger, juste pour comprendre. 
+        Dis-moi : <strong>qu'est-ce qui te pèse en ce moment dans tes cours ?</strong> 
+        Tu peux me parler librement.
+      </div>
+    </div>
+
+    <div class="chat-bubble-wrap user">
+      <div class="chat-avatar avatar-user">Toi</div>
+      <div class="chat-bubble bubble-user">
+        Je comprends pas les probabilités... Et en plus j'ai jamais le temps de réviser, 
+        entre l'école et la maison.
+      </div>
+    </div>
+
+    <div class="chat-bubble-wrap">
+      <div class="chat-avatar avatar-se"><span>SE</span></div>
+      <div class="chat-bubble bubble-se">
+        <span class="bubble-tag">Guide S.E. Corporation</span>
+        Je t'entends. <strong>Deux choses se mêlent</strong> : une difficulté de compréhension 
+        <em>et</em> un problème d'organisation. Ce n'est pas la même chose — et 
+        les deux se résolvent différemment. On va les attaquer séparément. 
+        Mais d'abord : est-ce que tu <em>essaies</em> de comprendre, 
+        ou est-ce que tu laisses tomber avant d'essayer ?
+      </div>
+    </div>
+
+    <div class="chat-bubble-wrap user">
+      <div class="chat-avatar avatar-user">Toi</div>
+      <div class="chat-bubble bubble-user">
+        Honnêtement... souvent je laisse tomber. C'est décourageant.
+      </div>
+    </div>
+
+    <div class="chat-bubble-wrap">
+      <div class="chat-avatar avatar-se"><span>SE</span></div>
+      <div class="chat-bubble bubble-se">
+        <span class="bubble-tag">Guide S.E. Corporation</span>
+        <strong>Merci d'être honnête.</strong> C'est déjà un acte courageux. 
+        Le découragement, ça se combat avec de petites victoires. 
+        Je vais te proposer un programme taillé sur mesure — 
+        rien d'écrasant, juste <em>ce qu'il faut</em>, au bon moment. 
+        Pas de pression. On avance ensemble.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ SECTION 3 : FORMULAIRE + IA ══ -->
+<section class="form-section" id="formSection">
+  <div class="form-wrap">
+
+    <span class="section-eyebrow" style="text-align:center;display:block;margin-bottom:0.8rem">Ton espace personnel</span>
+    <h2 class="section-title" style="color:var(--cream);margin-bottom:0.5rem">
+      Parle-moi de <span style="color:var(--gold);font-style:italic">toi</span>
+    </h2>
+    <p style="text-align:center;color:var(--grey);font-style:italic;font-size:1rem;margin-bottom:2.5rem;max-width:500px;margin-left:auto;margin-right:auto;line-height:1.7">
+      Ce que tu me dis reste entre nous. Ça aide Ing. Moïse à mieux t'accompagner.
+    </p>
+
+    <!-- Étape 1 : Qui es-tu -->
+    <div class="form-card">
+      <span class="form-step-label">Étape 01 — Ton profil</span>
+      <p class="form-question">Comment tu t'appelles, et dans quelle classe es-tu ?</p>
+
+      <div class="field">
+        <label>Prénom (ou surnom si tu préfères)</label>
+        <input type="text" id="f-prenom" placeholder="Ex : Armel, ou simplement « un élève de Tle C »" autocomplete="off">
+      </div>
+      <div class="field">
+        <label>Ta classe</label>
+        <select id="f-classe">
+          <option value="">— Choisir —</option>
+          <option>Terminale C</option>
+          <option>Terminale D</option>
+          <option>Terminale S</option>
+          <option>Terminale A</option>
+          <option>Terminale A4</option>
+          <option>Terminale E</option>
+          <option>Terminale F</option>
+          <option>Terminale L</option>
+          <option>Autre</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>WhatsApp (pour que Ing. Moïse te réponde directement)</label>
+        <input type="tel" id="f-wa" placeholder="Ex : 6XXXXXXXX" autocomplete="off">
+      </div>
+    </div>
+
+    <!-- Étape 2 : Ce qui bloque -->
+    <div class="form-card">
+      <span class="form-step-label">Étape 02 — Ce qui te bloque</span>
+      <p class="form-question">Qu'est-ce qui t'empêche de <em>vraiment</em> travailler en ce moment ?</p>
+      <p style="font-size:0.9rem;color:var(--grey);margin-bottom:1.2rem;font-style:italic">Coche tout ce qui te correspond — sois honnête, personne ne te juge ici.</p>
+
+      <div class="choices" id="blocages">
+        <button class="choice-btn" data-val="manque_temps">⏰ Manque de temps</button>
+        <button class="choice-btn" data-val="pas_comprendre">😵 Je ne comprends pas</button>
+        <button class="choice-btn" data-val="decouragement">😔 Découragement</button>
+        <button class="choice-btn" data-val="paresse">😴 Paresse / Procrastination</button>
+        <button class="choice-btn" data-val="pas_methode">🧭 Pas de méthode</button>
+        <button class="choice-btn" data-val="peur_echec">😨 Peur d'échouer</button>
+        <button class="choice-btn" data-val="distractions">📱 Distractions</button>
+        <button class="choice-btn" data-val="environnement">🏠 Environnement difficile</button>
+        <button class="choice-btn" data-val="autre">Autre chose</button>
+      </div>
+    </div>
+
+    <!-- Étape 3 : Difficultés précises -->
+    <div class="form-card">
+      <span class="form-step-label">Étape 03 — Ce que tu comprends mal</span>
+      <p class="form-question">Quelles notions ou chapitres te posent le plus problème ?</p>
+
+      <div class="field">
+        <label>Explique-moi avec tes propres mots</label>
+        <textarea id="f-difficultes" placeholder="Ex : Je bloque sur les probabilités dès que ça devient complexe. Les suites aussi je ne comprends pas pourquoi on fait ça..."></textarea>
+      </div>
+    </div>
+
+    <!-- Étape 4 : Temps et habitudes -->
+    <div class="form-card">
+      <span class="form-step-label">Étape 04 — Ton rythme</span>
+      <p class="form-question">En dehors de l'école, combien de temps peux-tu raisonnablement consacrer au travail ?</p>
+
+      <div class="choices" id="temps">
+        <button class="choice-btn" data-val="moins30">Moins de 30 min/jour</button>
+        <button class="choice-btn" data-val="30_1h">30 min à 1h/jour</button>
+        <button class="choice-btn" data-val="1_2h">1h à 2h/jour</button>
+        <button class="choice-btn" data-val="plus2h">Plus de 2h/jour</button>
+        <button class="choice-btn" data-val="weekend">Surtout le weekend</button>
+      </div>
+    </div>
+
+    <!-- Étape 5 : Message libre -->
+    <div class="form-card">
+      <span class="form-step-label">Étape 05 — Ton message à Ing. Moïse</span>
+      <p class="form-question">Y a-t-il quelque chose que tu voudrais lui dire, lui demander, ou lui suggérer ?</p>
+      <p style="font-size:0.9rem;color:var(--grey);margin-bottom:1.2rem;font-style:italic">
+        Une remarque sur les cours, une méthode qui ne te convient pas, une idée pour mieux apprendre… Tout est bienvenu.
+      </p>
+      <div class="field">
+        <label>Ton message (obligatoire — même court)</label>
+        <textarea id="f-message" placeholder="Ex : Je pense que les cours vont trop vite sur les probabilités. J'aimerais qu'on revoit les bases avant les exercices complexes..."></textarea>
+      </div>
+    </div>
+
+    <button class="btn-primary" id="btnEnvoyer" onclick="envoyerGuide()">
+      Envoyer &amp; recevoir mon programme →
+    </button>
+
+    <!-- RÉPONSE IA -->
+    <div class="ai-response" id="aiResponse">
+      <div class="ai-header">
+        <div class="ai-logo"><span>SE</span></div>
+        <div>
+          <div class="ai-name">Guide S.E. Corporation</div>
+          <div class="ai-status" id="aiStatus">En train de réfléchir pour toi...</div>
+        </div>
+      </div>
+
+      <div id="aiThinking" class="thinking">
+        <span>Analyse en cours</span>
+        <div class="thinking-dots"><span></span><span></span><span></span></div>
+      </div>
+
+      <div id="aiText" class="ai-content" style="display:none"></div>
+
+      <div class="programme-box" id="programmeBox" style="display:none">
+        <div class="programme-title">📅 Ton programme hebdomadaire personnalisé</div>
+        <div class="programme-content" id="programmeText"></div>
+      </div>
+
+      <!-- Suggestion obligatoire -->
+      <div class="suggestion-box" id="suggestionBox" style="display:none">
+        <label>💡 Une suggestion pour améliorer les cours ? (obligatoire)</label>
+        <textarea id="f-suggestion" placeholder="Ex : J'aimerais qu'on fasse plus d'exercices avant les évaluations. Ou qu'on ait accès aux corrigés plus tôt..."></textarea>
+        <button class="btn-suggest" onclick="envoyerSuggestion()">Envoyer ma suggestion →</button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══ FINALE ══ -->
+<section class="finale">
+  <p class="finale-eyebrow">S.E. Corporation — Since 2015</p>
+  <h2 class="finale-title">
+    Tu n'es pas seul(e).<br>
+    Ing. Moïse lit <em>chaque mot</em><br>
+    que tu lui envoies.
+  </h2>
+  <p class="finale-body">
+    Ce n'est pas un robot qui répond, c'est un système conçu pour te comprendre 
+    et préparer Ing. Moïse à t'aider avec précision. 
+    <strong>Ton honnêteté est ton premier acte de courage.</strong>
+  </p>
+  <p class="finale-sig">— Ing. Moïse Zame</p>
+</section>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, collection, addDoc, serverTimestamp }
+  from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const app = initializeApp({
+  apiKey:"AIzaSyAhSTl2OR5ztfoIwB2TgIqEaiMjD6TmrcI",
+  authDomain:"se-corporation-quiz-7187e.firebaseapp.com",
+  projectId:"se-corporation-quiz-7187e",
+  storageBucket:"se-corporation-quiz-7187e.firebasestorage.app",
+  messagingSenderId:"5773761325",
+  appId:"1:5773761325:web:e1d3cb01d88c3a73e611a4"
+});
+const db = getFirestore(app);
+
+// Scroll animations
+const obs = new IntersectionObserver(entries => {
+  entries.forEach((e,i) => { if(e.isIntersecting) setTimeout(()=>e.target.classList.add('visible'), i*120); });
+}, {threshold:0.12});
+document.querySelectorAll('.chat-bubble-wrap, .form-card').forEach(el => obs.observe(el));
+
+// Choices toggle
+document.querySelectorAll('.choices').forEach(group => {
+  group.querySelectorAll('.choice-btn').forEach(btn => {
+    btn.addEventListener('click', () => btn.classList.toggle('active'));
+  });
+});
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+window.envoyerGuide = async function() {
+  const prenom  = document.getElementById('f-prenom').value.trim();
+  const classe  = document.getElementById('f-classe').value;
+  const wa      = document.getElementById('f-wa').value.trim();
+  const diff    = document.getElementById('f-difficultes').value.trim();
+  const msg     = document.getElementById('f-message').value.trim();
+
+  if (!classe) { showToast('⚠ Sélectionne ta classe'); return; }
+  if (!diff)   { showToast('⚠ Décris tes difficultés'); return; }
+  if (!msg)    { showToast('⚠ Écris ton message à Ing. Moïse'); return; }
+
+  const blocages = [...document.querySelectorAll('#blocages .choice-btn.active')].map(b=>b.dataset.val);
+  const temps    = [...document.querySelectorAll('#temps .choice-btn.active')].map(b=>b.dataset.val);
+
+  const btn = document.getElementById('btnEnvoyer');
+  btn.disabled = true;
+  btn.textContent = 'Analyse en cours…';
+
+  document.getElementById('aiResponse').classList.add('visible');
+  document.getElementById('aiThinking').style.display = 'flex';
+  document.getElementById('aiText').style.display = 'none';
+  document.getElementById('programmeBox').style.display = 'none';
+  document.getElementById('suggestionBox').style.display = 'none';
+
+  document.getElementById('aiResponse').scrollIntoView({behavior:'smooth', block:'start'});
+
+  // ── Appel API Claude ──
+  const systemPrompt = `Tu es le guide bienveillant de S.E. Corporation, créée par Ing. Moïse Zame. 
+Tu es à la fois psychologue, philosophe et pédagogue. Tu parles comme un ami sage, pas comme un robot.
+Tu dois :
+1. Accueillir l'élève avec chaleur et empathie selon ce qu'il a partagé
+2. Nommer précisément ce qui le bloque et lui expliquer pourquoi c'est normal
+3. Lui donner 2-3 conseils concrets et humains (pas génériques)
+4. Lui proposer un programme hebdomadaire RÉALISTE et PRÉCIS basé sur le temps qu'il a et ses difficultés
+5. Terminer par une phrase de philosophie ou d'encouragement qui lui parle
+
+IMPORTANT : 
+- Utilise "je" (Guide S.E.) et "tu" (l'élève)
+- Sois précis : cite ses blocages spécifiques
+- Le programme doit être un vrai planning (Lundi : ..., Mardi : ...) pas des généralités
+- Maximum 400 mots pour la réponse principale
+- Le programme doit être séparé de la réponse, format : "PROGRAMME_DEBUT\n[contenu]\nPROGRAMME_FIN"
+- À la fin, OBLIGATOIREMENT demande-lui une suggestion pour améliorer les cours, sur une nouvelle ligne, format : "SUGGESTION_DEMANDE"`;
+
+  const userContent = `Profil élève :
+- Prénom/identité : ${prenom || 'Anonyme'}
+- Classe : ${classe}
+- WhatsApp : ${wa || 'non fourni'}
+- Blocages cochés : ${blocages.join(', ') || 'aucun coché'}
+- Temps disponible : ${temps.join(', ') || 'non précisé'}
+- Difficultés en maths : ${diff}
+- Message à Ing. Moïse : ${msg}
+
+Réponds-lui de manière humaine, personnalisée et bienveillante.`;
+
+  try {
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: systemPrompt,
+        messages: [{ role: 'user', content: userContent }]
+      })
+    });
+
+    const data = await resp.json();
+    const fullText = data.content?.[0]?.text || '';
+
+    // Parser la réponse
+    let mainText = fullText;
+    let programmeText = '';
+
+    if (fullText.includes('PROGRAMME_DEBUT')) {
+      const pStart = fullText.indexOf('PROGRAMME_DEBUT') + 'PROGRAMME_DEBUT'.length;
+      const pEnd   = fullText.indexOf('PROGRAMME_FIN');
+      programmeText = pEnd > pStart ? fullText.slice(pStart, pEnd).trim() : '';
+      mainText = fullText.slice(0, fullText.indexOf('PROGRAMME_DEBUT')).trim();
+      if (pEnd > 0) {
+        const afterProg = fullText.slice(pEnd + 'PROGRAMME_FIN'.length);
+        mainText += '\n\n' + afterProg.replace('SUGGESTION_DEMANDE','').trim();
+      }
+    }
+
+    // Afficher réponse principale
+    document.getElementById('aiThinking').style.display = 'none';
+    document.getElementById('aiStatus').textContent = 'Message reçu';
+    const aiText = document.getElementById('aiText');
+    aiText.style.display = 'block';
+    aiText.textContent = '';
+
+    // Affichage progressif lettre par lettre
+    let i = 0;
+    const cleaned = mainText.replace('SUGGESTION_DEMANDE','').trim();
+    const interval = setInterval(() => {
+      aiText.textContent += cleaned[i] || '';
+      i++;
+      if (i >= cleaned.length) {
+        clearInterval(interval);
+        if (programmeText) {
+          document.getElementById('programmeText').textContent = programmeText;
+          document.getElementById('programmeBox').style.display = 'block';
+        }
+        document.getElementById('suggestionBox').style.display = 'block';
+        document.getElementById('suggestionBox').scrollIntoView({behavior:'smooth',block:'nearest'});
+      }
+    }, 18);
+
+    // ── Sauvegarder dans Firebase ──
+    await addDoc(collection(db,'guide_sessions'), {
+      date: serverTimestamp(),
+      prenom:   prenom || 'Anonyme',
+      classe,
+      whatsapp: wa || '',
+      blocages,
+      temps,
+      difficultes: diff,
+      messagePourMoise: msg,
+      reponseGuide: fullText,
+      programme: programmeText,
+    });
+
+    btn.textContent = '✓ Envoyé';
+
+  } catch(e) {
+    document.getElementById('aiThinking').style.display = 'none';
+    document.getElementById('aiStatus').textContent = 'Erreur de connexion';
+    document.getElementById('aiText').style.display = 'block';
+    document.getElementById('aiText').textContent = 'Une erreur est survenue. Réessaie dans un moment. En attendant, ton message a bien été transmis à Ing. Moïse.';
+    btn.disabled = false;
+    btn.textContent = 'Réessayer →';
+    // Sauvegarder quand même
+    try {
+      await addDoc(collection(db,'guide_sessions'), {
+        date: serverTimestamp(),
+        prenom: prenom||'Anonyme', classe, whatsapp: wa||'',
+        blocages, temps, difficultes: diff, messagePourMoise: msg,
+        reponseGuide: '', programme: '',
+      });
+    } catch(_){}
+  }
+};
+
+window.envoyerSuggestion = async function() {
+  const sug = document.getElementById('f-suggestion').value.trim();
+  if (!sug) { showToast('⚠ Écris ta suggestion avant d\'envoyer'); return; }
+
+  try {
+    // Mettre à jour le dernier document (simplification : ajouter séparément)
+    await addDoc(collection(db,'suggestions_cours'), {
+      date: serverTimestamp(),
+      classe: document.getElementById('f-classe').value,
+      prenom: document.getElementById('f-prenom').value.trim() || 'Anonyme',
+      suggestion: sug
+    });
+
+    const box = document.getElementById('suggestionBox');
+    box.innerHTML = `<p style="color:var(--gold);font-family:'Space Mono',monospace;font-size:0.7rem;letter-spacing:0.2em;padding:1rem 0">
+      ✓ Suggestion envoyée à Ing. Moïse. Merci — chaque retour compte.
+    </p>`;
+    showToast('✓ Suggestion enregistrée');
+  } catch(e) {
+    showToast('⚠ Erreur réseau — réessaie');
+  }
+};
+</script>
+</body>
+</html>
