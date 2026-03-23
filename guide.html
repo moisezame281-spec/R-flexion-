@@ -731,6 +731,10 @@ const app = initializeApp({
 });
 const db = getFirestore(app);
 
+// ══ REMPLACE ICI TA CLÉ GEMINI ══
+// Crée ta clé gratuite sur : https://aistudio.google.com/app/apikey
+const GEMINI_KEY = AIzaSyCFz7KGKfKt2lDlXisGVk0L_OqhDW9CQcg;
+
 // Scroll animations
 const obs = new IntersectionObserver(entries => {
   entries.forEach((e,i) => { if(e.isIntersecting) setTimeout(()=>e.target.classList.add('visible'), i*120); });
@@ -776,9 +780,7 @@ window.envoyerGuide = async function() {
 
   document.getElementById('aiResponse').scrollIntoView({behavior:'smooth', block:'start'});
 
-  // ── Appel API Claude ──
-  // ── Appel API Claude ──
-  const systemPrompt = `Tu es le guide bienveillant de S.E. Corporation, créée par Ing. Moïse Zame (Ing. Génie Civil, ENSPD Douala).
+  const fullPrompt = `Tu es le guide bienveillant de S.E. Corporation, créée par Ing. Moïse Zame (Ing. Génie Civil, ENSPD Douala).
 Tu es à la fois psychologue, philosophe et pédagogue de haut niveau. Tu parles comme un ami sage, chaleureux et direct — pas comme un robot.
 
 Voici exactement ce que tu dois faire dans ta réponse, dans cet ordre :
@@ -801,9 +803,9 @@ RÈGLES ABSOLUES :
 - Le JSON du programme doit être 100% valide, sans retours à la ligne dans les valeurs
 - Adapte le programme au temps disponible de l'élève (${temps.join(', ') || 'non précisé'})
 - Sois précis dans le programme : cite les notions exactes à travailler
-- Ne mets RIEN entre |||PROGRAMME||| et |||FIN|||, seulement le JSON`;
+- Ne mets RIEN entre |||PROGRAMME||| et |||FIN|||, seulement le JSON
 
-  const userContent = `Profil de l'élève :
+Profil de l'élève :
 - Prénom : ${prenom || 'un élève'}
 - Classe : ${classe}
 - Blocages : ${blocages.join(', ') || 'non précisé'}
@@ -814,25 +816,29 @@ RÈGLES ABSOLUES :
 Réponds selon les instructions.`;
 
   try {
-    const resp = await fetch('/api/claude', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        system: systemPrompt,
-        max_tokens: 1200,
-        messages: [{ role: 'user', content: userContent }]
-      })
-    });
+    // ── Appel API Gemini (gratuit) ──
+    const resp = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: fullPrompt }] }],
+          generationConfig: { maxOutputTokens: 1200 }
+        })
+      }
+    );
 
     if (!resp.ok) throw new Error('HTTP ' + resp.status);
     const data = await resp.json();
     if (data.error) throw new Error(data.error.message || 'Erreur API');
-    const fullText = (data.content?.[0]?.text || '').trim();
+
+    const fullText = (data.candidates?.[0]?.content?.parts?.[0]?.text || '').trim();
     if (!fullText) throw new Error('Réponse vide');
 
     // ── Parser proprement ──
-    let mainText    = fullText;
-    let programme   = null;
+    let mainText  = fullText;
+    let programme = null;
 
     const markerStart = '|||PROGRAMME|||';
     const markerEnd   = '|||FIN|||';
@@ -884,15 +890,16 @@ Réponds selon les instructions.`;
       whatsapp: wa || '',
       blocages,
       temps,
-      difficultes:     diff,
+      difficultes:      diff,
       messagePourMoise: msg,
-      reponseGuide:    mainText,
-      programme:       programme ? JSON.stringify(programme) : '',
+      reponseGuide:     mainText,
+      programme:        programme ? JSON.stringify(programme) : '',
     });
 
     btn.textContent = '✓ Envoyé';
 
   } catch(e) {
+    console.error(e);
     document.getElementById('aiThinking').style.display = 'none';
     document.getElementById('aiStatus').textContent = 'Erreur de connexion';
     document.getElementById('aiText').style.display = 'block';
@@ -916,7 +923,6 @@ window.envoyerSuggestion = async function() {
   if (!sug) { showToast('⚠ Écris ta suggestion avant d\'envoyer'); return; }
 
   try {
-    // Mettre à jour le dernier document (simplification : ajouter séparément)
     await addDoc(collection(db,'suggestions_cours'), {
       date: serverTimestamp(),
       classe: document.getElementById('f-classe').value,
