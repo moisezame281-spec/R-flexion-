@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Parle-lui — S.E. Corporation</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --ink:#080807;--paper:#f2ede4;--cream:#e8e0d0;
+  --gold:#c9a84c;--red:#7a1515;
+  --grey:#5a554e;--midgrey:#9a948a;
+  --rule:rgba(0,0,0,.12);
+}
+html{scroll-behavior:smooth}
+
+body{
+  background:var(--paper);color:var(--ink);
+  font-family:'Cormorant Garamond',serif;
+  min-height:100vh;overflow-x:hidden;
+}
+
+/* grain overlay */
+body::after{
+  content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 300 300' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.045'/%3E%3C/svg%3E");
+  opacity:.55;mix-blend-mode:multiply;
+}
+
+/* ── MASTHEAD ─────────────────────────────────── */
+.masthead{
+  border-bottom:3px double var(--ink);
+  padding:2rem 2rem .8rem;
+  text-align:center;
+  position:relative;
+}
+.masthead-eyebrow{
+  font-family:'Space Mono',monospace;font-size:.52rem;
+  letter-spacing:.4em;text-transform:uppercase;
+  color:var(--midgrey);margin-bottom:.6rem;
+}
+.masthead-title{
+  font-family:'Playfair Display',serif;font-size:clamp(2.2rem,7vw,4.2rem);
+  font-weight:900;letter-spacing:-.02em;line-height:1;
+  color:var(--ink);
+}
+.masthead-title em{font-style:italic;font-weight:400}
+.masthead-rule{
+  display:flex;align-items:center;gap:.8rem;margin:.9rem 0 .5rem;
+}
+.masthead-rule::before,.masthead-rule::after{
+  content:'';flex:1;height:1px;background:var(--ink);
+}
+.masthead-rule span{
+  font-family:'Space Mono',monospace;font-size:.5rem;
+  letter-spacing:.3em;text-transform:uppercase;white-space:nowrap;
+}
+.masthead-sub{
+  font-size:1rem;color:var(--grey);font-style:italic;
+  max-width:480px;margin:.5rem auto 0;line-height:1.6;
+}
+
+/* ── QUOTE BLOCK ──────────────────────────────── */
+.quote-section{
+  max-width:680px;margin:3rem auto 0;padding:0 2rem;
+  text-align:center;
+}
+.pull-quote{
+  font-family:'Playfair Display',serif;font-size:clamp(1.15rem,3vw,1.55rem);
+  font-style:italic;font-weight:400;line-height:1.7;
+  color:var(--ink);
+  border-left:3px solid var(--ink);
+  border-right:3px solid var(--ink);
+  padding:1.2rem 2rem;
+  position:relative;
+}
+.pull-quote::before{
+  content:'❝';font-size:3rem;color:rgba(0,0,0,.08);
+  position:absolute;top:-.5rem;left:.6rem;
+  font-family:'Playfair Display',serif;line-height:1;
+}
+.pull-quote cite{
+  display:block;margin-top:.8rem;
+  font-family:'Space Mono',monospace;font-size:.58rem;
+  letter-spacing:.25em;text-transform:uppercase;
+  font-style:normal;color:var(--midgrey);
+}
+
+/* ── ANONYMITY NOTICE ─────────────────────────── */
+.anon-notice{
+  max-width:560px;margin:2.5rem auto;padding:0 2rem;
+  display:flex;align-items:flex-start;gap:.9rem;
+}
+.anon-icon{
+  font-size:1.4rem;flex-shrink:0;margin-top:.1rem;opacity:.6;
+}
+.anon-text{
+  font-size:.92rem;color:var(--grey);line-height:1.75;
+}
+.anon-text strong{color:var(--ink);font-weight:600}
+
+/* ── FORM ─────────────────────────────────────── */
+.form-section{
+  max-width:620px;margin:0 auto 4rem;padding:0 2rem;
+}
+
+.form-divider{
+  display:flex;align-items:center;gap:.8rem;margin-bottom:2rem;
+}
+.form-divider::before,.form-divider::after{
+  content:'';flex:1;height:1px;background:var(--rule);
+}
+.form-divider span{
+  font-family:'Space Mono',monospace;font-size:.5rem;
+  letter-spacing:.3em;text-transform:uppercase;color:var(--midgrey);
+}
+
+.field{margin-bottom:1.4rem}
+.field-label{
+  font-family:'Space Mono',monospace;font-size:.55rem;
+  letter-spacing:.28em;text-transform:uppercase;
+  color:var(--grey);margin-bottom:.5rem;display:block;
+}
+.field-label span{color:var(--midgrey);font-size:.5rem}
+
+.field input,.field textarea,.field select{
+  width:100%;padding:.8rem 1rem;
+  background:transparent;
+  border:none;border-bottom:1.5px solid var(--ink);
+  color:var(--ink);font-family:'Cormorant Garamond',serif;
+  font-size:1.05rem;outline:none;
+  transition:border-color .2s;
+  border-radius:0;
+  -webkit-appearance:none;
+}
+.field input::placeholder,.field textarea::placeholder{
+  color:var(--midgrey);font-style:italic;
+}
+.field input:focus,.field textarea:focus,.field select:focus{
+  border-bottom-color:var(--gold);
+}
+.field textarea{resize:vertical;min-height:110px;line-height:1.65}
+.field select{cursor:pointer;background:var(--paper)}
+.field select option{background:var(--paper)}
+
+/* type buttons */
+.type-row{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.3rem}
+.type-btn{
+  padding:.35rem .9rem;border:1.5px solid var(--ink);
+  background:transparent;color:var(--ink);
+  font-family:'Space Mono',monospace;font-size:.58rem;
+  letter-spacing:.15em;text-transform:uppercase;
+  cursor:pointer;transition:all .15s;border-radius:0;
+}
+.type-btn:hover{background:var(--ink);color:var(--paper)}
+.type-btn.active{background:var(--ink);color:var(--paper)}
+
+/* submit */
+.submit-row{margin-top:2rem;display:flex;align-items:center;gap:1.2rem;flex-wrap:wrap}
+.submit-btn{
+  padding:.8rem 2.2rem;border:2px solid var(--ink);
+  background:var(--ink);color:var(--paper);
+  font-family:'Space Mono',monospace;font-size:.62rem;
+  letter-spacing:.2em;text-transform:uppercase;font-weight:700;
+  cursor:pointer;transition:all .18s;
+}
+.submit-btn:hover{background:transparent;color:var(--ink)}
+.submit-btn:disabled{opacity:.35;cursor:default}
+.submit-note{
+  font-size:.82rem;color:var(--midgrey);font-style:italic;
+}
+
+/* success */
+.success-msg{
+  display:none;text-align:center;padding:3rem 2rem;
+  border:1.5px solid var(--ink);margin-top:2rem;
+}
+.success-msg.show{display:block}
+.success-title{
+  font-family:'Playfair Display',serif;font-size:1.8rem;
+  font-style:italic;margin-bottom:.6rem;
+}
+.success-sub{font-size:.95rem;color:var(--grey);line-height:1.7}
+
+/* footer */
+footer{
+  border-top:3px double var(--ink);
+  padding:1.5rem 2rem;text-align:center;
+  font-family:'Space Mono',monospace;font-size:.52rem;
+  letter-spacing:.3em;text-transform:uppercase;color:var(--midgrey);
+}
+
+/* animations */
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.masthead{animation:fadeUp .5s ease both}
+.quote-section{animation:fadeUp .5s .1s ease both}
+.anon-notice{animation:fadeUp .5s .2s ease both}
+.form-section{animation:fadeUp .5s .3s ease both}
+</style>
+</head>
+<body>
+
+<!-- MASTHEAD -->
+<header class="masthead">
+  <p class="masthead-eyebrow">S.E. Corporation · Confidentiel</p>
+  <h1 class="masthead-title">Parle-<em>lui</em>.</h1>
+  <div class="masthead-rule"><span>Ce que tu n'as jamais osé dire</span></div>
+  <p class="masthead-sub">Critiques, compliments, suggestions — tout est bienvenu. Rien n'est filtré.</p>
+</header>
+
+<!-- PULL QUOTE -->
+<section class="quote-section">
+  <blockquote class="pull-quote">
+    « Ceux qui m'enseignent le mieux sont ceux qui me disent ce que je fais mal — pas seulement ce que je fais bien. J'ai besoin de vous entendre pour continuer à m'améliorer. »
+    <cite>— Ing. Moïse Zame</cite>
+  </blockquote>
+</section>
+
+<!-- ANONYMITY NOTICE -->
+<div class="anon-notice">
+  <span class="anon-icon">🔒</span>
+  <p class="anon-text">
+    <strong>Ton message est totalement anonyme.</strong> Personne ne saura jamais qui l'a écrit — pas même Ing. Moïse — sauf si toi-même tu précises ton nom dans le message. Ce que tu dis ici reste entre toi et ta conscience.
+  </p>
+</div>
+
+<!-- FORM -->
+<section class="form-section">
+  <div class="form-divider"><span>Ton message</span></div>
+
+  <div id="main-form">
+    <!-- Type -->
+    <div class="field">
+      <label class="field-label">De quoi s'agit-il ?</label>
+      <div class="type-row">
+        <button class="type-btn active" data-val="critique" onclick="selectType(this)">Critique</button>
+        <button class="type-btn" data-val="compliment" onclick="selectType(this)">Compliment</button>
+        <button class="type-btn" data-val="suggestion" onclick="selectType(this)">Suggestion</button>
+        <button class="type-btn" data-val="autre" onclick="selectType(this)">Autre</button>
+      </div>
+    </div>
+
+    <!-- Matière / contexte -->
+    <div class="field">
+      <label class="field-label">Ça concerne <span>(optionnel)</span></label>
+      <select id="f-contexte">
+        <option value="">— Choisir —</option>
+        <option value="methode_cours">Ta méthode d'enseignement</option>
+        <option value="rythme">Le rythme / la cadence</option>
+        <option value="explications">La clarté des explications</option>
+        <option value="exercices">Les exercices proposés</option>
+        <option value="disponibilite">Ta disponibilité</option>
+        <option value="ambiance">L'ambiance en classe</option>
+        <option value="autre">Autre chose</option>
+      </select>
+    </div>
+
+    <!-- Message -->
+    <div class="field">
+      <label class="field-label">Ton message <span>— sois honnête, c'est le but</span></label>
+      <textarea id="f-msg" placeholder="Écris librement. Personne ne le saura."></textarea>
+    </div>
+
+    <!-- Nom optionnel -->
+    <div class="field">
+      <label class="field-label">Ton prénom <span>— uniquement si tu veux qu'il sache</span></label>
+      <input id="f-prenom" type="text" placeholder="Laisser vide pour rester anonyme" />
+    </div>
+
+    <div class="submit-row">
+      <button class="submit-btn" id="submit-btn" onclick="submitFeedback()">Envoyer en silence →</button>
+      <span class="submit-note">Aucune donnée identifiante n'est collectée.</span>
+    </div>
+  </div>
+
+  <div class="success-msg" id="success-msg">
+    <p class="success-title">Message transmis.</p>
+    <p class="success-sub">Il travaille chaque nuit pour vous. Maintenant, il a entendu ta voix — même sans connaître ton visage.<br><br>Merci d'avoir eu le courage de parler.</p>
+  </div>
+</section>
+
+<footer>S.E. Corporation · Since 2015 · Ing. Moïse Zame · Confidentiel</footer>
+
+<!-- Firebase -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, addDoc, serverTimestamp }
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+// ── Remplace par ta config Firebase ──
+const firebaseConfig = {
+  apiKey: "VOTRE_API_KEY",
+  authDomain: "VOTRE_PROJECT.firebaseapp.com",
+  projectId: "VOTRE_PROJECT_ID",
+};
+// ─────────────────────────────────────
+
+const app = initializeApp(firebaseConfig);
+const db  = getFirestore(app);
+
+let selectedType = 'critique';
+
+window.selectType = function(btn) {
+  document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  selectedType = btn.dataset.val;
+};
+
+window.submitFeedback = async function() {
+  const msg      = document.getElementById('f-msg').value.trim();
+  const prenom   = document.getElementById('f-prenom').value.trim();
+  const contexte = document.getElementById('f-contexte').value;
+
+  if (!msg) {
+    document.getElementById('f-msg').focus();
+    return;
+  }
+
+  const btn = document.getElementById('submit-btn');
+  btn.disabled = true;
+  btn.textContent = 'Envoi…';
+
+  try {
+    await addDoc(collection(db, 'avis_eleves'), {
+      type: selectedType,
+      contexte: contexte || null,
+      message: msg,
+      prenom: prenom || null,   // null si anonyme
+      date: serverTimestamp(),
+    });
+
+    document.getElementById('main-form').style.display = 'none';
+    document.getElementById('success-msg').classList.add('show');
+  } catch(e) {
+    btn.disabled = false;
+    btn.textContent = 'Envoyer en silence →';
+    alert('Une erreur s\'est produite. Réessaie.');
+  }
+};
+</script>
+</body>
+</html>
