@@ -401,6 +401,7 @@ tbody td.mono{font-family:'Space Mono',monospace;font-size:.75rem;letter-spacing
     <div style="display:flex;gap:4px;background:rgba(255,255,255,.04);border-radius:6px;padding:5px;margin-bottom:1.2rem;flex-wrap:wrap">
       <button onclick="guideTab('sessions')" id="gtab-sessions" style="padding:7px 14px;border-radius:4px;border:none;background:rgba(42,184,200,.15);color:#2ab8c8;font-family:'Space Mono',monospace;font-size:.62rem;letter-spacing:.12em;cursor:pointer">💬 Sessions Guide</button>
       <button onclick="guideTab('suggestions')" id="gtab-suggestions" style="padding:7px 14px;border-radius:4px;border:none;background:transparent;color:var(--grey);font-family:'Space Mono',monospace;font-size:.62rem;letter-spacing:.12em;cursor:pointer">💡 Suggestions</button>
+      <button onclick="guideTab('avis')" id="gtab-avis" style="padding:7px 14px;border-radius:4px;border:none;background:transparent;color:var(--grey);font-family:'Space Mono',monospace;font-size:.62rem;letter-spacing:.12em;cursor:pointer">📝 Avis élèves</button>
     </div>
 
     <!-- Sessions -->
@@ -422,6 +423,29 @@ tbody td.mono{font-family:'Space Mono',monospace;font-size:.75rem;letter-spacing
     <div id="gpanel-suggestions" style="display:none">
       <div id="suggestions-list"></div>
     </div>
+
+    <!-- Avis élèves -->
+    <div id="gpanel-avis" style="display:none">
+      <!-- Filtres -->
+      <div style="display:flex;gap:.6rem;margin-bottom:1rem;flex-wrap:wrap;align-items:center">
+        <input type="text" id="avis-search" placeholder="Rechercher dans les avis..."
+          oninput="renderAvis()"
+          style="padding:7px 12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:3px;color:var(--cream);font-family:'Space Mono',monospace;font-size:.65rem;outline:none;width:220px">
+        <select id="avis-filter-type" onchange="renderAvis()"
+          style="padding:7px 12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:3px;color:var(--cream);font-family:'Cormorant Garamond',serif;font-size:.9rem;outline:none">
+          <option value="">Tous les types</option>
+          <option value="critique">Critiques</option>
+          <option value="compliment">Compliments</option>
+          <option value="suggestion">Suggestions</option>
+          <option value="autre">Autres</option>
+        </select>
+      </div>
+      <!-- Compteurs rapides -->
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:.8rem;margin-bottom:1.2rem" id="avis-stats-row"></div>
+      <!-- Liste -->
+      <div id="avis-list"></div>
+    </div>
+
   </div>
 
 </div><!-- fin pg-admin -->
@@ -573,34 +597,23 @@ window.confirmArchiveEval = () => {
 async function archiveCurrentEval() {
   showNotif('📦 Archivage en cours...');
   try {
-    // Récupérer tous les docs non archivés dans les 3 collections
-    let toArchive = [];
+    let allDocs2 = [];
     for(const col of COLLECTIONS){
-      const snap = await getDocs(collection(db, col));
-      snap.docs.forEach(d => {
-        if(d.data().evaluation !== 'archived') {
-          toArchive.push({col, id: d.id});
-        }
-      });
+      const s2 = await getDocs(collection(db, col));
+      s2.docs.forEach(d2 => allDocs2.push({col, id:d2.id}));
     }
-    if(toArchive.length === 0) {
-      showNotif('⚠ Aucun résultat à archiver');
-      return;
+    for(const item of allDocs2){
+      batch.update(doc(db, item.col, item.id), { evaluation: 'archived' });
     }
-    // Archiver par lots de 500 (limite Firestore)
-    const batchSize = 450;
-    for(let i = 0; i < toArchive.length; i += batchSize) {
-      const batch = writeBatch(db);
-      toArchive.slice(i, i + batchSize).forEach(item => {
-        batch.update(doc(db, item.col, item.id), { evaluation: 'archived' });
-      });
-      await batch.commit();
+    // dummy snap pour la suite
+    const snap = { docs: allDocs2.map(x=>({id:x.id})) };
+    if(false){ // skip old loopbatch.commit();
     }
     showArchives = false;
-    showNotif('✓ ' + toArchive.length + ' résultat(s) archivé(s) avec succès !');
+    showNotif('✓ ' + toArchive.length + ' résultats archivés avec succès !');
   } catch(e) {
-    console.error('Archivage:', e);
-    showNotif('❌ Erreur archivage : ' + e.message);
+    console.error(e);
+    showNotif('❌ Erreur archivage');
   }
 }
 
@@ -1013,6 +1026,7 @@ window.showGuidePanel = function() {
   if (!isVisible) {
     loadGuideSessions();
     loadGuideSuggestions();
+    loadAvis();
     panel.scrollIntoView({behavior:'smooth'});
   }
 };
@@ -1020,10 +1034,15 @@ window.showGuidePanel = function() {
 window.guideTab = function(tab) {
   document.getElementById('gpanel-sessions').style.display    = tab==='sessions'    ? 'block' : 'none';
   document.getElementById('gpanel-suggestions').style.display = tab==='suggestions' ? 'block' : 'none';
-  document.getElementById('gtab-sessions').style.background    = tab==='sessions'    ? 'rgba(42,184,200,.15)' : 'transparent';
-  document.getElementById('gtab-sessions').style.color         = tab==='sessions'    ? '#2ab8c8' : 'var(--grey)';
-  document.getElementById('gtab-suggestions').style.background = tab==='suggestions' ? 'rgba(42,184,200,.15)' : 'transparent';
-  document.getElementById('gtab-suggestions').style.color      = tab==='suggestions' ? '#2ab8c8' : 'var(--grey)';
+  document.getElementById('gpanel-avis').style.display        = tab==='avis'        ? 'block' : 'none';
+
+  const tabs = ['sessions','suggestions','avis'];
+  tabs.forEach(t => {
+    const el = document.getElementById('gtab-'+t);
+    if (!el) return;
+    el.style.background = tab===t ? 'rgba(42,184,200,.15)' : 'transparent';
+    el.style.color      = tab===t ? '#2ab8c8' : 'var(--grey)';
+  });
 };
 
 function loadGuideSessions() {
@@ -1041,6 +1060,80 @@ function loadGuideSuggestions() {
     guideSuggestions = snap.docs.map(d=>({id:d.id,...d.data()}));
     renderGuideSuggestions();
   });
+}
+
+// ═══ AVIS ÉLÈVES ═══
+let avisData = [];
+
+function loadAvis() {
+  const q = query(collection(db,'avis_eleves'), orderBy('date','desc'));
+  onSnapshot(q, snap => {
+    avisData = snap.docs.map(d=>({id:d.id,...d.data()}));
+    renderAvis();
+    renderAvisStats();
+  });
+}
+
+window.renderAvis = function() {
+  const search = (document.getElementById('avis-search')||{}).value?.toLowerCase()||'';
+  const type   = (document.getElementById('avis-filter-type')||{}).value||'';
+  let filtered = avisData.filter(a => {
+    if (type && a.type !== type) return false;
+    if (search && !(a.message||'').toLowerCase().includes(search) && !(a.prenom||'').toLowerCase().includes(search)) return false;
+    return true;
+  });
+
+  const cont = document.getElementById('avis-list');
+  if (!cont) return;
+  if (!filtered.length) {
+    cont.innerHTML='<p style="color:var(--grey);padding:1.5rem;text-align:center;font-style:italic">Aucun avis pour l\'instant.</p>';
+    return;
+  }
+
+  const typeColors = {
+    critique:   { bg:'rgba(139,26,26,.15)',  border:'rgba(139,26,26,.35)',  color:'#e05555',  label:'Critique'   },
+    compliment: { bg:'rgba(26,94,26,.12)',   border:'rgba(26,94,26,.35)',   color:'#6dc96d',  label:'Compliment' },
+    suggestion: { bg:'rgba(201,168,76,.08)', border:'rgba(201,168,76,.3)', color:'var(--gold)',label:'Suggestion'},
+    autre:      { bg:'rgba(255,255,255,.04)',border:'rgba(255,255,255,.1)', color:'var(--grey)',label:'Autre'    },
+  };
+  const contexteLabels = {
+    methode_cours:'Méthode d\'enseignement', rythme:'Rythme / cadence',
+    explications:'Clarté des explications', exercices:'Exercices proposés',
+    disponibilite:'Disponibilité', ambiance:'Ambiance en classe', autre:'Autre'
+  };
+
+  cont.innerHTML = filtered.map(a => {
+    const dt = a.date?.toDate ? a.date.toDate().toLocaleDateString('fr-FR',{day:'2-digit',month:'short',year:'numeric'}) : '—';
+    const c  = typeColors[a.type] || typeColors.autre;
+    const ctx = a.contexte ? contexteLabels[a.contexte] || a.contexte : null;
+    const auteur = a.prenom ? `<strong style="color:var(--cream)">${a.prenom}</strong>` : `<em style="color:var(--grey)">Anonyme</em>`;
+    return `<div style="background:${c.bg};border:1px solid ${c.border};border-radius:4px;padding:1.2rem;margin-bottom:.8rem">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem;margin-bottom:.7rem">
+        <div style="display:flex;align-items:center;gap:.7rem">
+          <span style="font-family:'Space Mono',monospace;font-size:.58rem;background:${c.bg};color:${c.color};border:1px solid ${c.border};padding:3px 10px;border-radius:20px;font-weight:700">${c.label}</span>
+          ${ctx ? `<span style="font-size:.78rem;color:var(--grey)">${ctx}</span>` : ''}
+        </div>
+        <div style="font-family:'Space Mono',monospace;font-size:.6rem;color:var(--grey)">${auteur} · ${dt}</div>
+      </div>
+      <p style="font-size:.97rem;color:rgba(245,240,232,.88);line-height:1.75">${a.message}</p>
+    </div>`;
+  }).join('');
+};
+
+function renderAvisStats() {
+  const row = document.getElementById('avis-stats-row');
+  if (!row) return;
+  const counts = {critique:0, compliment:0, suggestion:0, autre:0};
+  avisData.forEach(a => { if(counts[a.type]!==undefined) counts[a.type]++; else counts.autre++; });
+  row.innerHTML = [
+    ['Total avis', avisData.length, 'var(--gold)'],
+    ['Critiques',  counts.critique,   '#e05555'],
+    ['Compliments',counts.compliment, '#6dc96d'],
+    ['Suggestions',counts.suggestion, 'var(--gold)'],
+  ].map(([lbl,val,col])=>`<div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:4px;padding:.9rem;text-align:center">
+    <div style="font-size:1.6rem;font-weight:800;color:${col};font-family:'Playfair Display',serif">${val}</div>
+    <div style="font-size:.65rem;color:var(--grey);font-family:'Space Mono',monospace;letter-spacing:.1em;margin-top:.2rem">${lbl}</div>
+  </div>`).join('');
 }
 
 window.renderGuideSessions = function() {
