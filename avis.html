@@ -288,13 +288,14 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/fireba
 import { getFirestore, collection, addDoc, serverTimestamp }
   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-// ── Remplace par ta config Firebase ──
 const firebaseConfig = {
-  apiKey: "VOTRE_API_KEY",
-  authDomain: "VOTRE_PROJECT.firebaseapp.com",
-  projectId: "VOTRE_PROJECT_ID",
+  apiKey: "AIzaSyAhSTl2OR5ztfoIwB2TgIqEaiMjD6TmrcI",
+  authDomain: "se-corporation-quiz-7187e.firebaseapp.com",
+  projectId: "se-corporation-quiz-7187e",
+  storageBucket: "se-corporation-quiz-7187e.firebasestorage.app",
+  messagingSenderId: "5773761325",
+  appId: "1:5773761325:web:e1d3cb01d88c3a73e611a4"
 };
-// ─────────────────────────────────────
 
 const app = initializeApp(firebaseConfig);
 const db  = getFirestore(app);
