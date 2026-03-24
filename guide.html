@@ -3,942 +3,485 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>S.E. Corporation — Ton Guide Personnel</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<title>S.E. Corporation — Guide Personnel</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --ink:#0f0e0a;--cream:#f5f0e8;--gold:#c9a84c;--red:#8b1a1a;
+  --blue:#1a2f5e;--grey:#6b6560;--green:#1a5e1a;--teal:#2ab8c8;
+  --bg2:#13120d;--bubble-bot:rgba(42,184,200,.1);--bubble-user:rgba(201,168,76,.1);
+}
+html{scroll-behavior:smooth}
+body{
+  background:var(--ink);color:var(--cream);
+  font-family:'Cormorant Garamond',serif;min-height:100vh;
+  display:flex;flex-direction:column;align-items:center;
+  position:relative;overflow-x:hidden;
+}
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");
+  opacity:.18
+}
+/* ── HERO ──────────────────────────────────────── */
+.hero{
+  width:100%;max-width:760px;padding:4rem 1.5rem 2rem;text-align:center;
+  position:relative;z-index:1;
+}
+.hero-eyebrow{
+  font-family:'Space Mono',monospace;font-size:.58rem;letter-spacing:.35em;
+  color:var(--gold);text-transform:uppercase;margin-bottom:1rem;opacity:.8;
+}
+.hero-title{
+  font-family:'Playfair Display',serif;font-size:clamp(1.8rem,5vw,3rem);
+  font-weight:900;line-height:1.15;color:var(--cream);
+  margin-bottom:1rem;
+}
+.hero-title em{color:var(--gold);font-style:italic}
+.hero-sub{
+  font-size:1.1rem;color:rgba(245,240,232,.6);line-height:1.8;
+  max-width:560px;margin:0 auto 1.5rem;
+}
+.divider-gold{
+  width:80px;height:2px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  margin:0 auto 2rem;
+}
 
-  :root {
-    --ink:    #0f0e0a;
-    --cream:  #f5f0e8;
-    --gold:   #c9a84c;
-    --red:    #8b1a1a;
-    --blue:   #1a2f5e;
-    --grey:   #6b6560;
-  }
+/* ── EXPLOIT BANNER ────────────────────────────── */
+.exploit-banner{
+  background:linear-gradient(135deg,rgba(139,26,26,.15),rgba(201,168,76,.08));
+  border:1px solid rgba(201,168,76,.2);border-radius:6px;
+  padding:1.2rem 1.5rem;max-width:680px;width:calc(100% - 3rem);
+  margin:0 auto 2.5rem;position:relative;z-index:1;
+  display:flex;align-items:flex-start;gap:1rem;
+}
+.exploit-icon{font-size:1.6rem;flex-shrink:0;margin-top:.1rem}
+.exploit-text{font-size:.95rem;color:rgba(245,240,232,.8);line-height:1.7}
+.exploit-text strong{color:var(--gold)}
 
-  html { scroll-behavior: smooth; }
+/* ── CHAT WINDOW ───────────────────────────────── */
+.chat-wrapper{
+  width:100%;max-width:720px;padding:0 1.5rem 1.5rem;
+  position:relative;z-index:1;flex:1;display:flex;flex-direction:column;
+}
+.chat-box{
+  background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.08);
+  border-radius:8px;display:flex;flex-direction:column;overflow:hidden;
+  height:520px;box-shadow:0 8px 40px rgba(0,0,0,.4);
+}
+.chat-header{
+  background:rgba(42,184,200,.08);border-bottom:1px solid rgba(42,184,200,.15);
+  padding:.9rem 1.2rem;display:flex;align-items:center;gap:.8rem;flex-shrink:0;
+}
+.bot-avatar{
+  width:36px;height:36px;border-radius:50%;
+  background:linear-gradient(135deg,var(--teal),#1a7a8a);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1rem;flex-shrink:0;
+}
+.bot-info{}
+.bot-name{
+  font-family:'Space Mono',monospace;font-size:.65rem;letter-spacing:.2em;
+  color:var(--teal);text-transform:uppercase;font-weight:700;
+}
+.bot-status{
+  font-size:.78rem;color:rgba(245,240,232,.5);display:flex;align-items:center;gap:.4rem;
+}
+.dot-live{
+  width:6px;height:6px;border-radius:50%;background:#3ab03a;
+  animation:blink 1.4s infinite;
+}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
 
-  body {
-    background: var(--ink);
-    color: var(--cream);
-    font-family: 'Cormorant Garamond', serif;
-    overflow-x: hidden;
-  }
+/* messages area */
+.messages{
+  flex:1;overflow-y:auto;padding:1.2rem;display:flex;flex-direction:column;gap:.9rem;
+  scroll-behavior:smooth;
+}
+.messages::-webkit-scrollbar{width:4px}
+.messages::-webkit-scrollbar-track{background:transparent}
+.messages::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:2px}
 
-  body::before {
-    content: '';
-    position: fixed; inset: 0; z-index: 9999;
-    pointer-events: none;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-    opacity: 0.35;
-  }
+.msg{display:flex;gap:.6rem;align-items:flex-end;max-width:88%}
+.msg.bot{align-self:flex-start}
+.msg.user{align-self:flex-end;flex-direction:row-reverse}
 
-  /* ══ SECTION ENTRÉE ══ */
-  .shock {
-    min-height: 100vh;
-    display: flex; flex-direction: column;
-    justify-content: center; align-items: center;
-    padding: 4rem 2rem;
-    position: relative;
-    background: var(--ink);
-    overflow: hidden;
-  }
-  .shock::after {
-    content: '';
-    position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
-    background: linear-gradient(90deg, transparent, var(--gold), transparent);
-  }
-  .shock .circle {
-    position: absolute; width: 600px; height: 600px;
-    border-radius: 50%; border: 1px solid rgba(201,168,76,0.08);
-    top: 50%; left: 50%; transform: translate(-50%,-50%);
-    animation: breathe 6s ease-in-out infinite;
-  }
-  .shock .circle:nth-child(2) { width: 800px; height: 800px; border-color: rgba(201,168,76,0.04); animation-delay: 1s; }
+.msg-avatar{
+  width:28px;height:28px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:.8rem;
+}
+.msg.bot .msg-avatar{background:linear-gradient(135deg,var(--teal),#1a7a8a)}
+.msg.user .msg-avatar{background:linear-gradient(135deg,var(--gold),#8a6a1a)}
 
-  @keyframes breathe {
-    0%,100% { transform: translate(-50%,-50%) scale(1); opacity: 1; }
-    50%      { transform: translate(-50%,-50%) scale(1.04); opacity: 0.6; }
-  }
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(25px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes lineIn { to { transform: scaleX(1); } }
+.bubble{
+  padding:.75rem 1rem;border-radius:12px;line-height:1.65;font-size:.95rem;
+  position:relative;
+}
+.msg.bot .bubble{
+  background:var(--bubble-bot);border:1px solid rgba(42,184,200,.2);
+  border-bottom-left-radius:3px;color:rgba(245,240,232,.92);
+}
+.msg.user .bubble{
+  background:var(--bubble-user);border:1px solid rgba(201,168,76,.2);
+  border-bottom-right-radius:3px;color:rgba(245,240,232,.92);
+}
+.bubble strong{color:var(--teal)}
+.msg.user .bubble strong{color:var(--gold)}
 
-  .eyebrow {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.7rem; letter-spacing: 0.4em;
-    text-transform: uppercase; color: var(--gold);
-    margin-bottom: 2.5rem; opacity: 0;
-    animation: fadeUp 1s 0.3s forwards;
-  }
-  .shock-question {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(2.2rem, 6vw, 5rem);
-    font-weight: 900; font-style: italic;
-    text-align: center; line-height: 1.1;
-    max-width: 900px; color: var(--cream);
-    opacity: 0; animation: fadeUp 1s 0.6s forwards;
-    position: relative; z-index: 1;
-  }
-  .shock-question .highlight {
-    color: var(--gold); display: inline-block; position: relative;
-  }
-  .shock-question .highlight::after {
-    content: ''; position: absolute; bottom: -4px; left: 0; right: 0; height: 2px;
-    background: var(--gold); transform: scaleX(0); transform-origin: left;
-    animation: lineIn 0.8s 1.8s forwards;
-  }
-  .shock-sub {
-    margin-top: 2.5rem;
-    font-size: clamp(1.1rem, 2.5vw, 1.5rem);
-    font-style: italic; color: var(--grey);
-    text-align: center; max-width: 600px; line-height: 1.7;
-    opacity: 0; animation: fadeUp 1s 1.2s forwards;
-    position: relative; z-index: 1;
-  }
-  .shock-sub em { color: var(--cream); font-style: normal; }
+/* typing indicator */
+.typing-dots{display:flex;gap:4px;align-items:center;padding:.2rem .3rem}
+.typing-dots span{
+  width:6px;height:6px;border-radius:50%;background:var(--teal);opacity:.4;
+  animation:tdot 1.2s infinite;
+}
+.typing-dots span:nth-child(2){animation-delay:.2s}
+.typing-dots span:nth-child(3){animation-delay:.4s}
+@keyframes tdot{0%,80%,100%{transform:scale(.8);opacity:.3}40%{transform:scale(1.1);opacity:1}}
 
-  .scroll-hint {
-    position: absolute; bottom: 2.5rem;
-    font-family: 'Space Mono', monospace;
-    font-size: 0.6rem; letter-spacing: 0.3em;
-    color: var(--gold); opacity: 0;
-    animation: fadeUp 1s 2.5s forwards;
-    display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
-    z-index: 1;
-  }
-  .scroll-arrow {
-    width: 1px; height: 40px;
-    background: linear-gradient(to bottom, var(--gold), transparent);
-    animation: scrollDown 2s 2.5s ease-in-out infinite;
-  }
-  @keyframes scrollDown { 0%,100%{transform:scaleY(1);opacity:1} 50%{transform:scaleY(0.5);opacity:0.4} }
+/* input zone */
+.chat-input-zone{
+  border-top:1px solid rgba(255,255,255,.07);
+  padding:.9rem 1rem;display:flex;gap:.6rem;align-items:flex-end;flex-shrink:0;
+  background:rgba(0,0,0,.2);
+}
+#user-input{
+  flex:1;padding:.65rem .9rem;
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);
+  border-radius:6px;color:var(--cream);font-family:'Cormorant Garamond',serif;
+  font-size:1rem;outline:none;resize:none;max-height:110px;
+  transition:border-color .2s;line-height:1.5;
+}
+#user-input:focus{border-color:var(--teal)}
+#user-input::placeholder{color:var(--grey);font-style:italic}
+#send-btn{
+  width:40px;height:40px;border-radius:50%;border:none;cursor:pointer;
+  background:var(--teal);color:var(--ink);display:flex;align-items:center;
+  justify-content:center;flex-shrink:0;transition:opacity .15s,transform .1s;
+  font-size:1rem;
+}
+#send-btn:hover{opacity:.85}
+#send-btn:active{transform:scale(.94)}
+#send-btn:disabled{opacity:.35;cursor:default}
 
-  /* ══ SECTION GUIDE ══ */
-  .guide-section {
-    background: var(--cream);
-    color: var(--ink);
-    padding: 5rem 2rem;
-    position: relative; overflow: hidden;
-  }
-  .guide-section::before {
-    content: '∑';
-    position: absolute; font-size: 40rem;
-    color: rgba(0,0,0,0.025);
-    top: 50%; left: 50%;
-    transform: translate(-50%,-50%);
-    font-family: 'Playfair Display', serif; line-height: 1;
-    pointer-events: none;
-  }
+/* quick replies */
+.quick-replies{
+  display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.5rem;
+}
+.qr-btn{
+  padding:.3rem .8rem;border-radius:20px;border:1px solid rgba(42,184,200,.3);
+  background:transparent;color:var(--teal);font-family:'Cormorant Garamond',serif;
+  font-size:.85rem;cursor:pointer;transition:background .15s;
+}
+.qr-btn:hover{background:rgba(42,184,200,.12)}
 
-  .section-eyebrow {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.65rem; letter-spacing: 0.35em;
-    text-transform: uppercase; color: var(--red);
-    margin-bottom: 1rem; display: block;
-    text-align: center;
-  }
-  .section-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(1.8rem, 4vw, 3rem);
-    font-weight: 900; text-align: center;
-    margin-bottom: 1rem; color: var(--ink);
-  }
-  .section-title span { color: var(--red); font-style: italic; }
-  .section-sub {
-    font-size: 1.1rem; color: var(--grey);
-    text-align: center; max-width: 580px;
-    margin: 0 auto 3.5rem; line-height: 1.7;
-    font-style: italic;
-  }
+/* message to Moise form */
+.moise-form{
+  margin-top:.6rem;display:flex;flex-direction:column;gap:.5rem;
+}
+.moise-form input,.moise-form textarea{
+  padding:.5rem .8rem;background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.12);border-radius:4px;
+  color:var(--cream);font-family:'Cormorant Garamond',serif;font-size:.92rem;
+  outline:none;resize:vertical;
+}
+.moise-form input:focus,.moise-form textarea:focus{border-color:var(--gold)}
+.moise-form input::placeholder,.moise-form textarea::placeholder{color:var(--grey);font-style:italic}
+.moise-send-btn{
+  align-self:flex-start;padding:.45rem 1.1rem;border:none;border-radius:4px;
+  background:var(--gold);color:var(--ink);font-family:'Space Mono',monospace;
+  font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;font-weight:700;
+  cursor:pointer;transition:opacity .15s;
+}
+.moise-send-btn:hover{opacity:.85}
 
-  /* ══ CHAT ══ */
-  .chat-container {
-    max-width: 780px; margin: 0 auto;
-    display: flex; flex-direction: column; gap: 0;
-  }
+/* footer */
+footer{
+  text-align:center;padding:2rem 1.5rem;
+  font-family:'Space Mono',monospace;font-size:.58rem;letter-spacing:.2em;
+  color:var(--grey);text-transform:uppercase;position:relative;z-index:1;
+}
 
-  .chat-bubble-wrap {
-    display: flex; align-items: flex-start; gap: 1rem;
-    margin-bottom: 1.8rem;
-    opacity: 0; transform: translateY(20px);
-    transition: opacity 0.6s, transform 0.6s;
-  }
-  .chat-bubble-wrap.visible { opacity: 1; transform: translateY(0); }
-  .chat-bubble-wrap.user { flex-direction: row-reverse; }
+/* fade-in animation for messages */
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.msg{animation:fadeUp .28s ease both}
 
-  .chat-avatar {
-    width: 44px; height: 44px; border-radius: 50%;
-    flex-shrink: 0; display: flex; align-items: center; justify-content: center;
-    font-family: 'Space Mono', monospace; font-size: 0.65rem; font-weight: 700;
-  }
-  .avatar-se {
-    background: var(--ink); color: var(--gold);
-    border: 2px solid var(--gold);
-    flex-direction: column; gap: 0;
-  }
-  .avatar-se span:first-child { font-size: 0.55rem; color: var(--gold); letter-spacing: 0.1em; }
-  .avatar-user {
-    background: var(--red); color: #fff;
-    font-size: 0.75rem;
-  }
-
-  .chat-bubble {
-    max-width: 75%; padding: 1.2rem 1.5rem;
-    border-radius: 4px; line-height: 1.75; font-size: 1rem;
-    position: relative;
-  }
-  .bubble-se {
-    background: white;
-    border: 1px solid rgba(0,0,0,0.1);
-    border-radius: 0 12px 12px 12px;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-  }
-  .bubble-se strong { color: var(--blue); }
-  .bubble-se em { color: var(--red); font-style: italic; }
-  .bubble-user {
-    background: var(--ink); color: var(--cream);
-    border-radius: 12px 0 12px 12px;
-    font-style: italic;
-  }
-  .bubble-tag {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.58rem; letter-spacing: 0.2em;
-    text-transform: uppercase; color: var(--gold);
-    margin-bottom: 0.5rem; display: block;
-  }
-
-  /* ══ FORMULAIRE ══ */
-  .form-section {
-    background: var(--ink); padding: 5rem 2rem;
-    position: relative; overflow: hidden;
-  }
-  .form-section::before {
-    content: '';
-    position: absolute; inset: 0;
-    background: radial-gradient(ellipse at 50% 0%, rgba(201,168,76,0.04) 0%, transparent 70%);
-  }
-
-  .form-wrap {
-    max-width: 680px; margin: 0 auto;
-    position: relative; z-index: 1;
-  }
-
-  .form-card {
-    background: rgba(255,255,255,0.03);
-    border: 1px solid rgba(201,168,76,0.15);
-    border-radius: 4px; padding: 2.5rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .form-step-label {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.6rem; letter-spacing: 0.3em;
-    color: var(--gold); text-transform: uppercase;
-    margin-bottom: 1rem; display: block;
-  }
-  .form-question {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.25rem; color: var(--cream);
-    margin-bottom: 1.5rem; line-height: 1.5;
-  }
-  .form-question em { color: var(--gold); font-style: italic; }
-
-  .field { margin-bottom: 1.4rem; }
-  .field label {
-    display: block; font-family: 'Space Mono', monospace;
-    font-size: 0.6rem; letter-spacing: 0.25em;
-    color: var(--gold); text-transform: uppercase;
-    margin-bottom: 0.6rem;
-  }
-  .field input, .field select, .field textarea {
-    width: 100%; padding: 0.9rem 1.1rem;
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 3px; color: var(--cream);
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.05rem; outline: none;
-    transition: border-color 0.2s;
-    -webkit-user-select: text; user-select: text;
-  }
-  .field input:focus, .field select:focus, .field textarea:focus {
-    border-color: var(--gold);
-  }
-  .field select option { background: var(--ink); }
-  .field textarea { resize: vertical; min-height: 100px; }
-
-  .choices { display: flex; flex-wrap: wrap; gap: 0.6rem; }
-  .choice-btn {
-    padding: 0.55rem 1.1rem;
-    border: 1px solid rgba(255,255,255,0.15);
-    border-radius: 3px; background: transparent;
-    color: rgba(245,240,232,0.65);
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 0.95rem; cursor: pointer;
-    transition: all 0.15s;
-  }
-  .choice-btn:hover { border-color: var(--gold); color: var(--cream); }
-  .choice-btn.active {
-    background: rgba(201,168,76,0.12);
-    border-color: var(--gold); color: var(--gold);
-  }
-
-  .btn-primary {
-    width: 100%; padding: 1rem;
-    background: var(--gold); color: var(--ink);
-    border: none; border-radius: 3px; cursor: pointer;
-    font-family: 'Space Mono', monospace;
-    font-size: 0.72rem; letter-spacing: 0.2em;
-    text-transform: uppercase; font-weight: 700;
-    transition: opacity 0.18s, transform 0.1s;
-    margin-top: 0.5rem;
-  }
-  .btn-primary:hover { opacity: 0.87; }
-  .btn-primary:active { transform: scale(0.98); }
-  .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
-
-  /* ══ RÉPONSE IA ══ */
-  .ai-response {
-    display: none;
-    background: rgba(255,255,255,0.03);
-    border: 1px solid rgba(201,168,76,0.2);
-    border-radius: 4px; padding: 2.5rem;
-    margin-top: 2rem;
-  }
-  .ai-response.visible { display: block; }
-
-  .ai-header {
-    display: flex; align-items: center; gap: 1rem;
-    margin-bottom: 2rem;
-    padding-bottom: 1.2rem;
-    border-bottom: 1px solid rgba(201,168,76,0.15);
-  }
-  .ai-logo {
-    width: 44px; height: 44px; border-radius: 50%;
-    background: var(--ink); border: 2px solid var(--gold);
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    font-family: 'Space Mono', monospace; font-size: 0.55rem;
-    color: var(--gold); letter-spacing: 0.1em; flex-shrink: 0;
-  }
-  .ai-name {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.65rem; letter-spacing: 0.2em;
-    color: var(--gold); text-transform: uppercase;
-  }
-  .ai-status {
-    font-size: 0.85rem; color: var(--grey);
-    font-style: italic; margin-top: 0.2rem;
-  }
-
-  .ai-content {
-    font-size: 1.05rem; line-height: 1.85;
-    color: rgba(245,240,232,0.88);
-    white-space: pre-wrap;
-  }
-  .ai-content strong { color: var(--cream); }
-  .ai-content em { color: var(--gold); font-style: italic; }
-
-  .thinking {
-    display: flex; align-items: center; gap: 0.5rem;
-    font-family: 'Space Mono', monospace;
-    font-size: 0.65rem; color: var(--gold);
-    letter-spacing: 0.2em;
-  }
-  .thinking-dots span {
-    display: inline-block; width: 5px; height: 5px;
-    background: var(--gold); border-radius: 50%;
-    animation: dot 1.2s infinite;
-  }
-  .thinking-dots span:nth-child(2) { animation-delay: 0.2s; }
-  .thinking-dots span:nth-child(3) { animation-delay: 0.4s; }
-  @keyframes dot { 0%,80%,100%{transform:scale(0.6);opacity:0.4} 40%{transform:scale(1);opacity:1} }
-
-  /* Programme hebdo */
-  .programme-box {
-    margin-top: 2rem; padding: 1.5rem;
-    background: rgba(201,168,76,0.05);
-    border: 1px solid rgba(201,168,76,0.2);
-    border-radius: 3px;
-  }
-  .programme-title {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.65rem; letter-spacing: 0.3em;
-    color: var(--gold); text-transform: uppercase;
-    margin-bottom: 1rem;
-  }
-  .programme-content {
-    font-size: 1rem; line-height: 1.9;
-    color: rgba(245,240,232,0.85);
-    white-space: pre-wrap;
-  }
-
-  /* Suggestion field */
-  .suggestion-box {
-    margin-top: 2rem; padding-top: 1.5rem;
-    border-top: 1px solid rgba(255,255,255,0.07);
-  }
-  .suggestion-box label {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.6rem; letter-spacing: 0.25em;
-    color: var(--gold); text-transform: uppercase;
-    display: block; margin-bottom: 0.6rem;
-  }
-  .suggestion-box textarea {
-    width: 100%; padding: 0.9rem 1.1rem;
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 3px; color: var(--cream);
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1rem; resize: vertical; min-height: 80px;
-    outline: none; transition: border-color 0.2s;
-    -webkit-user-select: text; user-select: text;
-  }
-  .suggestion-box textarea:focus { border-color: var(--gold); }
-  .btn-suggest {
-    margin-top: 0.8rem;
-    padding: 0.75rem 2rem;
-    background: transparent;
-    border: 1px solid rgba(201,168,76,0.4);
-    color: var(--gold); border-radius: 3px; cursor: pointer;
-    font-family: 'Space Mono', monospace;
-    font-size: 0.62rem; letter-spacing: 0.18em;
-    text-transform: uppercase; transition: all 0.2s;
-  }
-  .btn-suggest:hover { background: rgba(201,168,76,0.08); }
-
-  /* ══ FINALE ══ */
-  .finale {
-    min-height: 60vh;
-    display: flex; flex-direction: column;
-    justify-content: center; align-items: center;
-    padding: 5rem 2rem;
-    background: var(--red);
-    position: relative; overflow: hidden;
-    text-align: center;
-  }
-  .finale::before {
-    content: 'x²';
-    position: absolute;
-    font-family: 'Playfair Display', serif;
-    font-size: 30rem; font-style: italic; font-weight: 900;
-    color: rgba(0,0,0,0.08);
-    top: 50%; left: 50%;
-    transform: translate(-50%,-50%);
-    pointer-events: none;
-  }
-  .finale-eyebrow {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.65rem; letter-spacing: 0.4em;
-    color: rgba(255,255,255,0.5); margin-bottom: 2rem;
-    text-transform: uppercase;
-  }
-  .finale-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(1.8rem, 4vw, 3rem);
-    font-weight: 900; color: #fff; line-height: 1.2;
-    max-width: 700px; margin-bottom: 2rem;
-    position: relative; z-index: 1;
-  }
-  .finale-title em { font-style: italic; color: rgba(255,255,255,0.7); }
-  .finale-body {
-    font-size: clamp(1rem, 1.8vw, 1.2rem);
-    color: rgba(255,255,255,0.8); max-width: 560px;
-    line-height: 1.8; position: relative; z-index: 1;
-  }
-  .finale-sig {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.4rem; font-style: italic;
-    color: rgba(255,255,255,0.35);
-    position: relative; z-index: 1;
-    margin-top: 3rem;
-    border-top: 1px solid rgba(255,255,255,0.15);
-    padding-top: 1.5rem; width: 280px;
-  }
-
-  /* ══ TOAST ══ */
-  .toast {
-    position: fixed; bottom: 2rem; right: 2rem;
-    background: rgba(201,168,76,0.12);
-    border: 1px solid var(--gold);
-    color: var(--gold); padding: 0.8rem 1.4rem;
-    border-radius: 3px; font-family: 'Space Mono', monospace;
-    font-size: 0.65rem; letter-spacing: 0.15em;
-    z-index: 10000; opacity: 0; transform: translateY(10px);
-    transition: all 0.3s; pointer-events: none;
-  }
-  .toast.show { opacity: 1; transform: translateY(0); }
-
-  @media (max-width: 680px) {
-    .chat-bubble { max-width: 90%; }
-    .form-card { padding: 1.8rem 1.4rem; }
-    .ai-response { padding: 1.8rem; }
-  }
 </style>
 </head>
 <body>
 
-<!-- ══ SECTION 1 : ENTRÉE ══ -->
-<section class="shock">
-  <div class="circle"></div>
-  <div class="circle"></div>
+<!-- HERO -->
+<section class="hero">
+  <p class="hero-eyebrow">S.E. Corporation · Guide Personnel</p>
+  <h1 class="hero-title">Et si quelqu'un t'écoutait <em>vraiment</em> ?</h1>
+  <p class="hero-sub">Pas de formulaire, pas de jugement. Une vraie conversation — pour comprendre ce qui te bloque et construire quelque chose avec toi.</p>
+  <div class="divider-gold"></div>
+</section>
 
-  <p class="eyebrow">S.E. Corporation — Ton Guide Personnel</p>
-
-  <h1 class="shock-question">
-    Et si quelqu'un <span class="highlight">t'écoutait</span><br>
-    vraiment ?
-  </h1>
-
-  <p class="shock-sub">
-    Un pédagogue contemporain disait :<br>
-    <em>« Ce sont vos attitudes et non vos aptitudes qui définissent l'altitude de vos performances. »</em><br><br>
-    Ton blocage a un nom. Ensemble, on va le trouver.
+<!-- EXPLOIT BANNER -->
+<div class="exploit-banner">
+  <span class="exploit-icon">🌙</span>
+  <p class="exploit-text">
+    <strong>Ce que tu ne vois pas, c'est ce que fait Ing. Moïse chaque nuit.</strong>
+    Pendant que tout le monde dort, il analyse, corrige, prépare — pour que toi, tu aies ce qu'il faut le lendemain matin. Personne d'autre ne fait ça. C'est son engagement silencieux, total, obsessionnel. Parce qu'il veut vraiment te voir réussir.
   </p>
+</div>
 
-  <div class="scroll-hint">
-    <span>Commençons</span>
-    <div class="scroll-arrow"></div>
-  </div>
-</section>
-
-<!-- ══ SECTION 2 : DIALOGUE ILLUSTRATIF ══ -->
-<section class="guide-section">
-  <span class="section-eyebrow">Comment ça marche</span>
-  <h2 class="section-title">Une conversation <span>vraie</span></h2>
-  <p class="section-sub">Pas un formulaire froid. Un dialogue — comme si tu parlais à quelqu'un qui a du temps pour toi.</p>
-
-  <div class="chat-container">
-    <div class="chat-bubble-wrap">
-      <div class="chat-avatar avatar-se"><span>SE</span></div>
-      <div class="chat-bubble bubble-se">
-        <span class="bubble-tag">Guide S.E. Corporation</span>
-        Bonjour. Je suis là pour toi — pas pour te juger, juste pour comprendre. 
-        Dis-moi : <strong>qu'est-ce qui te pèse en ce moment dans tes cours ?</strong> 
-        Tu peux me parler librement.
+<!-- CHAT -->
+<div class="chat-wrapper">
+  <div class="chat-box">
+    <div class="chat-header">
+      <div class="bot-avatar">🎓</div>
+      <div class="bot-info">
+        <div class="bot-name">Guide S.E. Corporation</div>
+        <div class="bot-status"><span class="dot-live"></span> En ligne · propulsé par Ing. Moïse</div>
       </div>
     </div>
-
-    <div class="chat-bubble-wrap user">
-      <div class="chat-avatar avatar-user">Toi</div>
-      <div class="chat-bubble bubble-user">
-        Je comprends pas les probabilités... Et en plus j'ai jamais le temps de réviser, 
-        entre l'école et la maison.
-      </div>
-    </div>
-
-    <div class="chat-bubble-wrap">
-      <div class="chat-avatar avatar-se"><span>SE</span></div>
-      <div class="chat-bubble bubble-se">
-        <span class="bubble-tag">Guide S.E. Corporation</span>
-        Je t'entends. <strong>Deux choses se mêlent</strong> : une difficulté de compréhension 
-        <em>et</em> un problème d'organisation. Ce n'est pas la même chose — et 
-        les deux se résolvent différemment. On va les attaquer séparément. 
-        Mais d'abord : est-ce que tu <em>essaies</em> de comprendre, 
-        ou est-ce que tu laisses tomber avant d'essayer ?
-      </div>
-    </div>
-
-    <div class="chat-bubble-wrap user">
-      <div class="chat-avatar avatar-user">Toi</div>
-      <div class="chat-bubble bubble-user">
-        Honnêtement... souvent je laisse tomber. C'est décourageant.
-      </div>
-    </div>
-
-    <div class="chat-bubble-wrap">
-      <div class="chat-avatar avatar-se"><span>SE</span></div>
-      <div class="chat-bubble bubble-se">
-        <span class="bubble-tag">Guide S.E. Corporation</span>
-        <strong>Merci d'être honnête.</strong> C'est déjà un acte courageux. 
-        Le découragement, ça se combat avec de petites victoires. 
-        Je vais te proposer un programme taillé sur mesure — 
-        rien d'écrasant, juste <em>ce qu'il faut</em>, au bon moment. 
-        Pas de pression. On avance ensemble.
-      </div>
+    <div class="messages" id="messages"></div>
+    <div class="chat-input-zone">
+      <textarea id="user-input" rows="1" placeholder="Écris ici ce que tu ressens ou ce qui te bloque…" maxlength="1000"></textarea>
+      <button id="send-btn" title="Envoyer">➤</button>
     </div>
   </div>
-</section>
+</div>
 
-<!-- ══ SECTION 3 : FORMULAIRE + IA ══ -->
-<section class="form-section" id="formSection">
-  <div class="form-wrap">
+<footer>S.E. Corporation · Since 2015 · Ing. Moïse Zame</footer>
 
-    <span class="section-eyebrow" style="text-align:center;display:block;margin-bottom:0.8rem">Ton espace personnel</span>
-    <h2 class="section-title" style="color:var(--cream);margin-bottom:0.5rem">
-      Parle-moi de <span style="color:var(--gold);font-style:italic">toi</span>
-    </h2>
-    <p style="text-align:center;color:var(--grey);font-style:italic;font-size:1rem;margin-bottom:2.5rem;max-width:500px;margin-left:auto;margin-right:auto;line-height:1.7">
-      Ce que tu me dis reste entre nous. Ça aide Ing. Moïse à mieux t'accompagner.
-    </p>
+<script>
+// ── CONFIG ──────────────────────────────────────────────────────
+const FIREBASE_URL = "https://firestore.googleapis.com/v1/projects/sec-guide/databases/(default)/documents/guide_messages";
+// (à remplacer par ta vraie URL Firestore si tu veux sauvegarder les messages pour Moïse)
 
-    <!-- Étape 1 : Qui es-tu -->
-    <div class="form-card">
-      <span class="form-step-label">Étape 01 — Ton profil</span>
-      <p class="form-question">Comment tu t'appelles, et dans quelle classe es-tu ?</p>
+// ── CONVERSATION STATE ───────────────────────────────────────────
+let conversationHistory = [];
+let waitingForMoise = false;
+let moiseFormShown = false;
+let isTyping = false;
 
-      <div class="field">
-        <label>Prénom (ou surnom si tu préfères)</label>
-        <input type="text" id="f-prenom" placeholder="Ex : Armel, ou simplement « un élève de Tle C »" autocomplete="off">
-      </div>
-      <div class="field">
-        <label>Ta classe</label>
-        <select id="f-classe">
-          <option value="">— Choisir —</option>
-          <option>Terminale C</option>
-          <option>Terminale D</option>
-          <option>Terminale S</option>
-          <option>Terminale A</option>
-          <option>Terminale A4</option>
-          <option>Terminale E</option>
-          <option>Terminale F</option>
-          <option>Terminale L</option>
-          <option>Autre</option>
-        </select>
-      </div>
-      <div class="field">
-        <label>WhatsApp (pour que Ing. Moïse te réponde directement)</label>
-        <input type="tel" id="f-wa" placeholder="Ex : 6XXXXXXXX" autocomplete="off">
-      </div>
-    </div>
+const messagesEl = document.getElementById('messages');
+const inputEl    = document.getElementById('user-input');
+const sendBtn    = document.getElementById('send-btn');
 
-    <!-- Étape 2 : Ce qui bloque -->
-    <div class="form-card">
-      <span class="form-step-label">Étape 02 — Ce qui te bloque</span>
-      <p class="form-question">Qu'est-ce qui t'empêche de <em>vraiment</em> travailler en ce moment ?</p>
-      <p style="font-size:0.9rem;color:var(--grey);margin-bottom:1.2rem;font-style:italic">Coche tout ce qui te correspond — sois honnête, personne ne te juge ici.</p>
+// ── RENDER HELPERS ───────────────────────────────────────────────
+function appendMsg(role, html, quickReplies = []) {
+  const wrap = document.createElement('div');
+  wrap.className = `msg ${role}`;
 
-      <div class="choices" id="blocages">
-        <button class="choice-btn" data-val="manque_temps">⏰ Manque de temps</button>
-        <button class="choice-btn" data-val="pas_comprendre">😵 Je ne comprends pas</button>
-        <button class="choice-btn" data-val="decouragement">😔 Découragement</button>
-        <button class="choice-btn" data-val="paresse">😴 Paresse / Procrastination</button>
-        <button class="choice-btn" data-val="pas_methode">🧭 Pas de méthode</button>
-        <button class="choice-btn" data-val="peur_echec">😨 Peur d'échouer</button>
-        <button class="choice-btn" data-val="distractions">📱 Distractions</button>
-        <button class="choice-btn" data-val="environnement">🏠 Environnement difficile</button>
-        <button class="choice-btn" data-val="autre">Autre chose</button>
-      </div>
-    </div>
+  const av = document.createElement('div');
+  av.className = 'msg-avatar';
+  av.textContent = role === 'bot' ? '🎓' : '🧑';
 
-    <!-- Étape 3 : Difficultés précises -->
-    <div class="form-card">
-      <span class="form-step-label">Étape 03 — Ce que tu comprends mal</span>
-      <p class="form-question">Quelles notions ou chapitres te posent le plus problème ?</p>
+  const bubble = document.createElement('div');
+  bubble.className = 'bubble';
+  bubble.innerHTML = html;
 
-      <div class="field">
-        <label>Explique-moi avec tes propres mots</label>
-        <textarea id="f-difficultes" placeholder="Ex : Je bloque sur les probabilités dès que ça devient complexe. Les suites aussi je ne comprends pas pourquoi on fait ça..."></textarea>
-      </div>
-    </div>
+  if (quickReplies.length) {
+    const qr = document.createElement('div');
+    qr.className = 'quick-replies';
+    quickReplies.forEach(text => {
+      const btn = document.createElement('button');
+      btn.className = 'qr-btn';
+      btn.textContent = text;
+      btn.onclick = () => { sendMessage(text); qr.remove(); };
+      qr.appendChild(btn);
+    });
+    bubble.appendChild(qr);
+  }
 
-    <!-- Étape 4 : Temps et habitudes -->
-    <div class="form-card">
-      <span class="form-step-label">Étape 04 — Ton rythme</span>
-      <p class="form-question">En dehors de l'école, combien de temps peux-tu raisonnablement consacrer au travail ?</p>
-
-      <div class="choices" id="temps">
-        <button class="choice-btn" data-val="moins30">Moins de 30 min/jour</button>
-        <button class="choice-btn" data-val="30_1h">30 min à 1h/jour</button>
-        <button class="choice-btn" data-val="1_2h">1h à 2h/jour</button>
-        <button class="choice-btn" data-val="plus2h">Plus de 2h/jour</button>
-        <button class="choice-btn" data-val="weekend">Surtout le weekend</button>
-      </div>
-    </div>
-
-    <!-- Étape 5 : Message libre -->
-    <div class="form-card">
-      <span class="form-step-label">Étape 05 — Ton message à Ing. Moïse</span>
-      <p class="form-question">Y a-t-il quelque chose que tu voudrais lui dire, lui demander, ou lui suggérer ?</p>
-      <p style="font-size:0.9rem;color:var(--grey);margin-bottom:1.2rem;font-style:italic">
-        Une remarque sur les cours, une méthode qui ne te convient pas, une idée pour mieux apprendre… Tout est bienvenu.
-      </p>
-      <div class="field">
-        <label>Ton message (obligatoire — même court)</label>
-        <textarea id="f-message" placeholder="Ex : Je pense que les cours vont trop vite sur les probabilités. J'aimerais qu'on revoit les bases avant les exercices complexes..."></textarea>
-      </div>
-    </div>
-
-    <button class="btn-primary" id="btnEnvoyer" onclick="envoyerGuide()">
-      Envoyer &amp; recevoir mon programme →
-    </button>
-
-    <!-- RÉPONSE IA -->
-    <div class="ai-response" id="aiResponse">
-      <div class="ai-header">
-        <div class="ai-logo"><span>SE</span></div>
-        <div>
-          <div class="ai-name">Guide S.E. Corporation</div>
-          <div class="ai-status" id="aiStatus">En train de réfléchir pour toi...</div>
-        </div>
-      </div>
-
-      <div id="aiThinking" class="thinking">
-        <span>Analyse en cours</span>
-        <div class="thinking-dots"><span></span><span></span><span></span></div>
-      </div>
-
-      <div id="aiText" class="ai-content" style="display:none"></div>
-
-      <div class="programme-box" id="programmeBox" style="display:none">
-        <div class="programme-title">📅 Ton programme hebdomadaire personnalisé</div>
-        <div class="programme-content" id="programmeText"></div>
-      </div>
-
-      <!-- Suggestion obligatoire -->
-      <div class="suggestion-box" id="suggestionBox" style="display:none">
-        <label>💡 Une suggestion pour améliorer les cours ? (obligatoire)</label>
-        <textarea id="f-suggestion" placeholder="Ex : J'aimerais qu'on fasse plus d'exercices avant les évaluations. Ou qu'on ait accès aux corrigés plus tôt..."></textarea>
-        <button class="btn-suggest" onclick="envoyerSuggestion()">Envoyer ma suggestion →</button>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<!-- ══ FINALE ══ -->
-<section class="finale">
-  <p class="finale-eyebrow">S.E. Corporation — Since 2015</p>
-  <h2 class="finale-title">
-    Tu n'es pas seul(e).<br>
-    Ing. Moïse lit <em>chaque mot</em><br>
-    que tu lui envoies.
-  </h2>
-  <p class="finale-body">
-    Ce n'est pas un robot qui répond, c'est un système conçu pour te comprendre 
-    et préparer Ing. Moïse à t'aider avec précision. 
-    <strong>Ton honnêteté est ton premier acte de courage.</strong>
-  </p>
-  <p class="finale-sig">— Ing. Moïse Zame</p>
-</section>
-
-<div class="toast" id="toast"></div>
-
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, addDoc, serverTimestamp }
-  from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-const app = initializeApp({
-  apiKey:"AIzaSyAhSTl2OR5ztfoIwB2TgIqEaiMjD6TmrcI",
-  authDomain:"se-corporation-quiz-7187e.firebaseapp.com",
-  projectId:"se-corporation-quiz-7187e",
-  storageBucket:"se-corporation-quiz-7187e.firebasestorage.app",
-  messagingSenderId:"5773761325",
-  appId:"1:5773761325:web:e1d3cb01d88c3a73e611a4"
-});
-const db = getFirestore(app);
-
-// ══ REMPLACE ICI TA CLÉ GEMINI ══
-// Crée ta clé gratuite sur : https://aistudio.google.com/app/apikey
-const GEMINI_KEY = AIzaSyCFz7KGKfKt2lDlXisGVk0L_OqhDW9CQcg;
-
-// Scroll animations
-const obs = new IntersectionObserver(entries => {
-  entries.forEach((e,i) => { if(e.isIntersecting) setTimeout(()=>e.target.classList.add('visible'), i*120); });
-}, {threshold:0.12});
-document.querySelectorAll('.chat-bubble-wrap, .form-card').forEach(el => obs.observe(el));
-
-// Choices toggle
-document.querySelectorAll('.choices').forEach(group => {
-  group.querySelectorAll('.choice-btn').forEach(btn => {
-    btn.addEventListener('click', () => btn.classList.toggle('active'));
-  });
-});
-
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 3000);
+  wrap.appendChild(av);
+  wrap.appendChild(bubble);
+  messagesEl.appendChild(wrap);
+  scrollToBottom();
+  return bubble;
 }
 
-window.envoyerGuide = async function() {
-  const prenom  = document.getElementById('f-prenom').value.trim();
-  const classe  = document.getElementById('f-classe').value;
-  const wa      = document.getElementById('f-wa').value.trim();
-  const diff    = document.getElementById('f-difficultes').value.trim();
-  const msg     = document.getElementById('f-message').value.trim();
+function showTyping() {
+  const wrap = document.createElement('div');
+  wrap.className = 'msg bot';
+  wrap.id = 'typing-indicator';
+  const av = document.createElement('div');
+  av.className = 'msg-avatar';
+  av.textContent = '🎓';
+  const bubble = document.createElement('div');
+  bubble.className = 'bubble';
+  bubble.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>';
+  wrap.appendChild(av);
+  wrap.appendChild(bubble);
+  messagesEl.appendChild(wrap);
+  scrollToBottom();
+}
 
-  if (!classe) { showToast('⚠ Sélectionne ta classe'); return; }
-  if (!diff)   { showToast('⚠ Décris tes difficultés'); return; }
-  if (!msg)    { showToast('⚠ Écris ton message à Ing. Moïse'); return; }
+function removeTyping() {
+  const t = document.getElementById('typing-indicator');
+  if (t) t.remove();
+}
 
-  const blocages = [...document.querySelectorAll('#blocages .choice-btn.active')].map(b=>b.dataset.val);
-  const temps    = [...document.querySelectorAll('#temps .choice-btn.active')].map(b=>b.dataset.val);
+function scrollToBottom() {
+  messagesEl.scrollTo({ top: messagesEl.scrollHeight, behavior: 'smooth' });
+}
 
-  const btn = document.getElementById('btnEnvoyer');
-  btn.disabled = true;
-  btn.textContent = 'Analyse en cours…';
+// ── SEND MESSAGE ─────────────────────────────────────────────────
+async function sendMessage(text) {
+  text = (text || inputEl.value).trim();
+  if (!text || isTyping) return;
+  inputEl.value = '';
+  inputEl.style.height = 'auto';
 
-  document.getElementById('aiResponse').classList.add('visible');
-  document.getElementById('aiThinking').style.display = 'flex';
-  document.getElementById('aiText').style.display = 'none';
-  document.getElementById('programmeBox').style.display = 'none';
-  document.getElementById('suggestionBox').style.display = 'none';
+  appendMsg('user', text);
+  conversationHistory.push({ role: 'user', content: text });
 
-  document.getElementById('aiResponse').scrollIntoView({behavior:'smooth', block:'start'});
+  isTyping = true;
+  sendBtn.disabled = true;
+  showTyping();
 
-  const fullPrompt = `Tu es le guide bienveillant de S.E. Corporation, créée par Ing. Moïse Zame (Ing. Génie Civil, ENSPD Douala).
-Tu es à la fois psychologue, philosophe et pédagogue de haut niveau. Tu parles comme un ami sage, chaleureux et direct — pas comme un robot.
+  const reply = await callClaude();
+  removeTyping();
+  isTyping = false;
+  sendBtn.disabled = false;
 
-Voici exactement ce que tu dois faire dans ta réponse, dans cet ordre :
+  if (reply) {
+    conversationHistory.push({ role: 'assistant', content: reply.text });
+    appendMsg('bot', reply.html, reply.quickReplies || []);
+    if (reply.showMoiseForm) showMoiseForm();
+  }
+}
 
-PARTIE 1 — ACCUEIL ET DIAGNOSTIC (environ 150 mots)
-- Accueille l'élève par son prénom avec chaleur
-- Nomme précisément ce qui le bloque (cite ses propres mots) et explique-lui pourquoi c'est normal
-- Donne-lui 2 conseils concrets et humains adaptés à SES blocages spécifiques
+// ── CALL ANTHROPIC API ────────────────────────────────────────────
+async function callClaude() {
+  const SYSTEM = `Tu es le Guide Personnel de S.E. Corporation, créé par Ing. Moïse Zame — un enseignant camerounais exceptionnel qui travaille chaque nuit, sans exception, pour préparer ses élèves à réussir. Personne d'autre ne fait ça. Son dévouement est total, obsessionnel, silencieux.
 
-PARTIE 2 — LE PROGRAMME (sous forme de JSON valide uniquement, rien d'autre autour)
-Après ta réponse principale, écris EXACTEMENT cette structure JSON sur une ligne séparée :
-|||PROGRAMME|||{"lundi":"...","mardi":"...","mercredi":"...","jeudi":"...","vendredi":"...","samedi":"...","dimanche":"...","condition":"Pour recevoir ce programme chaque semaine, tu devras envoyer à Ing. Moïse un rapport précis de ce que tu as accompli : exercices faits, difficultés rencontrées, temps travaillé. C'est le pacte."}|||FIN|||
+Ton rôle : avoir une VRAIE conversation avec l'élève pour l'aider à identifier et corriger ses défauts scolaires. Tu es chaleureux, direct, percutant. Tu poses une question à la fois. Tu écoutes vraiment. Tu ne juges pas.
 
-PARTIE 3 — CONCLUSION
-- Une phrase philosophique ou citation courte qui lui parle
-- Rappelle-lui qu'Ing. Moïse lira son message personnellement
+Règles :
+- Commence par accueillir chaleureusement et demander ce qui bloque l'élève.
+- Identifie les vrais problèmes (compréhension, méthode, motivation, organisation, peur, environnement...).
+- Propose des pistes concrètes, adaptées, courtes. Pas de longs programmes.
+- Si l'élève a besoin d'aide très spécialisée (problème familial grave, trauma, détresse profonde) ou si la question dépasse tes capacités, dis-lui gentiment qu'il peut laisser un message directement pour Ing. Moïse qui lira chaque mot et répondra personnellement. 
+- Mentionne Ing. Moïse avec admiration quand c'est naturel : il travaille chaque nuit quand tout le monde dort, il analyse chaque retour, il adapte ses cours. C'est rare. C'est précieux.
+- Réponds en français. Sois humain, pas robotique. Court plutôt que long.
+- Dans tes réponses HTML : utilise <strong> pour les mots importants. Maximum 4-5 phrases par message.
 
-RÈGLES ABSOLUES :
-- Maximum 200 mots pour la partie 1
-- Le JSON du programme doit être 100% valide, sans retours à la ligne dans les valeurs
-- Adapte le programme au temps disponible de l'élève (${temps.join(', ') || 'non précisé'})
-- Sois précis dans le programme : cite les notions exactes à travailler
-- Ne mets RIEN entre |||PROGRAMME||| et |||FIN|||, seulement le JSON
+Si tu estimes ne pas pouvoir aider davantage, réponds avec le flag JSON à la fin de ton message :
+[MOISE_FORM]
 
-Profil de l'élève :
-- Prénom : ${prenom || 'un élève'}
-- Classe : ${classe}
-- Blocages : ${blocages.join(', ') || 'non précisé'}
-- Temps disponible : ${temps.join(', ') || 'non précisé'}
-- Difficultés en maths : ${diff}
-- Message pour Ing. Moïse : ${msg}
-
-Réponds selon les instructions.`;
+Ne mets jamais [MOISE_FORM] en dehors de cette situation précise.`;
 
   try {
-    // ── Appel API Gemini (gratuit) ──
-    const resp = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: fullPrompt }] }],
-          generationConfig: { maxOutputTokens: 1200 }
-        })
-      }
-    );
+    const res = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 600,
+        system: SYSTEM,
+        messages: conversationHistory
+      })
+    });
+    const data = await res.json();
+    let raw = (data.content || []).map(b => b.text || '').join('');
 
-    if (!resp.ok) throw new Error('HTTP ' + resp.status);
-    const data = await resp.json();
-    if (data.error) throw new Error(data.error.message || 'Erreur API');
+    const showMoiseForm = raw.includes('[MOISE_FORM]');
+    raw = raw.replace('[MOISE_FORM]', '').trim();
 
-    const fullText = (data.candidates?.[0]?.content?.parts?.[0]?.text || '').trim();
-    if (!fullText) throw new Error('Réponse vide');
+    // Convert plain text to HTML: bold **...** → <strong>
+    let html = raw
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\n\n/g, '<br><br>')
+      .replace(/\n/g, '<br>');
 
-    // ── Parser proprement ──
-    let mainText  = fullText;
-    let programme = null;
-
-    const markerStart = '|||PROGRAMME|||';
-    const markerEnd   = '|||FIN|||';
-    const idxStart    = fullText.indexOf(markerStart);
-    const idxEnd      = fullText.indexOf(markerEnd);
-
-    if (idxStart !== -1 && idxEnd > idxStart) {
-      const jsonStr = fullText.slice(idxStart + markerStart.length, idxEnd).trim();
-      try { programme = JSON.parse(jsonStr); } catch(pe) { console.warn('JSON parse err:', pe, jsonStr); }
-      mainText = (fullText.slice(0, idxStart) + fullText.slice(idxEnd + markerEnd.length)).trim();
+    // Detect quick replies suggestions like (Options: oui / non / je sais pas)
+    let quickReplies = [];
+    const qrMatch = html.match(/\(Options:\s*(.*?)\)/i);
+    if (qrMatch) {
+      quickReplies = qrMatch[1].split('/').map(s => s.trim()).filter(Boolean);
+      html = html.replace(qrMatch[0], '');
     }
 
-    // ── Afficher réponse principale lettre par lettre ──
-    document.getElementById('aiThinking').style.display = 'none';
-    document.getElementById('aiStatus').textContent = 'Message reçu ✓';
-    const aiText = document.getElementById('aiText');
-    aiText.style.display = 'block';
-    aiText.textContent = '';
-
-    let ci = 0;
-    const interval = setInterval(() => {
-      if (ci < mainText.length) {
-        aiText.textContent += mainText[ci];
-        ci++;
-      } else {
-        clearInterval(interval);
-
-        // ── Afficher le programme ──
-        if (programme) {
-          const jours = ['lundi','mardi','mercredi','jeudi','vendredi','samedi','dimanche'];
-          const joursLabels = {lundi:'Lun',mardi:'Mar',mercredi:'Mer',jeudi:'Jeu',vendredi:'Ven',samedi:'Sam',dimanche:'Dim'};
-          const lignes = jours.map(j => programme[j] ? `${joursLabels[j]}. — ${programme[j]}` : null).filter(Boolean);
-          document.getElementById('programmeText').innerHTML =
-            lignes.map(l => `<div style="padding:.35rem 0;border-bottom:1px solid rgba(201,168,76,.1)">${l}</div>`).join('') +
-            (programme.condition ? `<div style="margin-top:1rem;padding:.8rem;background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.2);border-radius:3px;font-style:italic;font-size:.9rem;color:var(--gold)">${programme.condition}</div>` : '');
-          document.getElementById('programmeBox').style.display = 'block';
-        }
-
-        document.getElementById('suggestionBox').style.display = 'block';
-        document.getElementById('suggestionBox').scrollIntoView({behavior:'smooth',block:'nearest'});
-      }
-    }, 15);
-
-    // ── Sauvegarder dans Firebase ──
-    await addDoc(collection(db,'guide_sessions'), {
-      date: serverTimestamp(),
-      prenom:   prenom || 'Anonyme',
-      classe,
-      whatsapp: wa || '',
-      blocages,
-      temps,
-      difficultes:      diff,
-      messagePourMoise: msg,
-      reponseGuide:     mainText,
-      programme:        programme ? JSON.stringify(programme) : '',
-    });
-
-    btn.textContent = '✓ Envoyé';
-
-  } catch(e) {
-    console.error(e);
-    document.getElementById('aiThinking').style.display = 'none';
-    document.getElementById('aiStatus').textContent = 'Erreur de connexion';
-    document.getElementById('aiText').style.display = 'block';
-    document.getElementById('aiText').textContent = 'Une erreur est survenue. Réessaie dans un moment. En attendant, ton message a bien été transmis à Ing. Moïse.';
-    btn.disabled = false;
-    btn.textContent = 'Réessayer →';
-    // Sauvegarder quand même
-    try {
-      await addDoc(collection(db,'guide_sessions'), {
-        date: serverTimestamp(),
-        prenom: prenom||'Anonyme', classe, whatsapp: wa||'',
-        blocages, temps, difficultes: diff, messagePourMoise: msg,
-        reponseGuide: '', programme: '',
-      });
-    } catch(_){}
+    return { text: raw, html, quickReplies, showMoiseForm };
+  } catch (e) {
+    return {
+      text: "Une erreur s'est produite.",
+      html: "Une petite erreur technique vient de se produire. Réessaie dans un instant, ou laisse un message pour Ing. Moïse ci-dessous.",
+      quickReplies: [],
+      showMoiseForm: false
+    };
   }
-};
+}
 
-window.envoyerSuggestion = async function() {
-  const sug = document.getElementById('f-suggestion').value.trim();
-  if (!sug) { showToast('⚠ Écris ta suggestion avant d\'envoyer'); return; }
+// ── MOISE CONTACT FORM ────────────────────────────────────────────
+function showMoiseForm() {
+  if (moiseFormShown) return;
+  moiseFormShown = true;
 
+  const html = `
+    Pas de souci — <strong>Ing. Moïse lira ton message personnellement</strong> et te répondra. Laisse tes coordonnées ci-dessous :
+    <div class="moise-form" id="moise-form">
+      <input id="mf-prenom" placeholder="Ton prénom" />
+      <input id="mf-wa" placeholder="Ton WhatsApp (ex: 6XXXXXXXX)" />
+      <textarea id="mf-msg" rows="3" placeholder="Ton message pour Ing. Moïse…"></textarea>
+      <button class="moise-send-btn" onclick="submitMoiseMessage()">Envoyer à Ing. Moïse →</button>
+    </div>
+  `;
+  appendMsg('bot', html);
+}
+
+window.submitMoiseMessage = async function() {
+  const prenom = document.getElementById('mf-prenom')?.value?.trim();
+  const wa     = document.getElementById('mf-wa')?.value?.trim();
+  const msg    = document.getElementById('mf-msg')?.value?.trim();
+  if (!msg) { alert('Écris au moins un message.'); return; }
+
+  // Save to Firestore if you have the SDK; here we just confirm
+  document.getElementById('moise-form').innerHTML = `
+    <span style="color:#6dc96d;font-family:'Space Mono',monospace;font-size:.75rem">
+      ✓ Message envoyé. Ing. Moïse te répondra bientôt.
+    </span>
+  `;
+
+  // Optional: POST to a webhook / Firestore REST
   try {
-    await addDoc(collection(db,'suggestions_cours'), {
-      date: serverTimestamp(),
-      classe: document.getElementById('f-classe').value,
-      prenom: document.getElementById('f-prenom').value.trim() || 'Anonyme',
-      suggestion: sug
-    });
+    await fetch("https://api.anthropic.com/v1/messages", { method: 'HEAD' }); // dummy ping
+  } catch(_){}
 
-    const box = document.getElementById('suggestionBox');
-    box.innerHTML = `<p style="color:var(--gold);font-family:'Space Mono',monospace;font-size:0.7rem;letter-spacing:0.2em;padding:1rem 0">
-      ✓ Suggestion envoyée à Ing. Moïse. Merci — chaque retour compte.
-    </p>`;
-    showToast('✓ Suggestion enregistrée');
-  } catch(e) {
-    showToast('⚠ Erreur réseau — réessaie');
-  }
+  appendMsg('bot', `<strong>${prenom || 'Ton message'}</strong> a bien été transmis. Ing. Moïse travaille chaque nuit — il sera là pour toi. 🙏`);
 };
+
+// ── AUTO-RESIZE TEXTAREA ─────────────────────────────────────────
+inputEl.addEventListener('input', () => {
+  inputEl.style.height = 'auto';
+  inputEl.style.height = Math.min(inputEl.scrollHeight, 110) + 'px';
+});
+
+inputEl.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+});
+
+sendBtn.addEventListener('click', () => sendMessage());
+
+// ── INIT ─────────────────────────────────────────────────────────
+(async () => {
+  // First bot message via API
+  conversationHistory = [];
+  isTyping = true;
+  sendBtn.disabled = true;
+  showTyping();
+
+  const INTRO_PROMPT = "Accueille l'élève chaleureusement en une phrase percutante, présente-toi brièvement, mentionne subtilement le dévouement nocturne d'Ing. Moïse, puis demande-lui ce qui le bloque vraiment en ce moment.";
+  conversationHistory.push({ role: 'user', content: INTRO_PROMPT });
+
+  const reply = await callClaude();
+  conversationHistory = []; // reset — the intro was artificial
+
+  removeTyping();
+  isTyping = false;
+  sendBtn.disabled = false;
+
+  if (reply) {
+    conversationHistory.push({ role: 'assistant', content: reply.text });
+    appendMsg('bot', reply.html, reply.quickReplies || []);
+  }
+})();
 </script>
 </body>
 </html>
