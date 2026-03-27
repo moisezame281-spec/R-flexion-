@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>S.E. Corporation — Évaluation Physique</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --ink:#060d0d;--cream:#e8f5f3;--teal:#1fa88a;--teal-lite:rgba(31,168,138,.12);
+  --teal-dim:rgba(31,168,138,.35);--red:#8b1a1a;--grey:#607a76;--mint:#a8e6dc;
+  --bg2:#0b1614;--white:#fff;--gold:#c9a84c;
+}
+html{scroll-behavior:smooth;height:-webkit-fill-available}
+body{background:var(--ink);color:var(--cream);font-family:'Cormorant Garamond',serif;
+  min-height:100vh;min-height:-webkit-fill-available;overflow-x:hidden;
+  -webkit-user-select:none;user-select:none}
+
+/* ── GRAIN OVERLAY ── */
+body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");opacity:.22}
+
+/* ── ANIMATED BG GRID ── */
+body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(31,168,138,.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(31,168,138,.04) 1px,transparent 1px);
+  background-size:48px 48px;
+  animation:gridShift 30s linear infinite}
+@keyframes gridShift{0%{background-position:0 0}100%{background-position:48px 48px}}
+
+.page{display:none;min-height:100vh;flex-direction:column;position:relative;z-index:1}
+.page.active{display:flex}
+
+/* ═══ ACCUEIL ══════════════════════════════════════════ */
+#pg-accueil{
+  justify-content:center;align-items:center;padding:3rem 1.5rem;
+  background:radial-gradient(ellipse at 50% 0%,rgba(31,168,138,.15) 0%,transparent 65%);
+  overflow:hidden
+}
+
+/* ── LOGO ── */
+.logo-block{display:flex;flex-direction:column;align-items:center;gap:.5rem;margin-bottom:2.2rem}
+.logo-ring{position:relative;width:116px;height:116px;
+  display:flex;align-items:center;justify-content:center;margin-bottom:.3rem}
+.logo-ring::before{content:'';position:absolute;inset:0;border-radius:50%;
+  background:conic-gradient(
+    var(--teal) 0deg,rgba(31,168,138,.08) 55deg,
+    var(--teal) 120deg,rgba(31,168,138,.08) 175deg,
+    var(--teal) 240deg,rgba(31,168,138,.08) 295deg,
+    var(--teal) 360deg);
+  animation:spin 12s linear infinite}
+.logo-ring::after{content:'';position:absolute;inset:4px;border-radius:50%;background:var(--ink)}
+@keyframes spin{to{transform:rotate(360deg)}}
+.logo-img{width:100px;height:100px;border-radius:50%;object-fit:cover;position:relative;z-index:1;
+  box-shadow:0 0 28px rgba(31,168,138,.22),0 0 70px rgba(31,168,138,.07)}
+.logo-brand{font-family:'Space Mono',monospace;font-size:.66rem;letter-spacing:.5em;
+  color:var(--teal);text-transform:uppercase}
+.logo-ornament{display:flex;align-items:center;gap:.5rem}
+.logo-line{width:28px;height:1px;background:linear-gradient(90deg,transparent,var(--teal))}
+.logo-line.r{background:linear-gradient(90deg,var(--teal),transparent)}
+.logo-diamond{width:5px;height:5px;background:var(--teal);transform:rotate(45deg);opacity:.8}
+.logo-since{font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:.83rem;color:var(--grey);letter-spacing:.2em}
+
+/* ── TITLE ── */
+.acc-title{font-family:'Playfair Display',serif;font-size:clamp(1.7rem,4vw,3rem);
+  font-weight:900;text-align:center;line-height:1.12;margin-bottom:.6rem;color:var(--cream)}
+.acc-sub{font-size:1rem;color:var(--grey);text-align:center;font-style:italic;
+  margin-bottom:2.2rem;letter-spacing:.04em}
+
+/* ── FORM ── */
+.form-box{background:rgba(31,168,138,.04);border:1px solid rgba(31,168,138,.2);
+  border-radius:6px;padding:2.4rem;width:100%;max-width:480px;position:relative}
+.form-box::before{content:'';position:absolute;inset:-1px;border-radius:6px;z-index:-1;
+  background:linear-gradient(135deg,rgba(31,168,138,.18),transparent 50%,rgba(31,168,138,.06))}
+.field{margin-bottom:1.3rem}
+.field label{display:block;font-family:'Space Mono',monospace;font-size:.58rem;
+  letter-spacing:.32em;color:var(--teal);text-transform:uppercase;margin-bottom:.5rem}
+.field input,.field select{width:100%;padding:.78rem 1rem;background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.09);border-radius:3px;
+  color:var(--cream);font-family:'Cormorant Garamond',serif;font-size:1.05rem;
+  outline:none;transition:border-color .2s;-webkit-user-select:text;user-select:text}
+.field input:focus,.field select:focus{border-color:var(--teal)}
+.field select option{background:var(--ink)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.divider{height:1px;background:linear-gradient(90deg,transparent,var(--teal-dim),transparent);margin:1.4rem 0}
+.btn{width:100%;padding:.9rem;border:none;border-radius:3px;cursor:pointer;
+  font-family:'Space Mono',monospace;font-size:.7rem;letter-spacing:.22em;
+  text-transform:uppercase;font-weight:700;transition:opacity .18s,transform .1s;
+  -webkit-tap-highlight-color:transparent;touch-action:manipulation;
+  -webkit-appearance:none;appearance:none}
+.btn:hover{opacity:.85}.btn:active{transform:scale(.98)}
+.btn-teal{background:var(--teal);color:var(--ink)}
+.btn-red{background:var(--red);color:#fff}
+
+/* ═══ RÈGLES ═══════════════════════════════════════════ */
+#pg-regles{justify-content:center;align-items:center;padding:3rem 1.5rem;background:var(--bg2)}
+.regles-box{max-width:680px;width:100%;background:rgba(31,168,138,.03);
+  border:1px solid rgba(31,168,138,.18);border-radius:6px;padding:3rem 3rem 2.5rem}
+.reg-title{font-family:'Playfair Display',serif;font-size:1.85rem;font-weight:900;
+  text-align:center;margin-bottom:.3rem;color:var(--cream)}
+.reg-title span{color:var(--teal);font-style:italic}
+.reg-intro{text-align:center;font-style:italic;color:var(--grey);font-size:.9rem;margin-bottom:1.4rem}
+.rule{display:grid;grid-template-columns:30px 1fr;gap:.9rem;
+  padding:.95rem 0;border-bottom:1px solid rgba(255,255,255,.05);align-items:start}
+.rule:last-of-type{border-bottom:none}
+.rule-n{font-family:'Space Mono',monospace;font-size:.6rem;color:var(--teal);padding-top:3px}
+.rule-t{font-size:1rem;color:rgba(232,245,243,.83);line-height:1.65}
+.rule-t strong{color:var(--cream)}.rule-t .alert{color:#e05555;font-weight:600}
+.accept{display:flex;align-items:flex-start;gap:.8rem;margin-top:1.5rem;cursor:pointer}
+.accept input[type=checkbox]{width:18px;height:18px;accent-color:var(--teal);cursor:pointer;margin-top:3px;flex-shrink:0}
+.accept label{font-size:.95rem;color:var(--grey);cursor:pointer;line-height:1.55}
+.accept label em{color:var(--cream);font-style:normal}
+
+/* ═══ QUIZ ══════════════════════════════════════════════ */
+#pg-quiz{background:var(--bg2)}
+.topbar{position:sticky;top:0;z-index:100;background:var(--ink);
+  border-bottom:1px solid rgba(31,168,138,.2);
+  padding:.85rem 2rem;display:flex;align-items:center;justify-content:space-between}
+.topbar-l{font-family:'Space Mono',monospace;font-size:.58rem;color:var(--teal);letter-spacing:.16em}
+.timer{display:flex;align-items:center;gap:.55rem;
+  font-family:'Space Mono',monospace;font-size:1.1rem;font-weight:700;color:var(--cream)}
+.timer-dot{width:8px;height:8px;border-radius:50%;background:#3ab03a;animation:blink 1s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.timer.danger{color:#e05555}.timer.danger .timer-dot{background:#e05555}
+.prog-bar{height:3px;background:rgba(31,168,138,.1)}
+.prog-fill{height:100%;background:var(--teal);transition:width .4s}
+.quiz-body{max-width:800px;margin:0 auto;padding:2.5rem 1.5rem 6rem;width:100%}
+
+/* Section header */
+.sec-head{display:flex;align-items:center;gap:1rem;margin:2.5rem 0 1.3rem;flex-wrap:wrap}
+.sec-badge{font-family:'Space Mono',monospace;font-size:.56rem;letter-spacing:.25em;
+  background:var(--teal);color:var(--ink);padding:.28rem .65rem;border-radius:2px;font-weight:700;white-space:nowrap}
+.sec-title{font-family:'Playfair Display',serif;font-size:1.02rem;font-style:italic;
+  color:rgba(232,245,243,.6)}
+
+/* Context box */
+.ctx-box{background:rgba(31,168,138,.06);border-left:3px solid var(--teal);
+  border-radius:0 4px 4px 0;padding:1rem 1.2rem;margin-bottom:1.2rem;
+  font-size:.95rem;line-height:1.7;color:rgba(232,245,243,.88);white-space:pre-line}
+.ctx-box strong{color:var(--teal)}
+
+/* Schema image */
+.schema-frame{background:rgba(255,255,255,.96);border:2px solid var(--teal-dim);
+  border-radius:6px;padding:1rem;margin-bottom:1.2rem;text-align:center;
+  box-shadow:0 4px 20px rgba(0,0,0,.35)}
+.schema-frame img{max-width:100%;height:auto;border-radius:3px}
+.schema-label{font-family:'Space Mono',monospace;font-size:.52rem;letter-spacing:.2em;
+  color:var(--grey);margin-top:.5rem;text-transform:uppercase}
+
+/* Q card */
+.qcard{background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.07);
+  border-radius:4px;padding:1.8rem 2rem 1.5rem;margin-bottom:1rem;transition:border-color .2s}
+.qcard:hover{border-color:rgba(31,168,138,.18)}
+.qcard.answered{border-color:rgba(31,168,138,.38)}
+.q-label{font-family:'Space Mono',monospace;font-size:.56rem;color:var(--teal);
+  letter-spacing:.18em;margin-bottom:.75rem}
+.q-text{font-size:1.04rem;line-height:1.78;color:var(--cream);margin-bottom:1.2rem;white-space:pre-line}
+.opts{display:flex;flex-direction:column;gap:.5rem}
+.opt{display:flex;align-items:flex-start;gap:.85rem;padding:.72rem 1rem;
+  border:1px solid rgba(255,255,255,.07);border-radius:3px;
+  cursor:pointer;transition:all .15s;-webkit-user-select:none;user-select:none}
+.opt:hover{border-color:rgba(31,168,138,.38);background:rgba(31,168,138,.05)}
+.opt.sel{border-color:var(--teal);background:rgba(31,168,138,.1)}
+.opt input{display:none}
+.opt-letter{font-family:'Space Mono',monospace;font-size:.65rem;color:var(--teal);
+  font-weight:700;padding-top:3px;flex-shrink:0;width:18px}
+.opt-text{font-size:.98rem;color:rgba(232,245,243,.85);line-height:1.5}
+
+.quiz-foot{position:fixed;bottom:0;left:0;right:0;background:var(--ink);
+  border-top:1px solid rgba(31,168,138,.18);
+  padding:.9rem 2rem;display:flex;justify-content:space-between;align-items:center}
+.q-counter{font-family:'Space Mono',monospace;font-size:.6rem;color:var(--grey)}
+
+/* ═══ FIN ════════════════════════════════════════════ */
+#pg-fin{justify-content:center;align-items:center;padding:3rem 1.5rem;
+  background:radial-gradient(ellipse at 50% 30%,rgba(31,168,138,.18) 0%,transparent 70%),var(--ink)}
+.fin-box{max-width:520px;width:100%;text-align:center;
+  background:rgba(31,168,138,.03);border:1px solid rgba(31,168,138,.2);
+  border-radius:6px;padding:3rem 2.5rem}
+.fin-icon{font-size:2.8rem;margin-bottom:1.2rem}
+.fin-title{font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;
+  color:var(--cream);margin-bottom:.4rem}
+.fin-title span{color:var(--teal);font-style:italic}
+.id-box{margin:2rem 0;padding:1.5rem;
+  background:rgba(31,168,138,.08);border:2px solid var(--teal);border-radius:4px}
+.id-lbl{font-family:'Space Mono',monospace;font-size:.58rem;letter-spacing:.3em;
+  color:var(--teal);text-transform:uppercase;margin-bottom:.8rem}
+.id-val{font-family:'Space Mono',monospace;font-size:2.5rem;font-weight:700;
+  color:var(--cream);letter-spacing:.25em}
+.id-warn{font-size:.87rem;color:var(--grey);font-style:italic;margin-top:.8rem;line-height:1.55}
+.score-box{margin:1.5rem 0;padding:1rem;
+  background:rgba(26,94,26,.15);border:1px solid rgba(50,160,50,.35);border-radius:3px}
+.score-lbl{font-family:'Space Mono',monospace;font-size:.56rem;letter-spacing:.22em;
+  color:rgba(100,200,100,.8);text-transform:uppercase;margin-bottom:.4rem}
+.score-val{font-family:'Playfair Display',serif;font-size:2.9rem;font-weight:900;color:#6dc96d}
+.score-sub{font-size:.93rem;color:var(--grey)}
+.fin-note{font-size:.9rem;color:var(--grey);line-height:1.65;font-style:italic}
+
+@media(max-width:580px){
+  .row2{grid-template-columns:1fr}
+  .regles-box,.form-box{padding:2rem 1.3rem}
+  .quiz-body{padding:1.5rem 1rem 6rem}
+  .qcard{padding:1.3rem 1.1rem}
+  .topbar{padding:.7rem 1rem}
+  .topbar-l{display:none}
+  .logo-img{width:88px;height:88px}
+  .logo-ring{width:102px;height:102px}
+}
+</style>
+</head>
+<body>
+
+<!-- PAGE ACCUEIL -->
+<div class="page active" id="pg-accueil">
+  <div class="logo-block">
+    <div class="logo-ring">
+      <img src="https://mon-depots.vercel.app/logo.jpg" class="logo-img" alt="S.E. Corp"
+        onerror="this.style.opacity='0'">
+    </div>
+    <div class="logo-ornament">
+      <div class="logo-line"></div><div class="logo-diamond"></div><div class="logo-line r"></div>
+    </div>
+    <div class="logo-brand">S.E. Corporation</div>
+    <div class="logo-since">Since 2015 — Excellence académique</div>
+  </div>
+
+  <h1 class="acc-title">Évaluation Hebdomadaire<br>Physique-Chimie</h1>
+  <p class="acc-sub">Terminale C &amp; D — Sciences Physiques</p>
+
+  <div class="form-box">
+    <div class="field">
+      <label>Prénom</label>
+      <input type="text" id="f-prenom" placeholder="Votre prénom" autocomplete="off" spellcheck="false">
+    </div>
+    <div class="field">
+      <label>Nom</label>
+      <input type="text" id="f-nom" placeholder="Votre nom de famille" autocomplete="off" spellcheck="false">
+    </div>
+    <div class="field">
+      <label>Établissement</label>
+      <input type="text" id="f-etab" placeholder="Nom de votre lycée" autocomplete="off" spellcheck="false">
+    </div>
+    <div class="row2">
+      <div class="field">
+        <label>Classe</label>
+        <select id="f-classe">
+          <option value="">— Choisir —</option>
+          <option value="TleC">Terminale C</option>
+          <option value="TleD">Terminale D</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Sexe</label>
+        <select id="f-sexe">
+          <option value="">— Choisir —</option>
+          <option value="M">Masculin</option>
+          <option value="F">Féminin</option>
+        </select>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <button class="btn btn-teal" onclick="goRegles()">Continuer →</button>
+  </div>
+</div>
+
+<!-- PAGE RÈGLES -->
+<div class="page" id="pg-regles">
+  <div class="regles-box">
+    <h2 class="reg-title">Règlement de <span>l'évaluation</span></h2>
+    <p class="reg-intro">Lisez attentivement avant de commencer</p>
+    <div class="divider" style="margin:0 0 1.4rem"></div>
+    <div class="rule"><span class="rule-n">01</span><p class="rule-t">Le quiz dure <strong>30 minutes</strong>. Le chronomètre démarre dès que vous appuyez sur « Commencer ». À l'expiration, le quiz est <strong>soumis automatiquement</strong>.</p></div>
+    <div class="rule"><span class="rule-n">02</span><p class="rule-t">À la fin, vous recevez un <strong>identifiant unique</strong>. <strong>Notez-le impérativement</strong> — il est votre seul moyen de retrouver votre classement.</p></div>
+    <div class="rule"><span class="rule-n">03</span><p class="rule-t">Le classement est <strong>confidentiel</strong> : seul votre identifiant y apparaît. Le professeur est le seul à connaître la correspondance nom ↔ identifiant.</p></div>
+    <div class="rule"><span class="rule-n">04</span><p class="rule-t">Chaque question comporte <strong>4 propositions</strong>. Une seule réponse est correcte. Lisez les données avec attention avant de répondre.</p></div>
+    <div class="rule"><span class="rule-n">05</span><p class="rule-t">Travaillez seul(e), <strong>sans aide extérieure</strong>. Clic droit et certains raccourcis clavier sont désactivés pendant l'évaluation.</p></div>
+    <div class="divider"></div>
+    <div class="accept">
+      <input type="checkbox" id="chk-accept">
+      <label for="chk-accept">J'ai lu et j'accepte le règlement. Je m'engage à composer seul(e). Je comprends que le résultat sera <em>enregistré et transmis</em> à l'enseignant.</label>
+    </div>
+    <button class="btn btn-teal" style="margin-top:1.5rem" onclick="startQuiz()">Commencer l'évaluation →</button>
+  </div>
+</div>
+
+<!-- PAGE QUIZ -->
+<div class="page" id="pg-quiz">
+  <div class="topbar">
+    <div class="topbar-l" id="topbar-label">S.E. CORPORATION — PHYSIQUE</div>
+    <div class="timer" id="timer-box">
+      <div class="timer-dot"></div>
+      <span id="timer-display">30:00</span>
+    </div>
+  </div>
+  <div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+  <div class="quiz-body" id="quiz-body"></div>
+  <div class="quiz-foot">
+    <div class="q-counter" id="q-counter">0 / 0 réponses</div>
+    <button class="btn btn-red" style="width:auto;padding:.65rem 1.8rem" onclick="confirmSubmit()">Terminer &amp; Soumettre</button>
+  </div>
+</div>
+
+<!-- PAGE FIN -->
+<div class="page" id="pg-fin">
+  <div class="fin-box">
+    <div class="fin-icon">⚗️</div>
+    <h2 class="fin-title">Évaluation <span>terminée</span></h2>
+    <div class="id-box">
+      <div class="id-lbl">Votre identifiant confidentiel</div>
+      <div class="id-val" id="fin-id">——</div>
+      <div class="id-warn">📌 Notez cet identifiant — il est nécessaire pour consulter votre classement.</div>
+    </div>
+    <div class="score-box" id="score-box">
+      <div class="score-lbl">Score obtenu</div>
+      <div class="score-val" id="score-val">—</div>
+      <div class="score-sub" id="score-sub">/ 20</div>
+    </div>
+    <p class="fin-note" id="fin-note">Le classement sera publié prochainement.<br>Bonne continuation !</p>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey:"AIzaSyAhSTl2OR5ztfoIwB2TgIqEaiMjD6TmrcI",
+  authDomain:"se-corporation-quiz-7187e.firebaseapp.com",
+  projectId:"se-corporation-quiz-7187e",
+  storageBucket:"se-corporation-quiz-7187e.firebasestorage.app",
+  messagingSenderId:"5773761325",
+  appId:"1:5773761325:web:e1d3cb01d88c3a73e611a4"
+};
+const app = initializeApp(firebaseConfig);
+const db  = getFirestore(app);
+
+// ══════════════════════════════════════════════════════════════════════════
+//  QUIZ TERMINALE D  —  20 pts  —  4 sections
+// ══════════════════════════════════════════════════════════════════════════
+const QUIZ_D = { duree:30*60, sections:[
+
+  // ── EX 5.13 : STROBOSCOPIE ─────────────────────────────────────────────
+  { badge:"EXERCICE 5.13", titre:"Stroboscopie — Lame vibrante",
+    ctx:`Un stroboscope est un disque portant P = 20 trous, effectuant n tours par seconde.
+La plus grande valeur de n pour laquelle la lame paraît unique et immobile est n_max = 20 tr/s.`,
+    qs:[
+      { id:"D-A1", pts:2,
+        txt:"La fréquence f du vibreur est donnée par f = P × n_max.\n\nQuelle est la fréquence f du vibreur ?",
+        opts:["f = 100 Hz","f = 200 Hz","f = 400 Hz","f = 20 Hz"], rep:2 },
+      { id:"D-A2", pts:1,
+        txt:"Pour n₁ = 10 tr/s, la fréquence apparente f_app = P × n₁.\n\nQuelle est f_app et que perçoit-on ?",
+        opts:["f_app = 200 Hz — la lame semble se mouvoir lentement","f_app = 400 Hz — la lame paraît immobile","f_app = 100 Hz — la lame semble immobile","f_app = 800 Hz — on voit plusieurs images"], rep:0 },
+      { id:"D-A3", pts:1,
+        txt:"Pour n₂ = 40 tr/s, f_app = P × n₂ = 800 Hz.\n\nComme f_app = 2f, que perçoit-on ?",
+        opts:["La lame semble immobile","La lame semble se dédoubler (deux images)","La lame semble ralentie","La lame paraît en avance"], rep:1 },
+      { id:"D-A4", pts:1,
+        txt:"Pour n₄ = 20,50 tr/s, f_app = 20 × 20,50 = 410 Hz.\n\nSachant que f_app > f (= 400 Hz), que perçoit-on ?",
+        opts:["La lame semble reculer lentement","La lame semble avancer lentement","La lame est immobile","La lame se dédouble"], rep:1 },
+    ]
+  },
+
+  // ── OSCILLATEURS ────────────────────────────────────────────────────────
+  { badge:"OSCILLATEURS", titre:"y₁ = a·cos(100πt − π/6) — Phases et décalages",
+    ctx:`L'équation horaire d'un oscillateur est : y₁ = a·cos(100πt − π/6)
+Un second oscillateur synchrone a pour équation : y₂ = a·cos(100πt + φ)`,
+    qs:[
+      { id:"D-B1", pts:2,
+        txt:"Quelles sont la fréquence f et la période T de cet oscillateur ?",
+        opts:["f = 50 Hz ; T = 0,02 s","f = 100 Hz ; T = 0,01 s","f = 100π Hz ; T = 1/(100π) s","f = 25 Hz ; T = 0,04 s"], rep:0 },
+      { id:"D-B2", pts:1,
+        txt:"Pour que les deux oscillateurs vibrent EN PHASE, Δφ = φ − (−π/6) = 0.\n\nQuelle est la valeur de φ ?",
+        opts:["φ = π/6","φ = −π/6","φ = 5π/6","φ = π/3"], rep:1 },
+      { id:"D-B3", pts:1,
+        txt:"Pour que les deux oscillateurs soient en OPPOSITION DE PHASE, Δφ = ±π.\n\nQuelle est la valeur de φ ?",
+        opts:["φ = −π/6","φ = π/3","φ = 5π/6","φ = −5π/6"], rep:2 },
+      { id:"D-B4", pts:2,
+        txt:"Pour que y₂ soit en QUADRATURE AVANCE par rapport à y₁, Δφ = +π/2.\nφ = −π/6 + π/2 = π/3.\n\nLe décalage horaire τ correspondant est τ = Δφ/ω.\nAvec ω = 100π rad/s et Δφ = π/2, que vaut τ ?",
+        opts:["τ = 1/200 s = 5 ms","τ = 1/400 s = 2,5 ms","τ = 1/100 s = 10 ms","τ = π/200 s"], rep:0 },
+    ]
+  },
+
+  // ── ÉLECTROMÈTRE ─────────────────────────────────────────────────────────
+  { badge:"ÉLECTRICITÉ", titre:"Pendules électrostatiques — Vérification de la charge",
+    ctx:`Deux boules de masse m = 53,1 g, longueur l = 25 cm, g = 9,8 N/kg.
+Distance entre boules D = O₁O₂ = 10 cm, angle avec la verticale θ = 35,4°.
+Constante de Coulomb K = 9×10⁹ SI. L'électromètre indique +2,5 µC.`,
+    qs:[
+      { id:"D-C1", pts:2,
+        txt:"À l'équilibre du pendule, la condition d'équilibre donne :\ntan θ = F_électrique / (mg)\n\nQuelle est la force électrostatique F_e exercée entre les deux boules ?\n(m = 0,0531 kg, g = 9,8 N/kg, θ = 35,4°, tan(35,4°) ≈ 0,712)",
+        opts:["F_e ≈ 0,371 N","F_e ≈ 0,520 N","F_e ≈ 0,250 N","F_e ≈ 1,04 N"], rep:0 },
+      { id:"D-C2", pts:2,
+        txt:"Par la loi de Coulomb : F_e = K·q²/D²\nAvec F_e = 0,371 N, K = 9×10⁹, D = 0,10 m.\n\nQuelle est la charge q calculée ?",
+        opts:["q ≈ 2,03 µC","q ≈ 2,50 µC","q ≈ 1,80 µC","q ≈ 3,10 µC"], rep:0 },
+      { id:"D-C3", pts:1,
+        txt:"L'électromètre indique +2,5 µC, alors que le calcul donne q ≈ 2,03 µC.\n\nQuelle conclusion peut-on tirer sur le fonctionnement de l'électromètre ?",
+        opts:["L'électromètre fonctionne parfaitement, les valeurs coïncident","L'électromètre présente un défaut car la valeur mesurée (2,5 µC) diffère significativement de la valeur calculée (2,03 µC)","L'écart est dû à une erreur de mesure des angles, l'électromètre est correct","Il faudrait refaire l'expérience pour conclure"], rep:1 },
+    ]
+  },
+
+  // ── CIRCUIT RLC ──────────────────────────────────────────────────────────
+  { badge:"CIRCUIT RLC", titre:"Bobine — Impédance, phase et résonance",
+    ctx:`Bobine d'inductance L = 0,1 H et de résistance r = 10 Ω, alimentée par un courant sinusoïdal de fréquence f = 50 Hz.
+ω = 2πf = 100π ≈ 314 rad/s`,
+    qs:[
+      { id:"D-D1", pts:2,
+        txt:"L'impédance d'une bobine est Z = √(r² + (Lω)²).\n\nAvec r = 10 Ω, L = 0,1 H, ω = 100π rad/s :\nLω = 0,1 × 100π ≈ 31,4 Ω\n\nQue vaut Z ?",
+        opts:["Z ≈ 32,9 Ω","Z ≈ 99,5 Ω","Z ≈ 41,4 Ω","Z ≈ 21,4 Ω"], rep:0 },
+      { id:"D-D2", pts:1,
+        txt:"La phase de la tension par rapport au courant est :\nφ = arctan(Lω / r) = arctan(31,4 / 10) = arctan(3,14)\n\nQue vaut φ (en degrés) ?",
+        opts:["φ ≈ 72,4°","φ ≈ 45°","φ ≈ 88,2°","φ ≈ 30°"], rep:0 },
+      { id:"D-D3", pts:2,
+        txt:"Pour que la tension soit en phase avec le courant dans un circuit RLC série, il faut Lω = 1/(Cω), soit :\nC = 1 / (L × ω²)\n\nAvec L = 0,1 H et ω = 100π rad/s, quelle est la capacité C nécessaire ?",
+        opts:["C ≈ 101 µF","C ≈ 50 µF","C ≈ 200 µF","C ≈ 318 µF"], rep:0 },
+    ]
+  },
+
+]};
+
+// ══════════════════════════════════════════════════════════════════════════
+//  QUIZ TERMINALE C  —  20 pts  —  3 sections
+// ══════════════════════════════════════════════════════════════════════════
+const QUIZ_C = { duree:30*60, sections:[
+
+  // ── ÉLECTROMÈTRE (même exercice que TD) ─────────────────────────────────
+  { badge:"ÉLECTRICITÉ", titre:"Pendules électrostatiques — Vérification de la charge",
+    ctx:`Deux boules de masse m = 53,1 g, longueur l = 25 cm, g = 9,8 N/kg.
+Distance entre boules D = O₁O₂ = 10 cm, angle θ = 35,4° avec la verticale.
+Constante de Coulomb K = 9×10⁹ SI. L'électromètre indique +2,5 µC.`,
+    qs:[
+      { id:"C-A1", pts:2,
+        txt:"À l'équilibre, la relation d'équilibre du pendule donne :\ntan θ = F_électrique / (mg)\n\nCalcule la force électrostatique F_e.\n(m = 0,0531 kg ; g = 9,8 N/kg ; tan(35,4°) ≈ 0,712)",
+        opts:["F_e ≈ 0,371 N","F_e ≈ 0,520 N","F_e ≈ 0,280 N","F_e ≈ 1,04 N"], rep:0 },
+      { id:"C-A2", pts:2,
+        txt:"Par la loi de Coulomb : F_e = K·q²/D²\nAvec F_e = 0,371 N, K = 9×10⁹, D = 0,10 m.\n\nLa charge calculée q vaut :",
+        opts:["q ≈ 2,03 µC","q ≈ 2,50 µC","q ≈ 0,64 µC","q ≈ 3,10 µC"], rep:0 },
+      { id:"C-A3", pts:1,
+        txt:"L'électromètre indique +2,5 µC, le calcul donne q ≈ 2,03 µC.\n\nConclusion :",
+        opts:["L'électromètre est fiable, l'écart est négligeable","L'électromètre présente probablement un défaut de fonctionnement","L'expérience est mal réalisée, recommencer","On ne peut pas conclure"], rep:1 },
+    ]
+  },
+
+  // ── PENDULE CONIQUE + STROBOSCOPIE ──────────────────────────────────────
+  { badge:"MÉCANIQUE 1", titre:"Pendule conique — Ressort élastique en rotation",
+    ctx:`Bille A de masse m = 50 g fixée à un ressort de raideur k = 50 N/m, longueur à vide l₀ = 20 cm.
+En rotation uniforme autour de l'axe Oz, le ressort s'allonge de a = 5,0 cm.
+Longueur en rotation : l = l₀ + a = 25 cm. Donnée : g = 9,8 m/s²`,
+    qs:[
+      { id:"C-B1", pts:2,
+        txt:"La condition dynamique sur la bille en rotation donne :\nkа = m·ω²·(l₀ + a)·sin α  et  m·g = m·ω²·(l₀ + a)·cos α\n\nEn utilisant la relation simplifiée ω² = ka / [m(l₀ + a)] :\n(k=50 N/m, a=0,05 m, m=0,05 kg, l=0,25 m)\n\nQue vaut ω ?",
+        opts:["ω ≈ 14,1 rad/s","ω ≈ 10,0 rad/s","ω ≈ 31,4 rad/s","ω ≈ 7,07 rad/s"], rep:0 },
+      { id:"C-B2", pts:2,
+        txt:"On a ω² = 200 rad²/s² et l = 0,25 m.\n\nLa condition sur la composante verticale donne :\ncos α = g / (l · ω²) = 9,8 / (0,25 × 200) = 9,8 / 50\n\nQue vaut l'angle α (angle entre le ressort et l'axe Oz) ?",
+        opts:["α ≈ 78,7°","α ≈ 45°","α ≈ 60°","α ≈ 11,3°"], rep:0 },
+    ]
+  },
+
+  // ── STROBOSCOPIE ────────────────────────────────────────────────────────
+  { badge:"STROBOSCOPIE", titre:"Roue à 4 rayons — Fréquence de rotation",
+    ctx:`Une roue munie de 4 rayons régulièrement espacés est éclairée par un stroboscope.
+La plus grande fréquence des éclairs pour laquelle la roue paraît immobile est f_emax = 120 Hz.`,
+    qs:[
+      { id:"C-C1", pts:2,
+        txt:"Quand la roue à P rayons paraît immobile au stroboscope, la relation est :\nf_emax = P × f_rotation\n\nAvec P = 4 rayons et f_emax = 120 Hz, que vaut la fréquence de rotation de la roue ?",
+        opts:["f_rotation = 30 Hz","f_rotation = 120 Hz","f_rotation = 480 Hz","f_rotation = 60 Hz"], rep:0 },
+    ]
+  },
+
+  // ── PENDULE ÉLASTIQUE ────────────────────────────────────────────────────
+  { badge:"MÉCANIQUE 2", titre:"Pendule élastique — Oscillations libres",
+    ctx:`Ressort de raideur k = 12 N/m. Solide S de masse m = 10 g = 0,010 kg.
+Position initiale x₀ = 2,0 cm = 0,02 m. Vitesse initiale v₀ = 1,2 m/s (vers A, sens négatif).`,
+    qs:[
+      { id:"C-D1", pts:2,
+        txt:"L'équation différentielle du mouvement est :\nm·ẍ + k·x = 0\n\nLa pulsation propre ω₀ = √(k/m).\nAvec k = 12 N/m et m = 0,010 kg, que vaut ω₀ ?",
+        opts:["ω₀ ≈ 34,6 rad/s","ω₀ ≈ 20,0 rad/s","ω₀ ≈ 12,0 rad/s","ω₀ ≈ 1,2 rad/s"], rep:0 },
+      { id:"C-D2", pts:3,
+        txt:"L'équation horaire est x(t) = x_m · cos(ω₀t + φ).\n\nL'amplitude x_m est donnée par la conservation de l'énergie :\nx_m² = x₀² + (v₀/ω₀)²\n\nAvec x₀ = 0,02 m, v₀ = 1,2 m/s, ω₀ = 34,6 rad/s :\n(v₀/ω₀)² = (1,2/34,6)² ≈ 1,2×10⁻³ m²\n\nQue vaut x_m ?",
+        opts:["x_m ≈ 4,0 cm","x_m ≈ 2,0 cm","x_m ≈ 6,0 cm","x_m ≈ 1,2 cm"], rep:0 },
+      { id:"C-D3", pts:2,
+        txt:"La phase initiale φ est donnée par :\ntan φ = −v₀ / (ω₀ · x₀) = −1,2 / (34,6 × 0,02) = −1,73\n\nQue vaut φ (la vitesse est négative car dirigée vers A) ?",
+        opts:["φ = −π/3 (≈ −60°)","φ = +π/3 (≈ +60°)","φ = −π/6 (≈ −30°)","φ = π/2"], rep:0 },
+      { id:"C-D4", pts:2,
+        txt:"La vitesse du solide à un abscisse x quelconque est donnée par :\nv² = ω₀²(x_m² − x²)\n\nÀ x = 1,5 cm = 0,015 m (avec x_m = 0,04 m, ω₀² = 1200 rad²/s²) :\nv² = 1200 × (16×10⁻⁴ − 2,25×10⁻⁴) = 1200 × 13,75×10⁻⁴\n\nQue vaut |v| au premier passage en x = 1,5 cm ?",
+        opts:["|v| ≈ 1,28 m/s","|v| ≈ 0,90 m/s","|v| ≈ 1,50 m/s","|v| ≈ 0,65 m/s"], rep:0 },
+    ]
+  },
+
+]};
+
+// ══ ÉTAT GLOBAL ══════════════════════════════════════════════════════════
+let QUIZ=null, eleve={}, reps={}, started=false, done=false, timerInt=null, tLeft=0;
+const ALL_QS = ()=> QUIZ ? QUIZ.sections.flatMap(s=>s.qs) : [];
+const TOTAL_PTS = ()=> ALL_QS().reduce((a,q)=>a+q.pts,0);
+
+// ══ NAVIGATION ═══════════════════════════════════════════════════════════
+window.showPage = id=>{
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('pg-'+id).classList.add('active');
+};
+
+window.goRegles = ()=>{
+  const p = document.getElementById('f-prenom').value.trim();
+  const n = document.getElementById('f-nom').value.trim();
+  const e = document.getElementById('f-etab').value.trim();
+  const c = document.getElementById('f-classe').value;
+  const s = document.getElementById('f-sexe').value;
+  if(!p||!n||!e||!c||!s){ alert('Veuillez remplir tous les champs.'); return; }
+  eleve = {prenom:p, nom:n, etablissement:e, classe:c, sexe:s};
+  // Choisir le bon quiz selon la classe
+  QUIZ = (c === 'TleC') ? QUIZ_C : QUIZ_D;
+  showPage('regles');
+};
+
+window.startQuiz = ()=>{
+  if(!document.getElementById('chk-accept').checked){
+    alert('Vous devez accepter le règlement.'); return;
+  }
+  document.getElementById('topbar-label').textContent =
+    `S.E. CORPORATION — TERMINALE ${eleve.classe.slice(3)} — PHYSIQUE`;
+  buildQuiz();
+  showPage('quiz');
+  startTimer();
+  started = true;
+  antiCheat();
+};
+
+// ══ CONSTRUCTION DU QUIZ ══════════════════════════════════════════════════
+function buildQuiz(){
+  const body = document.getElementById('quiz-body');
+  body.innerHTML = '';
+  QUIZ.sections.forEach(sec=>{
+    // Context box
+    let html = `<div class="sec-head">
+      <span class="sec-badge">${sec.badge}</span>
+      <span class="sec-title">${sec.titre}</span>
+    </div>`;
+    if(sec.ctx){
+      html += `<div class="ctx-box">${sec.ctx}</div>`;
+    }
+    body.insertAdjacentHTML('beforeend', html);
+
+    sec.qs.forEach(q=>{
+      const opts = q.opts.map((o,i)=>
+        `<label class="opt" id="opt-${q.id}-${i}" onclick="pick('${q.id}',${i},this)">
+          <input type="radio" name="q${q.id}">
+          <span class="opt-letter">${'ABCD'[i]}</span>
+          <span class="opt-text">${o}</span>
+        </label>`
+      ).join('');
+      body.insertAdjacentHTML('beforeend',
+        `<div class="qcard" id="qc-${q.id}">
+          <div class="q-label">QUESTION — ${q.pts} pt${q.pts>1?'s':''}</div>
+          <div class="q-text">${q.txt}</div>
+          <div class="opts">${opts}</div>
+        </div>`
+      );
+    });
+  });
+  updateCounter();
+}
+
+window.pick = (qId, idx, el)=>{
+  document.querySelectorAll(`[id^="opt-${qId}-"]`).forEach(l=>l.classList.remove('sel'));
+  el.classList.add('sel');
+  reps[qId] = idx;
+  document.getElementById('qc-'+qId).classList.add('answered');
+  updateCounter();
+};
+
+function updateCounter(){
+  const tot = ALL_QS().length, done2 = Object.keys(reps).length;
+  document.getElementById('q-counter').textContent = `${done2} / ${tot} réponses`;
+  document.getElementById('prog-fill').style.width = `${(done2/tot)*100}%`;
+}
+
+// ══ TIMER ═════════════════════════════════════════════════════════════════
+function startTimer(){
+  tLeft = QUIZ.duree;
+  timerInt = setInterval(()=>{
+    tLeft--;
+    const m = String(Math.floor(tLeft/60)).padStart(2,'0');
+    const s = String(tLeft%60).padStart(2,'0');
+    document.getElementById('timer-display').textContent = `${m}:${s}`;
+    if(tLeft<=300) document.getElementById('timer-box').classList.add('danger');
+    if(tLeft<=0){ clearInterval(timerInt); submit('temps_depasse'); }
+  },1000);
+}
+
+// ══ ANTI-TRICHE (léger, sans popup) ════════════════════════════════════
+function antiCheat(){
+  document.addEventListener('contextmenu', e=>{ if(started&&!done) e.preventDefault(); });
+  document.addEventListener('keydown', e=>{
+    if(!started||done) return;
+    if(e.ctrlKey && 'cvusap'.includes(e.key.toLowerCase())) e.preventDefault();
+    if(e.key==='F12'||(e.ctrlKey&&e.shiftKey&&e.key==='I')) e.preventDefault();
+  });
+}
+
+// ══ SOUMISSION ════════════════════════════════════════════════════════════
+window.confirmSubmit = ()=>{
+  if(done) return;
+  const tot = ALL_QS().length, left = tot - Object.keys(reps).length;
+  if(left>0){
+    if(!confirm(`${left} question(s) sans réponse. Soumettre quand même ?`)) return;
+  }
+  submit('normal');
+};
+
+async function submit(statut){
+  if(done) return;
+  done = true; started = false; clearInterval(timerInt);
+
+  let score = 0;
+  ALL_QS().forEach(q=>{
+    if(reps[q.id]!==undefined && reps[q.id]===q.rep) score += q.pts;
+  });
+  const totalPts = TOTAL_PTS();
+  const s20 = Math.round(score/totalPts*20*100)/100;
+  const id = genId(eleve.classe);
+
+  const data = {
+    identifiant:id, prenom:eleve.prenom, nom:eleve.nom,
+    etablissement:eleve.etablissement, classe:eleve.classe, sexe:eleve.sexe,
+    score, scoreOn20:s20, totalPts, statut,
+    reponses:JSON.stringify(reps), createdAt:new Date().toISOString()
+  };
+
+  const col = eleve.classe==='TleC' ? 'resultats_phys_c' : 'resultats_phys_d';
+  try{ await addDoc(collection(db, col), data); }
+  catch(e){
+    try{
+      const arr = JSON.parse(localStorage.getItem('se_phys')||'[]');
+      arr.push(data); localStorage.setItem('se_phys', JSON.stringify(arr));
+    }catch(e2){}
+  }
+
+  document.getElementById('fin-id').textContent = id;
+  document.getElementById('score-val').textContent = s20;
+  document.getElementById('score-sub').textContent = `/ 20  (${score} pts sur ${totalPts})`;
+  showPage('fin');
+}
+
+function genId(classe){
+  const c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  const prefix = classe==='TleC' ? 'PC' : 'PD';
+  return prefix+'-'+[...Array(4)].map(()=>c[Math.floor(Math.random()*c.length)]).join('');
+}
+</script>
+</body>
+</html>
