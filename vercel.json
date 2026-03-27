@@ -25,6 +25,8 @@
     {"src": "/progression", "dest": "/progression.html"},
     {"src": "/progression.html", "dest": "/progression.html"},
     {"src": "/admin-progression", "dest": "/admin_progression.html"},
-    {"src": "/admin_progression.html", "dest": "/admin_progression.html"}
+    {"src": "/admin_progression.html", "dest": "/admin_progression.html"},
+    {"src": "/physique", "dest": "/physique.html"},
+    {"src": "/physique.html", "dest": "/physique.html"}
   ]
 }
