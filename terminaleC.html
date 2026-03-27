@@ -30,7 +30,7 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
   position:relative;overflow:hidden
 }
 #pg-accueil::after{
-  content:'C';position:absolute;font-size:38rem;
+  content:'CD';position:absolute;font-size:38rem;
   color:rgba(232,132,58,.025);font-family:'Playfair Display',serif;
   font-style:italic;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none
 }
@@ -228,13 +228,6 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
 </head>
 <body>
 
-<!-- AUTH OVERLAY -->
-<div id="auth-overlay" style="display:none;position:fixed;inset:0;z-index:99999;background:#0f0e0a;justify-content:center;align-items:center;flex-direction:column;gap:1.2rem">
-  <div style="width:48px;height:48px;border:3px solid rgba(232,132,58,.3);border-top-color:#e8843a;border-radius:50%;animation:spin 1s linear infinite"></div>
-  <p id="auth-msg" style="color:#f5f0e8;font-family:serif;font-size:1.1rem;text-align:center;padding:0 2rem">Connexion en cours…</p>
-  <p style="color:#666;font-size:.82rem;font-family:monospace">S.E. Corporation — Accès sécurisé</p>
-</div>
-
 <div id="fraud-overlay">
   <div class="fraud-title">⚠️ Sortie détectée !</div>
   <div class="fraud-body">
@@ -247,7 +240,6 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
 
 <!-- PAGE ACCUEIL -->
 <div class="page active" id="pg-accueil">
-
   <div class="logo-block">
     <div class="logo-ring">
       <img src="https://mon-depots.vercel.app/logo.jpg" class="logo-img" alt="S.E. Corporation" onerror="this.style.background='var(--gold)';this.style.display='flex'">
@@ -274,6 +266,10 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
       <label>Nom</label>
       <input type="text" id="f-nom" placeholder="Votre nom de famille" autocomplete="off" spellcheck="false">
     </div>
+    <div class="field">
+      <label>Établissement</label>
+      <input type="text" id="f-etab" placeholder="Ex : Lycée de Yaoundé" autocomplete="off" spellcheck="false">
+    </div>
     <div class="row2">
       <div class="field">
         <label>Classe</label>
@@ -290,9 +286,6 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
           <option value="F">Féminin</option>
         </select>
       </div>
-      <label> Établissement </label>
-      <input type="text" id="f-etab" placeholder="Ex : Lycée de Yaoundé" autocomplete="off" spellcheck="false">
-    </div>
     </div>
     <div class="divider"></div>
     <button class="btn btn-gold" onclick="goRegles()">Continuer →</button>
@@ -358,9 +351,7 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-
+import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 const firebaseConfig = {
   apiKey:"AIzaSyAhSTl2OR5ztfoIwB2TgIqEaiMjD6TmrcI",
   authDomain:"se-corporation-quiz-7187e.firebaseapp.com",
@@ -371,263 +362,51 @@ const firebaseConfig = {
 };
 const app=initializeApp(firebaseConfig);
 const db=getFirestore(app);
-const auth=getAuth(app);
-const provider=new GoogleAuthProvider();
-
-// ══ MODE ADMIN ══
-const ADMIN_KEY='SE2025';
-const urlParams=new URLSearchParams(window.location.search);
-const isAdmin=urlParams.get('admin')===ADMIN_KEY;
-window._isAdmin=isAdmin;
-
-function getLundiSemaine(){
-  const d=new Date(); const day=d.getDay()||7;
-  d.setHours(0,0,0,0); d.setDate(d.getDate()-(day-1));
-  return d.toISOString();
-}
-async function verifierDoublure(uid){
-  const lundi=getLundiSemaine();
-  const q=query(collection(db,'resultats_c'),where('uid','==',uid),where('createdAt','>=',lundi));
-  const snap=await getDocs(q); return !snap.empty;
-}
-
-// ══ AUTH GOOGLE pour élèves seulement ══
-if(!isAdmin){
-  const overlay=document.getElementById('auth-overlay');
-  const msg=document.getElementById('auth-msg');
-  overlay.style.display='flex';
-  msg.textContent='Connexion en cours…';
-  (async()=>{
-    try{
-      const result=await signInWithPopup(auth,provider);
-      const uid=result.user.uid;
-      window._currentUid=uid;
-      msg.textContent='Vérification…';
-      const dejaCompose=await verifierDoublure(uid);
-      if(dejaCompose){
-        overlay.innerHTML=`<div style="text-align:center;padding:2rem"><div style="font-size:3rem;margin-bottom:1rem">🔒</div><h2 style="color:#c9a84c;font-family:serif;font-size:1.6rem;margin-bottom:1rem">Déjà participé</h2><p style="color:#aaa;font-size:1.05rem;line-height:1.7">Vous avez déjà composé cette semaine.<br><strong style="color:#f5f0e8">Une seule participation autorisée.</strong></p><p style="margin-top:2rem;color:#666;font-size:.9rem">S.E. Corporation</p></div>`;
-        return;
-      }
-      overlay.style.display='none';
-    }catch(e){
-      msg.textContent='Connexion requise. Rechargez la page.';
-    }
-  })();
-}
-
-// ══════════════════════════════════════════════════════════════
-//  QUIZ — TERMINALE C  ·  15 questions  ·  20 points  ·  30 min
-// ══════════════════════════════════════════════════════════════
-window.QUIZ={duree:30*60,sections:[
-
-  // ── SECTION 1 : PROBLÈME 3 — f(x) = e^((2x-1)/x) − x ──────
-  {
-    badge:"PROBLÈME 3",
-    titre:"f(x) = e^((2x−1)/x) − x  —  Prolongement, dérivée et variations",
-    qs:[
-      {
-        id:"A1", pts:1,
-        txt:"On pose f(x) = e^((2x−1)/x) − x pour x > 0.\n\nOn cherche le prolongement par continuité de f en 0.\nOn calcule : lim(x→0⁺) (2x−1)/x = ?\n\nQue vaut cette limite ?",
-        opts:[
-          "−∞",
-          "+∞",
-          "2",
-          "0"
-        ],
-        rep:0
-      },
-      {
-        id:"A2", pts:1,
-        txt:"D'après la question précédente, lim(x→0⁺) f(x) = lim(x→0⁺) e^((2x−1)/x) − x.\n\nQue vaut cette limite (on pose g(0) = cette valeur) ?",
-        opts:[
-          "+∞",
-          "0",
-          "e²",
-          "1"
-        ],
-        rep:1
-      },
-      {
-        id:"A3", pts:2,
-        txt:"On calcule g′(x) pour x ∈ ]0 ; +∞[, où g(x) = e^((2x−1)/x) − x.\n\nLa dérivée de u(x) = (2x−1)/x vaut :\nu′(x) = ?",
-        opts:[
-          "u′(x) = 1/x²",
-          "u′(x) = 2/x²",
-          "u′(x) = (2x+1)/x²",
-          "u′(x) = −1/x²"
-        ],
-        rep:0
-      },
-      {
-        id:"A4", pts:1,
-        txt:"On admet que g′(x) = e^((2x−1)/x) × (1/x²) − 1.\n\nOn cherche lim(x→0⁺) g′(x).\nComme lim(x→0⁺) (2x−1)/x = −∞, que vaut lim(x→0⁺) e^((2x−1)/x) ?",
-        opts:[
-          "+∞",
-          "0",
-          "1",
-          "e"
-        ],
-        rep:1
-      },
-      {
-        id:"A5", pts:2,
-        txt:"L'équation g′(x) = 0 admet deux solutions α et β.\nOn sait que :\n• g′(0,1) < 0  et  g′(0,2) > 0  → donc α ∈ ]0,1 ; 0,2[\n• g′(2,1) < 0  et  g′(2,2) > 0  → donc β ∈ ]2,1 ; 2,2[\n\nLe bénéfice maximum du GRVC est atteint en x = β ≈ 2,15 (années).\nCela correspond à l'année :",
-        opts:[
-          "La 1ère année",
-          "La 2ème année",
-          "La 3ème année",
-          "La 4ème année"
-        ],
-        rep:1
-      },
-    ]
-  },
-
-  // ── SECTION 2 : EXERCICE 2 — Nombres complexes zₙ ──────────
-  {
-    badge:"EXERCICE 2",
-    titre:"Suite de nombres complexes zₙ — Arguments et géométrie",
-    qs:[
-      {
-        id:"B1", pts:1,
-        txt:"On définit z₀ = e^(−iπ/2) et zₙ₊₁ = e^(iπ/2) × zₙ pour n ∈ ℕ.\n\nOn veut montrer par récurrence que :\nzₙ = e^(i(−π/2 + nπ/2)) pour tout n ∈ ℕ.\n\nVérification au rang 0 : z₀ = e^(i(−π/2 + 0)) = e^(−iπ/2). C'est vrai.\n\nSi on suppose zₙ = e^(i(−π/2 + nπ/2)), alors zₙ₊₁ = e^(iπ/2) × zₙ vaut :",
-        opts:[
-          "e^(i(−π/2 + (n+1)π/2))",
-          "e^(i(π/2 + nπ/2))",
-          "e^(i(−π/2 − nπ/2))",
-          "e^(i · nπ)"
-        ],
-        rep:0
-      },
-      {
-        id:"B2", pts:2,
-        txt:"On a montré que zₙ = e^(i(−π/2 + nπ/2)).\n\nOn pose aₙ = −π/2 + nπ/2. On veut montrer que Mₙ et Mₙ₊₁₂ sont confondus.\n\nQue vaut aₙ₊₁₂ − aₙ ?",
-        opts:[
-          "2π",
-          "6π",
-          "π",
-          "12π"
-        ],
-        rep:1
-      },
-      {
-        id:"B3", pts:1,
-        txt:"On veut montrer que zₙ₊₆ = −zₙ.\n\nOn calcule zₙ₊₆ / zₙ = e^(i(aₙ₊₆ − aₙ)).\n\nQue vaut aₙ₊₆ − aₙ = (−π/2 + (n+6)π/2) − (−π/2 + nπ/2) ?",
-        opts:[
-          "π",
-          "2π",
-          "3π",
-          "6π"
-        ],
-        rep:2
-      },
-      {
-        id:"B4", pts:1,
-        txt:"On a montré que zₙ₊₆ = −zₙ.\n\nOn désigne par Mₙ l'image de zₙ dans le plan complexe.\nQue peut-on déduire concernant O, Mₙ et Mₙ₊₆ ?",
-        opts:[
-          "O est le milieu de [MₙMₙ₊₆]",
-          "Mₙ = Mₙ₊₆",
-          "O, Mₙ, Mₙ₊₆ sont alignés mais O n'est pas milieu",
-          "MₙMₙ₊₆ est perpendiculaire à OMₙ"
-        ],
-        rep:0
-      },
-      {
-        id:"B5", pts:1,
-        txt:"On calcule le rapport :\n(zₙ₊₆ − zₙ) / (zₙ₊₄ − zₙ)\n\nOn sait que zₙ₊₆ = −zₙ, donc zₙ₊₆ − zₙ = −2zₙ.\nOn sait que zₙ₊₄ = e^(i·2π) × zₙ = ... (calculer l'argument)\n\nzₙ₊₄ − zₙ vaut :",
-        opts:[
-          "zₙ(e^(i·2π) − 1) = 0",
-          "zₙ(e^(iπ) − 1) = −2zₙ",
-          "zₙ(e^(i·2π/3) − 1)",
-          "zₙ(e^(i·2π/4) − 1) = zₙ(i − 1)"
-        ],
-        rep:3
-      },
-    ]
-  },
-
-  // ── SECTION 3 : ACTIVITÉ 35 — Probabilités (Urnes) ──────────
-  {
-    badge:"ACTIVITÉ 35",
-    titre:"Urnes U₁ et U₂ — Variables aléatoires X et Y",
-    qs:[
-      {
-        id:"C1", pts:1,
-        txt:"U₁ contient 4 boules blanches (numérotées 1 à 4).\nU₂ contient 3 boules rouges (numérotées 1 à 3).\n\nX = numéro de la boule blanche tirée.\nY = plus petit des deux numéros b et r.\n\nQuelle est la probabilité P(X = 2, Y = 2) ?",
-        opts:[
-          "1/12",
-          "2/12",
-          "1/6",
-          "1/4"
-        ],
-        rep:0
-      },
-      {
-        id:"C2", pts:1,
-        txt:"X est le numéro de la boule blanche tirée dans U₁ (4 boules équiprobables).\n\nQuelle est la loi de probabilité de X ?",
-        opts:[
-          "P(X = k) = 1/3 pour k ∈ {1, 2, 3}",
-          "P(X = k) = 1/4 pour k ∈ {1, 2, 3, 4}",
-          "P(X = k) = k/10 pour k ∈ {1, 2, 3, 4}",
-          "P(X = k) = 1/12 pour k ∈ {1, 2, 3, 4}"
-        ],
-        rep:1
-      },
-      {
-        id:"C3", pts:1,
-        txt:"On tire une boule dans U₁ et une dans U₂, indépendamment.\n\nX = numéro de la boule blanche, Y = min(b, r).\n\nLes variables X et Y sont-elles indépendantes ?\n(Rappel : X et Y sont indépendantes si pour tout (x, y) : P(X=x, Y=y) = P(X=x)×P(Y=y))",
-        opts:[
-          "Oui, car les tirages sont indépendants",
-          "Non, car Y dépend aussi de X (Y = min(b,r) dépend de la valeur de b)",
-          "Oui, car X et Y ont la même loi",
-          "Non, car U₁ et U₂ ont des compositions différentes"
-        ],
-        rep:1
-      },
-      {
-        id:"C4", pts:2,
-        txt:"On dit qu'on réussit l'expérience si la boule blanche porte le n° 2 ET la boule rouge porte le n° 2.\n\nCalculer la probabilité p de réussir l'expérience.\n\nP(boule blanche = 2) = ? et P(boule rouge = 2) = ?",
-        opts:[
-          "p = 1/4 × 1/3 = 1/12",
-          "p = 1/4 × 1/4 = 1/16",
-          "p = 1/3 × 1/3 = 1/9",
-          "p = 2/4 × 2/3 = 1/3"
-        ],
-        rep:0
-      },
-      {
-        id:"C5", pts:2,
-        txt:"On répète l'expérience 4 fois dans les mêmes conditions.\np = 1/12 est la probabilité de réussite à chaque essai.\n\nSoit N le nombre de réussites en 4 essais. N suit une loi B(4 ; 1/12).\n\nL'espérance mathématique E(N) et la variance V(N) valent respectivement :",
-        opts:[
-          "E(N) = 4/12 = 1/3  et  V(N) = 4 × (1/12) × (11/12) = 44/144",
-          "E(N) = 1/12  et  V(N) = 1/144",
-          "E(N) = 4  et  V(N) = 4 × (1/12) × (11/12)",
-          "E(N) = 1/3  et  V(N) = 1/9"
-        ],
-        rep:0
-      },
-    ]
-  },
-
-]}; // fin QUIZ
 
 // ══ ÉTAT ══
 const _savedFrauds = parseInt(sessionStorage.getItem('se_frauds')||'0');
 let eleve={},reps={},frauds=_savedFrauds,started=false,done=false,timerInt=null,tLeft=0;
+
+window.QUIZ={duree:30*60,sections:[
+  {badge:"PROBLÈME 3",titre:"f(x) = e^((2x−1)/x) − x — Prolongement, dérivée et variations",qs:[
+    {id:"A1",pts:1,txt:"On pose f(x) = e^((2x−1)/x) − x pour x > 0.\n\nOn cherche le prolongement par continuité de f en 0.\nOn calcule : lim(x→0⁺) (2x−1)/x = ?\n\nQue vaut cette limite ?",opts:["−∞","+∞","2","0"],rep:0},
+    {id:"A2",pts:1,txt:"D'après la question précédente, lim(x→0⁺) f(x) = lim(x→0⁺) e^((2x−1)/x) − x.\n\nQue vaut cette limite (on pose g(0) = cette valeur) ?",opts:["+∞","0","e²","1"],rep:1},
+    {id:"A3",pts:2,txt:"On calcule g′(x) pour x ∈ ]0 ; +∞[, où g(x) = e^((2x−1)/x) − x.\n\nLa dérivée de u(x) = (2x−1)/x vaut :\nu′(x) = ?",opts:["u′(x) = 1/x²","u′(x) = 2/x²","u′(x) = (2x+1)/x²","u′(x) = −1/x²"],rep:0},
+    {id:"A4",pts:1,txt:"On admet que g′(x) = e^((2x−1)/x) × (1/x²) − 1.\n\nOn cherche lim(x→0⁺) g′(x).\nComme lim(x→0⁺) (2x−1)/x = −∞, que vaut lim(x→0⁺) e^((2x−1)/x) ?",opts:["+∞","0","1","e"],rep:1},
+    {id:"A5",pts:2,txt:"L'équation g′(x) = 0 admet deux solutions α et β.\nOn sait que :\n• g′(0,1) < 0  et  g′(0,2) > 0  → donc α ∈ ]0,1 ; 0,2[\n• g′(2,1) < 0  et  g′(2,2) > 0  → donc β ∈ ]2,1 ; 2,2[\n\nLe bénéfice maximum est atteint en x = β ≈ 2,15 années. Cela correspond à :",opts:["La 1ère année","La 2ème année","La 3ème année","La 4ème année"],rep:1},
+  ]},
+  {badge:"EXERCICE 2",titre:"Suite de nombres complexes zₙ — Arguments et géométrie",qs:[
+    {id:"B1",pts:1,txt:"On définit z₀ = e^(−iπ/2) et zₙ₊₁ = e^(iπ/2) × zₙ pour n ∈ ℕ.\n\nOn montre par récurrence que zₙ = e^(i(−π/2 + nπ/2)).\n\nSi on suppose zₙ = e^(i(−π/2 + nπ/2)), alors zₙ₊₁ = e^(iπ/2) × zₙ vaut :",opts:["e^(i(−π/2 + (n+1)π/2))","e^(i(π/2 + nπ/2))","e^(i(−π/2 − nπ/2))","e^(i · nπ)"],rep:0},
+    {id:"B2",pts:2,txt:"On a montré que zₙ = e^(i(−π/2 + nπ/2)).\n\nOn pose aₙ = −π/2 + nπ/2. On veut montrer que Mₙ et Mₙ₊₁₂ sont confondus.\n\nQue vaut aₙ₊₁₂ − aₙ ?",opts:["2π","6π","π","12π"],rep:1},
+    {id:"B3",pts:1,txt:"On veut montrer que zₙ₊₆ = −zₙ.\n\nOn calcule aₙ₊₆ − aₙ = (−π/2 + (n+6)π/2) − (−π/2 + nπ/2).\n\nQue vaut cette différence ?",opts:["π","2π","3π","6π"],rep:2},
+    {id:"B4",pts:1,txt:"On a montré que zₙ₊₆ = −zₙ.\n\nOn désigne par Mₙ l'image de zₙ dans le plan complexe.\nQue peut-on déduire concernant O, Mₙ et Mₙ₊₆ ?",opts:["O est le milieu de [MₙMₙ₊₆]","Mₙ = Mₙ₊₆","O, Mₙ, Mₙ₊₆ sont alignés mais O n'est pas milieu","MₙMₙ₊₆ est perpendiculaire à OMₙ"],rep:0},
+    {id:"B5",pts:1,txt:"On sait que zₙ₊₆ = −zₙ, donc zₙ₊₆ − zₙ = −2zₙ.\nOn calcule zₙ₊₄ − zₙ : comme aₙ₊₄ − aₙ = 2π, on a zₙ₊₄ = zₙ.\n\nDonc zₙ₊₄ − zₙ vaut :",opts:["zₙ(e^(i·2π) − 1) = 0","zₙ(e^(iπ) − 1) = −2zₙ","zₙ(e^(i·2π/3) − 1)","zₙ(e^(i·2π/4) − 1) = zₙ(i − 1)"],rep:3},
+  ]},
+  {badge:"ACTIVITÉ 35",titre:"Urnes U₁ et U₂ — Variables aléatoires X et Y",qs:[
+    {id:"C1",pts:1,txt:"U₁ contient 4 boules blanches (numérotées 1 à 4).\nU₂ contient 3 boules rouges (numérotées 1 à 3).\nX = numéro de la boule blanche, Y = min(b, r).\n\nQuelle est la probabilité P(X = 2, Y = 2) ?",opts:["1/12","2/12","1/6","1/4"],rep:0},
+    {id:"C2",pts:1,txt:"X est le numéro de la boule blanche tirée dans U₁ (4 boules équiprobables).\n\nQuelle est la loi de probabilité de X ?",opts:["P(X = k) = 1/3 pour k ∈ {1,2,3}","P(X = k) = 1/4 pour k ∈ {1,2,3,4}","P(X = k) = k/10 pour k ∈ {1,2,3,4}","P(X = k) = 1/12 pour k ∈ {1,2,3,4}"],rep:1},
+    {id:"C3",pts:1,txt:"On tire une boule dans U₁ et une dans U₂, indépendamment.\nX = numéro de la boule blanche, Y = min(b, r).\n\nLes variables X et Y sont-elles indépendantes ?",opts:["Oui, car les tirages sont indépendants","Non, car Y dépend aussi de X (Y = min(b,r) dépend de b)","Oui, car X et Y ont la même loi","Non, car U₁ et U₂ ont des compositions différentes"],rep:1},
+    {id:"C4",pts:2,txt:"On réussit si la boule blanche porte le n° 2 ET la boule rouge porte le n° 2.\n\nCalculer la probabilité p de réussir l'expérience :\nP(boule blanche = 2) = ? et P(boule rouge = 2) = ?",opts:["p = 1/4 × 1/3 = 1/12","p = 1/4 × 1/4 = 1/16","p = 1/3 × 1/3 = 1/9","p = 2/4 × 2/3 = 1/3"],rep:0},
+    {id:"C5",pts:2,txt:"On répète l'expérience 4 fois. p = 1/12.\nSoit N le nombre de réussites en 4 essais. N suit une loi B(4 ; 1/12).\n\nL'espérance E(N) et la variance V(N) valent respectivement :",opts:["E(N) = 1/3  et  V(N) = 4 × (1/12) × (11/12) = 44/144","E(N) = 1/12  et  V(N) = 1/144","E(N) = 4  et  V(N) = 4 × (1/12) × (11/12)","E(N) = 1/3  et  V(N) = 1/9"],rep:0},
+  ]},
+]};
+
 const TOTAL_PTS=QUIZ.sections.flatMap(s=>s.qs).reduce((a,q)=>a+q.pts,0);
 const ALL_QS=()=>QUIZ.sections.flatMap(s=>s.qs);
-
-window.showPage=id=>{document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('pg-'+id).classList.add('active');};
 
 window.goRegles=()=>{
   const p=document.getElementById('f-prenom').value.trim();
   const n=document.getElementById('f-nom').value.trim();
   const c=document.getElementById('f-classe').value;
   const s=document.getElementById('f-sexe').value;
-  if(!p||!n||!c||!s){alert('Veuillez remplir tous les champs.');return;}
+  const etab=document.getElementById('f-etab').value.trim();
+  if(!p||!n||!c||!s){alert('Veuillez remplir tous les champs obligatoires.');return;}
   if(c!=='TleC'){alert('Ce quiz est réservé aux élèves de Terminale C.');return;}
-  eleve={prenom:p,nom:n,classe:c,sexe:s};showPage('regles');
+  eleve={prenom:p,nom:n,classe:c,sexe:s,etablissement:etab};showPage('regles');
 };
+
+
+window.showPage=id=>{document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('pg-'+id).classList.add('active');};
 
 window.startQuiz=()=>{
   if(!document.getElementById('chk-accept').checked){alert('Vous devez accepter le règlement.');return;}
@@ -697,27 +476,20 @@ window.confirmSubmit=()=>{
   submit('normal');
 };
 
+
 async function submit(statut){
   if(done)return;done=true;started=false;clearInterval(timerInt);
   let score=0;ALL_QS().forEach(q=>{if(reps[q.id]!==undefined&&reps[q.id]===q.rep)score+=q.pts;});
   const s20=Math.round(score/TOTAL_PTS*20*100)/100;
   let st=statut;if(frauds>0&&statut==='normal')st=`fraude_${frauds}_sorties`;
   const id=genId();
-  const data={uid:window._currentUid||null,identifiant:id,prenom:eleve.prenom,nom:eleve.nom,classe:eleve.classe,sexe:eleve.sexe,
+  const data={identifiant:id,prenom:eleve.prenom,nom:eleve.nom,classe:eleve.classe,sexe:eleve.sexe,
+    etablissement:eleve.etablissement||'',
     score,scoreOn20:s20,totalPts:TOTAL_PTS,statut:st,fraudCount:frauds,
-    reponses:JSON.stringify(reps),createdAt: new Date().toISOString()};
-  const saveData = async () => {
-    try {
-      await addDoc(collection(db,'resultats_c'), data);
-    } catch(e) {
-      try {
-        const arr = JSON.parse(localStorage.getItem('se_res')||'[]');
-        arr.push({...data});
-        localStorage.setItem('se_res', JSON.stringify(arr));
-      } catch(e2){}
-    }
-  };
-  saveData();
+    reponses:JSON.stringify(reps),createdAt:new Date().toISOString()};
+  try{await addDoc(collection(db,'resultats_c'),data);}catch(e){
+    try{const arr=JSON.parse(localStorage.getItem('se_res')||'[]');arr.push(data);localStorage.setItem('se_res',JSON.stringify(arr));}catch(e2){}
+  }
   document.getElementById('fin-id').textContent=id;
   document.getElementById('score-val').textContent=s20;
   document.getElementById('score-sub').textContent=`/ 20  (${score} pts sur ${TOTAL_PTS})`;
