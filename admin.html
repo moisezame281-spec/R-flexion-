@@ -10,7 +10,7 @@
 :root{
   --ink:#0f0e0a;--cream:#f5f0e8;--gold:#c9a84c;--red:#8b1a1a;
   --blue:#1a2f5e;--grey:#6b6560;--green:#1a5e1a;--bg2:#13120d;
-  --orange:#b85c00;
+  --orange:#b85c00;--teal:#1fa88a;--teal-dim:rgba(31,168,138,.35);
 }
 html{scroll-behavior:smooth}
 body{background:var(--ink);color:var(--cream);font-family:'Cormorant Garamond',serif;min-height:100vh}
@@ -161,6 +161,17 @@ tbody td.mono{font-family:'Space Mono',monospace;font-size:.75rem;letter-spacing
 .badge-fraud{background:rgba(139,26,26,.3);color:#e05555;border:1px solid rgba(139,26,26,.5)}
 .badge-time{background:rgba(184,92,0,.3);color:#ffaa55;border:1px solid rgba(184,92,0,.5)}
 .badge-tl{background:rgba(26,47,94,.4);color:#8899cc;border:1px solid rgba(26,47,94,.6)}
+.badge-maths{background:rgba(201,168,76,.2);color:var(--gold);border:1px solid rgba(201,168,76,.4)}
+.badge-phys{background:rgba(31,168,138,.2);color:#1fa88a;border:1px solid rgba(31,168,138,.4)}
+.matiere-tab{
+  display:inline-flex;align-items:center;gap:.5rem;padding:.55rem 1.1rem;border-radius:4px;
+  font-family:'Space Mono',monospace;font-size:.62rem;letter-spacing:.12em;
+  cursor:pointer;border:none;transition:all .2s;font-weight:700
+}
+.matiere-tab.active-maths{background:rgba(201,168,76,.2);color:var(--gold);border:1px solid rgba(201,168,76,.4)}
+.matiere-tab.active-phys{background:rgba(31,168,138,.18);color:#1fa88a;border:1px solid rgba(31,168,138,.35)}
+.matiere-tab.inactive{background:rgba(255,255,255,.04);color:var(--grey);border:1px solid rgba(255,255,255,.07)}
+.matiere-icon{font-size:1rem}
 .badge-ts{background:rgba(80,20,80,.4);color:#cc88cc;border:1px solid rgba(80,20,80,.6)}
 
 .score-bar-wrap{display:flex;align-items:center;gap:.6rem;min-width:100px}
@@ -277,9 +288,24 @@ tbody td.mono{font-family:'Space Mono',monospace;font-size:.75rem;letter-spacing
     </div>
     <div class="adm-header-right">
       <div class="live-dot">Temps réel</div>
+      <span id="matiere-label" style="font-family:'Space Mono',monospace;font-size:.62rem;letter-spacing:.15em;color:var(--gold);padding:.3rem .7rem;background:rgba(201,168,76,.1);border-radius:3px;border:1px solid rgba(201,168,76,.2)">➗ MATHÉMATIQUES</span>
       <button class="btn btn-gold btn-sm" onclick="refreshData()">↻ Actualiser</button>
       <button class="btn btn-sm" style="background:rgba(255,255,255,.06);color:var(--grey)" onclick="if(window.logout) window.logout()">Déconnexion</button>
     </div>
+  </div>
+
+  <!-- SÉLECTEUR MATIÈRE -->
+  <div style="display:flex;align-items:center;gap:.5rem;padding:.75rem 2rem;background:var(--ink);border-bottom:1px solid rgba(255,255,255,.05)">
+    <span style="font-family:'Space Mono',monospace;font-size:.55rem;letter-spacing:.2em;color:var(--grey);text-transform:uppercase;margin-right:.3rem">Matière :</span>
+    <button id="tab-maths" class="matiere-tab active-maths" onclick="switchMatiere('maths')">
+      <span class="matiere-icon">➗</span> Mathématiques
+    </button>
+    <button id="tab-phys" class="matiere-tab inactive" onclick="switchMatiere('phys')">
+      <span class="matiere-icon">⚗️</span> Physique-Chimie
+    </button>
+    <button id="tab-all" class="matiere-tab inactive" onclick="switchMatiere('all')">
+      <span class="matiere-icon">📚</span> Tout afficher
+    </button>
   </div>
 
   <!-- STATS -->
@@ -311,6 +337,13 @@ tbody td.mono{font-family:'Space Mono',monospace;font-size:.75rem;letter-spacing
       <option value="">Toutes les classes</option>
       <option value="TleL">Terminale L</option>
       <option value="TleS">Terminale S</option>
+      <option value="TleC">Terminale C</option>
+      <option value="TleD">Terminale D</option>
+    </select>
+    <select class="filter-sel" id="filter-matiere" onchange="switchMatiereFromFilter()" style="border:1px solid rgba(201,168,76,.25)">
+      <option value="maths">➗ Mathématiques</option>
+      <option value="phys">⚗️ Physique-Chimie</option>
+      <option value="all">📚 Toutes matières</option>
     </select>
     <select class="filter-sel" id="filter-statut" onchange="renderTable()">
       <option value="">Tous les statuts</option>
@@ -341,6 +374,7 @@ tbody td.mono{font-family:'Space Mono',monospace;font-size:.75rem;letter-spacing
           <th class="sortable" onclick="sortBy('identifiant')">Identifiant</th>
           <th class="col-nom" onclick="sortBy('nom')" style="display:none">Nom complet</th>
           <th class="col-etab" style="display:none">Établissement</th>
+          <th>Matière</th>
           <th>Classe</th>
           <th>Sexe</th>
           <th class="sortable" onclick="sortBy('scoreOn20')">Score /20</th>
@@ -351,7 +385,7 @@ tbody td.mono{font-family:'Space Mono',monospace;font-size:.75rem;letter-spacing
         </tr>
       </thead>
       <tbody id="table-body">
-        <tr class="empty-row"><td colspan="10">Aucune donnée — en attente des élèves...</td></tr>
+        <tr class="empty-row"><td colspan="11">Aucune donnée — en attente des élèves...</td></tr>
       </tbody>
     </table>
   </div>
@@ -372,7 +406,15 @@ tbody td.mono{font-family:'Space Mono',monospace;font-size:.75rem;letter-spacing
       </div>
       <div class="pdf-opt">
         <input type="radio" name="pdf-classe" id="pdf-td" value="TleD">
-        <label for="pdf-td">Terminale D</label>
+        <label for="pdf-td">Terminale D (Maths)</label>
+      </div>
+      <div class="pdf-opt">
+        <input type="radio" name="pdf-classe" id="pdf-pc" value="TleC-phys">
+        <label for="pdf-pc">⚗️ Terminale C (Physique)</label>
+      </div>
+      <div class="pdf-opt">
+        <input type="radio" name="pdf-classe" id="pdf-pd" value="TleD-phys">
+        <label for="pdf-pd">⚗️ Terminale D (Physique)</label>
       </div>
     </div>
 
@@ -516,13 +558,22 @@ window._logout = () => {
 };
 
 // ═══ ÉCOUTE FIREBASE EN TEMPS RÉEL (3 collections) ═══
-const COLLECTIONS = ['resultats', 'resultats_c', 'resultats_d'];
+const COLLECTIONS_MATHS = ['resultats', 'resultats_c', 'resultats_d'];
+const COLLECTIONS_PHYS  = ['resultats_phys_c', 'resultats_phys_d'];
+const ALL_COLLECTIONS   = [...COLLECTIONS_MATHS, ...COLLECTIONS_PHYS];
+const COLLECTIONS       = ALL_COLLECTIONS; // compat legacy
+let currentMatiere = 'maths'; // 'maths' | 'phys' | 'all'
 const _snapshots = {}; // stockage par collection
 const _unsubs = [];
 
 function mergeAndRender() {
-  // Fusionner les 3 collections
-  const all = Object.values(_snapshots).flat();
+  // Filtrer par matière
+  let colsToShow;
+  if (currentMatiere === 'maths') colsToShow = COLLECTIONS_MATHS;
+  else if (currentMatiere === 'phys') colsToShow = COLLECTIONS_PHYS;
+  else colsToShow = ALL_COLLECTIONS;
+
+  const all = colsToShow.flatMap(col => _snapshots[col] || []);
   // Trier par createdAt desc (Timestamp Firestore ou string ISO)
   all.sort((a, b) => {
     const ta = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(a.createdAt || 0);
@@ -537,7 +588,7 @@ function mergeAndRender() {
 }
 
 function startListen() {
-  COLLECTIONS.forEach(col => {
+  ALL_COLLECTIONS.forEach(col => {
     _snapshots[col] = [];
     const q = query(collection(db, col), orderBy('createdAt','desc'));
     const unsub = onSnapshot(q, snap => {
@@ -554,6 +605,48 @@ function startListen() {
 window.refreshData = () => {
   showNotif('↻ Actualisation en cours...');
   if (unsubscribe) { unsubscribe(); startListen(); }
+};
+
+// ═══ SWITCH MATIÈRE ═══
+window.switchMatiereFromFilter = () => {
+  const sel = document.getElementById('filter-matiere');
+  if(sel) window.switchMatiere(sel.value);
+};
+
+window.switchMatiere = (m) => {
+  currentMatiere = m;
+  // Update tabs
+  document.querySelectorAll('.matiere-tab').forEach(t => {
+    t.className = 'matiere-tab inactive';
+  });
+  const activeTab = document.getElementById('tab-' + m);
+  if (activeTab) {
+    activeTab.className = 'matiere-tab ' + (m === 'maths' ? 'active-maths' : m === 'phys' ? 'active-phys' : 'active-maths');
+  }
+  // Update topbar label
+  const lbl = document.getElementById('matiere-label');
+  if(lbl) {
+    if(m === 'maths') lbl.textContent = '➗ MATHÉMATIQUES';
+    else if(m === 'phys') lbl.textContent = '⚗️ PHYSIQUE-CHIMIE';
+    else lbl.textContent = '📚 TOUTES MATIÈRES';
+    lbl.style.color = m === 'phys' ? '#1fa88a' : 'var(--gold)';
+  }
+  // Update filter options
+  const filterClasse = document.getElementById('filter-classe');
+  if(filterClasse) {
+    filterClasse.innerHTML = '<option value="">Toutes les classes</option>';
+    if(m === 'maths' || m === 'all'){
+      filterClasse.innerHTML += '<option value="TleL">Terminale L</option><option value="TleS">Terminale S</option><option value="TleC">Terminale C</option><option value="TleD">Terminale D</option>';
+    }
+    if(m === 'phys' || m === 'all'){
+      filterClasse.innerHTML += '<option value="TleC">Terminale C (Physique)</option><option value="TleD">Terminale D (Physique)</option>';
+    }
+  }
+  // Sync dropdown
+  const filterSel = document.getElementById('filter-matiere');
+  if(filterSel) filterSel.value = m;
+  mergeAndRender();
+  showNotif('Affichage : ' + (m === 'maths' ? 'Mathématiques' : m === 'phys' ? 'Physique-Chimie' : 'Toutes matières'));
 };
 
 // ═══ BANNIÈRE ARCHIVE ═══
@@ -667,7 +760,7 @@ window.renderTable = () => {
 
   const tbody = document.getElementById('table-body');
   if (data.length === 0) {
-    tbody.innerHTML = '<tr class="empty-row"><td colspan="10">Aucun résultat trouvé.</td></tr>';
+    tbody.innerHTML = '<tr class="empty-row"><td colspan="11">Aucun résultat trouvé.</td></tr>';
     return;
   }
 
@@ -690,6 +783,10 @@ window.renderTable = () => {
     else if (statut.includes('temps')) { badgeClass='badge-time'; badgeLabel='⏱ Temps'; }
 
     const classBadge = r.classe==='TleL' ? 'badge-tl' : 'badge-ts';
+    // Déterminer la matière d'après la collection ou l'identifiant
+    const isPhys = (r._col||'').includes('phys') || (r.identifiant||'').startsWith('PC') || (r.identifiant||'').startsWith('PD');
+    const matiereLabel = isPhys ? '⚗️ Physique' : '➗ Maths';
+    const matiereBadge = isPhys ? 'badge-phys' : 'badge-maths';
 
     const barColor = s20>=14 ? '#6dc96d' : s20>=10 ? 'var(--gold)' : '#e05555';
 
@@ -698,6 +795,7 @@ window.renderTable = () => {
       <td class="mono" style="font-weight:700;color:var(--cream)">${r.identifiant||'—'}</td>
       <td class="col-nom" style="display:none"><strong>${r.prenom||''}</strong> ${r.nom||''}</td>
       <td class="col-etab" style="display:none;font-size:.78rem;color:var(--gold);max-width:110px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${r.etab||'—'}</td>
+      <td><span class="badge ${matiereBadge}">${matiereLabel}</span></td>
       <td><span class="badge ${classBadge}">${r.classe||'—'}</span></td>
       <td style="color:var(--grey)">${r.sexe==='M'?'♂':'♀'}</td>
       <td class="mono" style="font-weight:700;font-size:1rem;color:${barColor}">${s20}</td>
