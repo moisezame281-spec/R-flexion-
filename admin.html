@@ -869,13 +869,24 @@ window.showPdfSection = () => {
 };
 
 window.genPDF = (mode) => {
-  const classe = document.querySelector('input[name="pdf-classe"]:checked').value;
+  const classeVal = document.querySelector('input[name="pdf-classe"]:checked').value;
   const total  = parseInt(document.getElementById('pdf-total').value) || 120;
   const isParent = mode === 'parent';
 
-  // Vrais élèves de la classe, triés par score
-  const reels = allData
-    .filter(r => r.classe === classe)
+  // Déterminer si c'est une classe physique
+  const isPhysClasse = classeVal.endsWith('-phys');
+  // La vraie valeur de classe dans Firebase (ex: "TleC" même pour physique)
+  const classe = isPhysClasse ? classeVal.replace('-phys','') : classeVal;
+  // La matière pour le filtre
+  const matiereFilter = isPhysClasse ? 'phys' : 'maths';
+
+  // Vrais élèves de la classe, triés par score — filtrés par classe ET matière
+  const allSource = isPhysClasse
+    ? Object.values(_snapshots).flat().filter(r => (r._col||'').includes('phys'))
+    : Object.values(_snapshots).flat().filter(r => !(r._col||'').includes('phys'));
+
+  const reels = allSource
+    .filter(r => r.classe === classe && r.evaluation !== 'archived')
     .sort((a,b) => (b.scoreOn20||0)-(a.scoreOn20||0));
 
   // Score max réel (anti-20/20 pour fictifs)
@@ -883,7 +894,7 @@ window.genPDF = (mode) => {
   const scorePlafond = Math.min(19.5, maxReel + 1.5);
 
   // Fictifs pour compléter
-  const fictifs = genFictifs(total - reels.length, classe, scorePlafond);
+  const fictifs = genFictifs(total - reels.length, classe, scorePlafond, isPhysClasse);
 
   // Fusion et tri
   const tous = [
@@ -923,7 +934,8 @@ window.genPDF = (mode) => {
     doc.setFontSize(8.5);
     doc.setTextColor(201,168,76);
     const classeLabel = {TleS:'Terminale S', TleC:'Terminale C', TleD:'Terminale D'}[classe]||classe;
-    doc.text(`${classeLabel} — Mathématiques`, 40, 21);
+    const matiereLabel = isPhysClasse ? 'Physique-Chimie' : 'Mathématiques';
+    doc.text(`${classeLabel} — ${matiereLabel}`, 40, 21);
     doc.text(`Généré le ${new Date().toLocaleDateString('fr-FR')} à ${new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})}`, 40, 27);
     if(!isParent){
       doc.setTextColor(100,100,100);
@@ -1057,7 +1069,7 @@ window.genPDF = (mode) => {
 };
 
 // ═══ ÉLÈVES FICTIFS — NOMS & ÉTABLISSEMENTS DE YAOUNDÉ ═══
-function genFictifs(n, classe, scorePlafond) {
+function genFictifs(n, classe, scorePlafond, isPhysClasse=false) {
   if(n<=0) return [];
   const etabs = [
     'Lycée Général Leclerc','Lycée de Yaoundé','Lycée Bilingue de Yaoundé',
@@ -1086,7 +1098,9 @@ function genFictifs(n, classe, scorePlafond) {
     const nom2 = noms2[Math.floor(Math.random()*noms2.length)];
     const nom  = nom1 + ' ' + nom2;
     const etab = etabs[Math.floor(Math.random()*etabs.length)];
-    const prefix = {TleS:'SE', TleC:'TC', TleD:'TD'}[classe]||'SE';
+    const prefix = isPhysClasse
+      ? {TleC:'PC', TleD:'PD'}[classe]||'PC'
+      : {TleS:'SE', TleC:'TC', TleD:'TD'}[classe]||'SE';
     arr.push({id: prefix+'-'+genId(), prenom, nom, etab, score, statut:'normal', reel:false});
   }
   return arr;
