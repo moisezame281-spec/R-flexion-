@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Terminale — Le Manifeste</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --ink:    #0f0e0a;
+    --cream:  #f5f0e8;
+    --gold:   #c9a84c;
+    --red:    #8b1a1a;
+    --blue:   #1a2f5e;
+    --grey:   #6b6560;
+    --ember:  #e05555;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--ink);
+    color: var(--cream);
+    font-family: 'Cormorant Garamond', serif;
+    overflow-x: hidden;
+    cursor: default;
+  }
+
+  /* ── GRAIN OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 9999;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    opacity: 0.35;
+  }
+
+  /* ══ SECTION 1 — CHOC D'ENTRÉE ══════════════════════════════ */
+  .shock {
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    padding: 4rem 2rem;
+    position: relative;
+    background: var(--ink);
+    overflow: hidden;
+  }
+
+  .shock::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+
+  .shock .circle {
+    position: absolute;
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    border: 1px solid rgba(201, 168, 76, 0.08);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    animation: breathe 6s ease-in-out infinite;
+  }
+  .shock .circle:nth-child(2) {
+    width: 850px; height: 850px;
+    border-color: rgba(201,168,76,0.04);
+    animation-delay: 1.5s;
+  }
+  .shock .circle:nth-child(3) {
+    width: 1100px; height: 1100px;
+    border-color: rgba(201,168,76,0.02);
+    animation-delay: 3s;
+  }
+
+  @keyframes breathe {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    50%       { transform: translate(-50%, -50%) scale(1.04); opacity: 0.5; }
+  }
+
+  .eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 2.5rem;
+    opacity: 0;
+    animation: fadeUp 1s 0.3s forwards;
+  }
+
+  .shock-question {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.4rem, 6.5vw, 5.5rem);
+    font-weight: 900;
+    font-style: italic;
+    text-align: center;
+    line-height: 1.1;
+    max-width: 950px;
+    color: var(--cream);
+    opacity: 0;
+    animation: fadeUp 1s 0.6s forwards;
+    position: relative; z-index: 1;
+  }
+
+  .shock-question .highlight {
+    color: var(--gold);
+    display: inline-block;
+    position: relative;
+  }
+  .shock-question .highlight::after {
+    content: '';
+    position: absolute; bottom: -4px; left: 0; right: 0; height: 2px;
+    background: var(--gold);
+    transform: scaleX(0); transform-origin: left;
+    animation: lineIn 0.8s 2s forwards;
+  }
+  @keyframes lineIn { to { transform: scaleX(1); } }
+
+  .shock-sub {
+    margin-top: 2.5rem;
+    font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+    font-style: italic;
+    color: var(--grey);
+    text-align: center;
+    max-width: 640px;
+    line-height: 1.8;
+    opacity: 0;
+    animation: fadeUp 1s 1.2s forwards;
+    position: relative; z-index: 1;
+  }
+
+  .shock-sub em { color: var(--cream); font-style: normal; }
+
+  /* Mois badge */
+  .mois-badge {
+    position: absolute;
+    top: 2.5rem; right: 3rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(201,168,76,0.5);
+    border: 1px solid rgba(201,168,76,0.15);
+    padding: 0.5rem 1rem;
+    opacity: 0;
+    animation: fadeUp 1s 2s forwards;
+    z-index: 2;
+  }
+
+  /* ══ SECTION 2 — LE MIROIR ══════════════════════════════════ */
+  .miroir {
+    padding: 7rem 2rem;
+    background: var(--cream);
+    color: var(--ink);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .miroir::before {
+    content: '"';
+    position: absolute;
+    font-size: 55rem;
+    color: rgba(0,0,0,0.025);
+    top: -8rem; left: -3rem;
+    font-family: 'Playfair Display', serif;
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .miroir-inner {
+    max-width: 800px;
+    margin: 0 auto;
+    position: relative; z-index: 1;
+  }
+
+  .miroir-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--red);
+    display: block;
+    margin-bottom: 2.5rem;
+  }
+
+  .miroir-confession {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.5rem, 3vw, 2.4rem);
+    font-weight: 700;
+    font-style: italic;
+    line-height: 1.45;
+    color: var(--ink);
+    margin-bottom: 2.5rem;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.9s, transform 0.9s;
+  }
+  .miroir-confession.visible { opacity: 1; transform: translateY(0); }
+
+  .miroir-confession .gold-ink { color: var(--red); }
+
+  .miroir-corps {
+    font-size: clamp(1rem, 1.6vw, 1.2rem);
+    line-height: 1.9;
+    color: #444;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.9s 0.2s, transform 0.9s 0.2s;
+  }
+  .miroir-corps.visible { opacity: 1; transform: translateY(0); }
+
+  .miroir-corps strong { color: var(--ink); }
+  .miroir-corps em { font-style: italic; color: #222; }
+
+  .miroir-divider {
+    width: 60px;
+    height: 2px;
+    background: var(--gold);
+    margin: 2.5rem 0;
+    opacity: 0;
+    transition: opacity 0.9s 0.4s, width 0.9s 0.4s;
+  }
+  .miroir-divider.visible { opacity: 1; width: 120px; }
+
+  .miroir-voix {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.2rem, 2vw, 1.6rem);
+    font-style: italic;
+    color: var(--ink);
+    border-left: 3px solid var(--gold);
+    padding-left: 2rem;
+    line-height: 1.6;
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: opacity 0.9s 0.5s, transform 0.9s 0.5s;
+  }
+  .miroir-voix.visible { opacity: 1; transform: translateX(0); }
+
+  /* ══ SECTION 3 — CITATIONS CROISÉES ════════════════════════ */
+  .citations {
+    padding: 6rem 2rem;
+    background: var(--ink);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .citations-header {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+
+  .citations-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 900;
+    color: var(--cream);
+    line-height: 1.2;
+  }
+  .citations-header h2 span { color: var(--gold); font-style: italic; }
+
+  .cite-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .cite-card {
+    padding: 3rem 3.5rem;
+    position: relative;
+    border: 1px solid rgba(201,168,76,0.1);
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s, transform 0.8s;
+    background: rgba(255,255,255,0.02);
+  }
+  .cite-card.visible { opacity: 1; transform: translateY(0); }
+  .cite-card:hover { background: rgba(201,168,76,0.04); }
+
+  .cite-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1rem;
+    display: block;
+  }
+
+  .cite-text {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.05rem, 1.7vw, 1.3rem);
+    font-style: italic;
+    line-height: 1.65;
+    color: var(--cream);
+    margin-bottom: 1.2rem;
+  }
+
+  .cite-author {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.62rem;
+    color: var(--gold);
+    letter-spacing: 0.15em;
+    margin-bottom: 1rem;
+    display: block;
+    opacity: 0.7;
+  }
+
+  .cite-link {
+    font-size: 0.9rem;
+    color: rgba(245,240,232,0.55);
+    line-height: 1.75;
+    border-top: 1px solid rgba(201,168,76,0.1);
+    padding-top: 1rem;
+    margin-top: 0.5rem;
+  }
+
+  .cite-link em { color: var(--cream); font-style: italic; }
+  .cite-link strong { color: var(--gold); }
+
+  .cite-math {
+    position: absolute;
+    bottom: 1.2rem; right: 2rem;
+    font-family: 'Playfair Display', serif;
+    font-size: 2.8rem;
+    color: rgba(201,168,76,0.08);
+    font-style: italic;
+  }
+
+  /* Carte bombe centrale */
+  .cite-bomb {
+    grid-column: 1 / -1;
+    background: linear-gradient(135deg, #1a0a0a 0%, #0f0e0a 60%, #0a1020 100%);
+    color: var(--cream);
+    padding: 4.5rem 4rem;
+    text-align: center;
+    border: 1px solid rgba(201,168,76,0.2);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cite-bomb::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, transparent 40%, rgba(201,168,76,0.05));
+  }
+
+  .cite-bomb::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 10%; right: 10%; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+
+  .cite-bomb-text {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.4rem, 3vw, 2.3rem);
+    font-weight: 700;
+    font-style: italic;
+    line-height: 1.5;
+    position: relative; z-index: 1;
+  }
+
+  .cite-bomb-text .gold { color: var(--gold); }
+  .cite-bomb-text .red  { color: var(--ember); }
+
+  /* ══ SECTION 4 — LES VÉRITÉS ════════════════════════════════ */
+  .verites {
+    padding: 6rem 2rem;
+    background: var(--cream);
+    color: var(--ink);
+    position: relative;
+  }
+
+  .verites-header {
+    text-align: center;
+    margin-bottom: 4.5rem;
+  }
+
+  .verites-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-weight: 900;
+    color: var(--ink);
+    line-height: 1.15;
+  }
+  .verites-header h2 span { color: var(--red); font-style: italic; }
+
+  .verites-list {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .verite-item {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 2rem;
+    padding: 3rem 0;
+    border-bottom: 1px solid rgba(0,0,0,0.07);
+    opacity: 0;
+    transform: translateY(25px);
+    transition: opacity 0.8s, transform 0.8s;
+  }
+  .verite-item.visible { opacity: 1; transform: translateY(0); }
+
+  .verite-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 3.5rem;
+    font-weight: 900;
+    font-style: italic;
+    color: rgba(0,0,0,0.07);
+    line-height: 1;
+    padding-top: 0.2rem;
+    text-align: right;
+  }
+
+  .verite-content h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.2rem, 2vw, 1.6rem);
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 0.8rem;
+    line-height: 1.3;
+  }
+
+  .verite-content p {
+    font-size: clamp(0.95rem, 1.5vw, 1.1rem);
+    line-height: 1.85;
+    color: #555;
+  }
+
+  .verite-content p strong { color: var(--ink); }
+  .verite-content p em { color: #222; }
+
+  /* ══ SECTION 5 — LA PHRASE ══════════════════════════════════ */
+  .phrase-section {
+    padding: 8rem 2rem;
+    background: var(--ink);
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+  }
+
+  .phrase-section::before {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 700px; height: 700px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(201,168,76,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .phrase-eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 3rem;
+    opacity: 0;
+    transition: opacity 0.9s;
+    display: block;
+  }
+  .phrase-eyebrow.visible { opacity: 1; }
+
+  .phrase-grande {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5.5vw, 4.5rem);
+    font-weight: 900;
+    font-style: italic;
+    line-height: 1.2;
+    color: var(--cream);
+    max-width: 900px;
+    margin: 0 auto 2.5rem;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 1s 0.2s, transform 1s 0.2s;
+    position: relative; z-index: 1;
+  }
+  .phrase-grande.visible { opacity: 1; transform: translateY(0); }
+  .phrase-grande .or { color: var(--gold); }
+
+  .phrase-attr {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    color: rgba(245,240,232,0.3);
+    opacity: 0;
+    transition: opacity 1s 0.5s;
+  }
+  .phrase-attr.visible { opacity: 1; }
+
+  /* ══ SECTION 6 — FINALE ══════════════════════════════════ */
+  .finale {
+    padding: 8rem 2rem 6rem;
+    background: linear-gradient(180deg, #0f0e0a 0%, #1a0a05 50%, #0f0e0a 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .finale::before {
+    content: '∞';
+    position: absolute;
+    font-size: 30rem;
+    color: rgba(201,168,76,0.03);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Playfair Display', serif;
+    line-height: 1;
+    pointer-events: none;
+    animation: breathe 8s ease-in-out infinite;
+  }
+
+  .finale-eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 3rem;
+    opacity: 0;
+    transition: opacity 0.9s;
+  }
+  .finale-eyebrow.visible { opacity: 1; }
+
+  .finale-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.2rem, 5vw, 4rem);
+    font-weight: 900;
+    line-height: 1.2;
+    color: var(--cream);
+    max-width: 800px;
+    margin-bottom: 3rem;
+    position: relative; z-index: 1;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 1s 0.2s, transform 1s 0.2s;
+  }
+  .finale-title.visible { opacity: 1; transform: translateY(0); }
+  .finale-title em { font-style: italic; color: var(--gold); }
+
+  .finale-body {
+    font-size: clamp(1rem, 1.8vw, 1.25rem);
+    color: rgba(255,255,255,0.75);
+    max-width: 640px;
+    line-height: 1.9;
+    margin-bottom: 3rem;
+    position: relative; z-index: 1;
+    opacity: 0;
+    transition: opacity 1s 0.5s;
+  }
+  .finale-body.visible { opacity: 1; }
+  .finale-body strong { color: #fff; }
+
+  .finale-cta {
+    display: inline-block;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--ink);
+    background: var(--gold);
+    padding: 1.1rem 2.5rem;
+    position: relative; z-index: 1;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 1s 0.8s, transform 1s 0.8s, background 0.3s;
+    cursor: pointer;
+  }
+  .finale-cta.visible { opacity: 1; transform: translateY(0); }
+  .finale-cta:hover { background: var(--cream); }
+
+  .finale-sig {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    font-style: italic;
+    color: rgba(255,255,255,0.25);
+    position: relative; z-index: 1;
+    margin-top: 5rem;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 2rem;
+    width: 320px;
+    opacity: 0;
+    transition: opacity 1s 1s;
+  }
+  .finale-sig.visible { opacity: 1; }
+
+  /* ══ ANIMATIONS GLOBALES ══════════════════════════════════ */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(25px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ══ RESPONSIVE ══════════════════════════════════════════ */
+  @media (max-width: 700px) {
+    .cite-grid { grid-template-columns: 1fr; }
+    .cite-card { padding: 2.5rem 2rem; }
+    .cite-bomb { padding: 3rem 2rem; }
+    .verite-item { grid-template-columns: 50px 1fr; gap: 1rem; }
+    .verite-num { font-size: 2.5rem; }
+    .mois-badge { display: none; }
+    .phrase-grande { font-size: clamp(1.8rem, 8vw, 3rem); }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══ SECTION 1 : CHOC D'ENTRÉE ═══════════════════════════════════ -->
+<section class="shock">
+  <div class="circle"></div>
+  <div class="circle"></div>
+  <div class="circle"></div>
+
+  <span class="mois-badge">Avril 2025 — Message urgent</span>
+  <p class="eyebrow">Terminale — À toi qui lis ceci</p>
+
+  <h1 class="shock-question">
+    Tu as tout ce qu'il faut.<br>
+    Mais tu ne sais pas encore<br>
+    <span class="highlight">ce que tu vaux vraiment.</span>
+  </h1>
+
+  <p class="shock-sub">
+    Ce n'est pas un discours de prof.<br>
+    Ce n'est pas une leçon de plus.<br>
+    C'est la vérité que <em>j'aurais voulu entendre</em> quand j'étais à ta place.
+  </p>
+</section>
+
+<!-- ══ SECTION 2 : LE MIROIR ════════════════════════════════════════ -->
+<section class="miroir">
+  <div class="miroir-inner">
+    <span class="miroir-tag">Confession — Avant tout discours</span>
+
+    <h2 class="miroir-confession">
+      J'étais <span class="gold-ink">exactement</span> comme toi.<br>
+      Un élève correct. Travailleur. Mais qui ne savait pas encore<br>
+      ce que la vie allait lui révéler.
+    </h2>
+
+    <div class="miroir-divider"></div>
+
+    <p class="miroir-corps">
+      En Terminale, je faisais ce qu'il fallait. Je ne brillais pas. Je ne coulais pas.
+      J'étais <strong>dans la moyenne</strong> — cette zone confortable et dangereuse à la fois,
+      où l'on croit être en sécurité, mais où l'on dort sans le savoir.<br><br>
+      C'est <em>après le Bac</em> que tout a changé. Un échec douloureux.
+      Des rencontres qui m'ont ouvert les yeux. Des livres qui m'ont traversé comme des éclairs.
+      Et surtout — une voix.<br><br>
+      <strong>Une voix intérieure qui n'a jamais cessé de me dire d'avancer.</strong>
+      Qui me montrait, avec une clarté étrange, qui je voulais devenir.
+      Une personne avec de l'aura. Du charisme. Un exemple accompli.<br><br>
+      Cette voix — <em>tu l'as aussi.</em> Elle te parle peut-être en ce moment même.
+      La question est : est-ce que tu l'écoutes ?
+    </p>
+  </div>
+</section>
+
+<!-- ══ SECTION 3 : CITATIONS CROISÉES ══════════════════════════════ -->
+<section class="citations">
+  <div class="citations-header">
+    <h2>Ce que les grands<br>t'ont déjà <span>dit</span></h2>
+  </div>
+
+  <div class="cite-grid">
+
+    <div class="cite-card">
+      <span class="cite-tag">Pour ceux qui se limitent</span>
+      <p class="cite-text">« L'homme est condamné à être libre. »</p>
+      <p class="cite-author">— Sartre</p>
+      <p class="cite-link">
+        Tu n'es <em>pas condamné à rester ce que tu es aujourd'hui.</em>
+        Tu es <strong>libre de te redéfinir</strong>. La liberté fait peur —
+        mais c'est ton arme la plus puissante.
+      </p>
+      <span class="cite-math">∃</span>
+    </div>
+
+    <div class="cite-card">
+      <span class="cite-tag">Pour ceux qui abandonnent</span>
+      <p class="cite-text">« Il faut imaginer Sisyphe heureux. »</p>
+      <p class="cite-author">— Camus, Le mythe de Sisyphe</p>
+      <p class="cite-link">
+        Recommencer. Encore. Toujours. <em>Ce n'est pas de la faiblesse</em> —
+        c'est la définition de <strong>quelqu'un qui ne lâche pas.</strong>
+        Camus t'a préparé à ce que les concours t'imposeront.
+      </p>
+      <span class="cite-math">∞</span>
+    </div>
+
+    <div class="cite-card">
+      <span class="cite-tag">Pour ceux qui se distraient</span>
+      <p class="cite-text">« Un peuple qui ne connaît pas son histoire est condamné à la revivre. »</p>
+      <p class="cite-author">— Winston Churchill</p>
+      <p class="cite-link">
+        Un élève qui <em>ne comprend pas ses erreurs</em> est condamné à les répéter à l'examen.
+        <strong>Chaque heure perdue aujourd'hui est une erreur de demain.</strong>
+      </p>
+      <span class="cite-math">Δ</span>
+    </div>
+
+    <div class="cite-card">
+      <span class="cite-tag">Pour ceux qui doutent</span>
+      <p class="cite-text">« Je pense, donc je suis. »</p>
+      <p class="cite-author">— Descartes</p>
+      <p class="cite-link">
+        Tu penses. Tu raisonnes. Tu analyses.
+        <em>Donc tu es déjà capable</em> de tout ce qu'on attend de toi aux concours.
+        <strong>Le doute n'est pas une limite — c'est un carburant.</strong>
+      </p>
+      <span class="cite-math">∴</span>
+    </div>
+
+    <!-- Carte bombe centrale -->
+    <div class="cite-card cite-bomb visible">
+      <p class="cite-bomb-text">
+        Rousseau écrivait : <span class="gold">« L'homme est né libre, et partout il est dans les fers. »</span><br><br>
+        Toi, tu es né avec un <span class="gold">potentiel immense</span> —
+        et tu t'es mis <span class="red">toi-même</span> dans les fers
+        en décidant que tu n'étais pas assez bon pour viser plus haut.
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══ SECTION 4 : LES VÉRITÉS ══════════════════════════════════════ -->
+<section class="verites">
+  <div class="verites-header">
+    <h2>Ce que personne<br>ne t'a jamais <span>dit</span></h2>
+  </div>
+
+  <div class="verites-list">
+
+    <div class="verite-item">
+      <span class="verite-num">01</span>
+      <div class="verite-content">
+        <h3>Tu n'es pas « moyen » — tu es endormi</h3>
+        <p>
+          La moyenne n'est pas ton niveau réel. C'est ton niveau <strong>actuel</strong> —
+          celui d'avant le réveil. Il y a une différence énorme entre ce que tu fais
+          et ce que tu es capable de faire.
+          <em>Les concours ne cherchent pas des génies. Ils cherchent des gens qui décident de se lever.</em>
+        </p>
+      </div>
+    </div>
+
+    <div class="verite-item">
+      <span class="verite-num">02</span>
+      <div class="verite-content">
+        <h3>Ton téléphone te vole ton avenir, heure par heure</h3>
+        <p>
+          Chaque fois que tu scrolles sans but, tu échanges <strong>une heure de ton futur</strong>
+          contre 3 secondes de dopamine. Ce n'est pas un jugement moral —
+          c'est de la neurochimie pure.
+          <em>Les gens qui réussissent les grands concours ne sont pas plus intelligents que toi.
+          Ils ont juste appris à gérer cette bataille.</em>
+        </p>
+      </div>
+    </div>
+
+    <div class="verite-item">
+      <span class="verite-num">03</span>
+      <div class="verite-content">
+        <h3>« Je ne suis pas fait pour ça » est le plus grand mensonge</h3>
+        <p>
+          Aucun neurone de ton cerveau ne porte l'étiquette « pas capable ».
+          Cette croyance — <strong>tu l'as apprise</strong>. Souvent d'un mauvais prof.
+          Parfois d'un mauvais résultat. Parfois de toi-même, un soir de découragement.
+          <em>Et comme toute croyance apprise, elle peut être désapprise.</em>
+        </p>
+      </div>
+    </div>
+
+    <div class="verite-item">
+      <span class="verite-num">04</span>
+      <div class="verite-content">
+        <h3>La peur de l'examen est normale — mais elle ne doit pas te paralyser</h3>
+        <p>
+          Avoir peur à l'approche du Bac ou des concours, c'est <strong>humain</strong>.
+          C'est même bon signe — ça signifie que tu tiens à quelque chose.
+          La peur devient mortelle uniquement quand elle te fait <em>fuir</em>
+          au lieu de te faire <em>préparer</em>.
+        </p>
+      </div>
+    </div>
+
+    <div class="verite-item">
+      <span class="verite-num">05</span>
+      <div class="verite-content">
+        <h3>Les grands de ce pays ont connu exactement ta salle de classe</h3>
+        <p>
+          Les ingénieurs, médecins, juristes, entrepreneurs qui font avancer le Cameroun —
+          ils ont été assis là où tu es assis.
+          Ils ont lu les mêmes manuels. Passé les mêmes nuits blanches.
+          <em>La différence ? Ils ont décidé un jour de ne plus se contenter de leur potentiel endormi.</em>
+          <strong>Ce jour peut être aujourd'hui.</strong>
+        </p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══ SECTION 5 : LA PHRASE ════════════════════════════════════════ -->
+<section class="phrase-section">
+  <span class="phrase-eyebrow">La seule phrase que tu dois retenir</span>
+
+  <h2 class="phrase-grande">
+    Continue toujours de vouloir<br>
+    être <span class="or">le meilleur</span> —<br>
+    et ne pense qu'à ça,<br>
+    quoi qu'il arrive.
+  </h2>
+
+  <p class="phrase-attr">— Ce que j'aurais dû me dire à ta place</p>
+</section>
+
+<!-- ══ SECTION 6 : FINALE ════════════════════════════════════════ -->
+<section class="finale">
+  <p class="finale-eyebrow">La vérité que tu dois entendre maintenant</p>
+
+  <h2 class="finale-title">
+    Tu n'as pas peur des examens.<br>
+    Tu as peur <em>d'essayer vraiment</em><br>
+    et de découvrir ce dont tu es capable.
+  </h2>
+
+  <p class="finale-body">
+    Camus l'a écrit pour toi : <strong>« Il faut se battre pour trouver
+    ce qui peut rendre la vie plus lumineuse. »</strong><br><br>
+    Ce combat commence dans ta salle de classe. Dans ton cahier ouvert.
+    Dans ce problème que tu refuses de lâcher.<br><br>
+    Pas demain. Pas quand tu « seras prêt ».
+    <strong>Maintenant.</strong><br><br>
+    Il y a une voix en toi qui sait exactement qui tu peux devenir.
+    Le seul vrai choix que tu as aujourd'hui —
+    <strong>c'est de lui obéir.</strong>
+  </p>
+
+  <p class="finale-sig">— S.E. Corporation</p>
+</section>
+
+<script>
+  // Intersection Observer pour animations au scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 130);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  const animEls = document.querySelectorAll(
+    '.cite-card:not(.cite-bomb), .verite-item, .miroir-confession, .miroir-corps, .miroir-divider, .miroir-voix, .phrase-eyebrow, .phrase-grande, .phrase-attr, .finale-eyebrow, .finale-title, .finale-body, .finale-cta, .finale-sig'
+  );
+  animEls.forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
