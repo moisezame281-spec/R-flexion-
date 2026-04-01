@@ -29,6 +29,6 @@
     {"src": "/physique", "dest": "/physique.html"},
     {"src": "/physique.html", "dest": "/physique.html"}
     {"src": "/Cadeau_Terminale", "dest": "/Cadeau_Terminale.html"},
-    {"src": "/Cadeau_Terminale.html", "dest": "/Cadeau_Terminale.html"}
+    {"src": "/Cadeau_Terminale.html", "dest": "/Cadeau_Terminale.html"},
   ]
 }
