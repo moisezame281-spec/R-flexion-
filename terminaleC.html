@@ -19,116 +19,44 @@ body{background:var(--ink);color:var(--cream);font-family:'Cormorant Garamond',s
 html{height:-webkit-fill-available}
 body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
   background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");opacity:.25}
-
 .page{display:none;min-height:100vh;flex-direction:column}
 .page.active{display:flex}
-
-/* ═══ ACCUEIL ══════════════════════════════════════════ */
-#pg-accueil{
-  justify-content:center;align-items:center;padding:3rem 1.5rem;
-  background:radial-gradient(ellipse at 50% 0%,rgba(79,40,13,.25) 0%,transparent 65%),var(--ink);
-  position:relative;overflow:hidden
-}
-#pg-accueil::after{
-  content:'CD';position:absolute;font-size:38rem;
-  color:rgba(232,132,58,.025);font-family:'Playfair Display',serif;
-  font-style:italic;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none
-}
-
-/* ── LOGO ── */
+#pg-accueil{justify-content:center;align-items:center;padding:3rem 1.5rem;background:radial-gradient(ellipse at 50% 0%,rgba(79,40,13,.25) 0%,transparent 65%),var(--ink);position:relative;overflow:hidden}
+#pg-accueil::after{content:'CC';position:absolute;font-size:38rem;color:rgba(232,132,58,.025);font-family:'Playfair Display',serif;font-style:italic;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
 .logo-block{display:flex;flex-direction:column;align-items:center;gap:.45rem;margin-bottom:2.5rem;z-index:1}
-
-.logo-ring{
-  position:relative;width:120px;height:120px;
-  display:flex;align-items:center;justify-content:center;margin-bottom:.3rem
-}
-.logo-ring::before{
-  content:'';position:absolute;inset:0;border-radius:50%;
-  background:conic-gradient(
-    var(--gold) 0deg, rgba(232,132,58,.1) 60deg,
-    var(--gold) 120deg, rgba(232,132,58,.1) 180deg,
-    var(--gold) 240deg, rgba(232,132,58,.1) 300deg,
-    var(--gold) 360deg
-  );
-  animation:spin 10s linear infinite
-}
-.logo-ring::after{
-  content:'';position:absolute;inset:4px;border-radius:50%;background:var(--ink)
-}
+.logo-ring{position:relative;width:120px;height:120px;display:flex;align-items:center;justify-content:center;margin-bottom:.3rem}
+.logo-ring::before{content:'';position:absolute;inset:0;border-radius:50%;background:conic-gradient(var(--gold) 0deg,rgba(232,132,58,.1) 60deg,var(--gold) 120deg,rgba(232,132,58,.1) 180deg,var(--gold) 240deg,rgba(232,132,58,.1) 300deg,var(--gold) 360deg);animation:spin 10s linear infinite}
+.logo-ring::after{content:'';position:absolute;inset:4px;border-radius:50%;background:var(--ink)}
 @keyframes spin{to{transform:rotate(360deg)}}
-
-.logo-img{
-  width:104px;height:104px;border-radius:50%;object-fit:cover;
-  position:relative;z-index:1;
-  box-shadow:0 0 24px rgba(232,132,58,.18),0 0 60px rgba(232,132,58,.06)
-}
-
-.logo-ornament{
-  display:flex;align-items:center;gap:.5rem;margin-top:.1rem
-}
+.logo-img{width:104px;height:104px;border-radius:50%;object-fit:cover;position:relative;z-index:1;box-shadow:0 0 24px rgba(232,132,58,.18),0 0 60px rgba(232,132,58,.06)}
+.logo-ornament{display:flex;align-items:center;gap:.5rem;margin-top:.1rem}
 .logo-line{width:30px;height:1px;background:linear-gradient(90deg,transparent,var(--gold))}
 .logo-line.r{background:linear-gradient(90deg,var(--gold),transparent)}
-.logo-diamond{
-  width:5px;height:5px;background:var(--gold);
-  transform:rotate(45deg);opacity:.8
-}
-
-.logo-brand{font-family:'Space Mono',monospace;font-size:.68rem;letter-spacing:.5em;
-  color:var(--gold);text-transform:uppercase;margin-top:.1rem}
-.logo-divider{
-  width:100px;height:1px;
-  background:linear-gradient(90deg,transparent,rgba(232,132,58,.4),transparent)
-}
-.logo-since{font-family:'Cormorant Garamond',serif;font-style:italic;
-  font-size:.85rem;color:var(--grey);letter-spacing:.2em}
-
-/* ── TITRE ── */
-.acc-title{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,4.5vw,3.2rem);
-  font-weight:900;text-align:center;line-height:1.12;margin-bottom:.6rem;color:var(--cream);z-index:1}
-.acc-sub{font-size:1rem;color:var(--grey);text-align:center;font-style:italic;
-  margin-bottom:2.5rem;z-index:1;letter-spacing:.04em}
-
-/* ── FORM ── */
-.form-box{
-  background:rgba(255,255,255,.025);border:1px solid rgba(232,132,58,.18);
-  border-radius:5px;padding:2.5rem;width:100%;max-width:460px;z-index:1;position:relative
-}
-.form-box::before{
-  content:'';position:absolute;inset:-1px;border-radius:5px;z-index:-1;
-  background:linear-gradient(135deg,rgba(232,132,58,.18),transparent 55%,rgba(232,132,58,.05))
-}
+.logo-diamond{width:5px;height:5px;background:var(--gold);transform:rotate(45deg);opacity:.8}
+.logo-brand{font-family:'Space Mono',monospace;font-size:.68rem;letter-spacing:.5em;color:var(--gold);text-transform:uppercase;margin-top:.1rem}
+.logo-divider{width:100px;height:1px;background:linear-gradient(90deg,transparent,rgba(232,132,58,.4),transparent)}
+.logo-since{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.85rem;color:var(--grey);letter-spacing:.2em}
+.acc-title{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,4.5vw,3.2rem);font-weight:900;text-align:center;line-height:1.12;margin-bottom:.6rem;color:var(--cream);z-index:1}
+.acc-sub{font-size:1rem;color:var(--grey);text-align:center;font-style:italic;margin-bottom:2.5rem;z-index:1;letter-spacing:.04em}
+.form-box{background:rgba(255,255,255,.025);border:1px solid rgba(232,132,58,.18);border-radius:5px;padding:2.5rem;width:100%;max-width:460px;z-index:1;position:relative}
+.form-box::before{content:'';position:absolute;inset:-1px;border-radius:5px;z-index:-1;background:linear-gradient(135deg,rgba(232,132,58,.18),transparent 55%,rgba(232,132,58,.05))}
 .field{margin-bottom:1.4rem}
-.field label{display:block;font-family:'Space Mono',monospace;font-size:.6rem;
-  letter-spacing:.32em;color:var(--gold);text-transform:uppercase;margin-bottom:.55rem}
-.field input,.field select{
-  width:100%;padding:.8rem 1rem;background:rgba(255,255,255,.04);
-  border:1px solid rgba(255,255,255,.1);border-radius:3px;
-  color:var(--cream);font-family:'Cormorant Garamond',serif;font-size:1.05rem;
-  outline:none;transition:border-color .2s;-webkit-user-select:text;user-select:text
-}
+.field label{display:block;font-family:'Space Mono',monospace;font-size:.6rem;letter-spacing:.32em;color:var(--gold);text-transform:uppercase;margin-bottom:.55rem}
+.field input,.field select{width:100%;padding:.8rem 1rem;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:3px;color:var(--cream);font-family:'Cormorant Garamond',serif;font-size:1.05rem;outline:none;transition:border-color .2s;-webkit-user-select:text;user-select:text}
 .field input:focus,.field select:focus{border-color:var(--gold)}
 .field select option{background:var(--ink)}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
 .divider{height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:1.5rem 0}
-.btn{width:100%;padding:.95rem;border:none;border-radius:3px;cursor:pointer;
-  font-family:'Space Mono',monospace;font-size:.72rem;letter-spacing:.22em;
-  text-transform:uppercase;font-weight:700;transition:opacity .18s,transform .1s;
-  -webkit-tap-highlight-color:transparent;touch-action:manipulation;
-  -webkit-appearance:none;appearance:none}
+.btn{width:100%;padding:.95rem;border:none;border-radius:3px;cursor:pointer;font-family:'Space Mono',monospace;font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;font-weight:700;transition:opacity .18s,transform .1s;-webkit-tap-highlight-color:transparent;touch-action:manipulation;-webkit-appearance:none;appearance:none}
 .btn:hover{opacity:.87}.btn:active{transform:scale(.98)}
 .btn-gold{background:var(--gold);color:var(--ink)}
 .btn-red{background:var(--red);color:#fff}
-
-/* ═══ RÈGLES ═══════════════════════════════════════════ */
 #pg-regles{justify-content:center;align-items:center;padding:3rem 1.5rem;background:var(--bg2)}
-.regles-box{max-width:680px;width:100%;background:rgba(255,255,255,.02);
-  border:1px solid rgba(232,132,58,.2);border-radius:5px;padding:3rem 3rem 2.5rem}
-.reg-title{font-family:'Playfair Display',serif;font-size:1.9rem;font-weight:900;
-  text-align:center;margin-bottom:.3rem;color:var(--cream)}
+.regles-box{max-width:680px;width:100%;background:rgba(255,255,255,.02);border:1px solid rgba(232,132,58,.2);border-radius:5px;padding:3rem 3rem 2.5rem}
+.reg-title{font-family:'Playfair Display',serif;font-size:1.9rem;font-weight:900;text-align:center;margin-bottom:.3rem;color:var(--cream)}
 .reg-title span{color:var(--gold);font-style:italic}
 .reg-intro{text-align:center;font-style:italic;color:var(--grey);font-size:.9rem;margin-bottom:1.5rem}
-.rule{display:grid;grid-template-columns:30px 1fr;gap:.9rem;
-  padding:1rem 0;border-bottom:1px solid rgba(255,255,255,.05);align-items:start}
+.rule{display:grid;grid-template-columns:30px 1fr;gap:.9rem;padding:1rem 0;border-bottom:1px solid rgba(255,255,255,.05);align-items:start}
 .rule:last-of-type{border-bottom:none}
 .rule-n{font-family:'Space Mono',monospace;font-size:.62rem;color:var(--gold);padding-top:3px}
 .rule-t{font-size:1rem;color:rgba(245,240,232,.85);line-height:1.65}
@@ -137,15 +65,10 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
 .accept input[type=checkbox]{width:18px;height:18px;accent-color:var(--gold);cursor:pointer;margin-top:3px;flex-shrink:0}
 .accept label{font-size:.95rem;color:var(--grey);cursor:pointer;line-height:1.55}
 .accept label em{color:var(--cream);font-style:normal}
-
-/* ═══ QUIZ ══════════════════════════════════════════════ */
 #pg-quiz{background:var(--bg2)}
-.topbar{position:sticky;top:0;z-index:100;background:var(--ink);
-  border-bottom:1px solid rgba(232,132,58,.2);
-  padding:.85rem 2rem;display:flex;align-items:center;justify-content:space-between}
+.topbar{position:sticky;top:0;z-index:100;background:var(--ink);border-bottom:1px solid rgba(232,132,58,.2);padding:.85rem 2rem;display:flex;align-items:center;justify-content:space-between}
 .topbar-l{font-family:'Space Mono',monospace;font-size:.6rem;color:var(--gold);letter-spacing:.18em}
-.timer{display:flex;align-items:center;gap:.55rem;
-  font-family:'Space Mono',monospace;font-size:1.1rem;font-weight:700;color:var(--cream)}
+.timer{display:flex;align-items:center;gap:.55rem;font-family:'Space Mono',monospace;font-size:1.1rem;font-weight:700;color:var(--cream)}
 .timer-dot{width:8px;height:8px;border-radius:50%;background:#3ab03a;animation:blink 1s infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
 .timer.danger{color:#e05555}.timer.danger .timer-dot{background:#e05555}
@@ -153,77 +76,42 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
 .prog-fill{height:100%;background:var(--gold);transition:width .4s}
 .quiz-body{max-width:780px;margin:0 auto;padding:2.5rem 1.5rem 6rem;width:100%}
 .sec-head{display:flex;align-items:center;gap:1rem;margin:2.2rem 0 1.2rem}
-.sec-badge{font-family:'Space Mono',monospace;font-size:.58rem;letter-spacing:.28em;
-  background:var(--gold);color:var(--ink);padding:.28rem .65rem;border-radius:2px;font-weight:700}
-.sec-title{font-family:'Playfair Display',serif;font-size:1.05rem;font-style:italic;
-  color:rgba(245,240,232,.65)}
-.qcard{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);
-  border-radius:4px;padding:1.8rem 2rem 1.5rem;margin-bottom:1.1rem;transition:border-color .2s}
+.sec-badge{font-family:'Space Mono',monospace;font-size:.58rem;letter-spacing:.28em;background:var(--gold);color:var(--ink);padding:.28rem .65rem;border-radius:2px;font-weight:700}
+.sec-title{font-family:'Playfair Display',serif;font-size:1.05rem;font-style:italic;color:rgba(245,240,232,.65)}
+.qcard{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:4px;padding:1.8rem 2rem 1.5rem;margin-bottom:1.1rem;transition:border-color .2s}
 .qcard:hover{border-color:rgba(232,132,58,.18)}
 .qcard.answered{border-color:rgba(232,132,58,.35)}
-.q-label{font-family:'Space Mono',monospace;font-size:.58rem;color:var(--gold);
-  letter-spacing:.18em;margin-bottom:.75rem}
+.q-label{font-family:'Space Mono',monospace;font-size:.58rem;color:var(--gold);letter-spacing:.18em;margin-bottom:.75rem}
 .q-text{font-size:1.05rem;line-height:1.75;color:var(--cream);margin-bottom:1.2rem;white-space:pre-line}
 .opts{display:flex;flex-direction:column;gap:.55rem}
-.opt{display:flex;align-items:flex-start;gap:.85rem;padding:.75rem 1rem;
-  border:1px solid rgba(255,255,255,.07);border-radius:3px;
-  cursor:pointer;transition:all .15s;-webkit-user-select:none;user-select:none}
+.opt{display:flex;align-items:flex-start;gap:.85rem;padding:.75rem 1rem;border:1px solid rgba(255,255,255,.07);border-radius:3px;cursor:pointer;transition:all .15s;-webkit-user-select:none;user-select:none}
 .opt:hover{border-color:rgba(232,132,58,.38);background:rgba(232,132,58,.05)}
 .opt.sel{border-color:var(--gold);background:rgba(232,132,58,.1)}
 .opt input{display:none}
-.opt-letter{font-family:'Space Mono',monospace;font-size:.68rem;color:var(--gold);
-  font-weight:700;padding-top:3px;flex-shrink:0;width:18px}
+.opt-letter{font-family:'Space Mono',monospace;font-size:.68rem;color:var(--gold);font-weight:700;padding-top:3px;flex-shrink:0;width:18px}
 .opt-text{font-size:1rem;color:rgba(245,240,232,.85);line-height:1.5}
-.quiz-foot{position:fixed;bottom:0;left:0;right:0;background:var(--ink);
-  border-top:1px solid rgba(232,132,58,.18);
-  padding:.95rem 2rem;display:flex;justify-content:space-between;align-items:center}
+.quiz-foot{position:fixed;bottom:0;left:0;right:0;background:var(--ink);border-top:1px solid rgba(232,132,58,.18);padding:.95rem 2rem;display:flex;justify-content:space-between;align-items:center}
 .q-counter{font-family:'Space Mono',monospace;font-size:.62rem;color:var(--grey)}
-
-/* ═══ FIN ════════════════════════════════════════════ */
-#pg-fin{justify-content:center;align-items:center;padding:3rem 1.5rem;
-  background:radial-gradient(ellipse at 50% 30%,rgba(79,40,13,.35) 0%,transparent 70%),var(--ink)}
-.fin-box{max-width:520px;width:100%;text-align:center;
-  background:rgba(255,255,255,.02);border:1px solid rgba(232,132,58,.2);
-  border-radius:5px;padding:3rem 2.5rem}
+#pg-fin{justify-content:center;align-items:center;padding:3rem 1.5rem;background:radial-gradient(ellipse at 50% 30%,rgba(79,40,13,.35) 0%,transparent 70%),var(--ink)}
+.fin-box{max-width:520px;width:100%;text-align:center;background:rgba(255,255,255,.02);border:1px solid rgba(232,132,58,.2);border-radius:5px;padding:3rem 2.5rem}
 .fin-icon{font-size:2.8rem;margin-bottom:1.2rem}
-.fin-title{font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;
-  color:var(--cream);margin-bottom:.4rem}
+.fin-title{font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;color:var(--cream);margin-bottom:.4rem}
 .fin-title span{color:var(--gold);font-style:italic}
-.id-box{margin:2rem 0;padding:1.5rem;
-  background:rgba(232,132,58,.07);border:2px solid var(--gold);border-radius:4px}
-.id-lbl{font-family:'Space Mono',monospace;font-size:.6rem;letter-spacing:.3em;
-  color:var(--gold);text-transform:uppercase;margin-bottom:.8rem}
-.id-val{font-family:'Space Mono',monospace;font-size:2.6rem;font-weight:700;
-  color:var(--cream);letter-spacing:.25em}
+.id-box{margin:2rem 0;padding:1.5rem;background:rgba(232,132,58,.07);border:2px solid var(--gold);border-radius:4px}
+.id-lbl{font-family:'Space Mono',monospace;font-size:.6rem;letter-spacing:.3em;color:var(--gold);text-transform:uppercase;margin-bottom:.8rem}
+.id-val{font-family:'Space Mono',monospace;font-size:2.6rem;font-weight:700;color:var(--cream);letter-spacing:.25em}
 .id-warn{font-size:.88rem;color:var(--grey);font-style:italic;margin-top:.8rem;line-height:1.55}
-.score-box{margin:1.5rem 0;padding:1rem;
-  background:rgba(26,94,26,.15);border:1px solid rgba(50,160,50,.35);border-radius:3px}
-.score-lbl{font-family:'Space Mono',monospace;font-size:.58rem;letter-spacing:.22em;
-  color:rgba(100,200,100,.8);text-transform:uppercase;margin-bottom:.4rem}
+.score-box{margin:1.5rem 0;padding:1rem;background:rgba(26,94,26,.15);border:1px solid rgba(50,160,50,.35);border-radius:3px}
+.score-lbl{font-family:'Space Mono',monospace;font-size:.58rem;letter-spacing:.22em;color:rgba(100,200,100,.8);text-transform:uppercase;margin-bottom:.4rem}
 .score-val{font-family:'Playfair Display',serif;font-size:3rem;font-weight:900;color:#6dc96d}
 .score-sub{font-size:.95rem;color:var(--grey)}
 .fin-note{font-size:.92rem;color:var(--grey);line-height:1.65;font-style:italic}
-
-/* ═══ OVERLAY FRAUDE ══════════════════════════════════ */
-#fraud-overlay{display:none;position:fixed;inset:0;z-index:99998;
-  background:rgba(100,0,0,.97);justify-content:center;align-items:center;
-  flex-direction:column;gap:1.5rem;text-align:center;padding:2rem}
+#fraud-overlay{display:none;position:fixed;inset:0;z-index:99998;background:rgba(100,0,0,.97);justify-content:center;align-items:center;flex-direction:column;gap:1.5rem;text-align:center;padding:2rem}
 #fraud-overlay.show{display:flex}
 .fraud-title{font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:900;color:#fff}
 .fraud-body{font-size:1.05rem;color:rgba(255,255,255,.75);line-height:1.7;max-width:480px}
-.fraud-count{font-family:'Space Mono',monospace;font-size:1.3rem;color:#fff;
-  background:rgba(255,255,255,.1);padding:.5rem 1.5rem;border-radius:3px}
-
-@media(max-width:580px){
-  .row2{grid-template-columns:1fr}
-  .regles-box,.form-box{padding:2rem 1.4rem}
-  .quiz-body{padding:1.5rem 1rem 6rem}
-  .qcard{padding:1.4rem 1.2rem}
-  .topbar{padding:.75rem 1rem}
-  .topbar-l{display:none}
-  .logo-img{width:90px;height:90px}
-  .logo-ring{width:106px;height:106px}
-}
+.fraud-count{font-family:'Space Mono',monospace;font-size:1.3rem;color:#fff;background:rgba(255,255,255,.1);padding:.5rem 1.5rem;border-radius:3px}
+@media(max-width:580px){.row2{grid-template-columns:1fr}.regles-box,.form-box{padding:2rem 1.4rem}.quiz-body{padding:1.5rem 1rem 6rem}.qcard{padding:1.4rem 1.2rem}.topbar{padding:.75rem 1rem}.topbar-l{display:none}.logo-img{width:90px;height:90px}.logo-ring{width:106px;height:106px}}
 </style>
 </head>
 <body>
@@ -242,7 +130,7 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
 <div class="page active" id="pg-accueil">
   <div class="logo-block">
     <div class="logo-ring">
-      <img src="https://mon-depots.vercel.app/logo.jpg" class="logo-img" alt="S.E. Corporation" onerror="this.style.background='var(--gold)';this.style.display='flex'">
+      <img src="https://mon-depots.vercel.app/logo.jpg" class="logo-img" alt="S.E. Corporation" onerror="this.style.background='var(--gold)'">
     </div>
     <div class="logo-ornament">
       <div class="logo-line"></div>
@@ -253,39 +141,15 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
     <div class="logo-divider"></div>
     <div class="logo-since">Since 2015 — Excellence académique</div>
   </div>
-
   <h1 class="acc-title">Évaluation Hebdomadaire<br>Terminale C</h1>
   <p class="acc-sub">Mathématiques — Analyse, Complexes &amp; Probabilités</p>
-
   <div class="form-box">
-    <div class="field">
-      <label>Prénom</label>
-      <input type="text" id="f-prenom" placeholder="Votre prénom" autocomplete="off" spellcheck="false">
-    </div>
-    <div class="field">
-      <label>Nom</label>
-      <input type="text" id="f-nom" placeholder="Votre nom de famille" autocomplete="off" spellcheck="false">
-    </div>
-    <div class="field">
-      <label>Établissement</label>
-      <input type="text" id="f-etab" placeholder="Ex : Lycée de Yaoundé" autocomplete="off" spellcheck="false">
-    </div>
+    <div class="field"><label>Prénom</label><input type="text" id="f-prenom" placeholder="Votre prénom" autocomplete="off" spellcheck="false"></div>
+    <div class="field"><label>Nom</label><input type="text" id="f-nom" placeholder="Votre nom de famille" autocomplete="off" spellcheck="false"></div>
+    <div class="field"><label>Établissement</label><input type="text" id="f-etab" placeholder="Ex : Lycée de Yaoundé" autocomplete="off" spellcheck="false"></div>
     <div class="row2">
-      <div class="field">
-        <label>Classe</label>
-        <select id="f-classe">
-          <option value="">— Choisir —</option>
-          <option value="TleC">Terminale C</option>
-        </select>
-      </div>
-      <div class="field">
-        <label>Sexe</label>
-        <select id="f-sexe">
-          <option value="">— Choisir —</option>
-          <option value="M">Masculin</option>
-          <option value="F">Féminin</option>
-        </select>
-      </div>
+      <div class="field"><label>Classe</label><select id="f-classe"><option value="">— Choisir —</option><option value="TleC">Terminale C</option></select></div>
+      <div class="field"><label>Sexe</label><select id="f-sexe"><option value="">— Choisir —</option><option value="M">Masculin</option><option value="F">Féminin</option></select></div>
     </div>
     <div class="divider"></div>
     <button class="btn btn-gold" onclick="goRegles()">Continuer →</button>
@@ -317,10 +181,7 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
 <div class="page" id="pg-quiz">
   <div class="topbar">
     <div class="topbar-l">S.E. CORPORATION — TERMINALE C — MATHÉMATIQUES</div>
-    <div class="timer" id="timer-box">
-      <div class="timer-dot"></div>
-      <span id="timer-display">30:00</span>
-    </div>
+    <div class="timer" id="timer-box"><div class="timer-dot"></div><span id="timer-display">30:00</span></div>
   </div>
   <div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
   <div class="quiz-body" id="quiz-body"></div>
@@ -363,42 +224,55 @@ const firebaseConfig = {
 const app=initializeApp(firebaseConfig);
 const db=getFirestore(app);
 
-// ══ ÉTAT ══
-const _savedFrauds = parseInt(sessionStorage.getItem('se_frauds')||'0');
+const _savedFrauds=parseInt(sessionStorage.getItem('se_frauds')||'0');
 let eleve={},reps={},frauds=_savedFrauds,started=false,done=false,timerInt=null,tLeft=0;
 
 window.QUIZ={duree:30*60,sections:[
 
-  // ══ PARTIE A — f(x) = 1/sin x (8 questions × 1pt = 8pts) ══
-  {badge:"PARTIE A",titre:"f(x) = 1/sin x — Étude, réciproque et intégrale",qs:[
-    {id:"A1",pts:1,txt:"Soit f(x) = 1/sin x définie sur ]0 ; π[.\n\nSur quel intervalle f admet-elle un minimum ?",opts:["En x = π/3","En x = π/4","En x = π/2","En x = π/6"],rep:2},
-    {id:"A2",pts:1,txt:"La courbe (C) de f admet une symétrie. Elle est symétrique par rapport à :",opts:["L'axe des ordonnées","La droite x = π","La droite x = π/2","L'origine O"],rep:2},
-    {id:"A3",pts:1,txt:"La restriction g de f à ]0 ; π/2] admet une réciproque g⁻¹ car g est :",opts:["Positive et bornée sur cet intervalle","Strictement décroissante et continue","Paire sur cet intervalle","Bornée entre 1 et 2"],rep:1},
-    {id:"A4",pts:1,txt:"Soit y = g⁻¹(x). La relation g(y) = x donne :\n1/sin y = x\n\nDonc sin y est égal à :",opts:["x","1/x","√(x²−1)/x","x/√(x²−1)"],rep:1},
-    {id:"A5",pts:1,txt:"Avec y = g⁻¹(x) et y ∈ ]0 ; π/2], on a sin y = 1/x.\nEn utilisant cos²y + sin²y = 1 et cos y ≥ 0, que vaut cos y ?",opts:["1/x","x/√(x²−1)","√(x²−1)/x","−√(x²−1)/x"],rep:2},
-    {id:"A6",pts:2,txt:"On sait que (g⁻¹)'(x) = 1/g'(y) où g'(y) = −cos y / sin²y.\n\nEn remplaçant sin y = 1/x et cos y = √(x²−1)/x, que vaut g'(y) ?",opts:["x√(x²−1)","−x√(x²−1)","1/(x√(x²−1))","−1/(x√(x²−1))"],rep:1},
-    {id:"A7",pts:1,txt:"On en déduit que pour tout x ∈ ]1 ; +∞[, (g⁻¹)'(x) vaut :",opts:["1/(x√(x²−1))","−1/(x√(x²−1))","x/√(x²−1)","−x/√(x²−1)"],rep:1},
-    {id:"A8",pts:2,txt:"Pour calculer I = ∫ dt/(t√(t²−1)) de 2√3/3 à √2,\non utilise que (g⁻¹)'(t) = −1/(t√(t²−1)).\n\nOn calcule : g⁻¹(√2) = π/4  et  g⁻¹(2√3/3) = π/3.\n\nDonc I = g⁻¹(2√3/3) − g⁻¹(√2) = ?",opts:["π/6","π/4","π/12","π/3"],rep:2},
+  // ══ PARTIE A — Hyperbole (H) & équation complexe ══
+  {badge:"PARTIE A",titre:"Hyperbole (H) — Structure et points issus d'une équation complexe",qs:[
+    {id:"A1",pts:1,txt:"On considère la courbe (H) d'équation cartésienne 4x² − y² = 4.\n\nSous quelle forme réduite cette équation peut-elle s'écrire ?",
+      opts:["x²/4 − y²/1 = 1","x²/1 − y²/4 = 1","x²/2 − y²/2 = 1","x²/4 − y²/4 = 1"],rep:1},
+    {id:"A2",pts:1,txt:"Quels sont les sommets de l'hyperbole (H) ?",
+      opts:["(±2 ; 0)","(0 ; ±2)","(±1 ; 0)","(0 ; ±1)"],rep:2},
+    {id:"A3",pts:1,txt:"Quelles sont les équations des asymptotes de (H) ?",
+      opts:["y = ±x/2","y = ±2x","y = ±4x","y = ±x"],rep:1},
+    {id:"A4",pts:2,txt:"Soit l'équation (E) dans ℂ : Z² − (2/cosθ)Z + 5/cos²θ − 4 = 0, avec θ ∈ ℝ.\n\nQuelle est la forme factorisée du discriminant Δ de (E) ?",
+      opts:["Δ = (4tanθ)²","Δ = (4isinθ)²","Δ = (4itanθ)²","Δ = −16sin²θ"],rep:2},
+    {id:"A5",pts:1,txt:"Soient M′ et M″ les points du plan d'affixes Z′ et Z″, solutions de (E).\n\nOn pose x = Re(Z′) et y = Im(Z′). Que vaut 4x² − y² ?",
+      opts:["0","4","8/cos²θ","4cos(2θ)"],rep:1},
   ]},
 
-  // ══ PARTIE B — Congruences mod 8 (6 questions × 1pt = 6pts) ══
-  {badge:"PARTIE B",titre:"Congruences modulo 8 — Entiers et équations dans ℤ",qs:[
-    {id:"B1",pts:1,txt:"Soit N = 2k+1 un entier impair.\nOn développe N² = 4k²+4k+1 = 4k(k+1)+1.\n\nLe produit k(k+1) est toujours :",opts:["Impair","Pair","Un carré parfait","Congru à 3 mod 4"],rep:1},
-    {id:"B2",pts:1,txt:"En posant k(k+1) = 2p (pair), on obtient N² = 8p+1.\n\nDonc pour tout entier impair N, N² ≡ ? [8]",opts:["0","3","5","1"],rep:3},
-    {id:"B3",pts:1,txt:"Pour montrer que M² ≡ 1[8] ⟹ M impair, on raisonne par contraposée.\nSi M = 2k avec k pair, alors M² mod 8 vaut :",opts:["0","4","2","6"],rep:0},
-    {id:"B4",pts:1,txt:"Si M = 2k avec k impair, alors k = 2p+1 et M = 4p+2.\nM² = 16p²+16p+4 = 4(4p²+4p+1) = 4(2p+1)².\n\nM² mod 8 vaut :",opts:["0","2","4","6"],rep:2},
-    {id:"B5",pts:1,txt:"On résout x² = 8y+1 dans ℤ.\nOn a montré que x doit être impair : x = 2k+1.\nAlors y = k(k+1). Les solutions sont de la forme :",opts:["x = 2k+1, y = k² pour k ∈ ℤ","x = 2k+1, y = k(k+1) pour k ∈ ℤ","x = 2k, y = k² pour k ∈ ℤ","x = 4k+1, y = k pour k ∈ ℤ"],rep:1},
-    {id:"B6",pts:1,txt:"La courbe d'équation y = (x²−1)/8 passe par une infinité de points à coordonnées entières car :\n\nPour tout k ∈ ℤ, le point (2k+1, k(k+1)) vérifie l'équation. Il y en a :",opts:["Exactement 8","Un nombre fini","Une infinité","Aucun si k < 0"],rep:2},
+  // ══ PARTIE B — Congruences mod 8 ══
+  {badge:"PARTIE B",titre:"Congruences modulo 8 — Entiers et équation dans ℤ",qs:[
+    {id:"B1",pts:1,txt:"Soit N un entier impair. Quelle est la nature du produit k(k+1) pour tout entier k ?",
+      opts:["Toujours impair","Toujours pair","Parfois pair, parfois impair","Un carré parfait"],rep:1},
+    {id:"B2",pts:1,txt:"Que peut-on affirmer sur N² modulo 8, pour tout entier impair N ?",
+      opts:["N² ≡ 0 [8]","N² ≡ 3 [8]","N² ≡ 1 [8]","N² ≡ 5 [8]"],rep:2},
+    {id:"B3",pts:1,txt:"On cherche à montrer que M² ≡ 1 [8] implique M impair.\nSi M = 2k avec k pair, que vaut M² mod 8 ?",
+      opts:["0","2","4","6"],rep:0},
+    {id:"B4",pts:1,txt:"Si M = 4p + 2 (entier pair, k impair), que vaut M² mod 8 ?",
+      opts:["0","2","4","6"],rep:2},
+    {id:"B5",pts:1,txt:"On résout x² = 8y + 1 dans ℤ. Sous quelle forme générale s'expriment les solutions entières ?",
+      opts:["x = 2k, y = k² pour k ∈ ℤ","x = 2k+1, y = k(k+1) pour k ∈ ℤ","x = 4k+1, y = k pour k ∈ ℤ","x = 2k+1, y = k² pour k ∈ ℤ"],rep:1},
+    {id:"B6",pts:1,txt:"La courbe d'équation y = (x²−1)/8 passe-t-elle par une infinité de points à coordonnées entières ?",
+      opts:["Non, aucun point entier","Oui, exactement 8 points","Oui, une infinité de points","Seulement si x est positif"],rep:2},
   ]},
 
-  // ══ PARTIE C — Complexes (6 questions × 1pt = 6pts) ══
-  {badge:"PARTIE C",titre:"Nombres complexes — Équation (E) et géométrie dans ℂ",qs:[
-    {id:"C1",pts:1,txt:"(E) : z³ + (3−d²)z + 2i(1+d²) = 0, avec |d| = 2.\n\nOn vérifie que z = 2i est solution. On calcule P(2i) :\n(2i)³ = −8i\n(3−d²)(2i) = 6i − 2id²\n2i(1+d²) = 2i + 2id²\n\nLa somme P(2i) vaut :",opts:["4i","−2i","0","2"],rep:2},
-    {id:"C2",pts:1,txt:"Après factorisation par (z−2i), on obtient le trinôme :\nz² + 2iz − (1+d²) = 0\n\nSon discriminant Δ vaut :",opts:["4d²","4d²+4","4(d²+1)","−4d²"],rep:0},
-    {id:"C3",pts:1,txt:"Les solutions du trinôme z²+2iz−(1+d²) = 0 sont :\nz = (−2i ± 2d)/2\n\nSoit :",opts:["z = ±d","z = −i ± d","z = i ± d","z = d ± 2i"],rep:1},
-    {id:"C4",pts:1,txt:"M a pour affixe d−i et N a pour affixe −d−i, avec |d| = 2.\n\n|OM|² = |d−i|² = |d|² + 1 = ?\nDonc |OM| = ?",opts:["|OM| = 2","| OM| = 3","| OM| = √3","| OM| = √5"],rep:3},
-    {id:"C5",pts:1,txt:"On calcule le centre de gravité G du triangle AMN.\nA a l'affixe 2i, M l'affixe d−i, N l'affixe −d−i.\n\n(zA + zM + zN)/3 = (2i + d−i − d−i)/3 = ?",opts:["2i/3","−i/3","0","d/3"],rep:2},
-    {id:"C6",pts:1,txt:"Pour montrer que AMN est isocèle en A, on calcule :\n|AM|² = |d−i−2i|² = |d−3i|² = |d|² + 9\n|AN|² = |−d−3i|² = |d|² + 9\n\nConclusion :",opts:["AMN est isocèle en A seulement si d est réel","AMN est isocèle en A pour tout d avec |d| = 2","AMN est équilatéral","AM ≠ AN en général"],rep:1},
+  // ══ PARTIE C — Complexes ══
+  {badge:"PARTIE C",titre:"Nombres complexes — Équation (E) et triangle dans ℂ",qs:[
+    {id:"C1",pts:1,txt:"Soit l'équation (E) : z³ + (3−d²)z + 2i(1+d²) = 0, avec |d| = 2.\n\nPeut-on affirmer que z₀ = 2i est une racine de (E) ?",
+      opts:["Non, 2i ne vérifie pas (E)","Oui, pour tout d tel que |d| = 2","Oui, seulement si d est réel","Oui, seulement si d = 2"],rep:1},
+    {id:"C2",pts:1,txt:"Après factorisation de (E) par (z − 2i), on obtient un trinôme du second degré en z.\nQuel est son discriminant Δ ?",
+      opts:["4d²","4(d²+1)","−4d²","4d² + 4"],rep:0},
+    {id:"C3",pts:1,txt:"Quelles sont les deux autres racines de (E) en fonction de d ?",
+      opts:["z = ±d","z = −i ± d","z = i ± d","z = ±d − 2i"],rep:1},
+    {id:"C4",pts:1,txt:"M a pour affixe d − i, avec |d| = 2. Quelle est la valeur de |OM| ?",
+      opts:["2","3","√3","√5"],rep:3},
+    {id:"C5",pts:1,txt:"A a l'affixe 2i, M l'affixe d−i, N l'affixe −d−i.\nQuelle est l'affixe du centre de gravité G du triangle AMN ?",
+      opts:["2i/3","−i/3","0","d/3"],rep:2},
+    {id:"C6",pts:1,txt:"Le triangle AMN est-il isocèle ? Si oui, en quel sommet ?",
+      opts:["Isocèle en M","Isocèle en A pour tout d avec |d| = 2","Isocèle en N seulement si d est réel","Équilatéral"],rep:1},
   ]},
 ]};
 
@@ -415,7 +289,6 @@ window.goRegles=()=>{
   if(c!=='TleC'){alert('Ce quiz est réservé aux élèves de Terminale C.');return;}
   eleve={prenom:p,nom:n,classe:c,sexe:s,etablissement:etab};showPage('regles');
 };
-
 
 window.showPage=id=>{document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('pg-'+id).classList.add('active');};
 
@@ -479,14 +352,11 @@ function showFraud(){
 }
 
 window.confirmSubmit=()=>{
-  if(done) return;
+  if(done)return;
   const tot=ALL_QS().length,left=tot-Object.keys(reps).length;
-  if(left>0){
-    if(!confirm(`${left} question(s) sans réponse. Soumettre quand même ?`)) return;
-  }
+  if(left>0){if(!confirm(`${left} question(s) sans réponse. Soumettre quand même ?`))return;}
   submit('normal');
 };
-
 
 async function submit(statut){
   if(done)return;done=true;started=false;clearInterval(timerInt);
