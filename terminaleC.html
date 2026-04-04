@@ -371,44 +371,44 @@ window.QUIZ={duree:30*60,sections:[
 
   // ══ PARTIE A — Géométrie dans l'espace (5 questions) ══
   {badge:"PARTIE A",titre:"Géométrie dans l'espace — Plan (ABC) et sphère (Sθ)",qs:[
-    {id:"A1",pts:1,txt:"A(2;−3;−1), B(1;0;2), C(0;1;3).\nAB⃗ = B − A et AC⃗ = C − A.\n\nQue valent ces vecteurs ?",opts:["AB⃗=(1,3,3), AC⃗=(2,4,4)","AB⃗=(−1,3,3), AC⃗=(−2,4,4)","AB⃗=(−1,−3,3), AC⃗=(2,4,4)","AB⃗=(1,−3,3), AC⃗=(2,−4,4)"],rep:1},
-    {id:"A2",pts:1,txt:"AB⃗=(−1,3,3) et AC⃗=(−2,4,4).\nOn cherche k tel que AC⃗ = k·AB⃗.\nk = −2/−1 = 2, mais 4/3 ≠ 2.\n\nDonc A, B, C sont :",opts:["Alignés","Non alignés","Confondus","Équidistants de O"],rep:1},
-    {id:"A3",pts:2,txt:"n⃗ = AB⃗ ∧ AC⃗ avec AB⃗=(−1,3,3) et AC⃗=(−2,4,4).\n\nn⃗ = (3×4−3×4 ; 3×(−2)−(−1)×4 ; (−1)×4−3×(−2))\n= (0, −2, 2)\n\nL'équation du plan (ABC) passant par A(2;−3;−1) est :",opts:["x + y + z = 0","y − z + 2 = 0","2y − z + 1 = 0","x − y + z = 2"],rep:1},
-    {id:"A4",pts:1,txt:"(Sθ) : x²+y²+z²−2θx−2y sinθ+θ²−2+sin²θ = 0.\n\nEn complétant le carré en x et en y, on obtient :\n(x−θ)²+(y−sinθ)²+z² = ?\n\nC'est une sphère de rayon :",opts:["θ","sinθ","√2","2"],rep:2},
-    {id:"A5",pts:2,txt:"Le centre de (Sθ) est Ω(θ, sinθ, 0).\nLe plan (ABC) a pour équation y−z+2=0.\n\nLa distance de Ω au plan vaut :\nd = |sinθ − 0 + 2|/√(1²+(−1)²) = (sinθ+2)/√2.\n\nPour que le plan soit tangent à la sphère, il faut d = √2, soit :",opts:["sinθ = 0 → θ = kπ","sinθ = 1 → θ = π/2 + 2kπ","sinθ = −1 → θ = −π/2 + 2kπ","sinθ = √2−2"],rep:0},
+    {id:"A1",pts:1,txt:"On considère les points A(2 ; −3 ; −1), B(1 ; 0 ; 2) et C(0 ; 1 ; 3) dans l'espace.\n\nQuels sont les vecteurs AB⃗ et AC⃗ ?",opts:["AB⃗=(1,3,3), AC⃗=(2,4,4)","AB⃗=(−1,3,3), AC⃗=(−2,4,4)","AB⃗=(−1,−3,3), AC⃗=(2,4,4)","AB⃗=(1,−3,3), AC⃗=(2,−4,4)"],rep:1},
+    {id:"A2",pts:1,txt:"On dispose des vecteurs AB⃗ et AC⃗ calculés à partir des points A, B et C.\n\nQuelle est la position relative des points A, B et C ?",opts:["Ils sont alignés","Ils ne sont pas alignés","Ils sont confondus","Ils sont équidistants de O"],rep:1},
+    {id:"A3",pts:2,txt:"On considère le plan (ABC) passant par A(2 ; −3 ; −1) et de vecteur normal obtenu par le produit vectoriel de AB⃗ et AC⃗.\n\nQuelle est l'équation de ce plan ?",opts:["x + y + z = 0","y − z + 2 = 0","2y − z + 1 = 0","x − y + z = 2"],rep:1},
+    {id:"A4",pts:1,txt:"On considère la famille de sphères (Sθ) d'équation : x²+y²+z²−2θx−2y sinθ+θ²−2+sin²θ = 0.\n\nQuel est le rayon de (Sθ) ?",opts:["θ","sinθ","√2","2"],rep:2},
+    {id:"A5",pts:2,txt:"Le centre de la sphère (Sθ) est le point Ω(θ ; sinθ ; 0), et le plan (ABC) a pour équation y − z + 2 = 0.\n\nPour quelle(s) valeur(s) de θ le plan (ABC) est-il tangent à la sphère (Sθ) ?",opts:["sinθ = 0 → θ = kπ","sinθ = 1 → θ = π/2 + 2kπ","sinθ = −1 → θ = −π/2 + 2kπ","sinθ = √2−2"],rep:0},
   ]},
 
 
   // ══ PARTIE B — Complexes GEMEC (8 questions) ══
   {badge:"PARTIE B",titre:"Nombres complexes — Équation (E), triangle OAB et f(z)",qs:[
-    {id:"B1",pts:1,txt:"(E) : z² − 6z + c = 0 avec c un réel strictement supérieur à 9.\n\nLe discriminant vaut Δ = 36 − 4c.\nPuisque c > 9, que peut-on dire de Δ ?",opts:["Δ > 0 car 36 > 4×9","Δ = 0 donc une solution double","Δ < 0 car 4c > 36","Δ = 36 indépendamment de c"],rep:2},
-    {id:"B2",pts:1,txt:"Δ = 36 − 4c < 0. On pose Δ = −(4c−36).\n\n√Δ s'écrit :",opts:["2√(c−9)","i√(4c−36)","2i√(c−9)","−2√(c−9)"],rep:2},
-    {id:"B3",pts:1,txt:"Les solutions de (E) sont zA = 3 − i√(c−9) et zB = 3 + i√(c−9).\n\nOn calcule |OA|² = |zA|² = 9 + (c−9) = ?",opts:["9","c−9","c","18"],rep:2},
-    {id:"B4",pts:1,txt:"|OA|² = |OB|² = c.\n\nOn conclut que le triangle OAB est :",opts:["Équilatéral en O","Isocèle en O","Rectangle en A","Quelconque"],rep:1},
-    {id:"B5",pts:1,txt:"On calcule zA/zB en multipliant par le conjugué de zB.\n\nzA × z̄B = (3−i√(c−9))(3−i√(c−9)) = (3−i√(c−9))²\n\nLe dénominateur |zB|² vaut :",opts:["9","c−9","c","6"],rep:2},
-    {id:"B6",pts:1,txt:"OAB est rectangle en O si et seulement si Re(zA/zB) = 0.\n\nOn a Re(zA/zB) = (18−c)/c = 0.\n\nDonc c vaut :",opts:["9","12","18","24"],rep:2},
-    {id:"B7",pts:1,txt:"f(z) = iz/(z−2). On cherche l'ensemble (Γ) des z tels que |f(z)| = 1.\n\nAvec z = x+iy, |f(z)|² = (x²+y²)/((x−2)²+y²) = 1 donne :",opts:["x² = (x+2)²","x²+y² = (x+2)²+y²","x²+y² = (x−2)²+y²","y = 0"],rep:2},
-    {id:"B8",pts:1,txt:"L'équation x²+y² = (x−2)²+y² se simplifie en :\nx² = x²−4x+4  →  4x = 4  →  x = 1.\n\nDonc (Γ) est :",opts:["L'axe des abscisses","Un cercle de rayon 1","La droite x = 1, parallèle à l'axe imaginaire","La droite y = 1"],rep:2},
+    {id:"B1",pts:1,txt:"On considère l'équation (E) : z² − 6z + c = 0, avec c un réel strictement supérieur à 9.\n\nQue peut-on dire du discriminant de cette équation ?",opts:["Δ > 0 car 36 > 4×9","Δ = 0 donc une solution double","Δ < 0 car 4c > 36","Δ = 36 indépendamment de c"],rep:2},
+    {id:"B2",pts:1,txt:"Le discriminant de l'équation (E) est strictement négatif. On cherche à exprimer √Δ sous forme algébrique.\n\n√Δ s'écrit :",opts:["2√(c−9)","i√(4c−36)","2i√(c−9)","−2√(c−9)"],rep:2},
+    {id:"B3",pts:1,txt:"Les solutions de l'équation (E) sont deux complexes zA et zB, images des points A et B. O désigne l'origine.\n\nQue vaut |OA|² = |zA|² ?",opts:["9","c−9","c","18"],rep:2},
+    {id:"B4",pts:1,txt:"On a montré que |OA| = |OB|.\n\nQuelle est la nature du triangle OAB ?",opts:["Équilatéral en O","Isocèle en O","Rectangle en A","Quelconque"],rep:1},
+    {id:"B5",pts:1,txt:"On cherche à déterminer quand le triangle OAB est rectangle en O.\nPour cela, on étudie le rapport zA/zB en calculant le module au carré du dénominateur.\n\n|zB|² vaut :",opts:["9","c−9","c","6"],rep:2},
+    {id:"B6",pts:1,txt:"Le triangle OAB est rectangle en O si et seulement si les vecteurs OA⃗ et OB⃗ sont orthogonaux.\nOn utilise pour cela la partie réelle du rapport zA/zB.\n\nPour quelle valeur de c le triangle OAB est-il rectangle en O ?",opts:["9","12","18","24"],rep:2},
+    {id:"B7",pts:1,txt:"On considère la transformation f du plan complexe définie par f(z) = iz/(z−2).\nOn cherche l'ensemble (Γ) des points d'affixe z vérifiant |f(z)| = 1.\n\nEn posant z = x + iy, à quelle équation cartésienne cela conduit-il ?",opts:["x² = (x+2)²","x²+y² = (x+2)²+y²","x²+y² = (x−2)²+y²","y = 0"],rep:2},
+    {id:"B8",pts:1,txt:"L'équation cartésienne obtenue pour l'ensemble (Γ) se simplifie.\n\nQu'est-ce que (Γ) ?",opts:["L'axe des abscisses","Un cercle de rayon 1","La droite x = 1, parallèle à l'axe imaginaire","La droite y = 1"],rep:2},
   ]},
 
   // ══ PARTIE C — f(x) = eˣ/(eˣ−1) (6 questions) ══
   {badge:"PARTIE C",titre:"f(x) = eˣ/(eˣ−1) — Étude, point fixe et suite (uₙ)",qs:[
-    {id:"C1",pts:1,txt:"f(x) = eˣ/(eˣ−1). Le domaine de définition est ℝ privé de la valeur qui annule le dénominateur.\n\neˣ − 1 = 0 ⟺ x = ?\n\nDonc Dƒ = ?",opts:["ℝ \\ {1}","ℝ \\ {0}","ℝ \\ {−1}","ℝ entier"],rep:1},
-    {id:"C2",pts:1,txt:"On calcule lim f(x) quand x → +∞.\n\neˣ/(eˣ−1) = 1/(1−e^(−x)).\nQuand x → +∞, e^(−x) → 0.\n\nDonc lim f(x) = ?",opts:["0","e","1","+∞"],rep:2},
-    {id:"C3",pts:1,txt:"f'(x) = −eˣ/(eˣ−1)².\n\nPuisque eˣ > 0 et (eˣ−1)² > 0 sur Dƒ, que vaut le signe de f'(x) ?",opts:["f'(x) > 0 : f croissante","f'(x) < 0 : f décroissante","f'(x) = 0 : f constante","f'(x) change de signe en 0"],rep:1},
-    {id:"C4",pts:1,txt:"g(x) = f(x) − x sur ]0;+∞[.\n\ng(1) = e/(e−1) − 1 = 1/(e−1) ≈ 0,58 > 0\ng(2) = e²/(e²−1) − 2 ≈ −0,84 < 0\n\nPar le TVI, l'équation f(x) = x admet sur [1;2] :",opts:["Aucune solution","Deux solutions","Au moins une solution α","Exactement α = 1,5"],rep:2},
-    {id:"C5",pts:1,txt:"La suite (uₙ) définie par u₀ = 1 et uₙ₊₁ = f(uₙ).\n\nOn montre que uₙ ∈ [1;2] pour tout n.\nPour l'hérédité, on a besoin de vérifier que f([1;2]) ⊂ [1;2].\n\nf est décroissante, donc f([1;2]) = [f(2), f(1)]. Que faut-il vérifier ?",opts:["f(1) ≤ 1 et f(2) ≥ 2","f(2) ≥ 1 et f(1) ≤ 2","f(1) = f(2)","f(0) ∈ [1;2]"],rep:1},
-    {id:"C6",pts:2,txt:"On admet |f'(x)| ≤ 1/3 sur [1;2].\n\nPar le TAF : |uₙ₊₁ − α| = |f(uₙ) − f(α)| ≤ (1/3)|uₙ − α|.\n\nEn itérant n fois depuis u₀ = 1 avec |u₀ − α| ≤ 1, on obtient :",opts:["|uₙ − α| ≤ (1/3)ⁿ","|uₙ − α| ≤ n/3","|uₙ − α| ≤ 1/3","uₙ = α pour tout n ≥ 3"],rep:0},
+    {id:"C1",pts:1,txt:"Soit f la fonction définie par f(x) = eˣ/(eˣ−1).\n\nQuel est le domaine de définition de f ?",opts:["ℝ \\ {1}","ℝ \\ {0}","ℝ \\ {−1}","ℝ entier"],rep:1},
+    {id:"C2",pts:1,txt:"On étudie le comportement de f(x) = eˣ/(eˣ−1) lorsque x tend vers +∞.\n\nQuelle est cette limite ?",opts:["0","e","1","+∞"],rep:2},
+    {id:"C3",pts:1,txt:"On étudie les variations de f(x) = eˣ/(eˣ−1) sur son domaine de définition.\n\nQuelle est la nature de f sur chacun des intervalles de son domaine ?",opts:["f est croissante","f est décroissante","f est constante","f change de monotonie en 0"],rep:1},
+    {id:"C4",pts:1,txt:"On pose g(x) = f(x) − x sur ]0 ; +∞[, où f(x) = eˣ/(eˣ−1).\nOn sait que g(1) > 0 et g(2) < 0.\n\nQue peut-on conclure sur l'équation f(x) = x sur l'intervalle [1 ; 2] ?",opts:["Elle n'admet aucune solution","Elle admet deux solutions","Elle admet au moins une solution α","Elle admet exactement α = 1,5"],rep:2},
+    {id:"C5",pts:1,txt:"On définit la suite (uₙ) par u₀ = 1 et uₙ₊₁ = f(uₙ). On cherche à montrer que uₙ ∈ [1 ; 2] pour tout n.\nSachant que f est décroissante sur [1 ; 2], que faut-il vérifier pour établir que f([1 ; 2]) ⊂ [1 ; 2] ?",opts:["f(1) ≤ 1 et f(2) ≥ 2","f(2) ≥ 1 et f(1) ≤ 2","f(1) = f(2)","f(0) ∈ [1;2]"],rep:1},
+    {id:"C6",pts:2,txt:"On définit la suite (uₙ) par u₀ = 1 et uₙ₊₁ = f(uₙ), où α est le point fixe de f dans [1 ; 2].\nOn admet que |f'(x)| ≤ 1/3 sur [1 ; 2].\n\nQuelle majoration peut-on établir pour |uₙ − α| ?",opts:["|uₙ − α| ≤ (1/3)ⁿ","|uₙ − α| ≤ n/3","|uₙ − α| ≤ 1/3","uₙ = α pour tout n ≥ 3"],rep:0},
   ]},
 
   // ══ PARTIE D — f(x) = 1/sinx + Congruences + Complexes (6 questions) ══
   {badge:"PARTIE D",titre:"f(x) = 1/sin x — Réciproque, dérivée et intégrale",qs:[
-    {id:"D1",pts:1,txt:"La restriction g de f à ]0;π/2] admet g⁻¹ sur [1;+∞[.\n\nSi y = g⁻¹(x), alors g(y) = x, c'est-à-dire 1/siny = x.\n\nDonc siny = ?",opts:["x","1/x","√(x²−1)/x","x²−1"],rep:1},
-    {id:"D2",pts:1,txt:"Avec siny = 1/x et y ∈ ]0;π/2], cosy ≥ 0.\n\nEn utilisant sin²y + cos²y = 1 :\ncosy = √(1−1/x²) = ?",opts:["1/x","x/√(x²−1)","√(x²−1)/x","−√(x²−1)/x"],rep:2},
-    {id:"D3",pts:1,txt:"(g⁻¹)'(x) = 1/g'(y) avec g'(y) = −cosy/sin²y.\n\nEn substituant siny = 1/x et cosy = √(x²−1)/x :\ng'(y) = −(√(x²−1)/x) / (1/x²) = ?\n\nDonc (g⁻¹)'(x) = ?",opts:["(g⁻¹)'(x) = 1/(x√(x²−1))","(g⁻¹)'(x) = −1/(x√(x²−1))","(g⁻¹)'(x) = x√(x²−1)","(g⁻¹)'(x) = −x/√(x²−1)"],rep:1},
-    {id:"D4",pts:1,txt:"Pour calculer I = ∫dt/(t√(t²−1)) de 2√3/3 à √2,\non reconnaît que l'intégrande est −(g⁻¹)'(t).\n\ng⁻¹(√2) : on cherche y tel que siny = 1/√2, soit y = ?\ng⁻¹(2√3/3) : siny = 3/(2√3) = √3/2, soit y = ?",opts:["y = π/3 et y = π/4","y = π/4 et y = π/3","y = π/6 et y = π/4","y = π/4 et y = π/6"],rep:1},
-    {id:"D5",pts:1,txt:"I = −[g⁻¹(t)] de 2√3/3 à √2 = −(g⁻¹(√2) − g⁻¹(2√3/3)) = g⁻¹(2√3/3) − g⁻¹(√2)\n= π/3 − π/4 = ?",opts:["π/6","π/4","π/12","5π/12"],rep:2},
-    {id:"D6",pts:1,txt:"Pour N = 2k+1 entier impair, on a N² = 4k(k+1)+1.\nk(k+1) est toujours pair : k(k+1) = 2p.\nDonc N² = 8p+1.\n\nN² ≡ ? [8]",opts:["0","3","5","1"],rep:3},
+    {id:"D1",pts:1,txt:"On note g la restriction de f(x) = 1/sinx à ]0 ; π/2], qui admet une bijection réciproque g⁻¹ sur [1 ; +∞[.\n\nSi y = g⁻¹(x), quelle est la valeur de sin y ?",opts:["x","1/x","√(x²−1)/x","x²−1"],rep:1},
+    {id:"D2",pts:1,txt:"On sait que sin y = 1/x avec y ∈ ]0 ; π/2], donc cos y ≥ 0.\n\nQuelle est la valeur de cos y en fonction de x ?",opts:["1/x","x/√(x²−1)","√(x²−1)/x","−√(x²−1)/x"],rep:2},
+    {id:"D3",pts:1,txt:"On cherche l'expression de la dérivée de la réciproque g⁻¹, en utilisant les valeurs de sin y et cos y exprimées en fonction de x.\n\nQuelle est l'expression de (g⁻¹)'(x) ?",opts:["(g⁻¹)'(x) = 1/(x√(x²−1))","(g⁻¹)'(x) = −1/(x√(x²−1))","(g⁻¹)'(x) = x√(x²−1)","(g⁻¹)'(x) = −x/√(x²−1)"],rep:1},
+    {id:"D4",pts:1,txt:"Pour calculer l'intégrale I = ∫dt/(t√(t²−1)) de 2√3/3 à √2, on reconnaît le lien avec g⁻¹.\nOn cherche les images de 2√3/3 et √2 par g⁻¹ en résolvant sin y = 1/t pour chaque borne.\n\nQuels sont les résultats correspondants ?",opts:["y = π/3 et y = π/4","y = π/4 et y = π/3","y = π/6 et y = π/4","y = π/4 et y = π/6"],rep:1},
+    {id:"D5",pts:1,txt:"On exprime l'intégrale I = ∫dt/(t√(t²−1)) de 2√3/3 à √2 à l'aide de g⁻¹ et des bornes trouvées à la question précédente.\n\nQuelle est la valeur de I ?",opts:["π/6","π/4","π/12","5π/12"],rep:2},
+    {id:"D6",pts:1,txt:"Soit N un entier impair. On cherche le reste de N² dans la division euclidienne par 8.\n\nN² ≡ ? (mod 8)",opts:["0","3","5","1"],rep:3},
   ]},
 ]};
 
