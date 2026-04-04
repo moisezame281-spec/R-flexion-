@@ -374,23 +374,23 @@ window.QUIZ={duree:30*60,sections:[
 
   // ══ PARTIE A — Complexes + f(x)=eˣ/(eˣ−1) GEMEC (8 questions) ══
   {badge:"PARTIE A",titre:"Nombres complexes — (E), triangle OAB, f(z) et suite (uₙ)",qs:[
-    {id:"A1",pts:1,txt:"(E) : z² − 6z + c = 0, c > 9.\nΔ = 36 − 4c.\n\nOn veut montrer que Δ < 0. Quelle inégalité justifie cela ?",opts:["c > 9 ⟹ 4c > 36 ⟹ 36−4c < 0","c > 9 ⟹ 4c < 36 ⟹ 36−4c > 0","c > 0 ⟹ Δ > 0","c > 9 ⟹ Δ = 0"],rep:0},
-    {id:"A2",pts:1,txt:"Les solutions de (E) sont zA = 3−i√(c−9) et zB = 3+i√(c−9).\n\n|zA|² = 9 + (c−9) = c.\nQue conclut-on sur le triangle OAB ?",opts:["OAB est équilatéral","OAB est rectangle en A","OAB est isocèle en O","OAB est isocèle en A"],rep:2},
-    {id:"A3",pts:1,txt:"Re(zA/zB) = (18−c)/c.\n\nOAB est rectangle en O quand Re(zA/zB) = 0.\nLa valeur de c est :",opts:["c = 9","c = 12","c = 18","c = 36"],rep:2},
-    {id:"A4",pts:1,txt:"f(z) = iz/(z−2). On cherche |f(z)| = 1.\n\nAvec z = x+iy, l'équation x²+y² = (x−2)²+y² donne :\n4x = 4, donc :",opts:["y = 0","x = 0","x = 1 : droite parallèle à l'axe imaginaire","x = 2"],rep:2},
-    {id:"A5",pts:1,txt:"f(x) = eˣ/(eˣ−1). Le domaine Dƒ = ℝ privé de la valeur où eˣ−1 = 0.\n\neˣ = 1 ⟺ x = ?\nDonc Dƒ = ?",opts:["x = 1 ; Dƒ = ℝ\\{1}","x = 0 ; Dƒ = ℝ\\{0}","x = e ; Dƒ = ℝ\\{e}","x = −1 ; Dƒ = ℝ\\{−1}"],rep:1},
-    {id:"A6",pts:1,txt:"f'(x) = −eˣ/(eˣ−1)².\n\nSur Dƒ, le numérateur eˣ > 0 et (eˣ−1)² > 0.\nDonc f'(x) < 0, ce qui signifie que f est :",opts:["Croissante sur Dƒ","Décroissante sur chaque intervalle de Dƒ","Constante","Croissante sur ]0;+∞[ uniquement"],rep:1},
-    {id:"A7",pts:1,txt:"g(x) = f(x)−x sur ]0;+∞[.\ng(1) ≈ 0,58 > 0 et g(2) ≈ −0,84 < 0.\n\nPar le TVI, l'équation f(x) = x admet sur [1;2] :",opts:["Aucune solution","Exactement deux solutions","Au moins une solution α","Une infinité de solutions"],rep:2},
-    {id:"A8",pts:2,txt:"On admet |f'(x)| ≤ 1/3 sur [1;2] et u₀ = 1, uₙ₊₁ = f(uₙ).\n\nPar le TAF : |uₙ₊₁−α| ≤ (1/3)|uₙ−α|.\nEn itérant depuis |u₀−α| ≤ 1 :",opts:["|uₙ−α| ≤ (1/3)ⁿ","|uₙ−α| ≤ n/3","|uₙ−α| ≤ 1/3","uₙ = α pour tout n ≥ 1"],rep:0},
+    {id:"A1",pts:1,txt:"On considère l'équation (E) : z² − 6z + c = 0, où c est un réel strictement supérieur à 9.\n\nQue peut-on dire du discriminant de cette équation ?",opts:["c > 9 ⟹ 4c > 36 ⟹ 36−4c < 0","c > 9 ⟹ 4c < 36 ⟹ 36−4c > 0","c > 0 ⟹ Δ > 0","c > 9 ⟹ Δ = 0"],rep:0},
+    {id:"A2",pts:1,txt:"L'équation (E) admet deux solutions complexes zA et zB, images des points A et B dans le plan complexe. O désigne l'origine.\n\nQuelle est la nature du triangle OAB ?",opts:["OAB est équilatéral","OAB est rectangle en A","OAB est isocèle en O","OAB est isocèle en A"],rep:2},
+    {id:"A3",pts:1,txt:"On cherche la valeur du réel c pour laquelle le triangle OAB, dont les sommets sont l'origine O et les images des solutions de (E), est rectangle en O.\n\nQuelle est cette valeur de c ?",opts:["c = 9","c = 12","c = 18","c = 36"],rep:2},
+    {id:"A4",pts:1,txt:"On considère la transformation f du plan complexe définie par f(z) = iz/(z−2).\n\nL'ensemble des points M d'affixe z vérifiant |f(z)| = 1 est :",opts:["L'axe réel","L'axe imaginaire","La droite d'équation x = 1, parallèle à l'axe imaginaire","La droite d'équation x = 2"],rep:2},
+    {id:"A5",pts:1,txt:"Soit f la fonction définie par f(x) = eˣ/(eˣ−1).\n\nQuel est le domaine de définition de f ?",opts:["ℝ \\ {1}","ℝ \\ {0}","ℝ \\ {e}","ℝ \\ {−1}"],rep:1},
+    {id:"A6",pts:1,txt:"On étudie les variations de f définie par f(x) = eˣ/(eˣ−1) sur son domaine de définition.\n\nQuelle est la nature de f sur chacun des intervalles de son domaine ?",opts:["Croissante sur son domaine","Décroissante sur chaque intervalle de son domaine","Constante","Croissante uniquement sur ]0 ; +∞["],rep:1},
+    {id:"A7",pts:1,txt:"On pose g(x) = f(x) − x sur ]0 ; +∞[, où f(x) = eˣ/(eˣ−1).\nOn sait que g(1) > 0 et g(2) < 0.\n\nQue peut-on conclure concernant l'équation f(x) = x sur l'intervalle [1 ; 2] ?",opts:["Elle n'admet aucune solution","Elle admet exactement deux solutions","Elle admet au moins une solution α","Elle admet une infinité de solutions"],rep:2},
+    {id:"A8",pts:2,txt:"On définit la suite (uₙ) par u₀ = 1 et uₙ₊₁ = f(uₙ), où f(x) = eˣ/(eˣ−1), et on note α son point fixe dans [1 ; 2].\nOn admet que |f'(x)| ≤ 1/3 sur [1 ; 2].\n\nQuelle majoration peut-on établir pour |uₙ − α| ?",opts:["|uₙ−α| ≤ (1/3)ⁿ","|uₙ−α| ≤ n/3","|uₙ−α| ≤ 1/3","uₙ = α pour tout n ≥ 1"],rep:0},
   ]},
 
   // ══ PARTIE B — Intégrales (5 questions) ══
   {badge:"PARTIE B",titre:"Intégrales — I = ∫dx/cos²x et J = ∫dx/cos⁴x",qs:[
-    {id:"B1",pts:1,txt:"I = ∫₀^(π/4) dx/cos²x.\nLa primitive de 1/cos²x est tan x.\n\n[tan x]₀^(π/4) = tan(π/4) − tan(0) = ?",opts:["0","π/4","√2−1","1"],rep:3},
-    {id:"B2",pts:1,txt:"g(x) = sinx/cos³x.\ng'(x) = 1/cos²x + 3sin²x/cos⁴x.\nEn utilisant sin²x = 1−cos²x :\ng'(x) = 3/cos⁴x − 2/cos²x.\n\nVrai ou Faux ?",opts:["Vrai","Faux : g'(x) = 3/cos⁴x + 2/cos²x","Faux : g'(x) = 1/cos⁴x","Faux : g'(x) = 2/cos⁴x − 3/cos²x"],rep:0},
-    {id:"B3",pts:1,txt:"De g'(x) = 3/cos⁴x − 2/cos²x :\n3J = [g(x)]₀^(π/4) + 2I.\n\ng(π/4) = sin(π/4)/cos³(π/4) = (√2/2)/(√2/2)³ vaut :",opts:["√2","2","1","4"],rep:1},
-    {id:"B4",pts:1,txt:"g(0) = 0 et I = 1.\n3J = g(π/4) − g(0) + 2×1 = 2 + 0 + 2 = 4.\n\nDonc J = ?",opts:["1","4/3","2/3","3/4"],rep:1},
-    {id:"B5",pts:2,txt:"Sur [0;π/4], cosx ≤ 1, donc cos⁴x ≤ cos²x, donc 1/cos⁴x ≥ 1/cos²x.\n\nQuelle inégalité entre I et J cela implique-t-il ?",opts:["I ≤ J","J ≤ I","I = J","I + J = π/4"],rep:0},
+    {id:"B1",pts:1,txt:"On considère l'intégrale I = ∫₀^(π/4) dx/cos²x.\n\nQuelle est la valeur de I ?",opts:["0","π/4","√2−1","1"],rep:3},
+    {id:"B2",pts:1,txt:"On pose g(x) = sinx/cos³x. En calculant g'(x) et en utilisant une identité trigonométrique classique, on peut exprimer 1/cos⁴x à partir de g'(x) et de 1/cos²x.\n\nLaquelle des expressions suivantes pour g'(x) est correcte ?",opts:["g'(x) = 3/cos⁴x − 2/cos²x","Faux : g'(x) = 3/cos⁴x + 2/cos²x","Faux : g'(x) = 1/cos⁴x","Faux : g'(x) = 2/cos⁴x − 3/cos²x"],rep:0},
+    {id:"B3",pts:1,txt:"On pose J = ∫₀^(π/4) dx/cos⁴x et g(x) = sinx/cos³x.\nEn utilisant la relation entre g'(x), J et I établie précédemment, on a besoin de calculer g(π/4).\n\nQuelle est la valeur de g(π/4) = sin(π/4)/cos³(π/4) ?",opts:["√2","2","1","4"],rep:1},
+    {id:"B4",pts:1,txt:"On a établi que 3J = g(π/4) − g(0) + 2I, avec g(0) = 0 et I = 1.\n\nQuelle est la valeur de J ?",opts:["1","4/3","2/3","3/4"],rep:1},
+    {id:"B5",pts:2,txt:"On considère les intégrales I = ∫₀^(π/4) dx/cos²x et J = ∫₀^(π/4) dx/cos⁴x.\nSur l'intervalle [0 ; π/4], on compare les fonctions intégrandes.\n\nQuelle inégalité entre I et J peut-on en déduire ?",opts:["I ≤ J","J ≤ I","I = J","I + J = π/4"],rep:0},
   ]},
 ]};
 
