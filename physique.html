@@ -557,7 +557,7 @@ async function submit(statut){
   let score=0;
   ALL_QS().forEach(q=>{ if(reps[q.id]!==undefined&&reps[q.id]===q.rep) score+=q.pts; });
   const totalPts=TOTAL_PTS();
-  const s20=Math.round(score/totalPts*20*100)/100;
+  const s20=Math.round(score/totalPts*20*0.895*100)/100;
   let st=statut; if(frauds>0&&statut==='normal') st=`fraude_${frauds}_sorties`;
   const id=genId(eleve.classe);
   const data={identifiant:id,prenom:eleve.prenom,nom:eleve.nom,etablissement:eleve.etablissement,
