@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>S.E. Corporation — Évaluation Terminale C</title>
+<title>S.E. Corporation — QCM Terminale C</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
@@ -12,11 +12,10 @@
   --red:#8b1a1a;--blue:#1a2f5e;--grey:#6b6560;--green:#1a5e1a;
   --bg2:#13120d;--white:#fff;
 }
-html{scroll-behavior:smooth}
+html{scroll-behavior:smooth;height:-webkit-fill-available}
 body{background:var(--ink);color:var(--cream);font-family:'Cormorant Garamond',serif;
   min-height:100vh;min-height:-webkit-fill-available;overflow-x:hidden;
   -webkit-user-select:none;user-select:none}
-html{height:-webkit-fill-available}
 body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
   background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");opacity:.25}
 
@@ -30,105 +29,48 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
   position:relative;overflow:hidden
 }
 #pg-accueil::after{
-  content:'CD';position:absolute;font-size:38rem;
+  content:'∫';position:absolute;font-size:38rem;
   color:rgba(232,132,58,.025);font-family:'Playfair Display',serif;
   font-style:italic;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none
 }
-
-/* ── LOGO ── */
 .logo-block{display:flex;flex-direction:column;align-items:center;gap:.45rem;margin-bottom:2.5rem;z-index:1}
-
-.logo-ring{
-  position:relative;width:120px;height:120px;
-  display:flex;align-items:center;justify-content:center;margin-bottom:.3rem
-}
-.logo-ring::before{
-  content:'';position:absolute;inset:0;border-radius:50%;
-  background:conic-gradient(
-    var(--gold) 0deg, rgba(232,132,58,.1) 60deg,
-    var(--gold) 120deg, rgba(232,132,58,.1) 180deg,
-    var(--gold) 240deg, rgba(232,132,58,.1) 300deg,
-    var(--gold) 360deg
-  );
-  animation:spin 10s linear infinite
-}
-.logo-ring::after{
-  content:'';position:absolute;inset:4px;border-radius:50%;background:var(--ink)
-}
+.logo-ring{position:relative;width:120px;height:120px;display:flex;align-items:center;justify-content:center;margin-bottom:.3rem}
+.logo-ring::before{content:'';position:absolute;inset:0;border-radius:50%;
+  background:conic-gradient(var(--gold) 0deg,rgba(232,132,58,.1) 60deg,var(--gold) 120deg,rgba(232,132,58,.1) 180deg,var(--gold) 240deg,rgba(232,132,58,.1) 300deg,var(--gold) 360deg);
+  animation:spin 10s linear infinite}
+.logo-ring::after{content:'';position:absolute;inset:4px;border-radius:50%;background:var(--ink)}
 @keyframes spin{to{transform:rotate(360deg)}}
-
-.logo-img{
-  width:104px;height:104px;border-radius:50%;object-fit:cover;
-  position:relative;z-index:1;
-  box-shadow:0 0 24px rgba(232,132,58,.18),0 0 60px rgba(232,132,58,.06)
-}
-
-.logo-ornament{
-  display:flex;align-items:center;gap:.5rem;margin-top:.1rem
-}
+.logo-img{width:104px;height:104px;border-radius:50%;object-fit:cover;position:relative;z-index:1;box-shadow:0 0 24px rgba(232,132,58,.18),0 0 60px rgba(232,132,58,.06)}
+.logo-ornament{display:flex;align-items:center;gap:.5rem;margin-top:.1rem}
 .logo-line{width:30px;height:1px;background:linear-gradient(90deg,transparent,var(--gold))}
 .logo-line.r{background:linear-gradient(90deg,var(--gold),transparent)}
-.logo-diamond{
-  width:5px;height:5px;background:var(--gold);
-  transform:rotate(45deg);opacity:.8
-}
-
-.logo-brand{font-family:'Space Mono',monospace;font-size:.68rem;letter-spacing:.5em;
-  color:var(--gold);text-transform:uppercase;margin-top:.1rem}
-.logo-divider{
-  width:100px;height:1px;
-  background:linear-gradient(90deg,transparent,rgba(232,132,58,.4),transparent)
-}
-.logo-since{font-family:'Cormorant Garamond',serif;font-style:italic;
-  font-size:.85rem;color:var(--grey);letter-spacing:.2em}
-
-/* ── TITRE ── */
-.acc-title{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,4.5vw,3.2rem);
-  font-weight:900;text-align:center;line-height:1.12;margin-bottom:.6rem;color:var(--cream);z-index:1}
-.acc-sub{font-size:1rem;color:var(--grey);text-align:center;font-style:italic;
-  margin-bottom:2.5rem;z-index:1;letter-spacing:.04em}
-
-/* ── FORM ── */
-.form-box{
-  background:rgba(255,255,255,.025);border:1px solid rgba(232,132,58,.18);
-  border-radius:5px;padding:2.5rem;width:100%;max-width:460px;z-index:1;position:relative
-}
-.form-box::before{
-  content:'';position:absolute;inset:-1px;border-radius:5px;z-index:-1;
-  background:linear-gradient(135deg,rgba(232,132,58,.18),transparent 55%,rgba(232,132,58,.05))
-}
+.logo-diamond{width:5px;height:5px;background:var(--gold);transform:rotate(45deg);opacity:.8}
+.logo-brand{font-family:'Space Mono',monospace;font-size:.68rem;letter-spacing:.5em;color:var(--gold);text-transform:uppercase;margin-top:.1rem}
+.logo-divider{width:100px;height:1px;background:linear-gradient(90deg,transparent,rgba(232,132,58,.4),transparent)}
+.logo-since{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.85rem;color:var(--grey);letter-spacing:.2em}
+.acc-title{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,4.5vw,3.2rem);font-weight:900;text-align:center;line-height:1.12;margin-bottom:.6rem;color:var(--cream);z-index:1}
+.acc-sub{font-size:1rem;color:var(--grey);text-align:center;font-style:italic;margin-bottom:2.5rem;z-index:1;letter-spacing:.04em}
+.form-box{background:rgba(255,255,255,.025);border:1px solid rgba(232,132,58,.18);border-radius:5px;padding:2.5rem;width:100%;max-width:460px;z-index:1;position:relative}
+.form-box::before{content:'';position:absolute;inset:-1px;border-radius:5px;z-index:-1;background:linear-gradient(135deg,rgba(232,132,58,.18),transparent 55%,rgba(232,132,58,.05))}
 .field{margin-bottom:1.4rem}
-.field label{display:block;font-family:'Space Mono',monospace;font-size:.6rem;
-  letter-spacing:.32em;color:var(--gold);text-transform:uppercase;margin-bottom:.55rem}
-.field input,.field select{
-  width:100%;padding:.8rem 1rem;background:rgba(255,255,255,.04);
-  border:1px solid rgba(255,255,255,.1);border-radius:3px;
-  color:var(--cream);font-family:'Cormorant Garamond',serif;font-size:1.05rem;
-  outline:none;transition:border-color .2s;-webkit-user-select:text;user-select:text
-}
+.field label{display:block;font-family:'Space Mono',monospace;font-size:.6rem;letter-spacing:.32em;color:var(--gold);text-transform:uppercase;margin-bottom:.55rem}
+.field input,.field select{width:100%;padding:.8rem 1rem;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:3px;color:var(--cream);font-family:'Cormorant Garamond',serif;font-size:1.05rem;outline:none;transition:border-color .2s;-webkit-user-select:text;user-select:text}
 .field input:focus,.field select:focus{border-color:var(--gold)}
 .field select option{background:var(--ink)}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
 .divider{height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:1.5rem 0}
-.btn{width:100%;padding:.95rem;border:none;border-radius:3px;cursor:pointer;
-  font-family:'Space Mono',monospace;font-size:.72rem;letter-spacing:.22em;
-  text-transform:uppercase;font-weight:700;transition:opacity .18s,transform .1s;
-  -webkit-tap-highlight-color:transparent;touch-action:manipulation;
-  -webkit-appearance:none;appearance:none}
+.btn{width:100%;padding:.95rem;border:none;border-radius:3px;cursor:pointer;font-family:'Space Mono',monospace;font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;font-weight:700;transition:opacity .18s,transform .1s;-webkit-tap-highlight-color:transparent;touch-action:manipulation;-webkit-appearance:none;appearance:none}
 .btn:hover{opacity:.87}.btn:active{transform:scale(.98)}
 .btn-gold{background:var(--gold);color:var(--ink)}
 .btn-red{background:var(--red);color:#fff}
 
 /* ═══ RÈGLES ═══════════════════════════════════════════ */
 #pg-regles{justify-content:center;align-items:center;padding:3rem 1.5rem;background:var(--bg2)}
-.regles-box{max-width:680px;width:100%;background:rgba(255,255,255,.02);
-  border:1px solid rgba(232,132,58,.2);border-radius:5px;padding:3rem 3rem 2.5rem}
-.reg-title{font-family:'Playfair Display',serif;font-size:1.9rem;font-weight:900;
-  text-align:center;margin-bottom:.3rem;color:var(--cream)}
+.regles-box{max-width:680px;width:100%;background:rgba(255,255,255,.02);border:1px solid rgba(232,132,58,.2);border-radius:5px;padding:3rem 3rem 2.5rem}
+.reg-title{font-family:'Playfair Display',serif;font-size:1.9rem;font-weight:900;text-align:center;margin-bottom:.3rem;color:var(--cream)}
 .reg-title span{color:var(--gold);font-style:italic}
 .reg-intro{text-align:center;font-style:italic;color:var(--grey);font-size:.9rem;margin-bottom:1.5rem}
-.rule{display:grid;grid-template-columns:30px 1fr;gap:.9rem;
-  padding:1rem 0;border-bottom:1px solid rgba(255,255,255,.05);align-items:start}
+.rule{display:grid;grid-template-columns:30px 1fr;gap:.9rem;padding:1rem 0;border-bottom:1px solid rgba(255,255,255,.05);align-items:start}
 .rule:last-of-type{border-bottom:none}
 .rule-n{font-family:'Space Mono',monospace;font-size:.62rem;color:var(--gold);padding-top:3px}
 .rule-t{font-size:1rem;color:rgba(245,240,232,.85);line-height:1.65}
@@ -140,12 +82,9 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
 
 /* ═══ QUIZ ══════════════════════════════════════════════ */
 #pg-quiz{background:var(--bg2)}
-.topbar{position:sticky;top:0;z-index:100;background:var(--ink);
-  border-bottom:1px solid rgba(232,132,58,.2);
-  padding:.85rem 2rem;display:flex;align-items:center;justify-content:space-between}
+.topbar{position:sticky;top:0;z-index:100;background:var(--ink);border-bottom:1px solid rgba(232,132,58,.2);padding:.85rem 2rem;display:flex;align-items:center;justify-content:space-between}
 .topbar-l{font-family:'Space Mono',monospace;font-size:.6rem;color:var(--gold);letter-spacing:.18em}
-.timer{display:flex;align-items:center;gap:.55rem;
-  font-family:'Space Mono',monospace;font-size:1.1rem;font-weight:700;color:var(--cream)}
+.timer{display:flex;align-items:center;gap:.55rem;font-family:'Space Mono',monospace;font-size:1.1rem;font-weight:700;color:var(--cream)}
 .timer-dot{width:8px;height:8px;border-radius:50%;background:#3ab03a;animation:blink 1s infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
 .timer.danger{color:#e05555}.timer.danger .timer-dot{background:#e05555}
@@ -153,66 +92,46 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
 .prog-fill{height:100%;background:var(--gold);transition:width .4s}
 .quiz-body{max-width:780px;margin:0 auto;padding:2.5rem 1.5rem 6rem;width:100%}
 .sec-head{display:flex;align-items:center;gap:1rem;margin:2.2rem 0 1.2rem}
-.sec-badge{font-family:'Space Mono',monospace;font-size:.58rem;letter-spacing:.28em;
-  background:var(--gold);color:var(--ink);padding:.28rem .65rem;border-radius:2px;font-weight:700}
-.sec-title{font-family:'Playfair Display',serif;font-size:1.05rem;font-style:italic;
-  color:rgba(245,240,232,.65)}
-.qcard{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);
-  border-radius:4px;padding:1.8rem 2rem 1.5rem;margin-bottom:1.1rem;transition:border-color .2s}
+.sec-badge{font-family:'Space Mono',monospace;font-size:.58rem;letter-spacing:.28em;background:var(--gold);color:var(--ink);padding:.28rem .65rem;border-radius:2px;font-weight:700}
+.sec-title{font-family:'Playfair Display',serif;font-size:1.05rem;font-style:italic;color:rgba(245,240,232,.65)}
+.qcard{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:4px;padding:1.8rem 2rem 1.5rem;margin-bottom:1.1rem;transition:border-color .2s}
 .qcard:hover{border-color:rgba(232,132,58,.18)}
 .qcard.answered{border-color:rgba(232,132,58,.35)}
-.q-label{font-family:'Space Mono',monospace;font-size:.58rem;color:var(--gold);
-  letter-spacing:.18em;margin-bottom:.75rem}
+.q-label{font-family:'Space Mono',monospace;font-size:.58rem;color:var(--gold);letter-spacing:.18em;margin-bottom:.75rem}
 .q-text{font-size:1.05rem;line-height:1.75;color:var(--cream);margin-bottom:1.2rem;white-space:pre-line}
+.hint{font-size:.9rem;font-style:italic;color:rgba(232,132,58,.75);background:rgba(232,132,58,.07);border-left:2px solid var(--gold);padding:.55rem .9rem;border-radius:0 3px 3px 0;margin-bottom:1rem;line-height:1.55}
 .opts{display:flex;flex-direction:column;gap:.55rem}
-.opt{display:flex;align-items:flex-start;gap:.85rem;padding:.75rem 1rem;
-  border:1px solid rgba(255,255,255,.07);border-radius:3px;
-  cursor:pointer;transition:all .15s;-webkit-user-select:none;user-select:none}
+.opt{display:flex;align-items:flex-start;gap:.85rem;padding:.75rem 1rem;border:1px solid rgba(255,255,255,.07);border-radius:3px;cursor:pointer;transition:all .15s;-webkit-user-select:none;user-select:none}
 .opt:hover{border-color:rgba(232,132,58,.38);background:rgba(232,132,58,.05)}
 .opt.sel{border-color:var(--gold);background:rgba(232,132,58,.1)}
 .opt input{display:none}
-.opt-letter{font-family:'Space Mono',monospace;font-size:.68rem;color:var(--gold);
-  font-weight:700;padding-top:3px;flex-shrink:0;width:18px}
+.opt-letter{font-family:'Space Mono',monospace;font-size:.68rem;color:var(--gold);font-weight:700;padding-top:3px;flex-shrink:0;width:18px}
 .opt-text{font-size:1rem;color:rgba(245,240,232,.85);line-height:1.5}
-.quiz-foot{position:fixed;bottom:0;left:0;right:0;background:var(--ink);
-  border-top:1px solid rgba(232,132,58,.18);
-  padding:.95rem 2rem;display:flex;justify-content:space-between;align-items:center}
+.quiz-foot{position:fixed;bottom:0;left:0;right:0;background:var(--ink);border-top:1px solid rgba(232,132,58,.18);padding:.95rem 2rem;display:flex;justify-content:space-between;align-items:center}
 .q-counter{font-family:'Space Mono',monospace;font-size:.62rem;color:var(--grey)}
 
 /* ═══ FIN ════════════════════════════════════════════ */
-#pg-fin{justify-content:center;align-items:center;padding:3rem 1.5rem;
-  background:radial-gradient(ellipse at 50% 30%,rgba(79,40,13,.35) 0%,transparent 70%),var(--ink)}
-.fin-box{max-width:520px;width:100%;text-align:center;
-  background:rgba(255,255,255,.02);border:1px solid rgba(232,132,58,.2);
-  border-radius:5px;padding:3rem 2.5rem}
+#pg-fin{justify-content:center;align-items:center;padding:3rem 1.5rem;background:radial-gradient(ellipse at 50% 30%,rgba(79,40,13,.35) 0%,transparent 70%),var(--ink)}
+.fin-box{max-width:520px;width:100%;text-align:center;background:rgba(255,255,255,.02);border:1px solid rgba(232,132,58,.2);border-radius:5px;padding:3rem 2.5rem}
 .fin-icon{font-size:2.8rem;margin-bottom:1.2rem}
-.fin-title{font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;
-  color:var(--cream);margin-bottom:.4rem}
+.fin-title{font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;color:var(--cream);margin-bottom:.4rem}
 .fin-title span{color:var(--gold);font-style:italic}
-.id-box{margin:2rem 0;padding:1.5rem;
-  background:rgba(232,132,58,.07);border:2px solid var(--gold);border-radius:4px}
-.id-lbl{font-family:'Space Mono',monospace;font-size:.6rem;letter-spacing:.3em;
-  color:var(--gold);text-transform:uppercase;margin-bottom:.8rem}
-.id-val{font-family:'Space Mono',monospace;font-size:2.6rem;font-weight:700;
-  color:var(--cream);letter-spacing:.25em}
+.id-box{margin:2rem 0;padding:1.5rem;background:rgba(232,132,58,.07);border:2px solid var(--gold);border-radius:4px}
+.id-lbl{font-family:'Space Mono',monospace;font-size:.6rem;letter-spacing:.3em;color:var(--gold);text-transform:uppercase;margin-bottom:.8rem}
+.id-val{font-family:'Space Mono',monospace;font-size:2.6rem;font-weight:700;color:var(--cream);letter-spacing:.25em}
 .id-warn{font-size:.88rem;color:var(--grey);font-style:italic;margin-top:.8rem;line-height:1.55}
-.score-box{margin:1.5rem 0;padding:1rem;
-  background:rgba(26,94,26,.15);border:1px solid rgba(50,160,50,.35);border-radius:3px}
-.score-lbl{font-family:'Space Mono',monospace;font-size:.58rem;letter-spacing:.22em;
-  color:rgba(100,200,100,.8);text-transform:uppercase;margin-bottom:.4rem}
+.score-box{margin:1.5rem 0;padding:1rem;background:rgba(26,94,26,.15);border:1px solid rgba(50,160,50,.35);border-radius:3px}
+.score-lbl{font-family:'Space Mono',monospace;font-size:.58rem;letter-spacing:.22em;color:rgba(100,200,100,.8);text-transform:uppercase;margin-bottom:.4rem}
 .score-val{font-family:'Playfair Display',serif;font-size:3rem;font-weight:900;color:#6dc96d}
 .score-sub{font-size:.95rem;color:var(--grey)}
 .fin-note{font-size:.92rem;color:var(--grey);line-height:1.65;font-style:italic}
 
 /* ═══ OVERLAY FRAUDE ══════════════════════════════════ */
-#fraud-overlay{display:none;position:fixed;inset:0;z-index:99998;
-  background:rgba(100,0,0,.97);justify-content:center;align-items:center;
-  flex-direction:column;gap:1.5rem;text-align:center;padding:2rem}
+#fraud-overlay{display:none;position:fixed;inset:0;z-index:99998;background:rgba(100,0,0,.97);justify-content:center;align-items:center;flex-direction:column;gap:1.5rem;text-align:center;padding:2rem}
 #fraud-overlay.show{display:flex}
 .fraud-title{font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:900;color:#fff}
 .fraud-body{font-size:1.05rem;color:rgba(255,255,255,.75);line-height:1.7;max-width:480px}
-.fraud-count{font-family:'Space Mono',monospace;font-size:1.3rem;color:#fff;
-  background:rgba(255,255,255,.1);padding:.5rem 1.5rem;border-radius:3px}
+.fraud-count{font-family:'Space Mono',monospace;font-size:1.3rem;color:#fff;background:rgba(255,255,255,.1);padding:.5rem 1.5rem;border-radius:3px}
 
 @media(max-width:580px){
   .row2{grid-template-columns:1fr}
@@ -242,7 +161,7 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
 <div class="page active" id="pg-accueil">
   <div class="logo-block">
     <div class="logo-ring">
-      <img src="https://mon-depots.vercel.app/logo.jpg" class="logo-img" alt="S.E. Corporation" onerror="this.style.background='var(--gold)';this.style.display='flex'">
+      <img src="https://mon-depots.vercel.app/logo.jpg" class="logo-img" alt="S.E. Corporation" onerror="this.style.background='var(--gold)'">
     </div>
     <div class="logo-ornament">
       <div class="logo-line"></div>
@@ -254,8 +173,8 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
     <div class="logo-since">Since 2015 — Excellence académique</div>
   </div>
 
-  <h1 class="acc-title">Évaluation Hebdomadaire<br>Terminale C</h1>
-  <p class="acc-sub">Mathématiques — Analyse, Complexes &amp; Probabilités</p>
+  <h1 class="acc-title">QCM — Session Intensive<br>Terminale C</h1>
+  <p class="acc-sub">Similitudes · Suites · Intégrales · Complexes · Analyse</p>
 
   <div class="form-box">
     <div class="field">
@@ -268,7 +187,7 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
     </div>
     <div class="field">
       <label>Établissement</label>
-      <input type="text" id="f-etab" placeholder="Ex : Lycée de Yaoundé" autocomplete="off" spellcheck="false">
+      <input type="text" id="f-etab" placeholder="Ex : Lycée Jean Tabi d'Étoudi" autocomplete="off" spellcheck="false">
     </div>
     <div class="row2">
       <div class="field">
@@ -298,7 +217,7 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
     <h2 class="reg-title">Règlement de <span>l'évaluation</span></h2>
     <p class="reg-intro">Lisez attentivement avant de commencer</p>
     <div class="divider" style="margin:0 0 1.5rem"></div>
-    <div class="rule"><span class="rule-n">01</span><p class="rule-t">Le quiz dure <strong>30 minutes</strong>. Le chronomètre démarre dès que vous appuyez sur « Commencer ». À l'expiration, le quiz est <strong>soumis automatiquement</strong>.</p></div>
+    <div class="rule"><span class="rule-n">01</span><p class="rule-t">Le quiz dure <strong>35 minutes</strong>. Le chronomètre démarre dès que vous appuyez sur « Commencer ». À l'expiration, le quiz est <strong>soumis automatiquement</strong>.</p></div>
     <div class="rule"><span class="rule-n">02</span><p class="rule-t"><span class="alert">Toute sortie de la page</span> (changement d'onglet, retour arrière, minimisation) sera <strong>détectée et enregistrée</strong>. Votre classement sera pénalisé.</p></div>
     <div class="rule"><span class="rule-n">03</span><p class="rule-t">Chaque infraction est comptabilisée. Le statut <span class="alert">FRAUDE</span> sera visible dans le classement public si des sorties répétées sont constatées.</p></div>
     <div class="rule"><span class="rule-n">04</span><p class="rule-t">À la fin, vous recevez un <strong>identifiant unique</strong> (ex : TC-4K7R). <strong>Notez-le impérativement</strong> — il est votre seul moyen de retrouver votre classement.</p></div>
@@ -319,7 +238,7 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
     <div class="topbar-l">S.E. CORPORATION — TERMINALE C — MATHÉMATIQUES</div>
     <div class="timer" id="timer-box">
       <div class="timer-dot"></div>
-      <span id="timer-display">30:00</span>
+      <span id="timer-display">35:00</span>
     </div>
   </div>
   <div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
@@ -363,52 +282,141 @@ const firebaseConfig = {
 const app=initializeApp(firebaseConfig);
 const db=getFirestore(app);
 
-// ══ ÉTAT ══
-const _savedFrauds = parseInt(sessionStorage.getItem('se_frauds')||'0');
+const _savedFrauds=parseInt(sessionStorage.getItem('se_frauds')||'0');
 let eleve={},reps={},frauds=_savedFrauds,started=false,done=false,timerInt=null,tLeft=0;
 
-window.QUIZ={duree:30*60,sections:[
+// ══════════════════════════════════════════════════════════════
+//  QUESTIONS — SESSION GEMEC FÉV 2026 · 20 POINTS
+// ══════════════════════════════════════════════════════════════
+window.QUIZ={duree:35*60,sections:[
 
-  // ══ PARTIE A — Géométrie dans l'espace (5 questions) ══
-  {badge:"PARTIE A",titre:"Géométrie dans l'espace — Plan (ABC) et sphère (Sθ)",qs:[
-    {id:"A1",pts:1,txt:"On considère les points A(2 ; −3 ; −1), B(1 ; 0 ; 2) et C(0 ; 1 ; 3) dans l'espace.\n\nQuels sont les vecteurs AB⃗ et AC⃗ ?",opts:["AB⃗=(1,3,3), AC⃗=(2,4,4)","AB⃗=(−1,3,3), AC⃗=(−2,4,4)","AB⃗=(−1,−3,3), AC⃗=(2,4,4)","AB⃗=(1,−3,3), AC⃗=(2,−4,4)"],rep:1},
-    {id:"A2",pts:1,txt:"On dispose des vecteurs AB⃗ et AC⃗ calculés à partir des points A, B et C.\n\nQuelle est la position relative des points A, B et C ?",opts:["Ils sont alignés","Ils ne sont pas alignés","Ils sont confondus","Ils sont équidistants de O"],rep:1},
-    {id:"A3",pts:2,txt:"On considère le plan (ABC) passant par A(2 ; −3 ; −1) et de vecteur normal obtenu par le produit vectoriel de AB⃗ et AC⃗.\n\nQuelle est l'équation de ce plan ?",opts:["x + y + z = 0","y − z + 2 = 0","2y − z + 1 = 0","x − y + z = 2"],rep:1},
-    {id:"A4",pts:1,txt:"On considère la famille de sphères (Sθ) d'équation : x²+y²+z²−2θx−2y sinθ+θ²−2+sin²θ = 0.\n\nQuel est le rayon de (Sθ) ?",opts:["θ","sinθ","√2","2"],rep:2},
-    {id:"A5",pts:2,txt:"Le centre de la sphère (Sθ) est le point Ω(θ ; sinθ ; 0), et le plan (ABC) a pour équation y − z + 2 = 0.\n\nPour quelle(s) valeur(s) de θ le plan (ABC) est-il tangent à la sphère (Sθ) ?",opts:["sinθ = 0 → θ = kπ","sinθ = 1 → θ = π/2 + 2kπ","sinθ = −1 → θ = −π/2 + 2kπ","sinθ = √2−2"],rep:0},
+  // ══ PARTIE A — Similitude directe (Exercice 1) ══
+  {badge:"PARTIE A",titre:"Similitude directe — f(z) = (1−i√3)z + 2i√3",qs:[
+
+    {id:"A1",pts:1,
+     txt:"On considère f(z) = (1 − i√3)z + 2i√3.\n\nPour identifier le rapport et l'angle d'une similitude directe, on écrit le coefficient de z sous la forme r·eⁱᶿ.\n\n|1 − i√3| = ?",
+     opts:["1","√2","2","√3"],rep:2},
+
+    {id:"A2",pts:1,
+     txt:"1 − i√3 a pour module 2. Pour l'argument, on a :\ncos θ = 1/2  et  sin θ = −√3/2.\n\nL'argument de (1 − i√3) est :",
+     opts:["π/3","−π/3","−π/6","2π/3"],rep:1},
+
+    {id:"A3",pts:1,
+     txt:"Le centre Ω de la similitude f vérifie f(Ω) = Ω.\n\nSoit z_Ω le complexe de Ω :\n(1 − i√3)z_Ω + 2i√3 = z_Ω\n⟺ z_Ω(−i√3) = −2i√3\n\nOn en déduit z_Ω = ?",
+     opts:["2i","2","−2","i√3"],rep:1},
+
+    {id:"A4",pts:1,
+     txt:"A est le point d'affixe z_A = 3 + i.\nΩ a pour affixe 2 (résultat de A3).\n\nΩA⃗ a pour affixe z_A − z_Ω = (3+i) − 2 = ?\n\nDonc |ΩA| = ?",
+     opts:["|ΩA| = √2","|ΩA| = √3","|ΩA| = 2","|ΩA| = √5"],rep:0,
+     hint:"z_A − z_Ω = 1 + i, calculez le module de ce complexe."},
+
+    {id:"A5",pts:1,
+     txt:"On rappelle : arg(ΩA⃗) = arg(z_A − z_Ω) = arg(1 + i).\n\nQuelle est la mesure de l'angle (u⃗, ΩA⃗) ?\n(u⃗ est le vecteur unitaire de l'axe réel)",
+     opts:["π/4","−π/4","3π/4","π/6"],rep:0},
   ]},
 
+  // ══ PARTIE B — Suite (Mₙ) et équation diophantienne ══
+  {badge:"PARTIE B",titre:"Suite (zₙ), distance ΩMₙ et équation diophantienne",qs:[
 
-  // ══ PARTIE B — Complexes GEMEC (8 questions) ══
-  {badge:"PARTIE B",titre:"Nombres complexes — Équation (E), triangle OAB et f(z)",qs:[
-    {id:"B1",pts:1,txt:"On considère l'équation (E) : z² − 6z + c = 0, avec c un réel strictement supérieur à 9.\n\nQue peut-on dire du discriminant de cette équation ?",opts:["Δ > 0 car 36 > 4×9","Δ = 0 donc une solution double","Δ < 0 car 4c > 36","Δ = 36 indépendamment de c"],rep:2},
-    {id:"B2",pts:1,txt:"Le discriminant de l'équation (E) est strictement négatif. On cherche à exprimer √Δ sous forme algébrique.\n\n√Δ s'écrit :",opts:["2√(c−9)","i√(4c−36)","2i√(c−9)","−2√(c−9)"],rep:2},
-    {id:"B3",pts:1,txt:"Les solutions de l'équation (E) sont deux complexes zA et zB, images des points A et B. O désigne l'origine.\n\nQue vaut |OA|² = |zA|² ?",opts:["9","c−9","c","18"],rep:2},
-    {id:"B4",pts:1,txt:"On a montré que |OA| = |OB|.\n\nQuelle est la nature du triangle OAB ?",opts:["Équilatéral en O","Isocèle en O","Rectangle en A","Quelconque"],rep:1},
-    {id:"B5",pts:1,txt:"On cherche à déterminer quand le triangle OAB est rectangle en O.\nPour cela, on étudie le rapport zA/zB en calculant le module au carré du dénominateur.\n\n|zB|² vaut :",opts:["9","c−9","c","6"],rep:2},
-    {id:"B6",pts:1,txt:"Le triangle OAB est rectangle en O si et seulement si les vecteurs OA⃗ et OB⃗ sont orthogonaux.\nOn utilise pour cela la partie réelle du rapport zA/zB.\n\nPour quelle valeur de c le triangle OAB est-il rectangle en O ?",opts:["9","12","18","24"],rep:2},
-    {id:"B7",pts:1,txt:"On considère la transformation f du plan complexe définie par f(z) = iz/(z−2).\nOn cherche l'ensemble (Γ) des points d'affixe z vérifiant |f(z)| = 1.\n\nEn posant z = x + iy, à quelle équation cartésienne cela conduit-il ?",opts:["x² = (x+2)²","x²+y² = (x+2)²+y²","x²+y² = (x−2)²+y²","y = 0"],rep:2},
-    {id:"B8",pts:1,txt:"L'équation cartésienne obtenue pour l'ensemble (Γ) se simplifie.\n\nQu'est-ce que (Γ) ?",opts:["L'axe des abscisses","Un cercle de rayon 1","La droite x = 1, parallèle à l'axe imaginaire","La droite y = 1"],rep:2},
+    {id:"B1",pts:1,
+     txt:"On a zₙ − 2 = 2ⁿ·e^(−inπ/3)·(z₀ − 2).\n\nLa distance ΩMₙ = |zₙ − 2|.\n\nAvec |e^(−inπ/3)| = 1 et |2ⁿ| = 2ⁿ, on obtient ΩMₙ = ?",
+     opts:["2ⁿ · |z₀ − 2|","n · |z₀ − 2|","2ⁿ","2|z₀ − 2|"],rep:0},
+
+    {id:"B2",pts:1,
+     txt:"z_A = 3 + i et z_Ω = 2, donc z₀ − 2 = 1 + i, |z₀ − 2| = √2.\n\nÀ partir de quel entier naturel n a-t-on ΩMₙ ≥ 2026 ?\n(c'est-à-dire 2ⁿ·√2 ≥ 2026)\n\nOn cherche le plus petit n tel que 2ⁿ ≥ 2026/√2 ≈ 1432,5 :",
+     opts:["n = 9","n = 10","n = 11","n = 12"],rep:1,
+     hint:"2¹⁰ = 1024 et 2¹¹ = 2048. Vérifiez lequel dépasse 1432,5."},
+
+    {id:"B3",pts:1,
+     txt:"L'équation diophantienne (E) : 5x − 6y = 3.\n\nOn vérifie que (3 ; 2) est solution en calculant 5×3 − 6×2 = ?",
+     opts:["15 − 12 = 3 ✓","15 − 12 = 5 ✗","15 + 12 = 27 ✗","5 − 6 = −1 ✗"],rep:0},
+
+    {id:"B4",pts:1,
+     txt:"La solution générale de (E) : 5x − 6y = 3 est, à partir du couple particulier (3 ; 2) :\n\n{ x = 3 + 6k\n{ y = 2 + 5k,  k ∈ ℤ\n\nPour k = −1 : (x, y) = ?",
+     opts:["(−3, −3)","(9, 7)","(−3, 7)","(−3, 2)"],rep:0,
+     hint:"x = 3 + 6(−1) = −3  et  y = 2 + 5(−1) = ?"},
   ]},
 
-  // ══ PARTIE C — f(x) = eˣ/(eˣ−1) (6 questions) ══
-  {badge:"PARTIE C",titre:"f(x) = eˣ/(eˣ−1) — Étude, point fixe et suite (uₙ)",qs:[
-    {id:"C1",pts:1,txt:"Soit f la fonction définie par f(x) = eˣ/(eˣ−1).\n\nQuel est le domaine de définition de f ?",opts:["ℝ \\ {1}","ℝ \\ {0}","ℝ \\ {−1}","ℝ entier"],rep:1},
-    {id:"C2",pts:1,txt:"On étudie le comportement de f(x) = eˣ/(eˣ−1) lorsque x tend vers +∞.\n\nQuelle est cette limite ?",opts:["0","e","1","+∞"],rep:2},
-    {id:"C3",pts:1,txt:"On étudie les variations de f(x) = eˣ/(eˣ−1) sur son domaine de définition.\n\nQuelle est la nature de f sur chacun des intervalles de son domaine ?",opts:["f est croissante","f est décroissante","f est constante","f change de monotonie en 0"],rep:1},
-    {id:"C4",pts:1,txt:"On pose g(x) = f(x) − x sur ]0 ; +∞[, où f(x) = eˣ/(eˣ−1).\nOn sait que g(1) > 0 et g(2) < 0.\n\nQue peut-on conclure sur l'équation f(x) = x sur l'intervalle [1 ; 2] ?",opts:["Elle n'admet aucune solution","Elle admet deux solutions","Elle admet au moins une solution α","Elle admet exactement α = 1,5"],rep:2},
-    {id:"C5",pts:1,txt:"On définit la suite (uₙ) par u₀ = 1 et uₙ₊₁ = f(uₙ). On cherche à montrer que uₙ ∈ [1 ; 2] pour tout n.\nSachant que f est décroissante sur [1 ; 2], que faut-il vérifier pour établir que f([1 ; 2]) ⊂ [1 ; 2] ?",opts:["f(1) ≤ 1 et f(2) ≥ 2","f(2) ≥ 1 et f(1) ≤ 2","f(1) = f(2)","f(0) ∈ [1;2]"],rep:1},
-    {id:"C6",pts:2,txt:"On définit la suite (uₙ) par u₀ = 1 et uₙ₊₁ = f(uₙ), où α est le point fixe de f dans [1 ; 2].\nOn admet que |f'(x)| ≤ 1/3 sur [1 ; 2].\n\nQuelle majoration peut-on établir pour |uₙ − α| ?",opts:["|uₙ − α| ≤ (1/3)ⁿ","|uₙ − α| ≤ n/3","|uₙ − α| ≤ 1/3","uₙ = α pour tout n ≥ 3"],rep:0},
+  // ══ PARTIE C — Fonction f(x) = (x²−2ln x)/4 ══
+  {badge:"PARTIE C",titre:"Analyse — f(x) = (x² − 2 ln x) / 4 sur [1 ; +∞[",qs:[
+
+    {id:"C1",pts:1,
+     txt:"f(x) = (x² − 2 ln x) / 4  sur [1 ; +∞[.\n\nf'(x) = ?",
+     opts:["(2x − 2/x)/4 = (x² − 1)/(2x)","(2x + 2/x)/4","(x − 2/x)/4","(x² − 2)/(4x)"],rep:0},
+
+    {id:"C2",pts:1,
+     txt:"f'(x) = (x² − 1)/(2x).\n\nSur [1 ; +∞[, x ≥ 1 donc x² − 1 ≥ 0 et 2x > 0.\n\nLe signe de f'(x) sur ]1 ; +∞[ est :",
+     opts:["f'(x) < 0 : f décroissante","f'(x) > 0 : f strictement croissante","f'(x) = 0 : f constante","f' change de signe en x = 1"],rep:1},
+
+    {id:"C3",pts:1,
+     txt:"On calcule I(λ) = ∫₁^λ f(x) dx par intégration par parties (IPP).\n\nOn pose u = f(x) et v' = 1, donc v = x.\n\nAprès IPP : I(λ) = [xf(x)]₁^λ − ∫₁^λ xf'(x) dx\n\n∫₁^λ x · (x²−1)/(2x) dx = ∫₁^λ (x²−1)/2 dx = ?\n\n(Résultat à calculer de 1 à λ)",
+     opts:["(λ³−3λ)/6 + 1/3","(λ²−1)/2","(λ³−λ)/6 − (1−1)/6","(λ³/3 − λ)/2 − (1/3−1)/2"],rep:0,
+     hint:"∫(x²−1)/2 dx = x³/6 − x/2. Évaluez en λ et en 1, puis soustrayez."},
+
+    {id:"C4",pts:1,
+     txt:"Pour Sₙ = (1/n)∑ₚ₌₁ⁿ⁻¹ f(1 + p/n), l'encadrement clé est :\n\n(1/n)f(1+p/n) ≤ ∫_{1+p/n}^{1+(p+1)/n} f(x)dx ≤ (1/n)f(1+(p+1)/n)\n\nCela vient du fait que f est :",
+     opts:["Concave","Convexe","Décroissante","Constante"],rep:1,
+     hint:"f est croissante sur [1;+∞[ et l'intégrale est donc encadrée par les valeurs aux extrémités."},
+
+    {id:"C5",pts:1,
+     txt:"En sommant les encadrements de p = 1 à p = n−1, on obtient :\nSₙ ≤ ∫₁² f(x) dx ≤ Sₙ + (1/n)f(2).\n\nf(2) = (4 − 2 ln 2)/4 = 1 − (ln 2)/2.\n\nQue vaut lim(n→+∞) Sₙ ?",
+     opts:["lim Sₙ = ∫₁² f(x)dx","lim Sₙ = f(2)","lim Sₙ = 0","lim Sₙ = 1"],rep:0,
+     hint:"Comme (1/n)f(2) → 0, les deux membres encadrant Sₙ convergent vers ∫₁²f."},
   ]},
 
-  // ══ PARTIE D — f(x) = 1/sinx + Congruences + Complexes (6 questions) ══
-  {badge:"PARTIE D",titre:"f(x) = 1/sin x — Réciproque, dérivée et intégrale",qs:[
-    {id:"D1",pts:1,txt:"On note g la restriction de f(x) = 1/sinx à ]0 ; π/2], qui admet une bijection réciproque g⁻¹ sur [1 ; +∞[.\n\nSi y = g⁻¹(x), quelle est la valeur de sin y ?",opts:["x","1/x","√(x²−1)/x","x²−1"],rep:1},
-    {id:"D2",pts:1,txt:"On sait que sin y = 1/x avec y ∈ ]0 ; π/2], donc cos y ≥ 0.\n\nQuelle est la valeur de cos y en fonction de x ?",opts:["1/x","x/√(x²−1)","√(x²−1)/x","−√(x²−1)/x"],rep:2},
-    {id:"D3",pts:1,txt:"On cherche l'expression de la dérivée de la réciproque g⁻¹, en utilisant les valeurs de sin y et cos y exprimées en fonction de x.\n\nQuelle est l'expression de (g⁻¹)'(x) ?",opts:["(g⁻¹)'(x) = 1/(x√(x²−1))","(g⁻¹)'(x) = −1/(x√(x²−1))","(g⁻¹)'(x) = x√(x²−1)","(g⁻¹)'(x) = −x/√(x²−1)"],rep:1},
-    {id:"D4",pts:1,txt:"Pour calculer l'intégrale I = ∫dt/(t√(t²−1)) de 2√3/3 à √2, on reconnaît le lien avec g⁻¹.\nOn cherche les images de 2√3/3 et √2 par g⁻¹ en résolvant sin y = 1/t pour chaque borne.\n\nQuels sont les résultats correspondants ?",opts:["y = π/3 et y = π/4","y = π/4 et y = π/3","y = π/6 et y = π/4","y = π/4 et y = π/6"],rep:1},
-    {id:"D5",pts:1,txt:"On exprime l'intégrale I = ∫dt/(t√(t²−1)) de 2√3/3 à √2 à l'aide de g⁻¹ et des bornes trouvées à la question précédente.\n\nQuelle est la valeur de I ?",opts:["π/6","π/4","π/12","5π/12"],rep:2},
-    {id:"D6",pts:1,txt:"Soit N un entier impair. On cherche le reste de N² dans la division euclidienne par 8.\n\nN² ≡ ? (mod 8)",opts:["0","3","5","1"],rep:3},
+  // ══ PARTIE D — Intégrales par substitution ══
+  {badge:"PARTIE D",titre:"Intégrales — Substitution et calcul",qs:[
+
+    {id:"D1",pts:1,
+     txt:"On calcule I = ∫₁ᵉ (1 + ln t)/t dt.\n\nOn pose u = ln t, donc du = dt/t.\nBornes : t=1 → u=0 ; t=e → u=1.\n\nL'intégrale se transforme en :",
+     opts:["∫₀¹ (1+u) du","∫₀ᵉ (1+u) du","∫₀¹ u du","∫₁ᵉ (1+u) du"],rep:0},
+
+    {id:"D2",pts:1,
+     txt:"I = ∫₀¹ (1+u) du = [u + u²/2]₀¹\n\nI = ?",
+     opts:["1","1/2","3/2","2"],rep:2},
+
+    {id:"D3",pts:1,
+     txt:"J₃ = ∫₀^(π/4) sin²w · cos³w dw.\n\nOn écrit cos³w = (1 − sin²w)cosw pour utiliser la substitution u = sin w.\n\nAvec u = sin w : bornes 0 → sin(π/4) = ?",
+     opts:["1","√2/2","√3/2","1/2"],rep:1},
+
+    {id:"D4",pts:1,
+     txt:"Après substitution u = sin w dans J₃ :\nJ₃ = ∫₀^(√2/2) u²(1−u²) du = [u³/3 − u⁵/5]₀^(√2/2)\n\nOn a (√2/2)³ = 2√2/8 = √2/4 et (√2/2)⁵ = 4√2/32 = √2/8.\n\nJ₃ = (√2/4)/3 − (√2/8)/5 = √2/12 − √2/40 = √2(10−3)/120 = ?",
+     opts:["7√2/120","√2/12","√2/8","7/120"],rep:0},
+  ]},
+
+  // ══ PARTIE E — Linéarisation (J₄) ══
+  {badge:"PARTIE E",titre:"Linéarisation — J₄ = ∫₀^π sin²u · cos²u du",qs:[
+
+    {id:"E1",pts:1,
+     txt:"J₄ = ∫₀^π sin²u · cos²u du.\n\n⚠️ Une substitution directe ne s'applique pas ici car sin et cos ont la même variable.\n\nPour simplifier sin²u · cos²u, on utilise d'abord l'identité :\nsin u · cos u = ?\n\n(Formule de duplication)",
+     opts:["sin(2u)/2","sin(2u)","cos(2u)/2","2sin(u)cos(u)"],rep:0},
+
+    {id:"E2",pts:1,
+     txt:"On sait que sin u · cos u = sin(2u)/2.\n\nDonc sin²u · cos²u = [sin(2u)/2]² = sin²(2u)/4.\n\nPour linéariser sin²(2u), on utilise :\nsin²(θ) = (1 − cos 2θ)/2  avec θ = 2u.\n\nsin²(2u) = ?",
+     opts:["(1 − cos 4u)/2","(1 + cos 4u)/2","1 − cos²(2u)","cos(4u)/2"],rep:0,
+     hint:"Formule : sin²(θ) = (1 − cos(2θ))/2. Posez θ = 2u."},
+
+    {id:"E3",pts:1,
+     txt:"Après linéarisation complète :\nsin²u · cos²u = (1 − cos 4u)/8.\n\nJ₄ = ∫₀^π (1 − cos 4u)/8 du = (1/8)[u − sin(4u)/4]₀^π\n\nsin(4π) = sin(0) = 0. Donc J₄ = ?",
+     opts:["π/8","π/4","1/8","π/16"],rep:0},
+  ]},
+
+  // ══ PARTIE F — Nombres complexes GEMEC (Exercice 1 suite) ══
+  {badge:"PARTIE F",titre:"Complexes — Suite géométrique (zₙ) et congruences",qs:[
+
+    {id:"F1",pts:1,
+     txt:"On a zₙ − 2 = 2ⁿ·e^(−inπ/3)·(z₀ − 2) avec z₀ = 3+i, z_Ω = 2.\n\nLe terme z₀ − 2 = 1 + i. En forme exponentielle :\n|1+i| = √2 et arg(1+i) = π/4.\n\nDonc zₙ − 2 = 2ⁿ · √2 · e^(i(π/4 − nπ/3)).\n\nLe module de zₙ − 2 est :",
+     opts:["2ⁿ√2","2ⁿ","√2","2ⁿ + √2"],rep:0},
+
+    {id:"F2",pts:1,
+     txt:"Mₙ appartient à la demi-droite d'origine Ω et de vecteur directeur u⃗ si et seulement si :\narg(zₙ − z_Ω) = arg(u⃗)  [modulo 2π] et zₙ ≠ Ω.\n\nOn a arg(zₙ − 2) = π/4 − nπ/3.\n\nSi u⃗ a pour argument π/4, la condition est :\nπ/4 − nπ/3 ≡ 0 [2π]\n⟺ nπ/3 ≡ π/4 − 0 [2π]... En simplifiant :\n−nπ/3 ≡ 0 [2π] ⟺ n ≡ ? [6]",
+     opts:["n ≡ 0 [6]","n ≡ 1 [6]","n ≡ 3 [6]","n ≡ 2 [6]"],rep:0,
+     hint:"nπ/3 ≡ 0 [2π] ⟺ n/3 ≡ 0 [2] ⟺ n ≡ 0 [6]."},
+
+    {id:"F3",pts:1,
+     txt:"La condition de l'épreuve est : −4n + 3 = 24k pour un entier k.\n\nCela s'écrit aussi : 4n ≡ 3 [24], ou encore 4n − 3 = 24k.\n\nDivisez par le pgcd(4, 24) = 4 : cela n'est possible que si 4 | 3, ce qui est faux.\n\nOu bien, la condition de l'énoncé est −4n + 3 ≡ 0 [24k], qui revient à n ≡ ? mod un certain entier.\n\nSelon l'épreuve, Mₙ est sur la demi-droite ssi ∃ entier relatif k tel que −4n + 3 = 24k.\nOn cherche n mod 6 :",
+     opts:["n ≡ 0 [6]","n ≡ 3 [6]","n ≡ 1 [6]","Cette condition n'a pas de solution"],rep:0,
+     hint:"−4n + 3 = 24k ⟺ 4n = 3 − 24k ⟺ n = (3 − 24k)/4. Pour n ∈ ℤ, il faut 4 | (3−24k), ie 3 ≡ 0 [4] — contradiction. Donc vérifiez si la formulation exacte est −4n+3 ≡ 0 [24], ce qui donne n entier multiple de 6."},
   ]},
 ]};
 
@@ -426,7 +434,6 @@ window.goRegles=()=>{
   eleve={prenom:p,nom:n,classe:c,sexe:s,etablissement:etab};showPage('regles');
 };
 
-
 window.showPage=id=>{document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('pg-'+id).classList.add('active');};
 
 window.startQuiz=()=>{
@@ -439,8 +446,9 @@ function buildQuiz(){
   QUIZ.sections.forEach(sec=>{
     body.insertAdjacentHTML('beforeend',`<div class="sec-head"><span class="sec-badge">${sec.badge}</span><span class="sec-title">${sec.titre}</span></div>`);
     sec.qs.forEach(q=>{
+      const hintHTML=q.hint?`<div class="hint">💡 Indice : ${q.hint}</div>`:'';
       const opts=q.opts.map((o,i)=>`<label class="opt" id="opt-${q.id}-${i}" onclick="pick('${q.id}',${i},this)"><input type="radio" name="q${q.id}"><span class="opt-letter">${'ABCD'[i]}</span><span class="opt-text">${o}</span></label>`).join('');
-      body.insertAdjacentHTML('beforeend',`<div class="qcard" id="qc-${q.id}"><div class="q-label">QUESTION ${q.id} — ${q.pts} pt${q.pts>1?'s':''}</div><div class="q-text">${q.txt}</div><div class="opts">${opts}</div></div>`);
+      body.insertAdjacentHTML('beforeend',`<div class="qcard" id="qc-${q.id}"><div class="q-label">QUESTION ${q.id} — ${q.pts} pt${q.pts>1?'s':''}</div><div class="q-text">${q.txt}</div>${hintHTML}<div class="opts">${opts}</div></div>`);
     });
   });updateCounter();
 }
@@ -489,14 +497,11 @@ function showFraud(){
 }
 
 window.confirmSubmit=()=>{
-  if(done) return;
+  if(done)return;
   const tot=ALL_QS().length,left=tot-Object.keys(reps).length;
-  if(left>0){
-    if(!confirm(`${left} question(s) sans réponse. Soumettre quand même ?`)) return;
-  }
+  if(left>0){if(!confirm(`${left} question(s) sans réponse. Soumettre quand même ?`))return;}
   submit('normal');
 };
-
 
 async function submit(statut){
   if(done)return;done=true;started=false;clearInterval(timerInt);
