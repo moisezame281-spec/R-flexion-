@@ -3,13 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>S.E. Corporation — QCM Terminale D</title>
+<title>S.E. Corporation — QCM Session Intensive Terminale D</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --ink:#0f0e0a;--cream:#f5f0e8;--gold:#e8843a;
-  --red:#8b1a1a;--grey:#6b6560;--bg2:#13120d;
+  --ink:#0f0e0a;--cream:#f5f0e8;--gold:#e8843a;--gold-lite:rgba(232,132,58,.12);
+  --red:#8b1a1a;--blue:#1a2f5e;--grey:#6b6560;--green:#1a5e1a;
+  --bg2:#13120d;--white:#fff;
 }
 html{scroll-behavior:smooth;height:-webkit-fill-available}
 body{background:var(--ink);color:var(--cream);font-family:'Cormorant Garamond',serif;
@@ -17,14 +18,20 @@ body{background:var(--ink);color:var(--cream);font-family:'Cormorant Garamond',s
   -webkit-user-select:none;user-select:none}
 body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
   background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");opacity:.25}
+
 .page{display:none;min-height:100vh;flex-direction:column}
 .page.active{display:flex}
-#pg-accueil{justify-content:center;align-items:center;padding:3rem 1.5rem;
+
+#pg-accueil{
+  justify-content:center;align-items:center;padding:3rem 1.5rem;
   background:radial-gradient(ellipse at 50% 0%,rgba(79,40,13,.25) 0%,transparent 65%),var(--ink);
-  position:relative;overflow:hidden}
-#pg-accueil::after{content:'D';position:absolute;font-size:38rem;
+  position:relative;overflow:hidden
+}
+#pg-accueil::after{
+  content:'D';position:absolute;font-size:38rem;
   color:rgba(232,132,58,.025);font-family:'Playfair Display',serif;
-  font-style:italic;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
+  font-style:italic;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none
+}
 .logo-block{display:flex;flex-direction:column;align-items:center;gap:.45rem;margin-bottom:2.5rem;z-index:1}
 .logo-ring{position:relative;width:120px;height:120px;display:flex;align-items:center;justify-content:center;margin-bottom:.3rem}
 .logo-ring::before{content:'';position:absolute;inset:0;border-radius:50%;
@@ -55,6 +62,7 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
 .btn:hover{opacity:.87}.btn:active{transform:scale(.98)}
 .btn-gold{background:var(--gold);color:var(--ink)}
 .btn-red{background:var(--red);color:#fff}
+
 #pg-regles{justify-content:center;align-items:center;padding:3rem 1.5rem;background:var(--bg2)}
 .regles-box{max-width:680px;width:100%;background:rgba(255,255,255,.02);border:1px solid rgba(232,132,58,.2);border-radius:5px;padding:3rem 3rem 2.5rem}
 .reg-title{font-family:'Playfair Display',serif;font-size:1.9rem;font-weight:900;text-align:center;margin-bottom:.3rem;color:var(--cream)}
@@ -69,6 +77,7 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
 .accept input[type=checkbox]{width:18px;height:18px;accent-color:var(--gold);cursor:pointer;margin-top:3px;flex-shrink:0}
 .accept label{font-size:.95rem;color:var(--grey);cursor:pointer;line-height:1.55}
 .accept label em{color:var(--cream);font-style:normal}
+
 #pg-quiz{background:var(--bg2)}
 .topbar{position:sticky;top:0;z-index:100;background:var(--ink);border-bottom:1px solid rgba(232,132,58,.2);padding:.85rem 2rem;display:flex;align-items:center;justify-content:space-between}
 .topbar-l{font-family:'Space Mono',monospace;font-size:.6rem;color:var(--gold);letter-spacing:.18em}
@@ -86,7 +95,8 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
 .qcard:hover{border-color:rgba(232,132,58,.18)}
 .qcard.answered{border-color:rgba(232,132,58,.35)}
 .q-label{font-family:'Space Mono',monospace;font-size:.58rem;color:var(--gold);letter-spacing:.18em;margin-bottom:.75rem}
-.q-text{font-size:1.05rem;line-height:1.85;color:var(--cream);margin-bottom:1.2rem;white-space:pre-line}
+.q-text{font-size:1.05rem;line-height:1.75;color:var(--cream);margin-bottom:1.2rem;white-space:pre-line}
+.hint{font-size:.9rem;font-style:italic;color:rgba(232,132,58,.8);background:rgba(232,132,58,.07);border-left:2px solid var(--gold);padding:.55rem .9rem;border-radius:0 3px 3px 0;margin-bottom:1rem;line-height:1.55}
 .opts{display:flex;flex-direction:column;gap:.55rem}
 .opt{display:flex;align-items:flex-start;gap:.85rem;padding:.75rem 1rem;border:1px solid rgba(255,255,255,.07);border-radius:3px;cursor:pointer;transition:all .15s;-webkit-user-select:none;user-select:none}
 .opt:hover{border-color:rgba(232,132,58,.38);background:rgba(232,132,58,.05)}
@@ -96,6 +106,7 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
 .opt-text{font-size:1rem;color:rgba(245,240,232,.85);line-height:1.5}
 .quiz-foot{position:fixed;bottom:0;left:0;right:0;background:var(--ink);border-top:1px solid rgba(232,132,58,.18);padding:.95rem 2rem;display:flex;justify-content:space-between;align-items:center}
 .q-counter{font-family:'Space Mono',monospace;font-size:.62rem;color:var(--grey)}
+
 #pg-fin{justify-content:center;align-items:center;padding:3rem 1.5rem;background:radial-gradient(ellipse at 50% 30%,rgba(79,40,13,.35) 0%,transparent 70%),var(--ink)}
 .fin-box{max-width:520px;width:100%;text-align:center;background:rgba(255,255,255,.02);border:1px solid rgba(232,132,58,.2);border-radius:5px;padding:3rem 2.5rem}
 .fin-icon{font-size:2.8rem;margin-bottom:1.2rem}
@@ -110,11 +121,13 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
 .score-val{font-family:'Playfair Display',serif;font-size:3rem;font-weight:900;color:#6dc96d}
 .score-sub{font-size:.95rem;color:var(--grey)}
 .fin-note{font-size:.92rem;color:var(--grey);line-height:1.65;font-style:italic}
+
 #fraud-overlay{display:none;position:fixed;inset:0;z-index:99998;background:rgba(100,0,0,.97);justify-content:center;align-items:center;flex-direction:column;gap:1.5rem;text-align:center;padding:2rem}
 #fraud-overlay.show{display:flex}
 .fraud-title{font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:900;color:#fff}
 .fraud-body{font-size:1.05rem;color:rgba(255,255,255,.75);line-height:1.7;max-width:480px}
 .fraud-count{font-family:'Space Mono',monospace;font-size:1.3rem;color:#fff;background:rgba(255,255,255,.1);padding:.5rem 1.5rem;border-radius:3px}
+
 @media(max-width:580px){
   .row2{grid-template-columns:1fr}
   .regles-box,.form-box{padding:2rem 1.4rem}
@@ -131,31 +144,61 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
 
 <div id="fraud-overlay">
   <div class="fraud-title">⚠️ Sortie détectée !</div>
-  <div class="fraud-body">Vous avez quitté la page d'évaluation.<br>Cette action a été <strong>enregistrée et signalée</strong>.<br>Votre classement sera marqué : <strong style="color:#ffaaaa">SORTI DU SITE</strong></div>
+  <div class="fraud-body">
+    Vous avez quitté la page d'évaluation.<br>
+    Cette action a été <strong>enregistrée et signalée</strong>.<br>
+    Votre classement sera marqué : <strong style="color:#ffaaaa">SORTI DU SITE</strong>
+  </div>
   <div class="fraud-count" id="fraud-cd">Retour dans 5s</div>
 </div>
 
-<!-- ACCUEIL -->
+<!-- PAGE ACCUEIL -->
 <div class="page active" id="pg-accueil">
   <div class="logo-block">
-    <div class="logo-ring"><img src="https://mon-depots.vercel.app/logo.jpg" class="logo-img" alt="S.E. Corporation" onerror="this.style.background='var(--gold)'"></div>
-    <div class="logo-ornament"><div class="logo-line"></div><div class="logo-diamond"></div><div class="logo-line r"></div></div>
+    <div class="logo-ring">
+      <img src="https://mon-depots.vercel.app/logo.jpg" class="logo-img" alt="S.E. Corporation" onerror="this.style.background='var(--gold)'">
+    </div>
+    <div class="logo-ornament">
+      <div class="logo-line"></div>
+      <div class="logo-diamond"></div>
+      <div class="logo-line r"></div>
+    </div>
     <div class="logo-brand">S.E. Corporation</div>
     <div class="logo-divider"></div>
     <div class="logo-since">Since 2015 — Excellence académique</div>
   </div>
+
   <h1 class="acc-title">QCM — Session Intensive<br>Terminale D</h1>
-  <p class="acc-sub">Intégrales · Fonctions · Décomposition · Primitives</p>
+  <p class="acc-sub">Intégrales · Fonctions · Décomposition · Probabilités</p>
+
   <div class="form-box">
-    <div class="field"><label>Prénom</label><input type="text" id="f-prenom" placeholder="Votre prénom" autocomplete="off" spellcheck="false"></div>
-    <div class="field"><label>Nom</label><input type="text" id="f-nom" placeholder="Votre nom de famille" autocomplete="off" spellcheck="false"></div>
-    <div class="field"><label>Établissement</label><input type="text" id="f-etab" placeholder="Nom de votre lycée" autocomplete="off" spellcheck="false"></div>
+    <div class="field">
+      <label>Prénom</label>
+      <input type="text" id="f-prenom" placeholder="Votre prénom" autocomplete="off" spellcheck="false">
+    </div>
+    <div class="field">
+      <label>Nom</label>
+      <input type="text" id="f-nom" placeholder="Votre nom de famille" autocomplete="off" spellcheck="false">
+    </div>
+    <div class="field">
+      <label>Établissement *</label>
+      <input type="text" id="f-etab" placeholder="Ex : Lycée de Yaoundé (obligatoire)" autocomplete="off" spellcheck="false">
+    </div>
     <div class="row2">
-      <div class="field"><label>Classe</label>
-        <select id="f-classe"><option value="">— Choisir —</option><option value="TleD">Terminale D</option></select>
+      <div class="field">
+        <label>Classe</label>
+        <select id="f-classe">
+          <option value="">— Choisir —</option>
+          <option value="TleD">Terminale D</option>
+        </select>
       </div>
-      <div class="field"><label>Sexe</label>
-        <select id="f-sexe"><option value="">— Choisir —</option><option value="M">Masculin</option><option value="F">Féminin</option></select>
+      <div class="field">
+        <label>Sexe</label>
+        <select id="f-sexe">
+          <option value="">— Choisir —</option>
+          <option value="M">Masculin</option>
+          <option value="F">Féminin</option>
+        </select>
       </div>
     </div>
     <div class="divider"></div>
@@ -163,32 +206,35 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
   </div>
 </div>
 
-<!-- RÈGLES -->
+<!-- PAGE RÈGLES -->
 <div class="page" id="pg-regles">
   <div class="regles-box">
     <h2 class="reg-title">Règlement de <span>l'évaluation</span></h2>
     <p class="reg-intro">Lisez attentivement avant de commencer</p>
     <div class="divider" style="margin:0 0 1.5rem"></div>
-    <div class="rule"><span class="rule-n">01</span><p class="rule-t">Le quiz dure <strong>35 minutes</strong>. Le chronomètre démarre dès « Commencer ». À l'expiration, le quiz est <strong>soumis automatiquement</strong>.</p></div>
-    <div class="rule"><span class="rule-n">02</span><p class="rule-t"><span class="alert">Toute sortie de la page</span> (changement d'onglet, retour arrière, minimisation) sera <strong>détectée et enregistrée</strong>.</p></div>
-    <div class="rule"><span class="rule-n">03</span><p class="rule-t">Le statut <span class="alert">FRAUDE</span> sera visible dans le classement public si des sorties répétées sont constatées.</p></div>
-    <div class="rule"><span class="rule-n">04</span><p class="rule-t">À la fin, vous recevez un <strong>identifiant unique</strong>. <strong>Notez-le impérativement.</strong></p></div>
-    <div class="rule"><span class="rule-n">05</span><p class="rule-t">Le classement est <strong>confidentiel</strong> : seul votre identifiant y apparaît.</p></div>
-    <div class="rule"><span class="rule-n">06</span><p class="rule-t">Travaillez seul(e), <strong>sans aide extérieure</strong>. Clic droit et raccourcis clavier sont désactivés.</p></div>
+    <div class="rule"><span class="rule-n">01</span><p class="rule-t">Le quiz dure <strong>35 minutes</strong>. Le chronomètre démarre dès que vous appuyez sur « Commencer ». À l'expiration, le quiz est <strong>soumis automatiquement</strong>.</p></div>
+    <div class="rule"><span class="rule-n">02</span><p class="rule-t"><span class="alert">Toute sortie de la page</span> (changement d'onglet, retour arrière, minimisation) sera <strong>détectée et enregistrée</strong>. Votre classement sera pénalisé.</p></div>
+    <div class="rule"><span class="rule-n">03</span><p class="rule-t">Chaque infraction est comptabilisée. Le statut <span class="alert">FRAUDE</span> sera visible dans le classement public si des sorties répétées sont constatées.</p></div>
+    <div class="rule"><span class="rule-n">04</span><p class="rule-t">À la fin, vous recevez un <strong>identifiant unique</strong> (ex : TD-4K7R). <strong>Notez-le impérativement</strong> — il est votre seul moyen de retrouver votre classement.</p></div>
+    <div class="rule"><span class="rule-n">05</span><p class="rule-t">Le classement est <strong>confidentiel</strong> : seul votre identifiant y apparaît. Le professeur est le seul à connaître la correspondance nom ↔ identifiant.</p></div>
+    <div class="rule"><span class="rule-n">06</span><p class="rule-t">Travaillez seul(e), <strong>sans aide extérieure</strong>. Clic droit et raccourcis clavier sont désactivés pendant l'évaluation.</p></div>
     <div class="divider"></div>
     <div class="accept">
       <input type="checkbox" id="chk-accept">
-      <label for="chk-accept">J'ai lu et j'accepte le règlement. Je m'engage à composer seul(e). Toute irrégularité sera <em>enregistrée et sanctionnée</em>.</label>
+      <label for="chk-accept">J'ai lu et j'accepte le règlement. Je m'engage à composer seul(e) et à ne pas quitter la page. Je comprends que toute irrégularité sera <em>enregistrée et sanctionnée</em>.</label>
     </div>
     <button class="btn btn-gold" style="margin-top:1.5rem" onclick="startQuiz()">Commencer l'évaluation →</button>
   </div>
 </div>
 
-<!-- QUIZ -->
+<!-- PAGE QUIZ -->
 <div class="page" id="pg-quiz">
   <div class="topbar">
     <div class="topbar-l">S.E. CORPORATION — TERMINALE D — MATHÉMATIQUES</div>
-    <div class="timer" id="timer-box"><div class="timer-dot"></div><span id="timer-display">35:00</span></div>
+    <div class="timer" id="timer-box">
+      <div class="timer-dot"></div>
+      <span id="timer-display">35:00</span>
+    </div>
   </div>
   <div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
   <div class="quiz-body" id="quiz-body"></div>
@@ -198,7 +244,7 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
   </div>
 </div>
 
-<!-- FIN -->
+<!-- PAGE FIN -->
 <div class="page" id="pg-fin">
   <div class="fin-box">
     <div class="fin-icon">✦</div>
@@ -206,7 +252,7 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
     <div class="id-box">
       <div class="id-lbl">Votre identifiant confidentiel</div>
       <div class="id-val" id="fin-id">——</div>
-      <div class="id-warn">📌 Notez cet identifiant — nécessaire pour consulter votre classement.</div>
+      <div class="id-warn">📌 Notez cet identifiant maintenant — vous en aurez besoin pour consulter votre classement.</div>
     </div>
     <div class="score-box" id="score-box">
       <div class="score-lbl">Score obtenu</div>
@@ -220,127 +266,164 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-const firebaseConfig={apiKey:"AIzaSyAhSTl2OR5ztfoIwB2TgIqEaiMjD6TmrcI",authDomain:"se-corporation-quiz-7187e.firebaseapp.com",projectId:"se-corporation-quiz-7187e",storageBucket:"se-corporation-quiz-7187e.firebasestorage.app",messagingSenderId:"5773761325",appId:"1:5773761325:web:e1d3cb01d88c3a73e611a4"};
+const firebaseConfig = {
+  apiKey:"AIzaSyAhSTl2OR5ztfoIwB2TgIqEaiMjD6TmrcI",
+  authDomain:"se-corporation-quiz-7187e.firebaseapp.com",
+  projectId:"se-corporation-quiz-7187e",
+  storageBucket:"se-corporation-quiz-7187e.firebasestorage.app",
+  messagingSenderId:"5773761325",
+  appId:"1:5773761325:web:e1d3cb01d88c3a73e611a4"
+};
 const app=initializeApp(firebaseConfig);
 const db=getFirestore(app);
-let eleve={},reps={},frauds=0,started=false,done=false,timerInt=null,tLeft=0;
 
+const _savedFrauds=parseInt(sessionStorage.getItem('se_frauds')||'0');
+let eleve={},reps={},frauds=_savedFrauds,started=false,done=false,timerInt=null,tLeft=0;
+
+// ══════════════════════════════════════════════════════════════
+//  QUESTIONS — QCM SESSION INTENSIVE TERMINALE D — 20 POINTS
+// ══════════════════════════════════════════════════════════════
 window.QUIZ={duree:35*60,sections:[
 
-  // ── PARTIE A : Décomposition & Intégrale ─────────────────────
-  {badge:"PARTIE A",titre:"Décomposition en éléments simples — ∫[0 à 2] (4x² + 7x + 1)/(x + 2) dx",qs:[
+  // ══ PARTIE A — Décomposition en éléments simples & intégrale ══
+  // Chapitre : Calcul intégral / Décomposition
+  {badge:"PARTIE A",titre:"Décomposition — (4x²+7x+1)/(x+2) et calcul de I",qs:[
 
     {id:"A1",pts:1,
-     txt:"Déterminer les réels a, b, c tels que :\n(4x² + 7x + 1)/(x + 2) = ax + b + c/(x + 2).",
-     opts:["a = 4,  b = −1,  c = 3","a = 4,  b = 1,  c = −3","a = 4,  b = −1,  c = −3","a = −4,  b = 1,  c = 3"],rep:0},
+     txt:"On cherche a, b, c tels que :\n(4x²+7x+1)/(x+2) = ax + b + c/(x+2).\n\nOn effectue la division euclidienne de 4x²+7x+1 par x+2.\n4x² ÷ x = 4x. Puis 4x(x+2) = 4x²+8x.\n\n(4x²+7x+1) − (4x²+8x) = −x + 1.\nEnsuite −x ÷ x = −1, et −1(x+2) = −x−2.\n\n(−x+1) − (−x−2) = ?\nDonc le reste vaut :",
+     opts:["3","−1","1","0"],rep:0},
 
     {id:"A2",pts:1,
-     txt:"Calculer I = ∫[0 à 2] (4x² + 7x + 1)/(x + 2) dx.",
-     opts:["I = 6 + 3 ln 2","I = 6 − 3 ln 2","I = 3 + 6 ln 2","I = 6 + ln 2"],rep:0},
+     txt:"La division euclidienne donne :\n4x²+7x+1 = (x+2)(4x−1) + 3.\n\nDonc (4x²+7x+1)/(x+2) = 4x − 1 + 3/(x+2).\n\nLes valeurs de a, b et c sont :",
+     opts:["a=4, b=−1, c=3","a=4, b=1, c=−3","a=4, b=−1, c=−3","a=−4, b=1, c=3"],rep:0},
+
+    {id:"A3",pts:1,
+     txt:"On calcule I = ∫₀² (4x²+7x+1)/(x+2) dx.\n\nGrâce à la décomposition : I = ∫₀² (4x−1) dx + ∫₀² 3/(x+2) dx.\n\n∫₀²(4x−1)dx = [2x²−x]₀² = 8−2 = 6.\n∫₀² 3/(x+2)dx = 3[ln|x+2|]₀² = 3(ln4 − ln2) = 3 ln 2.\n\nDonc I = ?",
+     opts:["6 + 3 ln 2","6 − 3 ln 2","3 + 6 ln 2","6 + ln 2"],rep:0},
   ]},
 
-  // ── PARTIE B : Identité & Intégrale avec eˣ ──────────────────
-  {badge:"PARTIE B",titre:"Identité sur 1/(1 + eˣ) — ∫[0 à 1] 1/(1 + eˣ) dx",qs:[
+  // ══ PARTIE B — Identité 1/(1+eˣ) et intégrale ══
+  // Chapitre : Calcul intégral / Fonctions exponentielles
+  {badge:"PARTIE B",titre:"Identité 1/(1+eˣ) = 1 − eˣ/(1+eˣ) et calcul de J",qs:[
 
     {id:"B1",pts:1,
-     txt:"Démontrer que pour tout réel x :\n1/(1 + eˣ) = 1 − eˣ/(1 + eˣ).\n\nCette identité est-elle vraie ?",
-     opts:["Oui, car (1 + eˣ − eˣ)/(1 + eˣ) = 1/(1 + eˣ)","Non, le membre droit vaut eˣ/(1 + eˣ)","Oui, mais seulement pour x > 0","Non, car 1 − eˣ/(1 + eˣ) n'est pas défini en 0"],rep:0},
+     txt:"On veut prouver que pour tout réel x :\n1/(1+eˣ) = 1 − eˣ/(1+eˣ).\n\nEn partant du membre droit :\n1 − eˣ/(1+eˣ) = (1+eˣ−eˣ)/(1+eˣ) = ?\n\nDonc l'identité est :",
+     opts:["Vraie : on obtient bien 1/(1+eˣ)","Fausse : on obtient eˣ/(1+eˣ)","Vraie seulement pour x > 0","Fausse : le membre droit n'est pas défini en 0"],rep:0},
 
     {id:"B2",pts:1,
-     txt:"En déduire la valeur de J = ∫[0 à 1] 1/(1 + eˣ) dx.",
-     opts:["J = 1 + ln 2 − ln(1 + e)","J = 1 − ln 2 + ln(1 + e)","J = ln(1 + e) − ln 2","J = 1"],rep:0},
+     txt:"On déduit J = ∫₀¹ 1/(1+eˣ) dx.\n\nJ = ∫₀¹ 1 dx − ∫₀¹ eˣ/(1+eˣ) dx.\n\nOn reconnaît que eˣ/(1+eˣ) est de la forme u'/u avec u = 1+eˣ.\nDonc ∫₀¹ eˣ/(1+eˣ) dx = [ln(1+eˣ)]₀¹ = ln(1+e) − ln 2.\n\nJ = 1 − ln(1+e) + ln 2 = ?",
+     opts:["1 + ln 2 − ln(1+e)","1 − ln 2 + ln(1+e)","ln(1+e) − ln 2","1 + ln(e/(1+e))"],rep:0,
+     hint:"ln(1+e) − ln 2 = ln((1+e)/2). Donc J = 1 − ln((1+e)/2) = 1 + ln(2/(1+e))."},
 
     {id:"B3",pts:1,
-     txt:"En utilisant les valeurs numériques de e, lequel de ces encadrements est vrai pour J ?",
+     txt:"On peut aussi écrire J = 1 + ln 2 − ln(1+e).\n\nComme e ≈ 2,718, on a 1+e ≈ 3,718 et ln(1+e) ≈ 1,313.\nAinsi J ≈ 1 + 0,693 − 1,313 ≈ 0,38.\n\nLequel de ces encadrements est vrai pour J ?",
      opts:["0 < J < 1","J > 1","J < 0","J = 1/2"],rep:0},
   ]},
 
-  // ── PARTIE C : Fonctions f et g par morceaux ──────────────────
-  {badge:"PARTIE C",titre:"Fonctions par morceaux f et g sur [−1 ; 5]",qs:[
+  // ══ PARTIE C — Fonctions affines par morceaux f et g ══
+  // Chapitre : Fonctions / Représentations graphiques / Intégrales
+  {badge:"PARTIE C",titre:"Fonctions f et g par morceaux sur [−1 ; 5] — Intégrales I et J",qs:[
 
     {id:"C1",pts:1,
-     txt:"f est définie sur [−1 ; 5] par :\n  f(x) = x + 3    si −1 ≤ x ≤ 0\n  f(x) = −x + 3   si 0 < x ≤ 3\n  f(x) = x − 3    si 3 < x ≤ 5.\n\nQue valent f(0) et f(3) ?",
-     opts:["f(0) = 3 et f(3) = 0","f(0) = 2 et f(3) = 1","f(0) = 3 et f(3) = 3","f(0) = 0 et f(3) = 0"],rep:0},
+     txt:"f est définie sur [−1;5] par :\nf(x) = x+3 si −1≤x≤0\nf(x) = −x+3 si 0<x≤3\nf(x) = x−3 si 3<x≤5.\n\nQuelle est la valeur de f(0) ? Et f(3) ? La fonction f est-elle continue en x=0 ?",
+     opts:["f(0)=3, f(3)=0, continue en 0","f(0)=2, f(3)=1, non continue en 0","f(0)=3, f(3)=3, non continue en 0","f(0)=0, f(3)=0, continue en 0"],rep:0},
 
-    {id:"C2",pts:2,
-     txt:"Calculer I = ∫[−1 à 5] f(x) dx.",
-     opts:["I = 9","I = 8","I = 7","I = 10"],rep:0},
+    {id:"C2",pts:1,
+     txt:"On calcule I = ∫₋₁⁵ f(x)dx en découpant :\n\nI₁ = ∫₋₁⁰ (x+3)dx = [x²/2 + 3x]₋₁⁰ = 0 − (1/2−3) = 5/2\nI₂ = ∫₀³ (−x+3)dx = [−x²/2+3x]₀³ = (−9/2+9) = 9/2\nI₃ = ∫₃⁵ (x−3)dx = [x²/2−3x]₃⁵ = (25/2−15)−(9/2−9) = ?\n\nI₃ vaut :",
+     opts:["2","3","4","5/2"],rep:0,
+     hint:"(25/2−15) = −5/2  et  (9/2−9) = −9/2. I₃ = −5/2 − (−9/2) = 4/2 = 2."},
 
     {id:"C3",pts:1,
-     txt:"g est définie sur [−1 ; 5] par :\n  g(x) = −x/2 + 3/2   si −1 ≤ x ≤ 1\n  g(x) = −x/4 + 5/4   si 1 < x ≤ 5.\n\nCalculer J = ∫[−1 à 5] g(x) dx.",
-     opts:["J = 5","J = 4","J = 6","J = 3"],rep:0},
+     txt:"I = I₁ + I₂ + I₃ = 5/2 + 9/2 + 2.\n\nI = ?",
+     opts:["9","8","7 + 1/2","10"],rep:0,
+     hint:"5/2 + 9/2 = 14/2 = 7. Puis 7 + 2 = 9."},
 
     {id:"C4",pts:1,
-     txt:"Calculer ∫[−1 à 5] (f + 4g)(x) dx.",
-     opts:["29","20","25","14"],rep:0},
+     txt:"g est définie sur [−1;5] par :\ng(x) = −x/2 + 3/2 si −1≤x≤1\ng(x) = −x/4 + 5/4 si 1<x≤5.\n\nJ = ∫₋₁⁵ g(x)dx.\n\nJ₁ = ∫₋₁¹ (−x/2+3/2)dx = [−x²/4+3x/2]₋₁¹\n= (−1/4+3/2) − (−1/4−3/2) = ?\n\nJ₁ vaut :",
+     opts:["3","2","1","4"],rep:0,
+     hint:"(−1/4+3/2)−(−1/4−3/2) = 3/2+3/2 = 3."},
 
     {id:"C5",pts:1,
-     txt:"Calculer ∫[−1 à 5] (5f − 2g)(x) dx.",
-     opts:["35","45","55","25"],rep:0},
+     txt:"J₂ = ∫₁⁵ (−x/4+5/4)dx = [−x²/8+5x/4]₁⁵\n= (−25/8+25/4) − (−1/8+5/4)\n= (−25/8+50/8) − (−1/8+10/8)\n= 25/8 − 9/8 = ?\n\nJ₂ vaut :",
+     opts:["2","1","3/2","16/8"],rep:0,
+     hint:"25/8 − 9/8 = 16/8 = 2."},
+
+    {id:"C6",pts:1,
+     txt:"J = J₁ + J₂ = 3 + 2 = 5.\n\nOn veut ∫₋₁⁵ (f + 4g)(x)dx.\n\nPar linéarité de l'intégrale :\n∫(f+4g) = I + 4J = 9 + 4×5 = ?",
+     opts:["29","20","25","14"],rep:0},
+
+    {id:"C7",pts:1,
+     txt:"On veut ∫₋₁⁵ (5f − 2g)(x)dx.\n\n∫(5f−2g) = 5I − 2J = 5×9 − 2×5 = ?",
+     opts:["45","35","55","40"],rep:1,
+     hint:"5×9 = 45 et 2×5 = 10. Donc 45 − 10 = 35."},
   ]},
 
-  // ── PARTIE D : Étude de f(x) = eˣ/(eˣ + 1) ──────────────────
+  // ══ PARTIE D — Étude de f(x) = eˣ/(eˣ+1) ══
+  // Chapitre : Étude de fonctions / Dérivées / Limites / Asymptotes
   {badge:"PARTIE D",titre:"Étude complète de f(x) = eˣ/(eˣ + 1)",qs:[
 
     {id:"D1",pts:1,
-     txt:"Déterminer lim f(x) quand x → −∞ et lim f(x) quand x → +∞.",
-     opts:["0 en −∞  et  1 en +∞","1 en −∞  et  0 en +∞","0 en −∞  et  +∞ en +∞","1/2 dans les deux cas"],rep:0},
+     txt:"f(x) = eˣ/(eˣ+1) est définie sur ℝ car eˣ+1 > 0 pour tout x.\n\nCalculer lim f(x) quand x → −∞.\neˣ → 0 donc f(x) → 0/(0+1) = ?\n\nEt lim f(x) quand x → +∞ ?\nOn divise par eˣ : f(x) = 1/(1+e⁻ˣ) → ?",
+     opts:["lim = 0 en −∞ et lim = 1 en +∞","lim = 1 en −∞ et lim = 0 en +∞","lim = 0 en −∞ et lim = +∞ en +∞","lim = 1/2 en −∞ et en +∞"],rep:0},
 
     {id:"D2",pts:1,
-     txt:"Calculer f'(x) et conclure sur le sens de variation de f sur ℝ.",
-     opts:["f'(x) = eˣ/(eˣ + 1)² > 0 : f strictement croissante sur ℝ","f'(x) < 0 : f décroissante sur ℝ","f'(x) = 0 en x = 0 : f admet un extremum","f'(x) change de signe"],rep:0},
+     txt:"f'(x) = [eˣ(eˣ+1) − eˣ·eˣ] / (eˣ+1)²\n     = eˣ / (eˣ+1)².\n\nPuisque eˣ > 0 et (eˣ+1)² > 0, on conclut que :",
+     opts:["f'(x) > 0 : f est strictement croissante sur ℝ","f'(x) < 0 : f est décroissante sur ℝ","f'(x) = 0 en x = 0","f'(x) change de signe en x = 0"],rep:0},
 
     {id:"D3",pts:1,
-     txt:"Montrer que la courbe de f possède un centre de symétrie. Lequel ?",
-     opts:["Le point (0 ; 1/2)","L'axe des ordonnées","L'axe des abscisses","Le point (1 ; 1)"],rep:0},
+     txt:"f(0) = e⁰/(e⁰+1) = 1/2.\n\nLes droites y = 0 et y = 1 sont des asymptotes horizontales.\nLa courbe de f est :\n\nQuelle propriété de symétrie possède-t-elle ?",
+     opts:["Elle est symétrique par rapport au point (0 ; 1/2)","Elle est symétrique par rapport à l'axe des ordonnées","Elle est symétrique par rapport à l'axe des abscisses","Elle n'a aucune symétrie"],rep:0,
+     hint:"Calculez f(−x) + f(x) et vérifiez si cela vaut 1, ce qui implique que le point (0 ; 1/2) est un centre de symétrie."},
 
     {id:"D4",pts:1,
-     txt:"Vérifier que f(x) + f(−x) = 1. Quelle propriété géométrique cela confirme-t-il ?",
-     opts:["La courbe est symétrique par rapport au point (0 ; 1/2)","La courbe est symétrique par rapport à l'axe Oy","La courbe est périodique","f est paire"],rep:0},
+     txt:"On vérifie la symétrie : f(−x) = e⁻ˣ/(e⁻ˣ+1).\nEn multipliant numérateur et dénominateur par eˣ :\nf(−x) = 1/(1+eˣ).\n\nf(x) + f(−x) = eˣ/(eˣ+1) + 1/(1+eˣ) = (eˣ+1)/(eˣ+1) = ?\n\nDonc f(x) + f(−x) = 1, ce qui signifie que la courbe est :",
+     opts:["Symétrique par rapport au point (0 ; 1/2)","Symétrique par rapport à l'axe Oy","Périodique","Croissante puis décroissante"],rep:0},
 
     {id:"D5",pts:1,
-     txt:"Calculer K = ∫[−1 à 1] f(x) dx en utilisant une primitive de f.",
+     txt:"On note F une primitive de f sur ℝ.\nComme f(x) = eˣ/(eˣ+1) = (eˣ)'/(eˣ+1), on a :\n\nF(x) = ln(eˣ+1) + k, k constante.\n\nCalculer K = ∫₋₁¹ f(x)dx = [ln(eˣ+1)]₋₁¹ = ln(e+1) − ln(e⁻¹+1).\n\nOn a e⁻¹+1 = (1+e)/e, donc ln(e⁻¹+1) = ln(1+e) − 1.\n\nK = ln(e+1) − (ln(1+e) − 1) = ?",
      opts:["K = 1","K = 0","K = ln 2","K = 2"],rep:0},
   ]},
 
-  // ── PARTIE E : Intégrales 1/cos²x et 1/cos⁴x ────────────────
-  {badge:"PARTIE E",titre:"Intégrales — I = ∫[0 à π/4] dx/cos²x  et  J = ∫[0 à π/4] dx/cos⁴x",qs:[
+  // ══ PARTIE E — Intégrales cos²x et cos⁴x ══
+  // Chapitre : Calcul intégral / Primitives trigonométriques
+  {badge:"PARTIE E",titre:"Intégrales trigonométriques — I = ∫dx/cos²x  et  J = ∫dx/cos⁴x",qs:[
 
     {id:"E1",pts:1,
-     txt:"Calculer I = ∫[0 à π/4] dx/cos²x.",
-     opts:["I = 1","I = 0","I = √2","I = π/4"],rep:0},
+     txt:"I = ∫₀^(π/4) dx/cos²x.\n\nLa primitive de 1/cos²x = sec²x est tan x.\n\n[tan x]₀^(π/4) = tan(π/4) − tan(0) = ?",
+     opts:["1","0","√2","π/4"],rep:0},
 
     {id:"E2",pts:1,
-     txt:"Soit g(x) = sin x / cos³x.\nCalculer g'(x) et exprimer 1/cos⁴x en fonction de g'(x) et 1/cos²x.",
-     opts:["g'(x) = 3/cos⁴x − 2/cos²x","g'(x) = 3/cos⁴x + 2/cos²x","g'(x) = 1/cos⁴x − 2/cos²x","g'(x) = 2/cos⁴x − 3/cos²x"],rep:0},
+     txt:"On pose g(x) = sin x / cos³x.\nOn calcule g'(x) par la règle du quotient :\n\ng'(x) = [cos x · cos³x − sin x · (−3cos²x · (−sin x))] / cos⁶x\n      = [cos⁴x − 3sin²x cos²x] / cos⁶x ... \n\nEn divisant par cos⁴x et en utilisant sin²x = 1−cos²x,\non obtient g'(x) = ?",
+     opts:["3/cos⁴x − 2/cos²x","3/cos⁴x + 2/cos²x","1/cos⁴x − 2/cos²x","2/cos⁴x − 3/cos²x"],rep:0},
 
     {id:"E3",pts:1,
-     txt:"En déduire la valeur de g(π/4) − g(0).",
-     opts:["2","1","√2","4"],rep:0},
+     txt:"De la relation g'(x) = 3/cos⁴x − 2/cos²x, on tire :\n3 ∫₀^(π/4) dx/cos⁴x = [g(x)]₀^(π/4) + 2I.\n\ng(π/4) = sin(π/4)/cos³(π/4) = (√2/2) / (√2/2)³.\n(√2/2)³ = 2√2/8 = √2/4.\n\ng(π/4) = (√2/2) / (√2/4) = ?",
+     opts:["2","1","√2","4"],rep:0,
+     hint:"(√2/2) ÷ (√2/4) = (√2/2) × (4/√2) = 4/2 = 2."},
 
     {id:"E4",pts:1,
-     txt:"En déduire J = ∫[0 à π/4] dx/cos⁴x.",
-     opts:["J = 4/3","J = 3/4","J = 2/3","J = 1"],rep:0},
+     txt:"g(0) = sin(0)/cos³(0) = 0.\nI = 1 (question E1).\n3J = g(π/4) − g(0) + 2I = 2 − 0 + 2×1 = 4.\n\nDonc J = ?",
+     opts:["4/3","3/4","2/3","1"],rep:0},
 
     {id:"E5",pts:1,
-     txt:"Comparer J et I, puis vérifier la cohérence avec les valeurs calculées.",
-     opts:["J > I  car 1/cos⁴x ≥ 1/cos²x sur [0 ; π/4]","J < I","J = I","On ne peut pas comparer"],rep:0},
+     txt:"Sur [0 ; π/4], on a 0 ≤ cos x ≤ 1.\nDonc cos⁴x ≤ cos²x.\nEn inversant (termes positifs) : 1/cos⁴x ≥ 1/cos²x.\n\nEn intégrant sur [0 ; π/4] :\n∫₀^(π/4) dx/cos⁴x ≥ ∫₀^(π/4) dx/cos²x\n\nCe qui donne :",
+     opts:["J ≥ I, c'est-à-dire 4/3 ≥ 1 ✓","I ≥ J","I = J","J ≤ 0"],rep:0},
   ]},
+
 ]};
 
+const TOTAL_PTS=QUIZ.sections.flatMap(s=>s.qs).reduce((a,q)=>a+q.pts,0);
 const ALL_QS=()=>QUIZ.sections.flatMap(s=>s.qs);
-const TOTAL_PTS=ALL_QS().reduce((a,q)=>a+q.pts,0);
 
 window.goRegles=()=>{
   const p=document.getElementById('f-prenom').value.trim();
   const n=document.getElementById('f-nom').value.trim();
   const c=document.getElementById('f-classe').value;
   const s=document.getElementById('f-sexe').value;
-  const e=document.getElementById('f-etab').value.trim();
-  if(!p||!n||!c||!s){alert('Veuillez remplir tous les champs.');return;}
+  const etab=document.getElementById('f-etab').value.trim();
+  if(!p||!n||!c||!s||!etab){alert('Veuillez remplir tous les champs obligatoires, y compris l\'établissement.');return;}
   if(c!=='TleD'){alert('Ce quiz est réservé aux élèves de Terminale D.');return;}
-  eleve={prenom:p,nom:n,classe:c,sexe:s,etablissement:e};
-  showPage('regles');
+  eleve={prenom:p,nom:n,classe:c,sexe:s,etablissement:etab};showPage('regles');
 };
 
 window.showPage=id=>{document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('pg-'+id).classList.add('active');};
@@ -355,8 +438,9 @@ function buildQuiz(){
   QUIZ.sections.forEach(sec=>{
     body.insertAdjacentHTML('beforeend',`<div class="sec-head"><span class="sec-badge">${sec.badge}</span><span class="sec-title">${sec.titre}</span></div>`);
     sec.qs.forEach(q=>{
+      const hintHTML=q.hint?`<div class="hint">💡 Indice : ${q.hint}</div>`:'';
       const opts=q.opts.map((o,i)=>`<label class="opt" id="opt-${q.id}-${i}" onclick="pick('${q.id}',${i},this)"><input type="radio" name="q${q.id}"><span class="opt-letter">${'ABCD'[i]}</span><span class="opt-text">${o}</span></label>`).join('');
-      body.insertAdjacentHTML('beforeend',`<div class="qcard" id="qc-${q.id}"><div class="q-label">QUESTION ${q.id} — ${q.pts} pt${q.pts>1?'s':''}</div><div class="q-text">${q.txt}</div><div class="opts">${opts}</div></div>`);
+      body.insertAdjacentHTML('beforeend',`<div class="qcard" id="qc-${q.id}"><div class="q-label">QUESTION ${q.id} — ${q.pts} pt${q.pts>1?'s':''}</div><div class="q-text">${q.txt}</div>${hintHTML}<div class="opts">${opts}</div></div>`);
     });
   });updateCounter();
 }
@@ -387,6 +471,7 @@ function startTimer(){
 
 function antiCheat(){
   document.addEventListener('visibilitychange',()=>{if(!started||done)return;if(document.hidden){frauds++;showFraud();}});
+  document.addEventListener('pagehide',()=>{if(started&&!done){frauds++;}});
   window.addEventListener('blur',()=>{if(started&&!done){frauds++;showFraud();}});
   document.addEventListener('contextmenu',e=>{if(started&&!done)e.preventDefault();});
   document.addEventListener('keydown',e=>{
@@ -416,9 +501,12 @@ async function submit(statut){
   const s20=Math.round(score/TOTAL_PTS*20*100)/100;
   let st=statut;if(frauds>0&&statut==='normal')st=`fraude_${frauds}_sorties`;
   const id=genId();
-  const data={identifiant:id,prenom:eleve.prenom,nom:eleve.nom,classe:eleve.classe,sexe:eleve.sexe,etablissement:eleve.etablissement||'',score,scoreOn20:s20,totalPts:TOTAL_PTS,statut:st,fraudCount:frauds,reponses:JSON.stringify(reps),createdAt:new Date().toISOString()};
+  const data={identifiant:id,prenom:eleve.prenom,nom:eleve.nom,classe:eleve.classe,sexe:eleve.sexe,
+    etablissement:eleve.etablissement||'',
+    score,scoreOn20:s20,totalPts:TOTAL_PTS,statut:st,fraudCount:frauds,
+    reponses:JSON.stringify(reps),createdAt:new Date().toISOString()};
   try{await addDoc(collection(db,'resultats_d'),data);}catch(e){
-    try{const arr=JSON.parse(localStorage.getItem('se_d')||'[]');arr.push(data);localStorage.setItem('se_d',JSON.stringify(arr));}catch(e2){}
+    try{const arr=JSON.parse(localStorage.getItem('se_res')||'[]');arr.push(data);localStorage.setItem('se_res',JSON.stringify(arr));}catch(e2){}
   }
   document.getElementById('fin-id').textContent=id;
   document.getElementById('score-val').textContent=s20;
@@ -427,7 +515,7 @@ async function submit(statut){
     const box=document.getElementById('score-box');
     box.style.background='rgba(139,26,26,.18)';box.style.borderColor='rgba(224,85,85,.4)';
     document.getElementById('score-val').style.color='#e05555';
-    document.getElementById('fin-note').innerHTML=`⚠️ Résultat marqué <strong>${st.replace(/_/g,' ')}</strong>. Classement pénalisé.`;
+    document.getElementById('fin-note').innerHTML=`⚠️ Votre résultat est marqué <strong>${st.replace(/_/g,' ')}</strong>.<br>Votre classement sera pénalisé en conséquence.`;
   }
   showPage('fin');
 }
