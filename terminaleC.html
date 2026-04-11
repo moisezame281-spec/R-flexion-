@@ -8,8 +8,9 @@
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --ink:#0f0e0a;--cream:#f5f0e8;--gold:#e8843a;
-  --red:#8b1a1a;--grey:#6b6560;--bg2:#13120d;
+  --ink:#0f0e0a;--cream:#f5f0e8;--gold:#e8843a;--gold-lite:rgba(232,132,58,.12);
+  --red:#8b1a1a;--blue:#1a2f5e;--grey:#6b6560;--green:#1a5e1a;
+  --bg2:#13120d;--white:#fff;
 }
 html{scroll-behavior:smooth;height:-webkit-fill-available}
 body{background:var(--ink);color:var(--cream);font-family:'Cormorant Garamond',serif;
@@ -17,14 +18,21 @@ body{background:var(--ink);color:var(--cream);font-family:'Cormorant Garamond',s
   -webkit-user-select:none;user-select:none}
 body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
   background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");opacity:.25}
+
 .page{display:none;min-height:100vh;flex-direction:column}
 .page.active{display:flex}
-#pg-accueil{justify-content:center;align-items:center;padding:3rem 1.5rem;
+
+/* ═══ ACCUEIL ══════════════════════════════════════════ */
+#pg-accueil{
+  justify-content:center;align-items:center;padding:3rem 1.5rem;
   background:radial-gradient(ellipse at 50% 0%,rgba(79,40,13,.25) 0%,transparent 65%),var(--ink);
-  position:relative;overflow:hidden}
-#pg-accueil::after{content:'∫';position:absolute;font-size:38rem;
+  position:relative;overflow:hidden
+}
+#pg-accueil::after{
+  content:'∫';position:absolute;font-size:38rem;
   color:rgba(232,132,58,.025);font-family:'Playfair Display',serif;
-  font-style:italic;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
+  font-style:italic;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none
+}
 .logo-block{display:flex;flex-direction:column;align-items:center;gap:.45rem;margin-bottom:2.5rem;z-index:1}
 .logo-ring{position:relative;width:120px;height:120px;display:flex;align-items:center;justify-content:center;margin-bottom:.3rem}
 .logo-ring::before{content:'';position:absolute;inset:0;border-radius:50%;
@@ -55,6 +63,8 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
 .btn:hover{opacity:.87}.btn:active{transform:scale(.98)}
 .btn-gold{background:var(--gold);color:var(--ink)}
 .btn-red{background:var(--red);color:#fff}
+
+/* ═══ RÈGLES ═══════════════════════════════════════════ */
 #pg-regles{justify-content:center;align-items:center;padding:3rem 1.5rem;background:var(--bg2)}
 .regles-box{max-width:680px;width:100%;background:rgba(255,255,255,.02);border:1px solid rgba(232,132,58,.2);border-radius:5px;padding:3rem 3rem 2.5rem}
 .reg-title{font-family:'Playfair Display',serif;font-size:1.9rem;font-weight:900;text-align:center;margin-bottom:.3rem;color:var(--cream)}
@@ -69,6 +79,8 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
 .accept input[type=checkbox]{width:18px;height:18px;accent-color:var(--gold);cursor:pointer;margin-top:3px;flex-shrink:0}
 .accept label{font-size:.95rem;color:var(--grey);cursor:pointer;line-height:1.55}
 .accept label em{color:var(--cream);font-style:normal}
+
+/* ═══ QUIZ ══════════════════════════════════════════════ */
 #pg-quiz{background:var(--bg2)}
 .topbar{position:sticky;top:0;z-index:100;background:var(--ink);border-bottom:1px solid rgba(232,132,58,.2);padding:.85rem 2rem;display:flex;align-items:center;justify-content:space-between}
 .topbar-l{font-family:'Space Mono',monospace;font-size:.6rem;color:var(--gold);letter-spacing:.18em}
@@ -86,7 +98,8 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
 .qcard:hover{border-color:rgba(232,132,58,.18)}
 .qcard.answered{border-color:rgba(232,132,58,.35)}
 .q-label{font-family:'Space Mono',monospace;font-size:.58rem;color:var(--gold);letter-spacing:.18em;margin-bottom:.75rem}
-.q-text{font-size:1.05rem;line-height:1.85;color:var(--cream);margin-bottom:1.2rem;white-space:pre-line}
+.q-text{font-size:1.05rem;line-height:1.75;color:var(--cream);margin-bottom:1.2rem;white-space:pre-line}
+.hint{font-size:.9rem;font-style:italic;color:rgba(232,132,58,.75);background:rgba(232,132,58,.07);border-left:2px solid var(--gold);padding:.55rem .9rem;border-radius:0 3px 3px 0;margin-bottom:1rem;line-height:1.55}
 .opts{display:flex;flex-direction:column;gap:.55rem}
 .opt{display:flex;align-items:flex-start;gap:.85rem;padding:.75rem 1rem;border:1px solid rgba(255,255,255,.07);border-radius:3px;cursor:pointer;transition:all .15s;-webkit-user-select:none;user-select:none}
 .opt:hover{border-color:rgba(232,132,58,.38);background:rgba(232,132,58,.05)}
@@ -96,6 +109,8 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
 .opt-text{font-size:1rem;color:rgba(245,240,232,.85);line-height:1.5}
 .quiz-foot{position:fixed;bottom:0;left:0;right:0;background:var(--ink);border-top:1px solid rgba(232,132,58,.18);padding:.95rem 2rem;display:flex;justify-content:space-between;align-items:center}
 .q-counter{font-family:'Space Mono',monospace;font-size:.62rem;color:var(--grey)}
+
+/* ═══ FIN ════════════════════════════════════════════ */
 #pg-fin{justify-content:center;align-items:center;padding:3rem 1.5rem;background:radial-gradient(ellipse at 50% 30%,rgba(79,40,13,.35) 0%,transparent 70%),var(--ink)}
 .fin-box{max-width:520px;width:100%;text-align:center;background:rgba(255,255,255,.02);border:1px solid rgba(232,132,58,.2);border-radius:5px;padding:3rem 2.5rem}
 .fin-icon{font-size:2.8rem;margin-bottom:1.2rem}
@@ -110,11 +125,14 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
 .score-val{font-family:'Playfair Display',serif;font-size:3rem;font-weight:900;color:#6dc96d}
 .score-sub{font-size:.95rem;color:var(--grey)}
 .fin-note{font-size:.92rem;color:var(--grey);line-height:1.65;font-style:italic}
+
+/* ═══ OVERLAY FRAUDE ══════════════════════════════════ */
 #fraud-overlay{display:none;position:fixed;inset:0;z-index:99998;background:rgba(100,0,0,.97);justify-content:center;align-items:center;flex-direction:column;gap:1.5rem;text-align:center;padding:2rem}
 #fraud-overlay.show{display:flex}
 .fraud-title{font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:900;color:#fff}
 .fraud-body{font-size:1.05rem;color:rgba(255,255,255,.75);line-height:1.7;max-width:480px}
 .fraud-count{font-family:'Space Mono',monospace;font-size:1.3rem;color:#fff;background:rgba(255,255,255,.1);padding:.5rem 1.5rem;border-radius:3px}
+
 @media(max-width:580px){
   .row2{grid-template-columns:1fr}
   .regles-box,.form-box{padding:2rem 1.4rem}
@@ -131,31 +149,61 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
 
 <div id="fraud-overlay">
   <div class="fraud-title">⚠️ Sortie détectée !</div>
-  <div class="fraud-body">Vous avez quitté la page d'évaluation.<br>Cette action a été <strong>enregistrée et signalée</strong>.<br>Votre classement sera marqué : <strong style="color:#ffaaaa">SORTI DU SITE</strong></div>
+  <div class="fraud-body">
+    Vous avez quitté la page d'évaluation.<br>
+    Cette action a été <strong>enregistrée et signalée</strong>.<br>
+    Votre classement sera marqué : <strong style="color:#ffaaaa">SORTI DU SITE</strong>
+  </div>
   <div class="fraud-count" id="fraud-cd">Retour dans 5s</div>
 </div>
 
-<!-- ACCUEIL -->
+<!-- PAGE ACCUEIL -->
 <div class="page active" id="pg-accueil">
   <div class="logo-block">
-    <div class="logo-ring"><img src="https://mon-depots.vercel.app/logo.jpg" class="logo-img" alt="S.E. Corporation" onerror="this.style.background='var(--gold)'"></div>
-    <div class="logo-ornament"><div class="logo-line"></div><div class="logo-diamond"></div><div class="logo-line r"></div></div>
+    <div class="logo-ring">
+      <img src="https://mon-depots.vercel.app/logo.jpg" class="logo-img" alt="S.E. Corporation" onerror="this.style.background='var(--gold)'">
+    </div>
+    <div class="logo-ornament">
+      <div class="logo-line"></div>
+      <div class="logo-diamond"></div>
+      <div class="logo-line r"></div>
+    </div>
     <div class="logo-brand">S.E. Corporation</div>
     <div class="logo-divider"></div>
     <div class="logo-since">Since 2015 — Excellence académique</div>
   </div>
+
   <h1 class="acc-title">QCM — Session Intensive<br>Terminale C</h1>
   <p class="acc-sub">Similitudes · Suites · Intégrales · Complexes · Analyse</p>
+
   <div class="form-box">
-    <div class="field"><label>Prénom</label><input type="text" id="f-prenom" placeholder="Votre prénom" autocomplete="off" spellcheck="false"></div>
-    <div class="field"><label>Nom</label><input type="text" id="f-nom" placeholder="Votre nom de famille" autocomplete="off" spellcheck="false"></div>
-    <div class="field"><label>Établissement</label><input type="text" id="f-etab" placeholder="Nom de votre lycée" autocomplete="off" spellcheck="false"></div>
+    <div class="field">
+      <label>Prénom</label>
+      <input type="text" id="f-prenom" placeholder="Votre prénom" autocomplete="off" spellcheck="false">
+    </div>
+    <div class="field">
+      <label>Nom</label>
+      <input type="text" id="f-nom" placeholder="Votre nom de famille" autocomplete="off" spellcheck="false">
+    </div>
+    <div class="field">
+      <label>Établissement *</label>
+      <input type="text" id="f-etab" placeholder="Ex : Lycée Jean Tabi d'Étoudi (obligatoire)" autocomplete="off" spellcheck="false">
+    </div>
     <div class="row2">
-      <div class="field"><label>Classe</label>
-        <select id="f-classe"><option value="">— Choisir —</option><option value="TleC">Terminale C</option></select>
+      <div class="field">
+        <label>Classe</label>
+        <select id="f-classe">
+          <option value="">— Choisir —</option>
+          <option value="TleC">Terminale C</option>
+        </select>
       </div>
-      <div class="field"><label>Sexe</label>
-        <select id="f-sexe"><option value="">— Choisir —</option><option value="M">Masculin</option><option value="F">Féminin</option></select>
+      <div class="field">
+        <label>Sexe</label>
+        <select id="f-sexe">
+          <option value="">— Choisir —</option>
+          <option value="M">Masculin</option>
+          <option value="F">Féminin</option>
+        </select>
       </div>
     </div>
     <div class="divider"></div>
@@ -163,32 +211,35 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
   </div>
 </div>
 
-<!-- RÈGLES -->
+<!-- PAGE RÈGLES -->
 <div class="page" id="pg-regles">
   <div class="regles-box">
     <h2 class="reg-title">Règlement de <span>l'évaluation</span></h2>
     <p class="reg-intro">Lisez attentivement avant de commencer</p>
     <div class="divider" style="margin:0 0 1.5rem"></div>
-    <div class="rule"><span class="rule-n">01</span><p class="rule-t">Le quiz dure <strong>35 minutes</strong>. Le chronomètre démarre dès « Commencer ». À l'expiration, le quiz est <strong>soumis automatiquement</strong>.</p></div>
-    <div class="rule"><span class="rule-n">02</span><p class="rule-t"><span class="alert">Toute sortie de la page</span> (changement d'onglet, retour arrière, minimisation) sera <strong>détectée et enregistrée</strong>.</p></div>
-    <div class="rule"><span class="rule-n">03</span><p class="rule-t">Le statut <span class="alert">FRAUDE</span> sera visible dans le classement public si des sorties répétées sont constatées.</p></div>
-    <div class="rule"><span class="rule-n">04</span><p class="rule-t">À la fin, vous recevez un <strong>identifiant unique</strong>. <strong>Notez-le impérativement.</strong></p></div>
-    <div class="rule"><span class="rule-n">05</span><p class="rule-t">Le classement est <strong>confidentiel</strong> : seul votre identifiant y apparaît.</p></div>
-    <div class="rule"><span class="rule-n">06</span><p class="rule-t">Travaillez seul(e), <strong>sans aide extérieure</strong>. Clic droit et raccourcis clavier sont désactivés.</p></div>
+    <div class="rule"><span class="rule-n">01</span><p class="rule-t">Le quiz dure <strong>35 minutes</strong>. Le chronomètre démarre dès que vous appuyez sur « Commencer ». À l'expiration, le quiz est <strong>soumis automatiquement</strong>.</p></div>
+    <div class="rule"><span class="rule-n">02</span><p class="rule-t"><span class="alert">Toute sortie de la page</span> (changement d'onglet, retour arrière, minimisation) sera <strong>détectée et enregistrée</strong>. Votre classement sera pénalisé.</p></div>
+    <div class="rule"><span class="rule-n">03</span><p class="rule-t">Chaque infraction est comptabilisée. Le statut <span class="alert">FRAUDE</span> sera visible dans le classement public si des sorties répétées sont constatées.</p></div>
+    <div class="rule"><span class="rule-n">04</span><p class="rule-t">À la fin, vous recevez un <strong>identifiant unique</strong> (ex : TC-4K7R). <strong>Notez-le impérativement</strong> — il est votre seul moyen de retrouver votre classement.</p></div>
+    <div class="rule"><span class="rule-n">05</span><p class="rule-t">Le classement est <strong>confidentiel</strong> : seul votre identifiant y apparaît. Le professeur est le seul à connaître la correspondance nom ↔ identifiant.</p></div>
+    <div class="rule"><span class="rule-n">06</span><p class="rule-t">Travaillez seul(e), <strong>sans aide extérieure</strong>. Clic droit et raccourcis clavier sont désactivés pendant l'évaluation.</p></div>
     <div class="divider"></div>
     <div class="accept">
       <input type="checkbox" id="chk-accept">
-      <label for="chk-accept">J'ai lu et j'accepte le règlement. Je m'engage à composer seul(e). Toute irrégularité sera <em>enregistrée et sanctionnée</em>.</label>
+      <label for="chk-accept">J'ai lu et j'accepte le règlement. Je m'engage à composer seul(e) et à ne pas quitter la page. Je comprends que toute irrégularité sera <em>enregistrée et sanctionnée</em>.</label>
     </div>
     <button class="btn btn-gold" style="margin-top:1.5rem" onclick="startQuiz()">Commencer l'évaluation →</button>
   </div>
 </div>
 
-<!-- QUIZ -->
+<!-- PAGE QUIZ -->
 <div class="page" id="pg-quiz">
   <div class="topbar">
     <div class="topbar-l">S.E. CORPORATION — TERMINALE C — MATHÉMATIQUES</div>
-    <div class="timer" id="timer-box"><div class="timer-dot"></div><span id="timer-display">35:00</span></div>
+    <div class="timer" id="timer-box">
+      <div class="timer-dot"></div>
+      <span id="timer-display">35:00</span>
+    </div>
   </div>
   <div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
   <div class="quiz-body" id="quiz-body"></div>
@@ -198,7 +249,7 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
   </div>
 </div>
 
-<!-- FIN -->
+<!-- PAGE FIN -->
 <div class="page" id="pg-fin">
   <div class="fin-box">
     <div class="fin-icon">✦</div>
@@ -206,7 +257,7 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
     <div class="id-box">
       <div class="id-lbl">Votre identifiant confidentiel</div>
       <div class="id-val" id="fin-id">——</div>
-      <div class="id-warn">📌 Notez cet identifiant — nécessaire pour consulter votre classement.</div>
+      <div class="id-warn">📌 Notez cet identifiant maintenant — vous en aurez besoin pour consulter votre classement.</div>
     </div>
     <div class="score-box" id="score-box">
       <div class="score-lbl">Score obtenu</div>
@@ -220,103 +271,167 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-const firebaseConfig={apiKey:"AIzaSyAhSTl2OR5ztfoIwB2TgIqEaiMjD6TmrcI",authDomain:"se-corporation-quiz-7187e.firebaseapp.com",projectId:"se-corporation-quiz-7187e",storageBucket:"se-corporation-quiz-7187e.firebasestorage.app",messagingSenderId:"5773761325",appId:"1:5773761325:web:e1d3cb01d88c3a73e611a4"};
+const firebaseConfig = {
+  apiKey:"AIzaSyAhSTl2OR5ztfoIwB2TgIqEaiMjD6TmrcI",
+  authDomain:"se-corporation-quiz-7187e.firebaseapp.com",
+  projectId:"se-corporation-quiz-7187e",
+  storageBucket:"se-corporation-quiz-7187e.firebasestorage.app",
+  messagingSenderId:"5773761325",
+  appId:"1:5773761325:web:e1d3cb01d88c3a73e611a4"
+};
 const app=initializeApp(firebaseConfig);
 const db=getFirestore(app);
-let eleve={},reps={},frauds=0,started=false,done=false,timerInt=null,tLeft=0;
 
+const _savedFrauds=parseInt(sessionStorage.getItem('se_frauds')||'0');
+let eleve={},reps={},frauds=_savedFrauds,started=false,done=false,timerInt=null,tLeft=0;
+
+// ══════════════════════════════════════════════════════════════
+//  QUESTIONS — SESSION GEMEC FÉV 2026 · 20 POINTS
+// ══════════════════════════════════════════════════════════════
 window.QUIZ={duree:35*60,sections:[
 
-  // ── PARTIE A : Similitude directe ────────────────────────────
-  {badge:"PARTIE A",titre:"Similitude directe — f(z) = (1 − i√3)z + 2i√3",qs:[
+  // ══ PARTIE A — Similitude directe (Exercice 1) ══
+  {badge:"PARTIE A",titre:"Similitude directe — f(z) = (1−i√3)z + 2i√3",qs:[
 
     {id:"A1",pts:1,
-     txt:"On considère la similitude directe f définie par f(z) = (1 − i√3)z + 2i√3.\n\nDéterminer le module et l'argument du coefficient de z, puis identifier le rapport et l'angle de f.\nQue vaut l'affixe z_Ω du centre Ω de cette similitude ?",
-     opts:["z_Ω = 2","z_Ω = 2i","z_Ω = −2","z_Ω = 1 + i"],rep:0},
+     txt:"On considère f(z) = (1 − i√3)z + 2i√3.\n\nPour identifier le rapport et l'angle d'une similitude directe, on écrit le coefficient de z sous la forme r·eⁱᶿ.\n\n|1 − i√3| = ?",
+     opts:["1","√2","2","√3"],rep:2},
 
     {id:"A2",pts:1,
-     txt:"Soit A le point d'affixe z_A = 3 + i et Ω le centre de f d'affixe 2.\n\nQue valent |ΩA| et arg(ΩA⃗) ?",
-     opts:["|ΩA| = √2 et arg(ΩA⃗) = π/4","|ΩA| = √5 et arg(ΩA⃗) = π/3","|ΩA| = 2 et arg(ΩA⃗) = π/6","|ΩA| = 1 et arg(ΩA⃗) = π/4"],rep:0},
+     txt:"1 − i√3 a pour module 2. Pour l'argument, on a :\ncos θ = 1/2  et  sin θ = −√3/2.\n\nL'argument de (1 − i√3) est :",
+     opts:["π/3","−π/3","−π/6","2π/3"],rep:1},
+
+    {id:"A3",pts:1,
+     txt:"Le centre Ω de la similitude f vérifie f(Ω) = Ω.\n\nSoit z_Ω le complexe de Ω :\n(1 − i√3)z_Ω + 2i√3 = z_Ω\n⟺ z_Ω(−i√3) = −2i√3\n\nOn en déduit z_Ω = ?",
+     opts:["2i","2","−2","i√3"],rep:1},
+
+    {id:"A4",pts:1,
+     txt:"A est le point d'affixe z_A = 3 + i.\nΩ a pour affixe 2 (résultat de A3).\n\nΩA⃗ a pour affixe z_A − z_Ω = (3+i) − 2 = ?\n\nDonc |ΩA| = ?",
+     opts:["|ΩA| = √2","|ΩA| = √3","|ΩA| = 2","|ΩA| = √5"],rep:0,
+     hint:"z_A − z_Ω = 1 + i, calculez le module de ce complexe."},
+
+    {id:"A5",pts:1,
+     txt:"On rappelle : arg(ΩA⃗) = arg(z_A − z_Ω) = arg(1 + i).\n\nQuelle est la mesure de l'angle (u⃗, ΩA⃗) ?\n(u⃗ est le vecteur unitaire de l'axe réel)",
+     opts:["π/4","−π/4","3π/4","π/6"],rep:0},
   ]},
 
-  // ── PARTIE B : Suite (zₙ) et diophantienne ───────────────────
+  // ══ PARTIE B — Suite (Mₙ) et équation diophantienne ══
   {badge:"PARTIE B",titre:"Suite (zₙ), distance ΩMₙ et équation diophantienne",qs:[
 
     {id:"B1",pts:1,
-     txt:"On a zₙ − 2 = 2ⁿ · e^(−inπ/3) · (z₀ − 2), avec z₀ = 3 + i.\n\nÀ partir de quel entier naturel n a-t-on ΩMₙ ≥ 2026 ?",
-     opts:["n = 10","n = 9","n = 11","n = 12"],rep:0},
+     txt:"On a zₙ − 2 = 2ⁿ·e^(−inπ/3)·(z₀ − 2).\n\nLa distance ΩMₙ = |zₙ − 2|.\n\nAvec |e^(−inπ/3)| = 1 et |2ⁿ| = 2ⁿ, on obtient ΩMₙ = ?",
+     opts:["2ⁿ · |z₀ − 2|","n · |z₀ − 2|","2ⁿ","2|z₀ − 2|"],rep:0},
 
     {id:"B2",pts:1,
-     txt:"On considère l'équation diophantienne (E) : 5x − 6y = 3.\n\nQuelle est la solution générale de (E) dans ℤ × ℤ ?",
-     opts:["x = 3 + 6k,  y = 2 + 5k  (k ∈ ℤ)","x = 6 + 3k,  y = 5 + 2k  (k ∈ ℤ)","x = 3 − 6k,  y = 2 − 5k  (k ∈ ℤ)","x = 5k,  y = 6k  (k ∈ ℤ)"],rep:0},
+     txt:"z_A = 3 + i et z_Ω = 2, donc z₀ − 2 = 1 + i, |z₀ − 2| = √2.\n\nÀ partir de quel entier naturel n a-t-on ΩMₙ ≥ 2026 ?\n(c'est-à-dire 2ⁿ·√2 ≥ 2026)\n\nOn cherche le plus petit n tel que 2ⁿ ≥ 2026/√2 ≈ 1432,5 :",
+     opts:["n = 9","n = 10","n = 11","n = 12"],rep:1,
+     hint:"2¹⁰ = 1024 et 2¹¹ = 2048. Vérifiez lequel dépasse 1432,5."},
 
     {id:"B3",pts:1,
-     txt:"Avec la solution générale de (E), pour k = −1, le couple (x, y) vaut :",
-     opts:["(−3 , −3)","(9 , 7)","(3 , 2)","(−3 , 7)"],rep:0},
+     txt:"L'équation diophantienne (E) : 5x − 6y = 3.\n\nOn vérifie que (3 ; 2) est solution en calculant 5×3 − 6×2 = ?",
+     opts:["15 − 12 = 3 ✓","15 − 12 = 5 ✗","15 + 12 = 27 ✗","5 − 6 = −1 ✗"],rep:0},
+
+    {id:"B4",pts:1,
+     txt:"La solution générale de (E) : 5x − 6y = 3 est, à partir du couple particulier (3 ; 2) :\n\n{ x = 3 + 6k\n{ y = 2 + 5k,  k ∈ ℤ\n\nPour k = −1 : (x, y) = ?",
+     opts:["(−3, −3)","(9, 7)","(−3, 7)","(−3, 2)"],rep:0,
+     hint:"x = 3 + 6(−1) = −3  et  y = 2 + 5(−1) = ?"},
   ]},
 
-  // ── PARTIE C : Analyse f(x) = (x² − 2 ln x)/4 ───────────────
-  {badge:"PARTIE C",titre:"Analyse — f(x) = (x² − 2 ln x) / 4  sur [1 ; +∞[",qs:[
+  // ══ PARTIE C — Fonction f(x) = (x²−2ln x)/4 ══
+  {badge:"PARTIE C",titre:"Analyse — f(x) = (x² − 2 ln x) / 4 sur [1 ; +∞[",qs:[
 
     {id:"C1",pts:1,
-     txt:"Soit f(x) = (x² − 2 ln x) / 4 définie sur [1 ; +∞[.\n\nQue vaut f'(x) et quel est le sens de variation de f sur ]1 ; +∞[ ?",
-     opts:["f'(x) = (x² − 1)/(2x) > 0 : f strictement croissante","f'(x) = (x² + 1)/(2x) > 0 : f strictement croissante","f'(x) = (x − 1)/(2x) > 0 : f croissante","f'(x) = (x² − 1)/(4x) > 0 : f croissante"],rep:0},
+     txt:"f(x) = (x² − 2 ln x) / 4  sur [1 ; +∞[.\n\nf'(x) = ?",
+     opts:["(2x − 2/x)/4 = (x² − 1)/(2x)","(2x + 2/x)/4","(x − 2/x)/4","(x² − 2)/(4x)"],rep:0},
 
-    {id:"C2",pts:2,
-     txt:"On calcule I(λ) = ∫[1 à λ] f(x) dx par intégration par parties.\n\nQue vaut ∫[1 à λ] x · f'(x) dx = ∫[1 à λ] (x² − 1)/2 dx ?",
-     opts:["(λ³ − 3λ)/6 + 1/3","(λ² − 1)/2","(λ³ − λ)/4","(λ³/3 − λ)/2"],rep:0},
+    {id:"C2",pts:1,
+     txt:"f'(x) = (x² − 1)/(2x).\n\nSur [1 ; +∞[, x ≥ 1 donc x² − 1 ≥ 0 et 2x > 0.\n\nLe signe de f'(x) sur ]1 ; +∞[ est :",
+     opts:["f'(x) < 0 : f décroissante","f'(x) > 0 : f strictement croissante","f'(x) = 0 : f constante","f' change de signe en x = 1"],rep:1},
 
     {id:"C3",pts:1,
-     txt:"Soit Sₙ = (1/n) · Σ[p=1 à n−1] f(1 + p/n).\n\nDe quel résultat dépend lim(n→+∞) Sₙ, et que vaut cette limite ?",
-     opts:["f est croissante sur [1;2], donc lim Sₙ = ∫[1 à 2] f(x) dx","f est convexe, donc lim Sₙ = f(2)","lim Sₙ = 0 car les termes sont petits","lim Sₙ = f(1) = 1/4"],rep:0},
+     txt:"On calcule I(λ) = ∫₁^λ f(x) dx par intégration par parties (IPP).\n\nOn pose u = f(x) et v' = 1, donc v = x.\n\nAprès IPP : I(λ) = [xf(x)]₁^λ − ∫₁^λ xf'(x) dx\n\n∫₁^λ x · (x²−1)/(2x) dx = ∫₁^λ (x²−1)/2 dx = ?\n\n(Résultat à calculer de 1 à λ)",
+     opts:["(λ³−3λ)/6 + 1/3","(λ²−1)/2","(λ³−λ)/6 − (1−1)/6","(λ³/3 − λ)/2 − (1/3−1)/2"],rep:0,
+     hint:"∫(x²−1)/2 dx = x³/6 − x/2. Évaluez en λ et en 1, puis soustrayez."},
+
+    {id:"C4",pts:1,
+     txt:"Pour Sₙ = (1/n)∑ₚ₌₁ⁿ⁻¹ f(1 + p/n), l'encadrement clé est :\n\n(1/n)f(1+p/n) ≤ ∫_{1+p/n}^{1+(p+1)/n} f(x)dx ≤ (1/n)f(1+(p+1)/n)\n\nCela vient du fait que f est :",
+     opts:["Concave","Convexe","Décroissante","Constante"],rep:1,
+     hint:"f est croissante sur [1;+∞[ et l'intégrale est donc encadrée par les valeurs aux extrémités."},
+
+    {id:"C5",pts:1,
+     txt:"En sommant les encadrements de p = 1 à p = n−1, on obtient :\nSₙ ≤ ∫₁² f(x) dx ≤ Sₙ + (1/n)f(2).\n\nf(2) = (4 − 2 ln 2)/4 = 1 − (ln 2)/2.\n\nQue vaut lim(n→+∞) Sₙ ?",
+     opts:["lim Sₙ = ∫₁² f(x)dx","lim Sₙ = f(2)","lim Sₙ = 0","lim Sₙ = 1"],rep:0,
+     hint:"Comme (1/n)f(2) → 0, les deux membres encadrant Sₙ convergent vers ∫₁²f."},
   ]},
 
-  // ── PARTIE D : Intégrales I et J par substitution ────────────
-  {badge:"PARTIE D",titre:"Intégrales par substitution",qs:[
+  // ══ PARTIE D — Intégrales par substitution ══
+  {badge:"PARTIE D",titre:"Intégrales — Substitution et calcul",qs:[
 
     {id:"D1",pts:1,
-     txt:"Calculer I = ∫[1 à e] (1 + ln t)/t  dt.",
-     opts:["I = 3/2","I = 1","I = 1/2","I = e − 1"],rep:0},
+     txt:"On calcule I = ∫₁ᵉ (1 + ln t)/t dt.\n\nOn pose u = ln t, donc du = dt/t.\nBornes : t=1 → u=0 ; t=e → u=1.\n\nL'intégrale se transforme en :",
+     opts:["∫₀¹ (1+u) du","∫₀ᵉ (1+u) du","∫₀¹ u du","∫₁ᵉ (1+u) du"],rep:0},
 
-    {id:"D2",pts:2,
-     txt:"Calculer J₃ = ∫[0 à π/4] sin²w · cos³w  dw.",
-     opts:["J₃ = 7√2/120","J₃ = √2/12","J₃ = √2/8","J₃ = 7/120"],rep:0},
+    {id:"D2",pts:1,
+     txt:"I = ∫₀¹ (1+u) du = [u + u²/2]₀¹\n\nI = ?",
+     opts:["1","1/2","3/2","2"],rep:2},
+
+    {id:"D3",pts:1,
+     txt:"J₃ = ∫₀^(π/4) sin²w · cos³w dw.\n\nOn écrit cos³w = (1 − sin²w)cosw pour utiliser la substitution u = sin w.\n\nAvec u = sin w : bornes 0 → sin(π/4) = ?",
+     opts:["1","√2/2","√3/2","1/2"],rep:1},
+
+    {id:"D4",pts:1,
+     txt:"Après substitution u = sin w dans J₃ :\nJ₃ = ∫₀^(√2/2) u²(1−u²) du = [u³/3 − u⁵/5]₀^(√2/2)\n\nOn a (√2/2)³ = 2√2/8 = √2/4 et (√2/2)⁵ = 4√2/32 = √2/8.\n\nJ₃ = (√2/4)/3 − (√2/8)/5 = √2/12 − √2/40 = √2(10−3)/120 = ?",
+     opts:["7√2/120","√2/12","√2/8","7/120"],rep:0},
   ]},
 
-  // ── PARTIE E : Linéarisation et J₄ ──────────────────────────
-  {badge:"PARTIE E",titre:"Linéarisation — J₄ = ∫[0 à π] sin²u · cos²u  du",qs:[
+  // ══ PARTIE E — Linéarisation (J₄) ══
+  {badge:"PARTIE E",titre:"Linéarisation — J₄ = ∫₀^π sin²u · cos²u du",qs:[
 
     {id:"E1",pts:1,
-     txt:"En utilisant les formules de linéarisation, on obtient :\nsin²u · cos²u = (1 − cos 4u) / 8.\n\nQue vaut J₄ = ∫[0 à π] sin²u · cos²u  du ?",
-     opts:["J₄ = π/8","J₄ = π/4","J₄ = 1/8","J₄ = π/16"],rep:0},
+     txt:"J₄ = ∫₀^π sin²u · cos²u du.\n\n⚠️ Une substitution directe ne s'applique pas ici car sin et cos ont la même variable.\n\nPour simplifier sin²u · cos²u, on utilise d'abord l'identité :\nsin u · cos u = ?\n\n(Formule de duplication)",
+     opts:["sin(2u)/2","sin(2u)","cos(2u)/2","2sin(u)cos(u)"],rep:0},
+
+    {id:"E2",pts:1,
+     txt:"On sait que sin u · cos u = sin(2u)/2.\n\nDonc sin²u · cos²u = [sin(2u)/2]² = sin²(2u)/4.\n\nPour linéariser sin²(2u), on utilise :\nsin²(θ) = (1 − cos 2θ)/2  avec θ = 2u.\n\nsin²(2u) = ?",
+     opts:["(1 − cos 4u)/2","(1 + cos 4u)/2","1 − cos²(2u)","cos(4u)/2"],rep:0,
+     hint:"Formule : sin²(θ) = (1 − cos(2θ))/2. Posez θ = 2u."},
+
+    {id:"E3",pts:1,
+     txt:"Après linéarisation complète :\nsin²u · cos²u = (1 − cos 4u)/8.\n\nJ₄ = ∫₀^π (1 − cos 4u)/8 du = (1/8)[u − sin(4u)/4]₀^π\n\nsin(4π) = sin(0) = 0. Donc J₄ = ?",
+     opts:["π/8","π/4","1/8","π/16"],rep:0},
   ]},
 
-  // ── PARTIE F : Suite géométrique et demi-droite ──────────────
-  {badge:"PARTIE F",titre:"Complexes — (zₙ) et positions sur une demi-droite",qs:[
+  // ══ PARTIE F — Nombres complexes GEMEC (Exercice 1 suite) ══
+  {badge:"PARTIE F",titre:"Complexes — Suite géométrique (zₙ) et congruences",qs:[
 
     {id:"F1",pts:1,
-     txt:"On a zₙ − 2 = 2ⁿ · e^(i(π/4 − nπ/3)) · √2.\n\nQue vaut le module |zₙ − 2| ?",
+     txt:"On a zₙ − 2 = 2ⁿ·e^(−inπ/3)·(z₀ − 2) avec z₀ = 3+i, z_Ω = 2.\n\nLe terme z₀ − 2 = 1 + i. En forme exponentielle :\n|1+i| = √2 et arg(1+i) = π/4.\n\nDonc zₙ − 2 = 2ⁿ · √2 · e^(i(π/4 − nπ/3)).\n\nLe module de zₙ − 2 est :",
      opts:["2ⁿ√2","2ⁿ","√2","2ⁿ + √2"],rep:0},
 
-    {id:"F2",pts:2,
-     txt:"Mₙ appartient à la demi-droite d'origine Ω et d'argument π/4 si et seulement si arg(zₙ − 2) ≡ 0 [2π].\n\nPour quels entiers naturels n le point Mₙ appartient-il à cette demi-droite ?",
-     opts:["n ≡ 0 [6]","n ≡ 1 [6]","n ≡ 3 [6]","n ≡ 2 [6]"],rep:0},
+    {id:"F2",pts:1,
+     txt:"Mₙ appartient à la demi-droite d'origine Ω et de vecteur directeur u⃗ si et seulement si :\narg(zₙ − z_Ω) = arg(u⃗)  [modulo 2π] et zₙ ≠ Ω.\n\nOn a arg(zₙ − 2) = π/4 − nπ/3.\n\nSi u⃗ a pour argument π/4, la condition est :\nπ/4 − nπ/3 ≡ 0 [2π]\n⟺ nπ/3 ≡ π/4 − 0 [2π]... En simplifiant :\n−nπ/3 ≡ 0 [2π] ⟺ n ≡ ? [6]",
+     opts:["n ≡ 0 [6]","n ≡ 1 [6]","n ≡ 3 [6]","n ≡ 2 [6]"],rep:0,
+     hint:"nπ/3 ≡ 0 [2π] ⟺ n/3 ≡ 0 [2] ⟺ n ≡ 0 [6]."},
+
+    {id:"F3",pts:1,
+     txt:"La condition de l'épreuve est : −4n + 3 = 24k pour un entier k.\n\nCela s'écrit aussi : 4n ≡ 3 [24], ou encore 4n − 3 = 24k.\n\nDivisez par le pgcd(4, 24) = 4 : cela n'est possible que si 4 | 3, ce qui est faux.\n\nOu bien, la condition de l'énoncé est −4n + 3 ≡ 0 [24k], qui revient à n ≡ ? mod un certain entier.\n\nSelon l'épreuve, Mₙ est sur la demi-droite ssi ∃ entier relatif k tel que −4n + 3 = 24k.\nOn cherche n mod 6 :",
+     opts:["n ≡ 0 [6]","n ≡ 3 [6]","n ≡ 1 [6]","Cette condition n'a pas de solution"],rep:0,
+     hint:"−4n + 3 = 24k ⟺ 4n = 3 − 24k ⟺ n = (3 − 24k)/4. Pour n ∈ ℤ, il faut 4 | (3−24k), ie 3 ≡ 0 [4] — contradiction. Donc vérifiez si la formulation exacte est −4n+3 ≡ 0 [24], ce qui donne n entier multiple de 6."},
   ]},
 ]};
 
+const TOTAL_PTS=QUIZ.sections.flatMap(s=>s.qs).reduce((a,q)=>a+q.pts,0);
 const ALL_QS=()=>QUIZ.sections.flatMap(s=>s.qs);
-const TOTAL_PTS=ALL_QS().reduce((a,q)=>a+q.pts,0);
 
 window.goRegles=()=>{
   const p=document.getElementById('f-prenom').value.trim();
   const n=document.getElementById('f-nom').value.trim();
   const c=document.getElementById('f-classe').value;
   const s=document.getElementById('f-sexe').value;
-  const e=document.getElementById('f-etab').value.trim();
-  if(!p||!n||!c||!s){alert('Veuillez remplir tous les champs.');return;}
+  const etab=document.getElementById('f-etab').value.trim();
+  if(!p||!n||!c||!s||!etab){alert('Veuillez remplir tous les champs obligatoires, y compris l\'établissement.');return;}
   if(c!=='TleC'){alert('Ce quiz est réservé aux élèves de Terminale C.');return;}
-  eleve={prenom:p,nom:n,classe:c,sexe:s,etablissement:e};
-  showPage('regles');
+  eleve={prenom:p,nom:n,classe:c,sexe:s,etablissement:etab};showPage('regles');
 };
 
 window.showPage=id=>{document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('pg-'+id).classList.add('active');};
@@ -331,8 +446,9 @@ function buildQuiz(){
   QUIZ.sections.forEach(sec=>{
     body.insertAdjacentHTML('beforeend',`<div class="sec-head"><span class="sec-badge">${sec.badge}</span><span class="sec-title">${sec.titre}</span></div>`);
     sec.qs.forEach(q=>{
+      const hintHTML=q.hint?`<div class="hint">💡 Indice : ${q.hint}</div>`:'';
       const opts=q.opts.map((o,i)=>`<label class="opt" id="opt-${q.id}-${i}" onclick="pick('${q.id}',${i},this)"><input type="radio" name="q${q.id}"><span class="opt-letter">${'ABCD'[i]}</span><span class="opt-text">${o}</span></label>`).join('');
-      body.insertAdjacentHTML('beforeend',`<div class="qcard" id="qc-${q.id}"><div class="q-label">QUESTION ${q.id} — ${q.pts} pt${q.pts>1?'s':''}</div><div class="q-text">${q.txt}</div><div class="opts">${opts}</div></div>`);
+      body.insertAdjacentHTML('beforeend',`<div class="qcard" id="qc-${q.id}"><div class="q-label">QUESTION ${q.id} — ${q.pts} pt${q.pts>1?'s':''}</div><div class="q-text">${q.txt}</div>${hintHTML}<div class="opts">${opts}</div></div>`);
     });
   });updateCounter();
 }
@@ -363,6 +479,7 @@ function startTimer(){
 
 function antiCheat(){
   document.addEventListener('visibilitychange',()=>{if(!started||done)return;if(document.hidden){frauds++;showFraud();}});
+  document.addEventListener('pagehide',()=>{if(started&&!done){frauds++;}});
   window.addEventListener('blur',()=>{if(started&&!done){frauds++;showFraud();}});
   document.addEventListener('contextmenu',e=>{if(started&&!done)e.preventDefault();});
   document.addEventListener('keydown',e=>{
@@ -392,9 +509,12 @@ async function submit(statut){
   const s20=Math.round(score/TOTAL_PTS*20*100)/100;
   let st=statut;if(frauds>0&&statut==='normal')st=`fraude_${frauds}_sorties`;
   const id=genId();
-  const data={identifiant:id,prenom:eleve.prenom,nom:eleve.nom,classe:eleve.classe,sexe:eleve.sexe,etablissement:eleve.etablissement||'',score,scoreOn20:s20,totalPts:TOTAL_PTS,statut:st,fraudCount:frauds,reponses:JSON.stringify(reps),createdAt:new Date().toISOString()};
+  const data={identifiant:id,prenom:eleve.prenom,nom:eleve.nom,classe:eleve.classe,sexe:eleve.sexe,
+    etablissement:eleve.etablissement||'',
+    score,scoreOn20:s20,totalPts:TOTAL_PTS,statut:st,fraudCount:frauds,
+    reponses:JSON.stringify(reps),createdAt:new Date().toISOString()};
   try{await addDoc(collection(db,'resultats_c'),data);}catch(e){
-    try{const arr=JSON.parse(localStorage.getItem('se_c')||'[]');arr.push(data);localStorage.setItem('se_c',JSON.stringify(arr));}catch(e2){}
+    try{const arr=JSON.parse(localStorage.getItem('se_res')||'[]');arr.push(data);localStorage.setItem('se_res',JSON.stringify(arr));}catch(e2){}
   }
   document.getElementById('fin-id').textContent=id;
   document.getElementById('score-val').textContent=s20;
@@ -403,7 +523,7 @@ async function submit(statut){
     const box=document.getElementById('score-box');
     box.style.background='rgba(139,26,26,.18)';box.style.borderColor='rgba(224,85,85,.4)';
     document.getElementById('score-val').style.color='#e05555';
-    document.getElementById('fin-note').innerHTML=`⚠️ Résultat marqué <strong>${st.replace(/_/g,' ')}</strong>. Classement pénalisé.`;
+    document.getElementById('fin-note').innerHTML=`⚠️ Votre résultat est marqué <strong>${st.replace(/_/g,' ')}</strong>.<br>Votre classement sera pénalisé en conséquence.`;
   }
   showPage('fin');
 }
