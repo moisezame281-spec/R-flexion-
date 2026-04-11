@@ -810,7 +810,7 @@ window.renderTable = () => {
       <td class="mono" style="color:var(--gold)">${rank}</td>
       <td class="mono" style="font-weight:700;color:var(--cream)">${r.identifiant||'—'}</td>
       <td class="col-nom" style="display:none"><strong>${r.prenom||''}</strong> ${r.nom||''}</td>
-      <td class="col-etab" style="display:none;font-size:.78rem;color:var(--gold);max-width:110px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${r.etab||'—'}</td>
+      <td class="col-etab" style="display:none;font-size:.78rem;color:var(--gold);max-width:110px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${r.etablissement||r.etab||'—'}</td>
       <td><span class="badge ${matiereBadge}">${matiereLabel}</span></td>
       <td><span class="badge ${classBadge}">${r.classe||'—'}</span></td>
       <td style="color:var(--grey)">${r.sexe==='M'?'♂':'♀'}</td>
@@ -841,6 +841,7 @@ window.showDetail = (id) => {
   document.getElementById('modal-content').innerHTML = `
     <div class="modal-row"><span class="modal-lbl">Prénom</span><span class="modal-val">${r.prenom||'—'}</span></div>
     <div class="modal-row"><span class="modal-lbl">Nom</span><span class="modal-val">${r.nom||'—'}</span></div>
+    <div class="modal-row"><span class="modal-lbl">Établissement</span><span class="modal-val" style="color:var(--gold)">${r.etablissement||r.etab||'—'}</span></div>
     <div class="modal-row"><span class="modal-lbl">Classe</span><span class="modal-val">${r.classe||'—'}</span></div>
     <div class="modal-row"><span class="modal-lbl">Sexe</span><span class="modal-val">${r.sexe==='M'?'Masculin':'Féminin'}</span></div>
     <div class="modal-row"><span class="modal-lbl">Score</span><span class="modal-val" style="font-size:1.3rem;font-weight:700;color:var(--gold)">${r.scoreOn20||0} / 20</span></div>
@@ -860,12 +861,12 @@ window.closeModal = (e) => {
 // ═══ EXPORT CSV ═══
 window.exportCSV = () => {
   if (!allData.length) { showNotif('Aucune donnée à exporter.'); return; }
-  const headers = ['Identifiant','Prénom','Nom','Classe','Sexe','Score /20','Score brut','Total pts','Statut','Fraudes','Heure'];
+  const headers = ['Identifiant','Prénom','Nom','Établissement','Classe','Sexe','Score /20','Score brut','Total pts','Statut','Fraudes','Heure'];
   const rows = allData.map(r => {
     const time = r.createdAt?.seconds
       ? new Date(r.createdAt.seconds*1000).toLocaleString('fr-FR')
       : r.createdAt ? new Date(r.createdAt).toLocaleString('fr-FR') : '';
-    return [r.identifiant,r.prenom,r.nom,r.classe,r.sexe,r.scoreOn20,r.score,r.totalPts,r.statut,r.fraudCount,time]
+    return [r.identifiant,r.prenom,r.nom,r.etablissement||r.etab||'',r.classe,r.sexe,r.scoreOn20,r.score,r.totalPts,r.statut,r.fraudCount,time]
       .map(v=>`"${v??''}"`).join(',');
   });
   const csv = [headers.join(','), ...rows].join('\n');
@@ -918,7 +919,7 @@ window.genPDF = (mode) => {
       id: r.identifiant,
       prenom: r.prenom||'',
       nom: r.nom||'',
-      etab: r.etab||'—',
+      etab: r.etablissement||r.etab||'—',
       score: r.scoreOn20||0,
       statut: r.statut||'normal',
       reel: true
