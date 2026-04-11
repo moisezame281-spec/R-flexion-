@@ -336,6 +336,7 @@ tbody td.mono{font-family:'Space Mono',monospace;font-size:.75rem;letter-spacing
     <select class="filter-sel" id="filter-classe" onchange="renderTable()">
       <option value="">Toutes les classes</option>
       <option value="TleL">Terminale L</option>
+      <option value="TleSES">Terminale SES</option>
       <option value="TleS">Terminale S</option>
       <option value="TleC">Terminale C</option>
       <option value="TleD">Terminale D</option>
@@ -399,6 +400,14 @@ tbody td.mono{font-family:'Space Mono',monospace;font-size:.75rem;letter-spacing
       <div class="pdf-opt">
         <input type="radio" name="pdf-classe" id="pdf-ts" value="TleS" checked>
         <label for="pdf-ts">Terminale S</label>
+      </div>
+      <div class="pdf-opt">
+        <input type="radio" name="pdf-classe" id="pdf-tl" value="TleL">
+        <label for="pdf-tl">Terminale L</label>
+      </div>
+      <div class="pdf-opt">
+        <input type="radio" name="pdf-classe" id="pdf-tses" value="TleSES">
+        <label for="pdf-tses">Terminale SES</label>
       </div>
       <div class="pdf-opt">
         <input type="radio" name="pdf-classe" id="pdf-tc" value="TleC">
@@ -543,6 +552,7 @@ window._doLogin = () => {
     document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
     document.getElementById('pg-admin').classList.add('active');
     startListen();
+    setTimeout(()=>window.switchMatiere('maths'), 100);
   } else {
     document.getElementById('login-err').style.display = 'block';
     document.getElementById('pwd-input').value = '';
@@ -558,7 +568,7 @@ window._logout = () => {
 };
 
 // ═══ ÉCOUTE FIREBASE EN TEMPS RÉEL (3 collections) ═══
-const COLLECTIONS_MATHS = ['resultats', 'resultats_c', 'resultats_d'];
+const COLLECTIONS_MATHS = ['resultats', 'resultats_c', 'resultats_d', 'resultats_l'];
 const COLLECTIONS_PHYS  = ['resultats_phys_c', 'resultats_phys_d'];
 const ALL_COLLECTIONS   = [...COLLECTIONS_MATHS, ...COLLECTIONS_PHYS];
 const COLLECTIONS       = ALL_COLLECTIONS; // compat legacy
@@ -636,7 +646,7 @@ window.switchMatiere = (m) => {
   if(filterClasse) {
     filterClasse.innerHTML = '<option value="">Toutes les classes</option>';
     if(m === 'maths' || m === 'all'){
-      filterClasse.innerHTML += '<option value="TleL">Terminale L</option><option value="TleS">Terminale S</option><option value="TleC">Terminale C</option><option value="TleD">Terminale D</option>';
+      filterClasse.innerHTML += '<option value="TleL">Terminale L</option><option value="TleSES">Terminale SES</option><option value="TleS">Terminale S</option><option value="TleC">Terminale C</option><option value="TleD">Terminale D</option>';
     }
     if(m === 'phys' || m === 'all'){
       filterClasse.innerHTML += '<option value="TleC">Terminale C (Physique)</option><option value="TleD">Terminale D (Physique)</option>';
@@ -798,7 +808,7 @@ window.renderTable = () => {
     if (statut.includes('fraude')) { badgeClass='badge-fraud'; badgeLabel='⚠ Fraude ('+r.fraudCount+')'; }
     else if (statut.includes('temps')) { badgeClass='badge-time'; badgeLabel='⏱ Temps'; }
 
-    const classBadge = r.classe==='TleL' ? 'badge-tl' : 'badge-ts';
+    const classBadge = (r.classe==='TleL'||r.classe==='TleSES') ? 'badge-tl' : 'badge-ts';
     // Déterminer la matière d'après la collection ou l'identifiant
     const isPhys = (r._col||'').includes('phys') || (r.identifiant||'').startsWith('PC') || (r.identifiant||'').startsWith('PD');
     const matiereLabel = isPhys ? '⚗️ Physique' : '➗ Maths';
@@ -833,7 +843,9 @@ window.renderTable = () => {
 
 // ═══ DÉTAIL ═══
 window.showDetail = (id) => {
-  const r = allData.find(x=>x.identifiant===id);
+  // Cherche dans toutes les collections, pas seulement allData filtré
+  const allRows = Object.values(_snapshots).flat();
+  const r = allRows.find(x=>x.identifiant===id) || allData.find(x=>x.identifiant===id);
   if (!r) return;
   document.getElementById('modal-id').textContent = id;
   const reps = r.reponses ? JSON.parse(r.reponses) : {};
@@ -950,7 +962,7 @@ window.genPDF = (mode) => {
     doc.setFont('helvetica','normal');
     doc.setFontSize(8.5);
     doc.setTextColor(201,168,76);
-    const classeLabel = {TleS:'Terminale S', TleC:'Terminale C', TleD:'Terminale D'}[classe]||classe;
+    const classeLabel = {TleS:'Terminale S', TleC:'Terminale C', TleD:'Terminale D', TleL:'Terminale L', TleSES:'Terminale SES'}[classe]||classe;
     const matiereLabel = isPhysClasse ? 'Physique-Chimie' : 'Mathématiques';
     doc.text(`${classeLabel} — ${matiereLabel}`, 40, 21);
     doc.text(`Généré le ${new Date().toLocaleDateString('fr-FR')} à ${new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})}`, 40, 27);
@@ -1117,7 +1129,7 @@ function genFictifs(n, classe, scorePlafond, isPhysClasse=false) {
     const etab = etabs[Math.floor(Math.random()*etabs.length)];
     const prefix = isPhysClasse
       ? {TleC:'PC', TleD:'PD'}[classe]||'PC'
-      : {TleS:'SE', TleC:'TC', TleD:'TD'}[classe]||'SE';
+      : {TleS:'SE', TleC:'TC', TleD:'TD', TleL:'TL', TleSES:'SES'}[classe]||'SE';
     arr.push({id: prefix+'-'+genId(), prenom, nom, etab, score, statut:'normal', reel:false});
   }
   return arr;
