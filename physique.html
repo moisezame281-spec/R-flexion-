@@ -3,38 +3,25 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>S.E. Corporation — Évaluation Physique</title>
+<title>S.E. Corporation — Physique C & D</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-:root{
-  --ink:#060d0d;--cream:#e8f5f3;--teal:#1fa88a;--teal-lite:rgba(31,168,138,.12);
-  --teal-dim:rgba(31,168,138,.35);--red:#8b1a1a;--grey:#607a76;--mint:#a8e6dc;
-  --bg2:#0b1614;--white:#fff;--gold:#c9a84c;
-}
+:root{--ink:#060d0d;--cream:#e8f5f3;--teal:#1fa88a;--teal-dim:rgba(31,168,138,.35);--red:#8b1a1a;--grey:#607a76;--bg2:#0b1614;}
 html{scroll-behavior:smooth;height:-webkit-fill-available}
-body{background:var(--ink);color:var(--cream);font-family:'Cormorant Garamond',serif;
-  min-height:100vh;min-height:-webkit-fill-available;overflow-x:hidden;
-  -webkit-user-select:none;user-select:none}
-body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
-  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");opacity:.22}
-body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
-  background-image:linear-gradient(rgba(31,168,138,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(31,168,138,.04) 1px,transparent 1px);
-  background-size:48px 48px;animation:gridShift 30s linear infinite}
+body{background:var(--ink);color:var(--cream);font-family:'Cormorant Garamond',serif;min-height:100vh;overflow-x:hidden;-webkit-user-select:none;user-select:none}
+body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");opacity:.22}
+body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(rgba(31,168,138,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(31,168,138,.04) 1px,transparent 1px);background-size:48px 48px;animation:gridShift 30s linear infinite}
 @keyframes gridShift{0%{background-position:0 0}100%{background-position:48px 48px}}
 .page{display:none;min-height:100vh;flex-direction:column;position:relative;z-index:1}
 .page.active{display:flex}
-#pg-accueil{justify-content:center;align-items:center;padding:3rem 1.5rem;
-  background:radial-gradient(ellipse at 50% 0%,rgba(31,168,138,.15) 0%,transparent 65%);overflow:hidden}
+#pg-accueil{justify-content:center;align-items:center;padding:3rem 1.5rem;background:radial-gradient(ellipse at 50% 0%,rgba(31,168,138,.15) 0%,transparent 65%);overflow:hidden}
 .logo-block{display:flex;flex-direction:column;align-items:center;gap:.5rem;margin-bottom:2.2rem}
 .logo-ring{position:relative;width:116px;height:116px;display:flex;align-items:center;justify-content:center;margin-bottom:.3rem}
-.logo-ring::before{content:'';position:absolute;inset:0;border-radius:50%;
-  background:conic-gradient(var(--teal) 0deg,rgba(31,168,138,.08) 55deg,var(--teal) 120deg,rgba(31,168,138,.08) 175deg,var(--teal) 240deg,rgba(31,168,138,.08) 295deg,var(--teal) 360deg);
-  animation:spin 12s linear infinite}
+.logo-ring::before{content:'';position:absolute;inset:0;border-radius:50%;background:conic-gradient(var(--teal) 0deg,rgba(31,168,138,.08) 55deg,var(--teal) 120deg,rgba(31,168,138,.08) 175deg,var(--teal) 240deg,rgba(31,168,138,.08) 295deg,var(--teal) 360deg);animation:spin 12s linear infinite}
 .logo-ring::after{content:'';position:absolute;inset:4px;border-radius:50%;background:var(--ink)}
 @keyframes spin{to{transform:rotate(360deg)}}
-.logo-img{width:100px;height:100px;border-radius:50%;object-fit:cover;position:relative;z-index:1;
-  box-shadow:0 0 28px rgba(31,168,138,.22),0 0 70px rgba(31,168,138,.07)}
+.logo-img{width:100px;height:100px;border-radius:50%;object-fit:cover;position:relative;z-index:1;box-shadow:0 0 28px rgba(31,168,138,.22)}
 .logo-brand{font-family:'Space Mono',monospace;font-size:.66rem;letter-spacing:.5em;color:var(--teal);text-transform:uppercase}
 .logo-ornament{display:flex;align-items:center;gap:.5rem}
 .logo-line{width:28px;height:1px;background:linear-gradient(90deg,transparent,var(--teal))}
@@ -52,7 +39,7 @@ body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .field select option{background:var(--ink)}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
 .divider{height:1px;background:linear-gradient(90deg,transparent,var(--teal-dim),transparent);margin:1.4rem 0}
-.btn{width:100%;padding:.9rem;border:none;border-radius:3px;cursor:pointer;font-family:'Space Mono',monospace;font-size:.7rem;letter-spacing:.22em;text-transform:uppercase;font-weight:700;transition:opacity .18s,transform .1s;-webkit-tap-highlight-color:transparent;touch-action:manipulation;-webkit-appearance:none;appearance:none}
+.btn{width:100%;padding:.9rem;border:none;border-radius:3px;cursor:pointer;font-family:'Space Mono',monospace;font-size:.7rem;letter-spacing:.22em;text-transform:uppercase;font-weight:700;transition:opacity .18s,transform .1s;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 .btn:hover{opacity:.85}.btn:active{transform:scale(.98)}
 .btn-teal{background:var(--teal);color:var(--ink)}
 .btn-red{background:var(--red);color:#fff}
@@ -65,7 +52,7 @@ body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .rule:last-of-type{border-bottom:none}
 .rule-n{font-family:'Space Mono',monospace;font-size:.6rem;color:var(--teal);padding-top:3px}
 .rule-t{font-size:1rem;color:rgba(232,245,243,.83);line-height:1.65}
-.rule-t strong{color:var(--cream)}.rule-t .alert{color:#e05555;font-weight:600}
+.rule-t strong{color:var(--cream)}
 .accept{display:flex;align-items:flex-start;gap:.8rem;margin-top:1.5rem;cursor:pointer}
 .accept input[type=checkbox]{width:18px;height:18px;accent-color:var(--teal);cursor:pointer;margin-top:3px;flex-shrink:0}
 .accept label{font-size:.95rem;color:var(--grey);cursor:pointer;line-height:1.55}
@@ -83,16 +70,15 @@ body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .sec-head{display:flex;align-items:center;gap:1rem;margin:2.5rem 0 1.3rem;flex-wrap:wrap}
 .sec-badge{font-family:'Space Mono',monospace;font-size:.56rem;letter-spacing:.25em;background:var(--teal);color:var(--ink);padding:.28rem .65rem;border-radius:2px;font-weight:700;white-space:nowrap}
 .sec-title{font-family:'Playfair Display',serif;font-size:1.02rem;font-style:italic;color:rgba(232,245,243,.6)}
-.ctx-box{background:rgba(31,168,138,.06);border-left:3px solid var(--teal);border-radius:0 4px 4px 0;padding:1rem 1.2rem;margin-bottom:1.2rem;font-size:.95rem;line-height:1.7;color:rgba(232,245,243,.88);white-space:pre-line}
-.ctx-box strong{color:var(--teal)}
+.ctx-box{background:rgba(31,168,138,.06);border-left:3px solid var(--teal);border-radius:0 4px 4px 0;padding:1rem 1.2rem;margin-bottom:1.2rem;font-size:.93rem;line-height:1.7;color:rgba(232,245,243,.88);white-space:pre-line}
 .schema-frame{background:rgba(255,255,255,.96);border:2px solid var(--teal-dim);border-radius:6px;padding:1rem;margin-bottom:1.2rem;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,.35)}
-.schema-frame img{max-width:100%;height:auto;border-radius:3px;max-height:340px;object-fit:contain}
-.schema-label{font-family:'Space Mono',monospace;font-size:.52rem;letter-spacing:.2em;color:var(--grey);margin-top:.5rem;text-transform:uppercase}
+.schema-frame svg{max-width:100%;display:block;margin:0 auto}
+.schema-label{font-family:'Space Mono',monospace;font-size:.52rem;letter-spacing:.18em;color:#555;margin-top:.5rem;text-transform:uppercase}
 .qcard{background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.07);border-radius:4px;padding:1.8rem 2rem 1.5rem;margin-bottom:1rem;transition:border-color .2s}
 .qcard:hover{border-color:rgba(31,168,138,.18)}
 .qcard.answered{border-color:rgba(31,168,138,.38)}
 .q-label{font-family:'Space Mono',monospace;font-size:.56rem;color:var(--teal);letter-spacing:.18em;margin-bottom:.75rem}
-.q-text{font-size:1.04rem;line-height:1.78;color:var(--cream);margin-bottom:1.2rem;white-space:pre-line}
+.q-text{font-size:1.04rem;line-height:1.82;color:var(--cream);margin-bottom:1.2rem;white-space:pre-line}
 .opts{display:flex;flex-direction:column;gap:.5rem}
 .opt{display:flex;align-items:flex-start;gap:.85rem;padding:.72rem 1rem;border:1px solid rgba(255,255,255,.07);border-radius:3px;cursor:pointer;transition:all .15s;-webkit-user-select:none;user-select:none}
 .opt:hover{border-color:rgba(31,168,138,.38);background:rgba(31,168,138,.05)}
@@ -116,29 +102,16 @@ body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .score-val{font-family:'Playfair Display',serif;font-size:2.9rem;font-weight:900;color:#6dc96d}
 .score-sub{font-size:.93rem;color:var(--grey)}
 .fin-note{font-size:.9rem;color:var(--grey);line-height:1.65;font-style:italic}
-@media(max-width:580px){
-  .row2{grid-template-columns:1fr}
-  .regles-box,.form-box{padding:2rem 1.3rem}
-  .quiz-body{padding:1.5rem 1rem 6rem}
-  .qcard{padding:1.3rem 1.1rem}
-  .topbar{padding:.7rem 1rem}
-  .topbar-l{display:none}
-  .logo-img{width:88px;height:88px}
-  .logo-ring{width:102px;height:102px}
-}
+@media(max-width:580px){.row2{grid-template-columns:1fr}.regles-box,.form-box{padding:2rem 1.3rem}.quiz-body{padding:1.5rem 1rem 6rem}.qcard{padding:1.3rem 1.1rem}.topbar{padding:.7rem 1rem}.topbar-l{display:none}.logo-img{width:88px;height:88px}.logo-ring{width:102px;height:102px}}
 </style>
 </head>
 <body>
 
-<!-- PAGE ACCUEIL -->
+<!-- ACCUEIL -->
 <div class="page active" id="pg-accueil">
   <div class="logo-block">
-    <div class="logo-ring">
-      <img src="https://mon-depots.vercel.app/logo.jpg" class="logo-img" alt="S.E. Corp" onerror="this.style.opacity='0'">
-    </div>
-    <div class="logo-ornament">
-      <div class="logo-line"></div><div class="logo-diamond"></div><div class="logo-line r"></div>
-    </div>
+    <div class="logo-ring"><img src="https://mon-depots.vercel.app/logo.jpg" class="logo-img" alt="S.E. Corp" onerror="this.style.opacity='0'"></div>
+    <div class="logo-ornament"><div class="logo-line"></div><div class="logo-diamond"></div><div class="logo-line r"></div></div>
     <div class="logo-brand">S.E. Corporation</div>
     <div class="logo-since">Since 2015 — Excellence académique</div>
   </div>
@@ -157,11 +130,7 @@ body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
         </select>
       </div>
       <div class="field"><label>Sexe</label>
-        <select id="f-sexe">
-          <option value="">— Choisir —</option>
-          <option value="M">Masculin</option>
-          <option value="F">Féminin</option>
-        </select>
+        <select id="f-sexe"><option value="">— Choisir —</option><option value="M">Masculin</option><option value="F">Féminin</option></select>
       </div>
     </div>
     <div class="divider"></div>
@@ -169,27 +138,27 @@ body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
   </div>
 </div>
 
-<!-- PAGE RÈGLES -->
+<!-- RÈGLES -->
 <div class="page" id="pg-regles">
   <div class="regles-box">
     <h2 class="reg-title">Règlement de <span>l'évaluation</span></h2>
     <p class="reg-intro">Lisez attentivement avant de commencer</p>
     <div class="divider" style="margin:0 0 1.4rem"></div>
-    <div class="rule"><span class="rule-n">01</span><p class="rule-t">Le quiz dure <strong>30 minutes</strong>. Le chronomètre démarre dès que vous appuyez sur « Commencer ». À l'expiration, le quiz est <strong>soumis automatiquement</strong>.</p></div>
-    <div class="rule"><span class="rule-n">02</span><p class="rule-t">À la fin, vous recevez un <strong>identifiant unique</strong>. <strong>Notez-le impérativement</strong> — il est votre seul moyen de retrouver votre classement.</p></div>
-    <div class="rule"><span class="rule-n">03</span><p class="rule-t">Le classement est <strong>confidentiel</strong> : seul votre identifiant y apparaît. Le professeur est le seul à connaître la correspondance nom ↔ identifiant.</p></div>
-    <div class="rule"><span class="rule-n">04</span><p class="rule-t">Chaque question comporte <strong>4 propositions</strong>. Une seule réponse est correcte. Lisez les données avec attention avant de répondre.</p></div>
-    <div class="rule"><span class="rule-n">05</span><p class="rule-t">Travaillez seul(e), <strong>sans aide extérieure</strong>. Clic droit et certains raccourcis clavier sont désactivés pendant l'évaluation.</p></div>
+    <div class="rule"><span class="rule-n">01</span><p class="rule-t">Le quiz dure <strong>30 minutes</strong>. Le chronomètre démarre dès « Commencer ». À l'expiration, soumission <strong>automatique</strong>.</p></div>
+    <div class="rule"><span class="rule-n">02</span><p class="rule-t">À la fin, notez votre <strong>identifiant unique</strong> — seul moyen de consulter votre classement.</p></div>
+    <div class="rule"><span class="rule-n">03</span><p class="rule-t">Le classement est <strong>confidentiel</strong> : seul votre identifiant y apparaît.</p></div>
+    <div class="rule"><span class="rule-n">04</span><p class="rule-t">Chaque question comporte <strong>4 propositions</strong>, une seule correcte.</p></div>
+    <div class="rule"><span class="rule-n">05</span><p class="rule-t">Travaillez <strong>seul(e)</strong>. Clic droit et certains raccourcis sont désactivés.</p></div>
     <div class="divider"></div>
     <div class="accept">
       <input type="checkbox" id="chk-accept">
-      <label for="chk-accept">J'ai lu et j'accepte le règlement. Je m'engage à composer seul(e). Je comprends que le résultat sera <em>enregistré et transmis</em> à l'enseignant.</label>
+      <label for="chk-accept">J'ai lu et j'accepte le règlement. Je m'engage à composer seul(e). Le résultat sera <em>enregistré et transmis</em> à l'enseignant.</label>
     </div>
     <button class="btn btn-teal" style="margin-top:1.5rem" onclick="startQuiz()">Commencer l'évaluation →</button>
   </div>
 </div>
 
-<!-- PAGE QUIZ -->
+<!-- QUIZ -->
 <div class="page" id="pg-quiz">
   <div class="topbar">
     <div class="topbar-l" id="topbar-label">S.E. CORPORATION — PHYSIQUE</div>
@@ -203,7 +172,7 @@ body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
   </div>
 </div>
 
-<!-- PAGE FIN -->
+<!-- FIN -->
 <div class="page" id="pg-fin">
   <div class="fin-box">
     <div class="fin-icon">⚗️</div>
@@ -211,7 +180,7 @@ body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
     <div class="id-box">
       <div class="id-lbl">Votre identifiant confidentiel</div>
       <div class="id-val" id="fin-id">——</div>
-      <div class="id-warn">📌 Notez cet identifiant — il est nécessaire pour consulter votre classement.</div>
+      <div class="id-warn">📌 Notez cet identifiant — nécessaire pour votre classement.</div>
     </div>
     <div class="score-box">
       <div class="score-lbl">Score obtenu</div>
@@ -225,263 +194,240 @@ body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-const firebaseConfig = {
-  apiKey:"AIzaSyAhSTl2OR5ztfoIwB2TgIqEaiMjD6TmrcI",
-  authDomain:"se-corporation-quiz-7187e.firebaseapp.com",
-  projectId:"se-corporation-quiz-7187e",
-  storageBucket:"se-corporation-quiz-7187e.firebasestorage.app",
-  messagingSenderId:"5773761325",
-  appId:"1:5773761325:web:e1d3cb01d88c3a73e611a4"
-};
-const app = initializeApp(firebaseConfig);
-const db  = getFirestore(app);
+const firebaseConfig={apiKey:"AIzaSyAhSTl2OR5ztfoIwB2TgIqEaiMjD6TmrcI",authDomain:"se-corporation-quiz-7187e.firebaseapp.com",projectId:"se-corporation-quiz-7187e",storageBucket:"se-corporation-quiz-7187e.firebasestorage.app",messagingSenderId:"5773761325",appId:"1:5773761325:web:e1d3cb01d88c3a73e611a4"};
+const app=initializeApp(firebaseConfig);
+const db=getFirestore(app);
+let QUIZ=null,eleve={},reps={},started=false,done=false,timerInt=null,tLeft=0;
+const ALL_QS=()=>QUIZ?QUIZ.sections.flatMap(s=>s.qs):[];
+const TOTAL_PTS=()=>ALL_QS().reduce((a,q)=>a+q.pts,0);
+
+// ── SCHÉMAS SVG ──────────────────────────────────────────────
+const SVG_SKIEUR=`<div class="schema-frame"><svg viewBox="0 0 400 230" xmlns="http://www.w3.org/2000/svg" style="max-height:210px;width:100%"><rect width="400" height="230" fill="#f5f5f0"/><line x1="60" y1="105" x2="330" y2="105" stroke="#aaa" stroke-dasharray="8,4" stroke-width="1.5"/><line x1="55" y1="58" x2="210" y2="105" stroke="#222" stroke-width="2.5"/><line x1="210" y1="105" x2="340" y2="185" stroke="#222" stroke-width="2.5"/><circle cx="210" cy="105" r="5" fill="#333"/><text x="90" y="90" font-size="15" font-family="serif" fill="#333">θ₁</text><text x="244" y="127" font-size="15" font-family="serif" fill="#333">θ₂</text><text x="350" y="150" font-size="13" font-family="serif" fill="#333">h</text><text x="43" y="58" font-size="13" font-weight="bold" fill="#333">D</text><text x="203" y="99" font-size="13" font-weight="bold" fill="#444">E</text><text x="332" y="182" font-size="13" font-weight="bold" fill="#333">F</text><line x1="340" y1="105" x2="340" y2="185" stroke="#888" stroke-dasharray="4,3" stroke-width="1.2"/></svg><div class="schema-label">Figure 2 — Virage du skieur (D → E → F)</div></div>`;
+
+const SVG_CERCEAUX=`<div class="schema-frame"><svg viewBox="0 0 300 340" xmlns="http://www.w3.org/2000/svg" style="max-height:300px;width:100%"><rect width="300" height="340" fill="#f5f5f0"/><line x1="150" y1="8" x2="150" y2="330" stroke="#888" stroke-dasharray="6,4" stroke-width="1.5"/><circle cx="150" cy="130" r="110" fill="none" stroke="#333" stroke-width="2"/><circle cx="150" cy="220" r="55" fill="none" stroke="#333" stroke-width="2"/><circle cx="150" cy="20" r="4" fill="#333"/><circle cx="150" cy="175" r="4" fill="#333"/><circle cx="150" cy="265" r="4" fill="#333"/><circle cx="150" cy="320" r="4" fill="#333"/><text x="157" y="23" font-size="13" font-weight="bold" fill="#333">O</text><text x="157" y="178" font-size="13" font-weight="bold" fill="#333">I</text><text x="157" y="268" font-size="13" font-weight="bold" fill="#333">J</text><text x="157" y="322" font-size="13" font-weight="bold" fill="#333">K</text><text x="120" y="13" font-size="12" font-family="serif" fill="#555">(Δ)</text><line x1="150" y1="20" x2="68" y2="95" stroke="#555" stroke-width="1.2"/><text x="88" y="68" font-size="13" font-family="serif" fill="#555">R</text><line x1="150" y1="175" x2="108" y2="225" stroke="#555" stroke-width="1.2"/><text x="112" y="208" font-size="13" font-family="serif" fill="#555">r</text></svg><div class="schema-label">Figure — Grand cerceau (O, R, M) et petit cerceau (I, r = R/2, m = M/2)</div></div>`;
+
+const SVG_PLONGEUR=`<div class="schema-frame"><svg viewBox="0 0 380 200" xmlns="http://www.w3.org/2000/svg" style="max-height:190px;width:100%"><defs><marker id="arr" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#555"/></marker></defs><rect width="380" height="200" fill="#f5f5f0"/><rect x="0" y="118" width="105" height="82" fill="#ccc" stroke="#888" stroke-width="1"/><rect x="82" y="98" width="44" height="20" fill="#aaa" stroke="#666" stroke-width="1"/><line x1="105" y1="118" x2="380" y2="118" stroke="#888" stroke-width="1.5"/><line x1="104" y1="98" x2="104" y2="8" stroke="#888" stroke-dasharray="4,3" stroke-width="1"/><line x1="104" y1="118" x2="104" y2="98" stroke="#555" stroke-dasharray="3,2" stroke-width="1"/><text x="58" y="96" font-size="11" font-weight="bold" fill="#333">G</text><text x="108" y="111" font-size="10" font-family="serif" fill="#555">y₀</text><text x="370" y="132" font-size="11" font-family="serif" fill="#555">x</text><text x="108" y="14" font-size="11" font-family="serif" fill="#555">y</text><text x="40" y="18" font-size="11" font-family="serif" fill="#666" font-style="italic">j⃗</text><line x1="48" y1="22" x2="48" y2="48" stroke="#555" stroke-width="1.5" marker-end="url(#arr)"/><ellipse cx="155" cy="62" rx="18" ry="7" fill="none" stroke="#333" stroke-width="1.2" transform="rotate(-20,155,62)"/><text x="148" y="56" font-size="10" font-family="serif" fill="#333">G</text><ellipse cx="268" cy="46" rx="18" ry="7" fill="none" stroke="#333" stroke-width="1.2" transform="rotate(8,268,46)"/><text x="261" y="40" font-size="10" font-family="serif" fill="#333">G</text></svg><div class="schema-label">Figure 1 — Saut de TCHAKARIAS depuis le tremplin</div></div>`;
 
 // ══════════════════════════════════════════════════════════════
-//  TERMINALE C
+//  QUIZ TERMINALE C
 // ══════════════════════════════════════════════════════════════
-const QUIZ_C = { duree:30*60, sections:[
+const QUIZ_C={duree:30*60,sections:[
 
-  // ── SECTION 1 : ÉLECTROSTATIQUE ──────────────────────────────
-  { badge:"PARTIE I", titre:"Électrostatique — Champs et forces",
-    ctx:`Un ion SO₄²⁻ est placé entre deux plaques A et B soumises à une tension V_A − V_B = 2000 V, distantes de 10 cm.
-Charge élémentaire : e = 1,6 × 10⁻¹⁹ C.`,
-    qs:[
-      { id:"C1", pts:1,
-        txt:"L'intensité du champ électrique E entre les plaques (uniformes et parallèles) se calcule par :\n\nQuelle formule est correcte ?",
-        opts:["E = U / d","E = U × d","E = d / U","E = q × U"], rep:0 },
-      { id:"C2", pts:1,
-        txt:"Avec V_A − V_B = 2 000 V et d = 10 cm = 0,1 m, quelle est la valeur de E ?",
-        opts:["E = 20 000 V/m","E = 200 V/m","E = 2 000 V/m","E = 200 000 V/m"], rep:0 },
-      { id:"C3", pts:1,
-        txt:"L'ion SO₄²⁻ porte la charge q = −2e. La force électrique exercée sur cet ion vaut F = qE.\nSi E = 20 000 V/m, que vaut |F| ?",
-        opts:["|F| = 6,4 × 10⁻¹⁵ N","|F| = 3,2 × 10⁻¹⁵ N","|F| = 1,6 × 10⁻¹⁵ N","|F| = 12,8 × 10⁻¹⁵ N"], rep:0 },
-      { id:"C4", pts:1,
-        txt:"Les surfaces équipotentielles P et N vérifient |V_P − V_N| = 1 200 V.\nSi la particule chargée (q = −2e) se déplace de N à P, le travail W de la force électrique vaut :",
-        opts:["W = 3,84 × 10⁻¹⁶ J","W = −3,84 × 10⁻¹⁶ J","W = 1,92 × 10⁻¹⁶ J","W = −1,92 × 10⁻¹⁶ J"], rep:1 },
-    ]
-  },
+  {badge:"PARTIE 1",titre:"Vérification des savoirs",
+   ctx:`Classe : Terminale C — Épreuve de Physique — Collège Joseph Stintzi, Obala`,
+   qs:[
+    {id:"C1",pts:1,
+     txt:"Lequel de ces systèmes est à la fois oscillant ET satellite géostationnaire ?",
+     opts:["Un pendule simple oscillant autour de l'axe de la Terre","Un satellite en orbite circulaire équatoriale de période 24 heures","Un ressort en vibration autour d'un axe horizontal","Un disque tournant à vitesse constante"],rep:1},
 
-  // ── SECTION 2 : VIRAGE D'UN SKIEUR ──────────────────────────────
-  { badge:"PARTIE II", titre:"Mécanique — Virage d'un skieur",
-    schema:`<div class="schema-frame"><img src="https://mon-depots.vercel.app/logo.jpg" style="display:none" onerror=""><svg viewBox="0 0 380 220" width="100%" style="max-height:220px" xmlns="http://www.w3.org/2000/svg"><rect width="380" height="220" fill="#f5f5f0"/><line x1="50" y1="100" x2="320" y2="100" stroke="#aaa" stroke-dasharray="8,4" stroke-width="1.5"/><line x1="50" y1="60" x2="200" y2="100" stroke="#222" stroke-width="2.5"/><line x1="200" y1="100" x2="330" y2="180" stroke="#222" stroke-width="2.5"/><circle cx="200" cy="100" r="5" fill="#333"/><text x="85" y="87" font-size="14" font-family="serif" fill="#333">θ₁</text><text x="235" y="120" font-size="14" font-family="serif" fill="#333">θ₂</text><text x="345" y="185" font-size="13" font-family="serif" fill="#333">h</text><text x="40" y="60" font-size="13" font-weight="bold" fill="#333">D</text><text x="195" y="95" font-size="13" font-weight="bold" fill="#555">E</text><text x="325" y="175" font-size="13" font-weight="bold" fill="#333">F</text><line x1="330" y1="100" x2="330" y2="180" stroke="#888" stroke-dasharray="4,3" stroke-width="1"/></svg><div class="schema-label">Figure — Virage du skieur (D → E → F)</div></div>`,
-    ctx:`Un skieur aborde un virage horizontal de rayon r = 50 m avec une vitesse égale à 57,6 km/h. On néglige les frottements.
-Données : θ₁ = 45°, α = 10 m/s²`,
-    qs:[
-      { id:"C5", pts:1,
-        txt:"Pour qu'un skieur aborde un virage sans déraper, la composante centripète de son poids doit équilibrer la réaction normale. L'angle θ que doit faire la piste avec l'horizontale vérifie :\n\ntan θ = v² / (g × r)\n\nAvec v = 57,6 km/h et r = 50 m, que vaut l'angle θ ?",
-        opts:["θ ≈ 45°","θ ≈ 30°","θ ≈ 60°","θ ≈ 20°"], rep:0 },
-      { id:"C6", pts:1,
-        txt:"Le skieur aborde en E la position rectiligne DE inclinée d'un angle θ₁ = 30° par rapport à l'horizontal, et quitte le sol en F avec une vitesse de 36 km/h.\n\nL'équation de la trajectoire du skieur entre E et F (dans le repère indiqué) est de la forme :\n\nQuelle expression correspond ?",
-        opts:["y = x·tan(θ₁) − (g·x²)/(2v²·cos²θ₁)","y = x·cos(θ₁) + (g·x²)/(2v²)","y = x·tan(θ₁) + (g·x²)/(2v²·cos²θ₁)","y = −(g·x²)/(2v²) + x·sin(θ₁)"], rep:0 },
-      { id:"C7", pts:2,
-        txt:"Avec θ₁ = 45°, α = 10 m/s² et la trajectoire calculée, la différence d'altitude h entre E et F est h = 5 m.\n\nQuelle est la vitesse du skieur à l'arrivée en F ?",
-        opts:["v_F ≈ 20 m/s","v_F ≈ 15 m/s","v_F ≈ 25 m/s","v_F ≈ 10 m/s"], rep:0 },
-    ]
-  },
+    {id:"C2",pts:1,
+     txt:"Le théorème du centre d'inertie énonce que :",
+     opts:["La somme des forces extérieures est égale à m·a⃗ du centre de masse","L'énergie cinétique totale est constante pour tout système isolé","Le moment cinétique est conservé en l'absence de couple extérieur","La résultante des forces intérieures est nulle dans tout référentiel"],rep:0},
 
-  // ── SECTION 3 : PROJECTILE ──────────────────────────────────────
-  { badge:"PARTIE III", titre:"Mouvement d'un projectile",
-    ctx:`Un projectile est lancé d'un point A situé à h = 1 m du sol, avec une vitesse v₀ = 16 m/s faisant un angle α avec l'horizontal.
-Un mur de hauteur H = 5 m est situé à une distance L = 8 m du lanceur. g = 9,81 m/s²`,
-    qs:[
-      { id:"C8", pts:1,
-        txt:"Les équations horaires du mouvement du projectile dans le repère (O, i, j, k) sont :\n\nQuelle est la nature du mouvement horizontal du projectile ?",
-        opts:["Rectiligne uniforme","Rectiligne uniformément accéléré","Circulaire uniforme","Parabolique uniforme"], rep:0 },
-      { id:"C9", pts:1,
-        txt:"L'équation de la trajectoire (y en fonction de x) du projectile est de la forme :\n\ny = x·tan(α) − [g/(2v₀²cos²α)]·x²\n\nCette équation représente :",
-        opts:["Une parabole","Une droite","Une ellipse","Un cercle"], rep:0 },
-      { id:"C10", pts:1,
-        txt:"Pour que le projectile passe au-dessus du mur, il faut que y(L) ≥ H − h.\nAvec L = 8 m, H = 5 m, h = 1 m, v₀ = 16 m/s, g = 9,81 m/s².\n\nL'intervalle d'angles α permettant au projectile de passer au-dessus du mur se situe :",
-        opts:["Entre deux valeurs α₁ et α₂ (ex. : 30° < α < 75°)","Pour tout α entre 0° et 90°","Uniquement pour α = 45°","Pour α > 80° uniquement"], rep:0 },
-      { id:"C11", pts:1,
-        txt:"On fixe α = 45°. En B (sommet du mur), la vitesse v_B du projectile forme un angle β avec l'horizontale, avec β = arctan(v_y/v_x).\n\nSi v_y en B est négatif (projectile en descente), alors :",
-        opts:["β est négatif : le vecteur vitesse est incliné vers le bas","β est positif : le vecteur vitesse est incliné vers le haut","β = 0 : la vitesse est horizontale","β = 90° : la vitesse est verticale"], rep:0 },
-    ]
-  },
+    {id:"C3",pts:1,
+     txt:"Le théorème d'Huygens permet de :",
+     opts:["Calculer le moment d'inertie par rapport à un axe quelconque à partir de celui passant par le centre de masse","Déterminer la résultante des forces dans un mouvement circulaire","Relier l'énergie potentielle et cinétique dans un oscillateur","Calculer la période d'un pendule en fonction de sa masse"],rep:0},
 
-  // ── SECTION 4 : PLONGEUR / BULLE ──────────────────────────────
-  { badge:"PARTIE IV", titre:"Situation — Saut du plongeur & bulle d'air",
-    ctx:`TCHAKARIAS (athlète des JO Paris 2024) effectue un saut depuis un tremplin à t = 0, avec une vitesse v₀ inclinée d'un angle α par rapport à l'horizontal.
-Il atteint le sommet s après avoir parcouru une distance x₀.
-Une bulle d'air sphérique de rayon r et masse volumique ρ_air remonte verticalement.
-Données : f = −6πηr·v̄ ; α = 40° ; g = 9,81 m/s² ; x₁ = 1 m ; H = 6 m
-ρ_eau = 1,0 × 10³ kg/m³ ; ρ_air = 1,3 kg/m³`,
-    qs:[
-      { id:"C12", pts:1,
-        txt:"Le centre d'inertie de TCHAKARIAS est au point G₀ (x₀ = 0, y₀ = 0).\nLe mouvement de rotation est négligé.\n\nQuelle est la nature du mouvement du centre d'inertie G pendant le saut ?",
-        opts:["Mouvement de projectile (parabolique)","Mouvement rectiligne uniforme","Mouvement circulaire","Oscillatoire"], rep:0 },
-      { id:"C13", pts:1,
-        txt:"La bulle d'air remonte à vitesse initiale nulle. Elle est soumise à :\n— Son poids P = ρ_air × V × g (vers le bas)\n— La poussée d'Archimède Π = ρ_eau × V × g (vers le haut)\n— La force de frottement f (vers le bas lors de la montée)\n\nÀ la vitesse limite v_lim, l'accélération est nulle. La relation vérifiée est :",
-        opts:["Π = P + |f|","Π = P","Π + P = |f|","P = Π + |f|"], rep:0 },
-      { id:"C14", pts:1,
-        txt:"L'investigateur BELINGA propose : dv/dt = g(ρ_eau/ρ_air − 1) − (9η)/(2ρ_air r²) · v\nL'investigateur ZOBUS propose : dv/dt = g(ρ_eau/ρ_air − 1) − (9η)/(2ρ_air r²) · v\n\nLa vitesse initiale de la bulle est nulle. Que peut-on conclure des deux propositions ?",
-        opts:["Les deux équations sont identiques : BELINGA et ZOBUS ont le même modèle","BELINGA propose une vitesse limite plus grande que ZOBUS","Seul ZOBUS a une équation physiquement correcte","Les deux modèles sont faux"], rep:0 },
-    ]
-  },
+    {id:"C4",pts:1,
+     txt:"Parmi les analogies entre forces électriques et gravitationnelles, laquelle est exacte ?",
+     opts:["Les deux forces sont proportionnelles au produit des 'charges' et décroissent en 1/r²","Les deux forces peuvent être à la fois attractives et répulsives","Elles sont identiques en intensité pour les mêmes valeurs numériques","Les deux forces dépendent uniquement de la vitesse des objets"],rep:0},
 
+    {id:"C5",pts:1,
+     txt:"La déflexion électrique et la déflexion magnétique d'une particule chargée diffèrent en ce que :",
+     opts:["La force magnétique est toujours perpendiculaire à la vitesse, contrairement à la force électrique","La force électrique n'agit que sur les protons","La déflexion magnétique modifie la valeur de la vitesse","Seule la déflexion électrique courbe la trajectoire"],rep:0},
+
+    {id:"C6",pts:1,
+     txt:"Une grandeur physique peut avoir plusieurs dimensions. Laquelle est vraie ?",
+     opts:["L'énergie s'exprime en joules, en électronvolts ou en kWh : unités différentes d'une même grandeur","Une grandeur physique n'a toujours qu'une seule dimension","La vitesse est sans dimension","La pression et l'énergie ont la même dimension"],rep:0},
+
+    {id:"C7",pts:1,
+     txt:"Une accélération tangentielle nulle implique :",
+     opts:["Un mouvement circulaire uniforme (la norme de la vitesse est constante)","Un mouvement rectiligne non uniforme","Un mouvement de rotation accéléré","Un mouvement parabolique uniforme"],rep:0},
+  ]},
+
+  {badge:"PARTIE 2",titre:"Particule entre les plaques — Champ électrique",
+   ctx:`Un ion SO₄²⁻ est abandonné entre deux plaques A et B soumises à une tension V_A − V_B = 2000 V, distantes de d = 10 cm.
+Charge élémentaire : e = 1,6 × 10⁻¹⁹ C`,
+   qs:[
+    {id:"C8",pts:1,
+     txt:"Le champ électrique E entre les plaques (uniformes et parallèles) et son intensité valent :",
+     opts:["E = 20 000 V/m, dirigé de A vers B","E = 200 V/m, dirigé de B vers A","E = 2 000 V/m, dirigé de A vers B","E = 200 000 V/m, dirigé de B vers A"],rep:0},
+
+    {id:"C9",pts:1,
+     txt:"La force électrique exercée sur l'ion SO₄²⁻ (charge q = −2e) a pour intensité :",
+     opts:["|F| = 6,4 × 10⁻¹⁵ N","|F| = 3,2 × 10⁻¹⁵ N","|F| = 1,6 × 10⁻¹⁵ N","|F| = 12,8 × 10⁻¹⁵ N"],rep:0},
+
+    {id:"C10",pts:1,
+     txt:"On donne |V_P − V_N| = 1 200 V. La distance séparant les surfaces équipotentielles P et N est :",
+     opts:["d_PN = 6 cm","d_PN = 12 cm","d_PN = 1,2 cm","d_PN = 0,6 cm"],rep:0},
+
+    {id:"C11",pts:1,
+     txt:"La particule chargée (q = −2e) se déplace de N à P. Le travail de la force électrique vaut :",
+     opts:["W = −3,84 × 10⁻¹⁶ J","W = +3,84 × 10⁻¹⁶ J","W = −1,92 × 10⁻¹⁶ J","W = +1,92 × 10⁻¹⁶ J"],rep:0},
+  ]},
+
+  {badge:"PARTIE 3",titre:"Virage d'un skieur — On néglige les frottements",
+   ctx:`Un skieur aborde un virage horizontal de rayon r = 50 m avec une vitesse v = 57,6 km/h. On néglige les frottements.
+Données : θ₁ = 45° ; α = 10 m/s²`,
+   qs:[
+    {id:"C12",pts:1,
+     txt:"L'angle θ que doit faire la piste avec l'horizontale pour éviter tout dérapage vaut :",
+     opts:["θ = 45°","θ = 30°","θ = 60°","θ = 20°"],rep:0},
+
+    {id:"C13",pts:1,
+     txt:"Le skieur aborde en E la position rectiligne DE inclinée de θ₁ = 30° avec l'horizontal, avec v = 36 km/h = 10 m/s. L'équation de la trajectoire entre E et F (repère indiqué) est :",
+     opts:["y = x·tan θ₁ − g·x²/(2v²cos²θ₁)","y = x·cos θ₁ − g·x²/(2v²)","y = x·tan θ₁ + g·x²/(2v²cos²θ₁)","y = −g·x²/(2v²) + x·sin θ₁"],rep:0},
+
+    {id:"C14",pts:2,
+     txt:"Avec θ₁ = 45° et α = 10 m/s², la hauteur h entre E et F est h = 5 m.\nLa vitesse du skieur à l'arrivée en F vaut :",
+     opts:["v_F ≈ 14,1 m/s","v_F ≈ 10,0 m/s","v_F ≈ 20,0 m/s","v_F ≈ 7,07 m/s"],rep:0},
+  ]},
+
+  {badge:"PARTIE 4",titre:"Pendule pesant — Deux cerceaux solidaires",
+   ctx:`Un pendule pesant constitué d'un grand cerceau (centre I, rayon R, masse M) auquel est soudé en K un petit cerceau (centre J, rayon r = R/2, masse m = M/2). O, I, J et K sont alignés. L'axe de rotation (Δ) est horizontal, passant par O, diamétralement opposé à K.
+
+Tableau de mesures (durée τ de 20 oscillations) :
+R (cm) :  5    |  10   |  15   |  20   |  25   |  30   |  35
+τ (s)  : 12,61 | 17,83 | 21,83 | 25,21 | 28,19 | 30,88 | 33,35
+
+On prendra π² = 10.`,
+   qs:[
+    {id:"C15",pts:1,
+     txt:"La masse totale du système (grand + petit cerceau) est :",
+     opts:["M_tot = 3M/2","M_tot = 2M","M_tot = M/2","M_tot = M²/2"],rep:0},
+
+    {id:"C16",pts:1,
+     txt:"Le moment d'inertie du grand cerceau (masse M, rayon R) par rapport à l'axe (Δ) passant par O, situé à distance 2R du centre I, est par le théorème d'Huygens :",
+     opts:["I_grand = MR² + M(2R)² = 5MR²","I_grand = MR²","I_grand = 2MR²","I_grand = 3MR²"],rep:0},
+
+    {id:"C17",pts:1,
+     txt:"Le centre J du petit cerceau est à la distance OJ = 2R de O. Le moment d'inertie du petit cerceau par rapport à (Δ) est :",
+     opts:["I_petit = (M/2)(R/2)² + (M/2)(2R)² = MR²/8 + 2MR²","I_petit = (M/2)(R/2)² = MR²/8","I_petit = (M/2)(2R)² = 2MR²","I_petit = MR²/4"],rep:0},
+
+    {id:"C18",pts:2,
+     txt:"D'après l'exploitation graphique de T² = f(R) (avec T = τ/20), la pente de la droite obtenue et la valeur de g déduite sont :",
+     opts:["Pente ≈ 1,83 s²/cm → g ≈ 9,8 m/s²","Pente ≈ 0,5 s²/cm → g ≈ 5,0 m/s²","Pente ≈ 3,0 s²/cm → g ≈ 12 m/s²","Pente ≈ 0,92 s²/cm → g ≈ 4,9 m/s²"],rep:0},
+  ]},
 ]};
 
 // ══════════════════════════════════════════════════════════════
-//  TERMINALE D
+//  QUIZ TERMINALE D
 // ══════════════════════════════════════════════════════════════
-const QUIZ_D = { duree:30*60, sections:[
+const QUIZ_D={duree:30*60,sections:[
 
-  // ── SECTION 1 : VRAI/FAUX — SAVOIRS ──────────────────────────
-  { badge:"PARTIE I", titre:"Vérification des savoirs",
-    ctx:`Répondez à chaque affirmation en choisissant la réponse qui vous semble juste.`,
-    qs:[
-      { id:"D1", pts:1,
-        txt:"Parmi les affirmations suivantes sur le théorème du centre d'inertie, laquelle est exacte ?",
-        opts:[
-          "Il énonce que la somme des forces extérieures agissant sur un système est égale au produit de sa masse totale par l'accélération de son centre d'inertie.",
-          "Il énonce que le centre d'inertie se déplace toujours en ligne droite, quelle que soit la situation.",
-          "Il est applicable uniquement aux solides en rotation.",
-          "Il est identique au principe d'inertie de Newton."
-        ], rep:0 },
-      { id:"D2", pts:1,
-        txt:"Le théorème d'Huygens est utilisé en mécanique pour :",
-        opts:[
-          "Calculer le moment d'inertie d'un solide par rapport à un axe quelconque à partir de celui par rapport à un axe passant par le centre de masse.",
-          "Déterminer la vitesse d'un projectile en fonction de sa masse.",
-          "Calculer la force de frottement dans un mouvement circulaire.",
-          "Relier la pression et la vitesse dans un fluide en écoulement."
-        ], rep:0 },
-      { id:"D3", pts:1,
-        txt:"Parmi les propositions suivantes, laquelle constitue une analogie correcte entre forces électriques et forces gravitationnelles ?",
-        opts:[
-          "Les deux forces sont en 1/r², proportionnelles à des 'charges' (masse ou charge électrique), et décroissantes avec la distance.",
-          "Les deux forces peuvent être répulsives ou attractives dans tous les cas.",
-          "Les deux forces dépendent uniquement de la vitesse des objets.",
-          "Les deux forces sont identiques en intensité pour des charges de même valeur."
-        ], rep:0 },
-      { id:"D4", pts:1,
-        txt:"La déflexion électrique d'une particule chargée dans un champ électrique uniforme E est :",
-        opts:[
-          "Proportionnelle à E et à la charge, et inversement proportionnelle à la masse et au carré de la vitesse initiale.",
-          "Indépendante du champ électrique.",
-          "Uniquement verticale, quelle que soit la direction du champ.",
-          "Identique à la déflexion magnétique dans les mêmes conditions."
-        ], rep:0 },
-      { id:"D5", pts:1,
-        txt:"Une grandeur physique peut avoir plusieurs dimensions. Parmi les affirmations suivantes, laquelle est vraie ?",
-        opts:[
-          "L'énergie peut s'exprimer en joules, en électronvolts ou en kilowatts-heure : ce sont trois expressions d'une même grandeur.",
-          "Une grandeur physique n'a toujours qu'une seule unité possible.",
-          "La vitesse ne peut s'exprimer qu'en m/s.",
-          "La masse ne peut s'exprimer qu'en kilogrammes."
-        ], rep:0 },
-      { id:"D6", pts:1,
-        txt:"Une accélération tangentielle nulle implique un mouvement :",
-        opts:[
-          "Circulaire uniforme (vitesse constante en norme).",
-          "Circulaire uniformément accéléré.",
-          "Rectiligne non uniforme.",
-          "Parabolique uniforme."
-        ], rep:0 },
-    ]
-  },
+  {badge:"PARTIE 1",titre:"Situation — Saut du plongeur TCHAKARIAS & bulle d'air",
+   ctx:`Lors des JO de Paris 2024, TCHAKARIAS quitte le tremplin à t = 0 avec une vitesse v₀ inclinée d'un angle α = 40° par rapport à l'horizontal. Il atteint le sommet s après avoir parcouru une distance x₀.
+Une fois au fond de la piscine, il souffle une bulle d'air sphérique de rayon r et masse volumique ρ_air qui remonte verticalement depuis t = 0.
 
-  // ── SECTION 2 : ÉLECTROSTATIQUE ──────────────────────────────
-  { badge:"PARTIE II", titre:"Application directe — Champ électrique entre les plaques",
-    ctx:`Un ion SO₄²⁻ est placé entre deux plaques A et B soumises à une tension V_A − V_B = 2000 V, distantes de d = 10 cm.
-Charge élémentaire : e = 1,6 × 10⁻¹⁹ C. La particule se déplace de N à P.
-On donne : |V_P − V_N| = 1 200 V`,
-    qs:[
-      { id:"D7", pts:1,
-        txt:"Le champ électrique E entre deux plaques planes parallèles est lié à la tension U et à la distance d entre les plaques. Parmi les relations suivantes, laquelle est exacte ?",
-        opts:["E = U/d","E = U × d","E = d/U","E = q/d"], rep:0 },
-      { id:"D8", pts:1,
-        txt:"La force électrique F exercée sur l'ion SO₄²⁻ entre les plaques est représentée par le vecteur champ électrique multiplié par la charge algébrique q = −2e.\n\nLe sens de la force sur l'ion est :",
-        opts:["Opposé au sens du champ électrique (car q < 0)","Dans le même sens que le champ électrique","Perpendiculaire au champ électrique","Nul car les charges se compensent"], rep:0 },
-      { id:"D9", pts:1,
-        txt:"Calculer la distance qui sépare les surfaces équipotentielles P et N.\nOn sait que |V_P − V_N| = 1 200 V et que E = 20 000 V/m.",
-        opts:["d_PN = 6 cm","d_PN = 10 cm","d_PN = 1,2 cm","d_PN = 12 m"], rep:0 },
-      { id:"D10", pts:1,
-        txt:"Le travail W de la force électrique pour déplacer la particule de N à P avec q = −2e et |V_P − V_N| = 1 200 V est :\n\nW = q × (V_P − V_N)\n\nQue vaut W ?",
-        opts:["W = −3,84 × 10⁻¹⁶ J","W = +3,84 × 10⁻¹⁶ J","W = −1,92 × 10⁻¹⁶ J","W = +1,92 × 10⁻¹⁶ J"], rep:0 },
-    ]
-  },
+Informations utiles :
+• Mouvement de rotation et frottements de l'air sur TCHAKARIAS négligés
+• Centre d'inertie G₀ en (x₀ = 0, y₀ = 0) ; axe vertical dirigé vers le haut
+• Bulle : vitesse initiale nulle, soumise à son poids p⃗, la poussée d'Archimède Π⃗ et une force de frottement fluide f⃗ = −6πηr·v⃗
 
-  // ── SECTION 3 : VIRAGE & PROJECTILE ──────────────────────────
-  { badge:"PARTIE III", titre:"Application directe — Skieur & Projectile",
-    schema:`<div class="schema-frame"><svg viewBox="0 0 380 220" width="100%" style="max-height:200px" xmlns="http://www.w3.org/2000/svg"><rect width="380" height="220" fill="#f5f5f0"/><line x1="50" y1="100" x2="320" y2="100" stroke="#aaa" stroke-dasharray="8,4" stroke-width="1.5"/><line x1="50" y1="60" x2="200" y2="100" stroke="#222" stroke-width="2.5"/><line x1="200" y1="100" x2="330" y2="180" stroke="#222" stroke-width="2.5"/><circle cx="200" cy="100" r="5" fill="#333"/><text x="85" y="87" font-size="14" font-family="serif" fill="#333">θ₁</text><text x="232" y="120" font-size="14" font-family="serif" fill="#333">θ₂</text><text x="345" y="145" font-size="13" font-family="serif" fill="#333">h</text><text x="40" y="60" font-size="13" font-weight="bold" fill="#333">D</text><text x="194" y="93" font-size="13" font-weight="bold" fill="#555">E</text><text x="325" y="177" font-size="13" font-weight="bold" fill="#333">F</text><line x1="330" y1="100" x2="330" y2="180" stroke="#888" stroke-dasharray="4,3" stroke-width="1"/></svg><div class="schema-label">Figure — Virage du skieur (D → E → F)</div></div>`,
-    ctx:`Skieur : vitesse en E = 36 km/h, θ₁ = 30°, α = 10 m/s², On donne : θ₁ = 45°, α = 10 m/s²
-Projectile : lancé à h = 1 m du sol, v₀ = 16 m/s, angle α, mur H = 5 m à L = 8 m. g = 9,81 m/s²`,
-    qs:[
-      { id:"D11", pts:1,
-        txt:"Le skieur quitte le sol en E (position rectiligne DE, angle θ₁ = 30° avec l'horizontal) avec une vitesse v = 36 km/h = 10 m/s.\n\nL'équation de la trajectoire du skieur entre E et F dans le repère (E, x, y) est :",
-        opts:["y = x·tan θ₁ − g·x²/(2v²cos²θ₁)","y = x/tan θ₁ + g·x²/(2v²)","y = x·sin θ₁ − g·x/(2v)","y = g·x²/(2v²cos²θ₁) − x·tan θ₁"], rep:0 },
-      { id:"D12", pts:2,
-        txt:"Avec θ₁ = 45° et α = 10 m/s², la différence d'altitude h entre E et F, et la vitesse à l'arrivée en F sont :\n\nLa vitesse du skieur en F vaut :",
-        opts:["v_F = √(v_E² + 2αh) ≈ 14,1 m/s","v_F = v_E + αt ≈ 20 m/s","v_F = v_E / 2 ≈ 5 m/s","v_F = v_E ≈ 10 m/s"], rep:0 },
-      { id:"D13", pts:1,
-        txt:"Pour le projectile (v₀ = 16 m/s, L = 8 m, H = 5 m, h_lancement = 1 m), l'intervalle d'angles α pour passer au-dessus du mur est :\n\nDonner : α = 45°, B est le point de passage au-dessus du mur.\nLa vitesse v_B forme un angle β avec l'horizontal. Alors :",
-        opts:["v_yB < 0 donc β < 0 : le projectile descend au point B","v_yB > 0 donc β > 0 : le projectile monte encore","v_yB = 0 : le projectile est au sommet","v_xB = 0 : le mouvement est vertical"], rep:0 },
-      { id:"D14", pts:1,
-        txt:"La hauteur maximale atteinte par le projectile (v₀ = 16 m/s, α = 45°, h_lancement = 1 m) est :\n\ny_max = h + (v₀ sin α)² / (2g)\n\nQue vaut y_max ?",
-        opts:["y_max ≈ 7,52 m","y_max ≈ 5,00 m","y_max ≈ 13,04 m","y_max ≈ 3,26 m"], rep:0 },
-    ]
-  },
+Données : α = 40° ; g = 9,81 m/s² ; x₁ = 1 m ; H = 6 m
+η = 1,0 × 10⁻³ Pa·s ; ρ_eau = 1,0 × 10³ kg/m³ ; ρ_air = 1,3 kg/m³
 
-  // ── SECTION 4 : OSCILLATEURS / SYSTÈME OSCILLANT ──────────────
-  { badge:"PARTIE IV", titre:"Oscillateurs — Systèmes oscillants",
-    ctx:`Soit les deux fonctions : y₁ = 5 sin(100πt + π/3) cm  et  y₂ = 7 sin(100πt − π/7) cm
-Un pendule simple de longueur l = 0,98 m, écarté d'un angle θ_m = 9° et lâché sans vitesse initiale. g = 9,80 m/s²`,
-    qs:[
-      { id:"D15", pts:1,
-        txt:"La superposition de y₁ et y₂ dans la base de Fresnel donne y = y₁ + y₂.\n\nLa fréquence de chaque oscillateur est :",
-        opts:["f = 50 Hz","f = 100 Hz","f = 100π Hz","f = 25 Hz"], rep:0 },
-      { id:"D16", pts:1,
-        txt:"Lors d'un phénomène de stroboscopie, un disque noir peint de 3 rayons blancs tourne à N = 28 tr/s.\nLe disque est éclairé par un stroboscope dont la fréquence varie entre 10 Hz et 100 Hz.\n\nPour quelles fréquences des éclairs le disque paraît-il immobile avec 3 rayons blancs ?",
-        opts:["28 Hz, 56 Hz, 84 Hz","10 Hz, 50 Hz, 100 Hz","14 Hz, 28 Hz, 56 Hz","28/3 Hz ≈ 9,3 Hz uniquement"], rep:0 },
-      { id:"D17", pts:1,
-        txt:"Pour le pendule simple (l = 0,98 m, θ_m = 9°), l'énergie potentielle de pesanteur (prise nulle à la position d'équilibre) en fonction de θ est :\n\nE_p = mgl(1 − cos θ) ≈ ½mgl·θ² (pour θ en rad, petits angles)",
-        opts:["E_p est maximale aux extrémités et nulle à l'équilibre","E_p est constante tout au long du mouvement","E_p est maximale à la position d'équilibre","E_p dépend de la vitesse angulaire"], rep:0 },
-      { id:"D18", pts:1,
-        txt:"L'équation différentielle qui régit le mouvement du pendule simple est :\n\nθ̈ + (g/l)·θ = 0\n\nLa solution de cette équation est de la forme θ(t) = θ_m · sin(ω₀t + φ). Quelle est la valeur de ω₀ ?",
-        opts:["ω₀ = √(g/l) ≈ 10 rad/s","ω₀ = g/l ≈ 10 rad²/s","ω₀ = √(l/g) ≈ 0,316 rad/s","ω₀ = 2π/T"], rep:0 },
-      { id:"D19", pts:1,
-        txt:"Par le théorème du centre d'inertie, la tension T du fil au passage par la verticale (θ = 0) vérifie :\n\nT = mg(3 − 2cos θ_m)\n\nAvec θ_m = 9° = π/20 rad, g = 9,80 m/s², et cos(9°) ≈ 0,988, que vaut T/mg ?",
-        opts:["T/mg ≈ 1,024","T/mg ≈ 3","T/mg ≈ 0,988","T/mg ≈ 2,012"], rep:0 },
-    ]
-  },
+Document 1 — Investigations :
+Vitesse initiale v₀ : BELINGA = 5 m/s ; ZOBUS = 0,7 m/s
+Portée de TCHAKARIAS : BELINGA = 2 m ; ZOBUS = 3 m
 
-  // ── SECTION 5 : VALEUR DE g (SITUATION PROBLÈME) ────────────────
-  { badge:"PARTIE V", titre:"Situation problème — Mesure de g par catapulte",
-    ctx:`Un groupe d'élèves utilise une catapulte (ressort + piston + tube cylindrique) pour lancer une bille (S) horizontalement à une vitesse v₀ constante depuis une hauteur h variable.
-Ils mesurent x_m, l'abscisse du point d'impact sur un plancher horizontal.
-v₀ = 4,85 m/s (horizontale, constante) ; g est à déterminer.
+BELINGA : dv/dt = g(ρ_eau/ρ_air − 1) − [9η/(2ρ_air r²)]·v
+ZOBUS   : dv/dt = g(ρ_eau/ρ_air − 1) − [9η/(2ρ_air r²)]·v`,
+   qs:[
+    {id:"D1",pts:1,
+     txt:"La nature du mouvement du centre d'inertie G de TCHAKARIAS pendant le saut est :",
+     opts:["Un mouvement de projectile (parabolique) car seul le poids agit sur G","Un mouvement rectiligne uniforme","Un mouvement circulaire uniforme","Un mouvement oscillatoire"],rep:0},
 
-Données expérimentales (extrait) :
-h (cm) : 20  |  40  |  60  |  80  |  100 |  120 |  140
-x_m (m) : 1,00 | 1,43 | 1,73 | 2,00 | 2,26 | 2,43 | 2,60
-x²_m (m²): 1,0  |  2,0  |  3,0  |  4,0  |  5,1  |  5,9  |  6,8`,
-    qs:[
-      { id:"D20", pts:1,
-        txt:"La bille est lancée horizontalement depuis une hauteur h avec v₀ horizontal.\n\nL'équation de la trajectoire reliant x_m et h est :",
-        opts:["x²_m = (2v₀²/g) × h","x_m = v₀ × √(2h/g)","x²_m = (g/2v₀²) × h","h = g × x²_m / (2v₀²)"], rep:0 },
-      { id:"D21", pts:2,
-        txt:"Le graphe de x²_m en fonction de h donne une droite de pente p = Δ(x²_m)/Δh.\nD'après le tableau, la pente est approximativement :\n\np = (6,8 − 1,0) / (1,40 − 0,20) ≈ 4,83 m\n\nSachant que p = 2v₀²/g, et v₀ = 4,85 m/s, que vaut g ?",
-        opts:["g ≈ 9,72 m/s²","g ≈ 4,85 m/s²","g ≈ 5,00 m/s²","g ≈ 12,0 m/s²"], rep:0 },
-      { id:"D22", pts:1,
-        txt:"La valeur de g obtenue expérimentalement (≈ 9,72 m/s²) est comparée à la valeur théorique (9,80 m/s²).\n\nQuelle conclusion les élèves peuvent-ils tirer ?",
-        opts:["La valeur est cohérente, l'écart est faible (< 1%). L'expérience confirme le modèle.","La valeur est fausse, l'expérience est mal réalisée.","La valeur de 9,72 m/s² est impossible physiquement.","Le modèle est invalide car g ne peut pas être mesuré ainsi."], rep:0 },
-    ]
-  },
+    {id:"D2",pts:1,
+     txt:"Avec v₀ = 5 m/s et α = 40°, la portée horizontale x₀ de TCHAKARIAS vaut :",
+     opts:["x₀ = v₀²·sin(2α)/g ≈ 2,47 m","x₀ = v₀²/g ≈ 2,55 m","x₀ = v₀·cos α ≈ 3,83 m","x₀ = v₀·sin α/g ≈ 0,33 m"],rep:0},
 
+    {id:"D3",pts:1,
+     txt:"À la vitesse limite de la bulle (accélération nulle), la relation entre les forces s'écrit :",
+     opts:["Π⃗ = p⃗ + |f⃗|  (poussée = poids + frottement)","Π⃗ = p⃗  (poussée = poids seul)","p⃗ = Π⃗ + |f⃗|  (poids = poussée + frottement)","f⃗ = Π⃗  (frottement = poussée)"],rep:0},
+
+    {id:"D4",pts:1,
+     txt:"Les propositions de BELINGA et ZOBUS sur l'équation différentielle du mouvement de la bulle sont :",
+     opts:["Identiques — les deux équations sont exactement les mêmes","Différentes — BELINGA a une vitesse limite plus grande","Seul ZOBUS est correct physiquement","Les deux sont erronées"],rep:0},
+
+    {id:"D5",pts:1,
+     txt:"La vitesse limite de la bulle est proportionnelle à :",
+     opts:["r² (au carré du rayon)","1/r (inversement proportionnelle à r)","r (au rayon)","1/r² (inversement au carré du rayon)"],rep:0},
+
+    {id:"D6",pts:1,
+     txt:"En comparant les portées avec la formule x₀ = v₀²·sin(2α)/g (α = 40°) :\nBELINGA : v₀ = 5 m/s → x₀ ≈ ? ; ZOBUS : v₀ = 0,7 m/s → x₀ ≈ ?\nLaquelle est cohérente avec la portée annoncée ?",
+     opts:["BELINGA : x₀ ≈ 2,47 m ≈ 2 m ✓  et  ZOBUS : x₀ ≈ 0,049 m ≠ 3 m ✗","Les deux sont cohérentes","ZOBUS seul est cohérent","Aucune n'est cohérente"],rep:0},
+  ]},
+
+  {badge:"PARTIE 2",titre:"Stroboscopie — Disque à 3 rayons, N = 28 tr/s",
+   ctx:`Un disque noir peint de 3 rayons blancs identiquement espacés tourne à N = 28 tr/s.
+Le disque est éclairé par un stroboscope dont la fréquence f_e varie entre 10 Hz et 100 Hz.`,
+   qs:[
+    {id:"D7",pts:1,
+     txt:"Pour quelles fréquences d'éclairs le disque paraît-il immobile avec 3 rayons blancs visibles ?",
+     opts:["f_e = 28 Hz et f_e = 84 Hz","f_e = 14 Hz et f_e = 56 Hz","f_e = 28 Hz seulement","f_e = 56 Hz et f_e = 84 Hz"],rep:0},
+
+    {id:"D8",pts:1,
+     txt:"Pour quelles fréquences d'éclairs le disque paraît-il immobile avec 6 rayons blancs visibles ?",
+     opts:["f_e = 14 Hz et f_e = 42 Hz","f_e = 56 Hz et f_e = 84 Hz","f_e = 28 Hz","f_e = 7 Hz seulement"],rep:0},
+
+    {id:"D9",pts:1,
+     txt:"Pour f_e = 78 Hz, quelle est la fréquence apparente et que perçoit-on ?",
+     opts:["f_app = 6 Hz → le disque semble avancer lentement","f_app = 78 Hz → le disque tourne à sa vraie vitesse","f_app = −6 Hz → le disque semble reculer lentement","f_app = 0 → le disque est immobile"],rep:0},
+  ]},
+
+  {badge:"PARTIE 3",titre:"Pendule simple — l = 0,98 m, θ_m = 9°",
+   ctx:`Un pendule simple de masse m, longueur l = 0,98 m, écarté de θ_m = 9° et lâché sans vitesse initiale.
+g = 9,80 m/s². Frottements négligés.
+NB : pour θ ≤ 10°, sin θ ≈ θ  et  1 − cos θ ≈ θ²/2 (θ en rad).`,
+   qs:[
+    {id:"D10",pts:1,
+     txt:"En prenant pour origine de l'énergie potentielle le plan horizontal passant par le centre d'inertie à l'équilibre, l'énergie mécanique du pendule en fonction de m, g, l et θ_m est :",
+     opts:["E_m = mgl·θ_m²/2","E_m = mgl·θ_m","E_m = mgl(1 − cos θ_m)  sans approximation","E_m = (1/2)ml²·θ̇²"],rep:0},
+
+    {id:"D11",pts:1,
+     txt:"L'équation différentielle qui régit le mouvement est :",
+     opts:["θ̈ + (g/l)·θ = 0","θ̈ − (g/l)·θ = 0","θ̈ + g·θ = 0","l·θ̈ + g·sin θ = 0  (sans approximation)"],rep:0},
+
+    {id:"D12",pts:1,
+     txt:"La solution est θ(t) = θ_m·sin(ω₀t + φ). Les valeurs de ω₀ et T sont :",
+     opts:["ω₀ = √(g/l) ≈ 10 rad/s  et  T = 2π√(l/g) ≈ 1,98 s","ω₀ = g/l ≈ 10 rad²/s","ω₀ = √(l/g) ≈ 0,316 rad/s","ω₀ = 2πN avec N = 28 tr/s"],rep:0},
+
+    {id:"D13",pts:1,
+     txt:"Par le théorème du centre d'inertie, la tension T du fil au passage par la verticale vérifie T = mg(3 − 2cos θ_m).\nAvec cos 9° ≈ 0,988, que vaut T/mg ?",
+     opts:["T/mg ≈ 1,024","T/mg ≈ 3,000","T/mg ≈ 0,988","T/mg ≈ 2,000"],rep:0},
+  ]},
+
+  {badge:"PARTIE 4",titre:"Situation — Mesure de g par catapulte",
+   ctx:`Des élèves lancent une bille (S) horizontalement depuis une hauteur h variable, à vitesse v₀ = 4,85 m/s constante. Ils mesurent x_m, l'abscisse du point d'impact sur le plancher.
+
+Tableau de mesures :
+h (cm)    :  20   |  40   |  60   |  80   |  100  |  120  |  140
+x_m (m)   : 1,00  | 1,43  | 1,73  | 2,00  | 2,26  | 2,43  | 2,60
+x²_m (m²) :  1,0  |  2,0  |  3,0  |  4,0  |  5,1  |  5,9  |  6,8`,
+   qs:[
+    {id:"D14",pts:1,
+     txt:"La relation entre x_m et h pour un lancer horizontal est :",
+     opts:["x²_m = (2v₀²/g)·h","x_m = v₀·√(2h/g)","x²_m = (g/2v₀²)·h","h = g·x²_m/(2v₀²)"],rep:0},
+
+    {id:"D15",pts:1,
+     txt:"La pente de la droite x²_m = f(h) déterminée à partir du tableau vaut approximativement :",
+     opts:["p ≈ 4,83 m  (soit (6,8−1,0)/(1,40−0,20))","p ≈ 2,0 m","p ≈ 6,8 m","p ≈ 1,0 m/cm"],rep:0},
+
+    {id:"D16",pts:2,
+     txt:"Avec p = 2v₀²/g ≈ 4,83 m et v₀ = 4,85 m/s, la valeur de g déduite expérimentalement est :",
+     opts:["g ≈ 9,72 m/s²","g ≈ 4,86 m/s²","g ≈ 4,83 m/s²","g ≈ 0,41 m/s²"],rep:0},
+
+    {id:"D17",pts:1,
+     txt:"L'écart relatif entre g_exp ≈ 9,72 m/s² et g_théo = 9,80 m/s² est d'environ 0,82 %. La conclusion est :",
+     opts:["L'expérience est cohérente : l'écart inférieur à 1 % valide le modèle","L'expérience est un échec car g ≠ 9,80 m/s²","Le modèle est invalide","L'erreur est trop grande pour conclure"],rep:0},
+  ]},
 ]};
 
-// ══ ÉTAT GLOBAL ══════════════════════════════════════════════
-let QUIZ=null, eleve={}, reps={}, started=false, done=false, timerInt=null, tLeft=0;
-const ALL_QS = ()=> QUIZ ? QUIZ.sections.flatMap(s=>s.qs) : [];
-const TOTAL_PTS = ()=> ALL_QS().reduce((a,q)=>a+q.pts,0);
+// ══ NAVIGATION ════════════════════════════════════════════════
+window.showPage=id=>{document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('pg-'+id).classList.add('active');};
 
-window.showPage = id=>{
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.getElementById('pg-'+id).classList.add('active');
-};
-
-window.goRegles = ()=>{
+window.goRegles=()=>{
   const p=document.getElementById('f-prenom').value.trim();
   const n=document.getElementById('f-nom').value.trim();
   const e=document.getElementById('f-etab').value.trim();
@@ -493,50 +439,34 @@ window.goRegles = ()=>{
   showPage('regles');
 };
 
-window.startQuiz = ()=>{
+window.startQuiz=()=>{
   if(!document.getElementById('chk-accept').checked){alert('Vous devez accepter le règlement.');return;}
   document.getElementById('topbar-label').textContent=`S.E. CORPORATION — TERMINALE ${eleve.classe.slice(3)} — PHYSIQUE`;
-  buildQuiz();
-  showPage('quiz');
-  startTimer();
-  started=true;
-  antiCheat();
+  buildQuiz();showPage('quiz');startTimer();started=true;antiCheat();
 };
 
+// ══ CONSTRUCTION DU QUIZ ══════════════════════════════════════
 function buildQuiz(){
-  const body=document.getElementById('quiz-body');
-  body.innerHTML='';
-  QUIZ.sections.forEach(sec=>{
+  const body=document.getElementById('quiz-body');body.innerHTML='';
+  QUIZ.sections.forEach((sec,si)=>{
     let html=`<div class="sec-head"><span class="sec-badge">${sec.badge}</span><span class="sec-title">${sec.titre}</span></div>`;
-    if(sec.schema) html+=sec.schema;
+    // Schémas : C→ skieur en section 2, cerceaux en section 3 ; D→ plongeur en section 0
+    if(eleve.classe==='TleC'&&si===2) html+=SVG_SKIEUR;
+    if(eleve.classe==='TleC'&&si===3) html+=SVG_CERCEAUX;
+    if(eleve.classe==='TleD'&&si===0) html+=SVG_PLONGEUR;
     if(sec.ctx) html+=`<div class="ctx-box">${sec.ctx}</div>`;
     body.insertAdjacentHTML('beforeend',html);
     sec.qs.forEach(q=>{
-      const opts=q.opts.map((o,i)=>
-        `<label class="opt" id="opt-${q.id}-${i}" onclick="pick('${q.id}',${i},this)">
-          <input type="radio" name="q${q.id}">
-          <span class="opt-letter">${'ABCD'[i]}</span>
-          <span class="opt-text">${o}</span>
-        </label>`
-      ).join('');
-      body.insertAdjacentHTML('beforeend',
-        `<div class="qcard" id="qc-${q.id}">
-          <div class="q-label">QUESTION — ${q.pts} pt${q.pts>1?'s':''}</div>
-          <div class="q-text">${q.txt}</div>
-          <div class="opts">${opts}</div>
-        </div>`
-      );
+      const opts=q.opts.map((o,i)=>`<label class="opt" id="opt-${q.id}-${i}" onclick="pick('${q.id}',${i},this)"><input type="radio" name="q${q.id}"><span class="opt-letter">${'ABCD'[i]}</span><span class="opt-text">${o}</span></label>`).join('');
+      body.insertAdjacentHTML('beforeend',`<div class="qcard" id="qc-${q.id}"><div class="q-label">QUESTION — ${q.pts} pt${q.pts>1?'s':''}</div><div class="q-text">${q.txt}</div><div class="opts">${opts}</div></div>`);
     });
-  });
-  updateCounter();
+  });updateCounter();
 }
 
 window.pick=(qId,idx,el)=>{
   document.querySelectorAll(`[id^="opt-${qId}-"]`).forEach(l=>l.classList.remove('sel'));
-  el.classList.add('sel');
-  reps[qId]=idx;
-  document.getElementById('qc-'+qId).classList.add('answered');
-  updateCounter();
+  el.classList.add('sel');reps[qId]=idx;
+  document.getElementById('qc-'+qId).classList.add('answered');updateCounter();
 };
 
 function updateCounter(){
@@ -545,6 +475,7 @@ function updateCounter(){
   document.getElementById('prog-fill').style.width=`${(done2/tot)*100}%`;
 }
 
+// ══ TIMER ════════════════════════════════════════════════════
 function startTimer(){
   tLeft=QUIZ.duree;
   timerInt=setInterval(()=>{
@@ -552,11 +483,12 @@ function startTimer(){
     const m=String(Math.floor(tLeft/60)).padStart(2,'0');
     const s=String(tLeft%60).padStart(2,'0');
     document.getElementById('timer-display').textContent=`${m}:${s}`;
-    if(tLeft<=300) document.getElementById('timer-box').classList.add('danger');
+    if(tLeft<=300)document.getElementById('timer-box').classList.add('danger');
     if(tLeft<=0){clearInterval(timerInt);submit('temps_depasse');}
   },1000);
 }
 
+// ══ ANTI-TRICHE ══════════════════════════════════════════════
 function antiCheat(){
   document.addEventListener('contextmenu',e=>{if(started&&!done)e.preventDefault();});
   document.addEventListener('keydown',e=>{
@@ -566,6 +498,7 @@ function antiCheat(){
   });
 }
 
+// ══ SOUMISSION ════════════════════════════════════════════════
 window.confirmSubmit=()=>{
   if(done)return;
   const tot=ALL_QS().length,left=tot-Object.keys(reps).length;
@@ -574,35 +507,22 @@ window.confirmSubmit=()=>{
 };
 
 async function submit(statut){
-  if(done)return;
-  done=true;started=false;clearInterval(timerInt);
-  let score=0;
-  ALL_QS().forEach(q=>{if(reps[q.id]!==undefined&&reps[q.id]===q.rep)score+=q.pts;});
+  if(done)return;done=true;started=false;clearInterval(timerInt);
+  let score=0;ALL_QS().forEach(q=>{if(reps[q.id]!==undefined&&reps[q.id]===q.rep)score+=q.pts;});
   const totalPts=TOTAL_PTS();
   const s20=Math.round(score/totalPts*20*100)/100;
-  const id=genId(eleve.classe);
-  const data={
-    identifiant:id,prenom:eleve.prenom,nom:eleve.nom,
-    etablissement:eleve.etablissement,classe:eleve.classe,sexe:eleve.sexe,
-    score,scoreOn20:s20,totalPts,statut,
-    reponses:JSON.stringify(reps),createdAt:new Date().toISOString()
-  };
+  const prefix=eleve.classe==='TleC'?'PC':'PD';
+  const id=genId(prefix);
   const col=eleve.classe==='TleC'?'resultats_phys_c':'resultats_phys_d';
-  try{await addDoc(collection(db,col),data);}
-  catch(e){
-    try{const arr=JSON.parse(localStorage.getItem('se_phys')||'[]');arr.push(data);localStorage.setItem('se_phys',JSON.stringify(arr));}catch(e2){}
-  }
+  const data={identifiant:id,prenom:eleve.prenom,nom:eleve.nom,etablissement:eleve.etablissement,classe:eleve.classe,sexe:eleve.sexe,score,scoreOn20:s20,totalPts,statut,reponses:JSON.stringify(reps),createdAt:new Date().toISOString()};
+  try{await addDoc(collection(db,col),data);}catch(e){try{const arr=JSON.parse(localStorage.getItem('se_phys')||'[]');arr.push(data);localStorage.setItem('se_phys',JSON.stringify(arr));}catch(e2){}}
   document.getElementById('fin-id').textContent=id;
   document.getElementById('score-val').textContent=s20;
   document.getElementById('score-sub').textContent=`/ 20  (${score} pts sur ${totalPts})`;
   showPage('fin');
 }
 
-function genId(classe){
-  const c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-  const prefix=classe==='TleC'?'PC':'PD';
-  return prefix+'-'+[...Array(4)].map(()=>c[Math.floor(Math.random()*c.length)]).join('');
-}
+function genId(prefix){const c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';return prefix+'-'+[...Array(4)].map(()=>c[Math.floor(Math.random()*c.length)]).join('');}
 </script>
 </body>
 </html>
