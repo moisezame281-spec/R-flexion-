@@ -3,14 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>S.E. Corporation — QCM Session Intensive Terminale L & SES</title>
+<title>S.E. Corporation — QCM Terminale A</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --ink:#0f0e0a;--cream:#f5f0e8;--gold:#c9a84c;--gold-lite:rgba(201,168,76,.12);
-  --red:#8b1a1a;--blue:#1a2f5e;--grey:#6b6560;--green:#1a5e1a;
-  --bg2:#13120d;--white:#fff;
+  --ink:#0f0e0a;--cream:#f5f0e8;--gold:#c9a84c;
+  --red:#8b1a1a;--grey:#6b6560;--bg2:#13120d;
 }
 html{scroll-behavior:smooth;height:-webkit-fill-available}
 body{background:var(--ink);color:var(--cream);font-family:'Cormorant Garamond',serif;
@@ -18,20 +17,16 @@ body{background:var(--ink);color:var(--cream);font-family:'Cormorant Garamond',s
   -webkit-user-select:none;user-select:none}
 body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
   background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");opacity:.25}
-
 .page{display:none;min-height:100vh;flex-direction:column}
 .page.active{display:flex}
 
-#pg-accueil{
-  justify-content:center;align-items:center;padding:3rem 1.5rem;
-  background:radial-gradient(ellipse at 50% 0%,rgba(26,47,94,.25) 0%,transparent 65%),var(--ink);
-  position:relative;overflow:hidden
-}
-#pg-accueil::after{
-  content:'ln';position:absolute;font-size:38rem;
+/* ACCUEIL */
+#pg-accueil{justify-content:center;align-items:center;padding:3rem 1.5rem;
+  background:radial-gradient(ellipse at 50% 0%,rgba(201,168,76,.15) 0%,transparent 65%),var(--ink);
+  position:relative;overflow:hidden}
+#pg-accueil::after{content:'ln';position:absolute;font-size:38rem;
   color:rgba(201,168,76,.025);font-family:'Playfair Display',serif;
-  font-style:italic;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none
-}
+  font-style:italic;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
 .logo-block{display:flex;flex-direction:column;align-items:center;gap:.45rem;margin-bottom:2.5rem;z-index:1}
 .logo-ring{position:relative;width:120px;height:120px;display:flex;align-items:center;justify-content:center;margin-bottom:.3rem}
 .logo-ring::before{content:'';position:absolute;inset:0;border-radius:50%;
@@ -39,7 +34,8 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
   animation:spin 10s linear infinite}
 .logo-ring::after{content:'';position:absolute;inset:4px;border-radius:50%;background:var(--ink)}
 @keyframes spin{to{transform:rotate(360deg)}}
-.logo-img{width:104px;height:104px;border-radius:50%;object-fit:cover;position:relative;z-index:1;box-shadow:0 0 24px rgba(201,168,76,.18),0 0 60px rgba(201,168,76,.06)}
+.logo-img{width:104px;height:104px;border-radius:50%;object-fit:cover;position:relative;z-index:1;
+  box-shadow:0 0 24px rgba(201,168,76,.18),0 0 60px rgba(201,168,76,.06)}
 .logo-ornament{display:flex;align-items:center;gap:.5rem;margin-top:.1rem}
 .logo-line{width:30px;height:1px;background:linear-gradient(90deg,transparent,var(--gold))}
 .logo-line.r{background:linear-gradient(90deg,var(--gold),transparent)}
@@ -63,6 +59,7 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
 .btn-gold{background:var(--gold);color:var(--ink)}
 .btn-red{background:var(--red);color:#fff}
 
+/* RÈGLES */
 #pg-regles{justify-content:center;align-items:center;padding:3rem 1.5rem;background:var(--bg2)}
 .regles-box{max-width:680px;width:100%;background:rgba(255,255,255,.02);border:1px solid rgba(201,168,76,.2);border-radius:5px;padding:3rem 3rem 2.5rem}
 .reg-title{font-family:'Playfair Display',serif;font-size:1.9rem;font-weight:900;text-align:center;margin-bottom:.3rem;color:var(--cream)}
@@ -78,6 +75,7 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
 .accept label{font-size:.95rem;color:var(--grey);cursor:pointer;line-height:1.55}
 .accept label em{color:var(--cream);font-style:normal}
 
+/* QUIZ */
 #pg-quiz{background:var(--bg2)}
 .topbar{position:sticky;top:0;z-index:100;background:var(--ink);border-bottom:1px solid rgba(201,168,76,.2);padding:.85rem 2rem;display:flex;align-items:center;justify-content:space-between}
 .topbar-l{font-family:'Space Mono',monospace;font-size:.6rem;color:var(--gold);letter-spacing:.18em}
@@ -88,15 +86,15 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
 .prog-bar{height:3px;background:rgba(201,168,76,.12)}
 .prog-fill{height:100%;background:var(--gold);transition:width .4s}
 .quiz-body{max-width:780px;margin:0 auto;padding:2.5rem 1.5rem 6rem;width:100%}
-.sec-head{display:flex;align-items:center;gap:1rem;margin:2.2rem 0 1.2rem}
-.sec-badge{font-family:'Space Mono',monospace;font-size:.58rem;letter-spacing:.28em;background:var(--gold);color:var(--ink);padding:.28rem .65rem;border-radius:2px;font-weight:700}
+.sec-head{display:flex;align-items:center;gap:1rem;margin:2.2rem 0 1.2rem;flex-wrap:wrap}
+.sec-badge{font-family:'Space Mono',monospace;font-size:.58rem;letter-spacing:.28em;background:var(--gold);color:var(--ink);padding:.28rem .65rem;border-radius:2px;font-weight:700;white-space:nowrap}
 .sec-title{font-family:'Playfair Display',serif;font-size:1.05rem;font-style:italic;color:rgba(245,240,232,.65)}
+.ctx-box{background:rgba(201,168,76,.05);border-left:3px solid var(--gold);border-radius:0 4px 4px 0;padding:1rem 1.2rem;margin-bottom:1.2rem;font-size:.95rem;line-height:1.7;color:rgba(245,240,232,.88);white-space:pre-line}
 .qcard{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:4px;padding:1.8rem 2rem 1.5rem;margin-bottom:1.1rem;transition:border-color .2s}
 .qcard:hover{border-color:rgba(201,168,76,.18)}
-.qcard.answered{border-color:rgba(201,168,76,.35)}
+.qcard.answered{border-color:rgba(201,168,76,.38)}
 .q-label{font-family:'Space Mono',monospace;font-size:.58rem;color:var(--gold);letter-spacing:.18em;margin-bottom:.75rem}
-.q-text{font-size:1.05rem;line-height:1.75;color:var(--cream);margin-bottom:1.2rem;white-space:pre-line}
-.hint{font-size:.9rem;font-style:italic;color:rgba(201,168,76,.85);background:rgba(201,168,76,.07);border-left:2px solid var(--gold);padding:.55rem .9rem;border-radius:0 3px 3px 0;margin-bottom:1rem;line-height:1.55}
+.q-text{font-size:1.05rem;line-height:1.82;color:var(--cream);margin-bottom:1.2rem;white-space:pre-line}
 .opts{display:flex;flex-direction:column;gap:.55rem}
 .opt{display:flex;align-items:flex-start;gap:.85rem;padding:.75rem 1rem;border:1px solid rgba(255,255,255,.07);border-radius:3px;cursor:pointer;transition:all .15s;-webkit-user-select:none;user-select:none}
 .opt:hover{border-color:rgba(201,168,76,.38);background:rgba(201,168,76,.05)}
@@ -107,7 +105,8 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
 .quiz-foot{position:fixed;bottom:0;left:0;right:0;background:var(--ink);border-top:1px solid rgba(201,168,76,.18);padding:.95rem 2rem;display:flex;justify-content:space-between;align-items:center}
 .q-counter{font-family:'Space Mono',monospace;font-size:.62rem;color:var(--grey)}
 
-#pg-fin{justify-content:center;align-items:center;padding:3rem 1.5rem;background:radial-gradient(ellipse at 50% 30%,rgba(26,47,94,.35) 0%,transparent 70%),var(--ink)}
+/* FIN */
+#pg-fin{justify-content:center;align-items:center;padding:3rem 1.5rem;background:radial-gradient(ellipse at 50% 30%,rgba(201,168,76,.15) 0%,transparent 70%),var(--ink)}
 .fin-box{max-width:520px;width:100%;text-align:center;background:rgba(255,255,255,.02);border:1px solid rgba(201,168,76,.2);border-radius:5px;padding:3rem 2.5rem}
 .fin-icon{font-size:2.8rem;margin-bottom:1.2rem}
 .fin-title{font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;color:var(--cream);margin-bottom:.4rem}
@@ -122,6 +121,7 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
 .score-sub{font-size:.95rem;color:var(--grey)}
 .fin-note{font-size:.92rem;color:var(--grey);line-height:1.65;font-style:italic}
 
+/* FRAUD */
 #fraud-overlay{display:none;position:fixed;inset:0;z-index:99998;background:rgba(100,0,0,.97);justify-content:center;align-items:center;flex-direction:column;gap:1.5rem;text-align:center;padding:2rem}
 #fraud-overlay.show{display:flex}
 .fraud-title{font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:900;color:#fff}
@@ -129,19 +129,14 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
 .fraud-count{font-family:'Space Mono',monospace;font-size:1.3rem;color:#fff;background:rgba(255,255,255,.1);padding:.5rem 1.5rem;border-radius:3px}
 
 @media(max-width:580px){
-  .row2{grid-template-columns:1fr}
-  .regles-box,.form-box{padding:2rem 1.4rem}
-  .quiz-body{padding:1.5rem 1rem 6rem}
-  .qcard{padding:1.4rem 1.2rem}
-  .topbar{padding:.75rem 1rem}
-  .topbar-l{display:none}
-  .logo-img{width:90px;height:90px}
-  .logo-ring{width:106px;height:106px}
+  .row2{grid-template-columns:1fr}.regles-box,.form-box{padding:2rem 1.4rem}
+  .quiz-body{padding:1.5rem 1rem 6rem}.qcard{padding:1.4rem 1.2rem}
+  .topbar{padding:.75rem 1rem}.topbar-l{display:none}
+  .logo-img{width:90px;height:90px}.logo-ring{width:106px;height:106px}
 }
 </style>
 </head>
 <body>
-
 
 <div id="fraud-overlay">
   <div class="fraud-title">⚠️ Sortie détectée !</div>
@@ -149,31 +144,28 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
   <div class="fraud-count" id="fraud-cd">Retour dans 5s</div>
 </div>
 
-<!-- PAGE ACCUEIL -->
+<!-- ACCUEIL -->
 <div class="page active" id="pg-accueil">
   <div class="logo-block">
-    <div class="logo-ring">
-      <img src="https://mon-depots.vercel.app/logo.jpg" class="logo-img" alt="S.E. Corporation" onerror="this.style.background='var(--gold)'">
-    </div>
-    <div class="logo-ornament">
-      <div class="logo-line"></div><div class="logo-diamond"></div><div class="logo-line r"></div>
-    </div>
+    <div class="logo-ring"><img src="https://mon-depots.vercel.app/logo.jpg" class="logo-img" alt="S.E. Corporation" onerror="this.style.background='var(--gold)'"></div>
+    <div class="logo-ornament"><div class="logo-line"></div><div class="logo-diamond"></div><div class="logo-line r"></div></div>
     <div class="logo-brand">S.E. Corporation</div>
     <div class="logo-divider"></div>
     <div class="logo-since">Since 2015 — Excellence académique</div>
   </div>
-  <h1 class="acc-title">QCM — Session Intensive<br>Terminale L &amp; SES</h1>
-  <p class="acc-sub">Logarithmes · Polynômes · Statistiques · Fonctions rationnelles</p>
+  <h1 class="acc-title">QCM — Session Intensive<br>Terminale A</h1>
+  <p class="acc-sub">Fonctions · Logarithmes · Statistiques · Situations-problèmes</p>
   <div class="form-box">
     <div class="field"><label>Prénom</label><input type="text" id="f-prenom" placeholder="Votre prénom" autocomplete="off" spellcheck="false"></div>
     <div class="field"><label>Nom</label><input type="text" id="f-nom" placeholder="Votre nom de famille" autocomplete="off" spellcheck="false"></div>
-    <div class="field"><label>Établissement *</label><input type="text" id="f-etab" placeholder="Ex : Lycée de Yaoundé (obligatoire)" autocomplete="off" spellcheck="false"></div>
+    <div class="field"><label>Établissement</label><input type="text" id="f-etab" placeholder="Nom de votre lycée" autocomplete="off" spellcheck="false"></div>
     <div class="row2">
-      <div class="field"><label>Classe</label>
+      <div class="field"><label>Sous-série</label>
         <select id="f-classe">
           <option value="">— Choisir —</option>
-          <option value="TleL">Terminale L</option>
-          <option value="TleSES">Terminale SES</option>
+          <option value="TleA1">Terminale A1</option>
+          <option value="TleA2">Terminale A2</option>
+          <option value="TleA4">Terminale A4</option>
         </select>
       </div>
       <div class="field"><label>Sexe</label>
@@ -189,32 +181,31 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
   </div>
 </div>
 
-<!-- PAGE RÈGLES -->
+<!-- RÈGLES -->
 <div class="page" id="pg-regles">
   <div class="regles-box">
     <h2 class="reg-title">Règlement de <span>l'évaluation</span></h2>
     <p class="reg-intro">Lisez attentivement avant de commencer</p>
     <div class="divider" style="margin:0 0 1.5rem"></div>
-    <div class="rule"><span class="rule-n">01</span><p class="rule-t">Le quiz dure <strong>30 minutes</strong>. Le chronomètre démarre dès que vous appuyez sur « Commencer ». À l'expiration, le quiz est <strong>soumis automatiquement</strong>.</p></div>
-    <div class="rule"><span class="rule-n">02</span><p class="rule-t"><span class="alert">Toute sortie de la page</span> (changement d'onglet, retour arrière, minimisation) sera <strong>détectée et enregistrée</strong>. Votre classement sera pénalisé.</p></div>
-    <div class="rule"><span class="rule-n">03</span><p class="rule-t">Chaque infraction est comptabilisée. Le statut <span class="alert">FRAUDE</span> sera visible dans le classement public.</p></div>
-    <div class="rule"><span class="rule-n">04</span><p class="rule-t">À la fin, vous recevez un <strong>identifiant unique</strong> (ex : SE-4K7R). <strong>Notez-le impérativement</strong>.</p></div>
-    <div class="rule"><span class="rule-n">05</span><p class="rule-t">Le classement est <strong>confidentiel</strong> : seul votre identifiant y apparaît.</p></div>
-    <div class="rule"><span class="rule-n">06</span><p class="rule-t">Travaillez seul(e), <strong>sans aide extérieure</strong>. Clic droit et raccourcis désactivés.</p></div>
+    <div class="rule"><span class="rule-n">01</span><p class="rule-t">Le quiz dure <strong>35 minutes</strong>. À l'expiration, soumission <strong>automatique</strong>.</p></div>
+    <div class="rule"><span class="rule-n">02</span><p class="rule-t"><span class="alert">Toute sortie de la page</span> sera <strong>détectée et enregistrée</strong>. Classement pénalisé.</p></div>
+    <div class="rule"><span class="rule-n">03</span><p class="rule-t">Notez votre <strong>identifiant unique</strong> à la fin — seul moyen de retrouver votre classement.</p></div>
+    <div class="rule"><span class="rule-n">04</span><p class="rule-t">Chaque question comporte <strong>4 propositions</strong>, une seule correcte.</p></div>
+    <div class="rule"><span class="rule-n">05</span><p class="rule-t">Travaillez <strong>seul(e)</strong>. Clic droit et certains raccourcis sont désactivés.</p></div>
     <div class="divider"></div>
     <div class="accept">
       <input type="checkbox" id="chk-accept">
-      <label for="chk-accept">J'ai lu et j'accepte le règlement. Je m'engage à composer seul(e) et à ne pas quitter la page. Je comprends que toute irrégularité sera <em>enregistrée et sanctionnée</em>.</label>
+      <label for="chk-accept">J'ai lu et j'accepte le règlement. Je m'engage à composer seul(e). Toute irrégularité sera <em>enregistrée et sanctionnée</em>.</label>
     </div>
     <button class="btn btn-gold" style="margin-top:1.5rem" onclick="startQuiz()">Commencer l'évaluation →</button>
   </div>
 </div>
 
-<!-- PAGE QUIZ -->
+<!-- QUIZ -->
 <div class="page" id="pg-quiz">
   <div class="topbar">
-    <div class="topbar-l">S.E. CORPORATION — TERMINALE L / SES — MATHÉMATIQUES</div>
-    <div class="timer" id="timer-box"><div class="timer-dot"></div><span id="timer-display">30:00</span></div>
+    <div class="topbar-l" id="topbar-label">S.E. CORPORATION — TERMINALE A — MATHÉMATIQUES</div>
+    <div class="timer" id="timer-box"><div class="timer-dot"></div><span id="timer-display">35:00</span></div>
   </div>
   <div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
   <div class="quiz-body" id="quiz-body"></div>
@@ -224,7 +215,7 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
   </div>
 </div>
 
-<!-- PAGE FIN -->
+<!-- FIN -->
 <div class="page" id="pg-fin">
   <div class="fin-box">
     <div class="fin-icon">✦</div>
@@ -232,7 +223,7 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
     <div class="id-box">
       <div class="id-lbl">Votre identifiant confidentiel</div>
       <div class="id-val" id="fin-id">——</div>
-      <div class="id-warn">📌 Notez cet identifiant — vous en aurez besoin pour consulter votre classement.</div>
+      <div class="id-warn">📌 Notez cet identifiant — nécessaire pour consulter votre classement.</div>
     </div>
     <div class="score-box" id="score-box">
       <div class="score-lbl">Score obtenu</div>
@@ -246,158 +237,123 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-const firebaseConfig={
-  apiKey:"AIzaSyAhSTl2OR5ztfoIwB2TgIqEaiMjD6TmrcI",
-  authDomain:"se-corporation-quiz-7187e.firebaseapp.com",
-  projectId:"se-corporation-quiz-7187e",
-  storageBucket:"se-corporation-quiz-7187e.firebasestorage.app",
-  messagingSenderId:"5773761325",
-  appId:"1:5773761325:web:e1d3cb01d88c3a73e611a4"
-};
+const firebaseConfig={apiKey:"AIzaSyAhSTl2OR5ztfoIwB2TgIqEaiMjD6TmrcI",authDomain:"se-corporation-quiz-7187e.firebaseapp.com",projectId:"se-corporation-quiz-7187e",storageBucket:"se-corporation-quiz-7187e.firebasestorage.app",messagingSenderId:"5773761325",appId:"1:5773761325:web:e1d3cb01d88c3a73e611a4"};
 const app=initializeApp(firebaseConfig);
 const db=getFirestore(app);
+let eleve={},reps={},frauds=0,started=false,done=false,timerInt=null,tLeft=0;
 
-const _savedFrauds=parseInt(sessionStorage.getItem('se_frauds')||'0');
-const _wasStarted=sessionStorage.getItem('se_started')==='1';
-let eleve={},reps={},frauds=_savedFrauds,started=false,done=false,timerInt=null,tLeft=0;
-if(_wasStarted){frauds++;sessionStorage.setItem('se_frauds',frauds);}
+// ══════════════════════════════════════════════════════════════
+//  QUIZ TERMINALE A — 20 points — 4 sections
+// ══════════════════════════════════════════════════════════════
+const QUIZ={duree:35*60,sections:[
 
-// ══════════════════════════════════════════════════════════════════
-//  QUESTIONS — QCM SESSION INTENSIVE TERMINALE L & SES — 20 POINTS
-// ══════════════════════════════════════════════════════════════════
-window.QUIZ={duree:30*60,sections:[
-
-  // ══ PARTIE A — Polynôme P(x) et équations logarithmiques ══
-  // Chapitre : Polynômes / Fonctions logarithmiques
-  {badge:"PARTIE A",titre:"Polynôme P(x) = 2x³+x²−13x+6 et équations logarithmiques",qs:[
-
+  // ── SECTION 1 : f(x) = x·ln x — Étude complète ───────────────
+  {badge:"PARTIE I",titre:"Étude de f(x) = x·ln x sur ]0 ; +∞[",
+   ctx:"Soit f la fonction définie sur ]0 ; +∞[ par f(x) = x·ln x\net g(x) = 1 + ln x.",
+   qs:[
     {id:"A1",pts:1,
-     txt:"P(x) = 2x³ + x² − 13x + 6.\n\nOn veut montrer que (x−2) est un facteur de P(x).\nPour cela, on calcule P(2) :\n\n2(2)³ + (2)² − 13(2) + 6 = 16 + 4 − 26 + 6 = ?",
-     opts:["0 : (x−2) est bien un facteur","2 : (x−2) n'est pas un facteur","−2 : il n'y a pas de racine entière","4 : (x−4) serait le bon facteur"],rep:0},
+     txt:"La résolution de l'inéquation 1 + ln x ≥ 0 donne :",
+     opts:["x ∈ [1/e ; +∞[","x ∈ ]0 ; 1/e]","x ∈ ]0 ; e]","x ∈ [e ; +∞["],rep:0},
 
     {id:"A2",pts:1,
-     txt:"Puisque P(2) = 0, on effectue la division de P(x) par (x−2).\nLe résultat donne P(x) = (x−2)(2x²+5x−3).\n\nOn factorise 2x²+5x−3 : Δ = 25 + 24 = 49.\nLes racines sont x = (−5±7)/4.\n\nLes deux racines de 2x²+5x−3 sont :",
-     opts:["x = 1/2  et  x = −3","x = −1/2  et  x = 3","x = 1/3  et  x = −2","x = 3/2  et  x = −1"],rep:0},
+     txt:"lim f(x) quand x → 0⁺ et lim f(x) quand x → +∞ sont :",
+     opts:["lim = 0 en 0⁺ et lim = +∞ en +∞","lim = −∞ en 0⁺ et lim = +∞ en +∞","lim = 0 en 0⁺ et lim = 0 en +∞","lim = 1 en 0⁺ et lim = +∞ en +∞"],rep:0},
 
     {id:"A3",pts:1,
-     txt:"L'ensemble solution de P(x) = 0 dans ℝ est :",
-     opts:["{−3 ; 1/2 ; 2}","{3 ; −1/2 ; −2}","{−3 ; 1/2}","{2 ; −3}"],rep:0},
+     txt:"Calculer f'(x) et vérifier que f'(x) = g(x). Quelle est l'expression correcte de f'(x) ?",
+     opts:["f'(x) = 1 + ln x","f'(x) = 2 + ln x","f'(x) = ln x","f'(x) = 1/x"],rep:0},
 
     {id:"A4",pts:1,
-     txt:"On pose t = ln x pour résoudre dans ℝ :\n2ln³x + ln²x − 13lnx + 6 = 0.\n\nOn obtient t ∈ {−3 ; 1/2 ; 2}.\nPour t = 1/2 : ln x = 1/2, donc x = ?\nPour t = −3 : ln x = −3, donc x = ?",
-     opts:["x = √e  et  x = e⁻³","x = e²  et  x = e³","x = e^(1/2) = e  et  x = 1/e³","x = √e  et  x = 1/e"],rep:0},
+     txt:"Le minimum de f sur ]0 ; +∞[ est atteint en x = 1/e. Que vaut f(1/e) ?",
+     opts:["f(1/e) = −1/e","f(1/e) = 1/e","f(1/e) = 0","f(1/e) = −1"],rep:0},
 
     {id:"A5",pts:1,
-     txt:"L'ensemble solution complet de 2ln³x + ln²x − 13lnx + 6 = 0 dans ℝ est :",
-     opts:["{e⁻³ ; √e ; e²}","{e⁻² ; √e ; e³}","{ 1/e³ ; e ; e² }","{e⁻³ ; e² ; e³}"],rep:0},
+     txt:"Sur ]0 ; 1/e[, f est ____________ et sur ]1/e ; +∞[, f est ____________.",
+     opts:["décroissante puis croissante","croissante puis décroissante","décroissante sur tout ]0 ; +∞[","croissante sur tout ]0 ; +∞["],rep:0},
 
-    {id:"A6",pts:1,
-     txt:"Pour résoudre 2ln³x + ln²x − 13lnx + 6 ≤ 0,\non analyse le signe de P(t) avec t = ln x.\n\nP(t) ≤ 0 pour t ∈ ]−∞ ; −3] ∪ [1/2 ; 2].\nComme t = ln x et x > 0, l'ensemble solution est :",
-     opts:["]0 ; e⁻³] ∪ [√e ; e²]","[e⁻³ ; √e] ∪ [e² ; +∞[","]0 ; e³] ∪ [e⁻² ; +∞[","[e⁻³ ; e²]"],rep:0,
-     hint:"ln x ≤ −3 ⟺ x ≤ e⁻³ (avec x > 0). Et 1/2 ≤ ln x ≤ 2 ⟺ √e ≤ x ≤ e²."},
+    {id:"A6",pts:2,
+     txt:"L'équation de la tangente (T) à la courbe de f au point d'abscisse x = 1 est :",
+     opts:["y = x − 1","y = x","y = 2x − 1","y = x + 1"],rep:0},
   ]},
 
-  // ══ PARTIE B — Systèmes d'équations et logarithmes ══
-  // Chapitre : Systèmes / Fonctions logarithmiques
-  {badge:"PARTIE B",titre:"Systèmes (S₁) et (S₂) — Équations et inéquation logarithmique",qs:[
-
+  // ── SECTION 2 : Systèmes et polynôme — Collège Mongo Beti ────
+  {badge:"PARTIE II",titre:"Système de Gauss et polynôme — Terminale A",
+   ctx:"On considère le système :\nx + y + z = 15\n−x − y + 2z = 0\n2x + y − z = 8\n\nEt le polynôme p(x) = 2x³ − 3x² − 17x + 30.",
+   qs:[
     {id:"B1",pts:1,
-     txt:"Résoudre (S₁) dans ℝ² :\n{ 2x + 3y = 13\n{ 3x − 2y = 0\n\nDe la 2ᵉ équation : x = 2y/3. En substituant dans la 1ʳᵉ :\n2(2y/3) + 3y = 13 → 4y/3 + 3y = 13 → 13y/3 = 13\n\nOn trouve y = ?, puis x = ?",
-     opts:["y = 3, x = 2","y = 2, x = 3","y = 4, x = 1","y = 1, x = 4"],rep:0},
+     txt:"Par la méthode du pivot de Gauss, le triplet solution du système est :",
+     opts:["(x ; y ; z) = (3 ; 7 ; 5)","(x ; y ; z) = (5 ; 3 ; 7)","(x ; y ; z) = (7 ; 3 ; 5)","(x ; y ; z) = (3 ; 5 ; 7)"],rep:0},
 
     {id:"B2",pts:1,
-     txt:"En posant u = ln x et v = ln y, le système (S₂) :\n{ 2ln x + 3ln y = 13\n{ 3ln x − 2ln y = 0\n\nest identique à (S₁) avec u à la place de x et v de y.\nDonc u = 2 et v = 3, soit ln x = 2 et ln y = 3.\n\nLa solution dans ℝ² est :",
-     opts:["(e² ; e³)","(2 ; 3)","(e³ ; e²)","(e ; e²)"],rep:0},
+     txt:"En déduisant du système précédent, les solutions du système :\nln x + ln y + ln z = 15\n−ln x − ln y + 2 ln z = 0\n2 ln x + ln y − ln z = 8\nsont :",
+     opts:["x = e³, y = e⁷, z = e⁵","x = e⁵, y = e³, z = e⁷","x = 3, y = 7, z = 5","x = e⁷, y = e³, z = e⁵"],rep:0},
 
     {id:"B3",pts:1,
-     txt:"Résoudre dans ℝ : ln(x+3) + ln(x−4) = 3 ln 2.\n\n3 ln 2 = ln 8. Le domaine exige x > 4.\nL'équation devient ln[(x+3)(x−4)] = ln 8.\n(x+3)(x−4) = 8 → x²−x−12 = 8 → x²−x−20 = 0.\n\nΔ = 1 + 80 = 81. Les racines sont x = (1±9)/2 :",
-     opts:["x = 5 (x = −4 rejeté car x > 4)","x = 5 et x = −4","x = 4","x = 10"],rep:0},
+     txt:"On vérifie que p(2) = 0. La factorisation p(x) = (x − 2)(2x² + x − 15).\nLes solutions de p(x) = 0 sont :",
+     opts:["x ∈ {−3 ; 2 ; 5/2}","x ∈ {−3 ; 2 ; 3}","x ∈ {−5/2 ; 2 ; 3}","x ∈ {−3 ; −2 ; 5/2}"],rep:0},
 
     {id:"B4",pts:1,
-     txt:"On veut résoudre ln(x+3) + ln(x−4) ≤ 3 ln 2, avec x > 4.\n\nL'inéquation devient (x+3)(x−4) ≤ 8, soit x²−x−20 ≤ 0.\nLes racines du trinôme sont −4 et 5.\nDonc x²−x−20 ≤ 0 pour x ∈ [−4 ; 5].\n\nEn intersectant avec le domaine x > 4, l'ensemble solution est :",
-     opts:["]4 ; 5]","]4 ; +∞[","[−4 ; 5]","{5}"],rep:0},
+     txt:"En déduire les solutions dans ]0 ; +∞[ de l'équation :\n2(ln x)³ − 3(ln x)² − 17 ln x + 30 = 0",
+     opts:["x ∈ {e⁻³ ; e² ; e^(5/2)}","x ∈ {e³ ; e⁻² ; e^(5/2)}","x ∈ {e⁻³ ; e² ; e³}","x ∈ {e⁻³ ; e⁻² ; e^(5/2)}"],rep:0},
+
+    {id:"B5",pts:2,
+     txt:"Les solutions dans ]0 ; +∞[ de l'inéquation :\n2(ln x)³ − 3(ln x)² − 17 ln x + 30 ≤ 0 sont :",
+     opts:["x ∈ ]0 ; e⁻³] ∪ [e² ; e^(5/2)]","x ∈ [e⁻³ ; e²] ∪ [e^(5/2) ; +∞[","x ∈ ]0 ; e²]","x ∈ [e⁻³ ; e^(5/2)]"],rep:0},
   ]},
 
-  // ══ PARTIE C — Système 3×3 et logarithmes ══
-  // Chapitre : Systèmes / Logarithmes
-  {badge:"PARTIE C",titre:"Système 3×3 et déduction logarithmique",qs:[
-
+  // ── SECTION 3 : Statistiques — Droite de Mayer ───────────────
+  {badge:"PARTIE III",titre:"Statistiques — Droite de Mayer",
+   ctx:"Étude sur 8 ans des moyennes générales en mathématiques aux baccalauréats littéraires :\n\nAnnée (xᵢ) :    1  | 2  | 3  | 4  | 5  | 6  | 7  | 8\nMoyenne (yᵢ) :  6  | 8  | 8  | 6  | 9  | 10 | 10 | 11",
+   qs:[
     {id:"C1",pts:1,
-     txt:"On cherche le triplet (x;y;z) solution du système :\n{ x − 2y + 3z = 13\n{ 2x − y − 3z = −4\n{ 3x + 2y − 4z = −8\n\nOn teste (2 ; −1 ; 3) dans la 1ʳᵉ équation :\n2 − 2(−1) + 3(3) = 2 + 2 + 9 = ?",
-     opts:["13 ✓ — On continue la vérification","11 ✗","15 ✗","9 ✗"],rep:0},
+     txt:"Les coordonnées du point moyen G de cette série statistique sont :",
+     opts:["G(4,5 ; 8,5)","G(4 ; 8)","G(4,5 ; 8,25)","G(5 ; 8,5)"],rep:0},
 
     {id:"C2",pts:1,
-     txt:"On vérifie (2 ; −1 ; 3) dans la 2ᵉ et 3ᵉ équation :\n2ᵉ : 2(2)−(−1)−3(3) = 4+1−9 = −4 ✓\n3ᵉ : 3(2)+2(−1)−4(3) = 6−2−12 = −8 ✓\n\nDonc la solution du système est :",
-     opts:["(2 ; −1 ; 3)","(−2 ; 1 ; 3)","(2 ; 1 ; 3)","(−2 ; −1 ; 3)"],rep:0},
+     txt:"La droite de Mayer est déterminée par les points G₁ et G₂, moyennes des deux demi-séries.\nG₁ = moyenne des 4 premières valeurs et G₂ = moyenne des 4 dernières.\nQue valent G₁ et G₂ ?",
+     opts:["G₁(2,5 ; 7) et G₂(6,5 ; 10)","G₁(2 ; 7) et G₂(6 ; 10)","G₁(2,5 ; 8) et G₂(6,5 ; 9)","G₁(3 ; 7) et G₂(6 ; 10)"],rep:0},
 
     {id:"C3",pts:1,
-     txt:"En posant ln x = 2, ln y = −1, ln z = 3,\nle système logarithmique a la même structure.\n\nOn en déduit :\n• x = e² \n• y = e⁻¹\n• z = e³\n\nLaquelle de ces écritures est correcte pour y ?",
-     opts:["y = 1/e","y = e","y = −e","y = e⁻²"],rep:0},
+     txt:"La pente de la droite de Mayer (G₁G₂) vaut :",
+     opts:["a = 3/4","a = 1/2","a = 1","a = 3/8"],rep:0},
+
+    {id:"C4",pts:1,
+     txt:"L'équation de la droite de Mayer est y = (3/4)x + b.\nLa valeur de b est :",
+     opts:["b = 5,125","b = 5,5","b = 4,75","b = 6"],rep:0},
+
+    {id:"C5",pts:1,
+     txt:"En supposant la tendance vérifiée, l'estimation de la moyenne à la 13ᵉ année est :",
+     opts:["y ≈ 14,875","y ≈ 15,25","y ≈ 13,5","y ≈ 16"],rep:0},
   ]},
 
-  // ══ PARTIE D — Statistiques et droite de Mayer ══
-  // Chapitre : Statistiques / Régression linéaire
-  {badge:"PARTIE D",titre:"Statistiques — Nuage de points, point moyen G et droite de Mayer",qs:[
-
+  // ── SECTION 4 : Situation-problème Mongo Beti ────────────────
+  {badge:"PARTIE IV",titre:"Situation-problème — Salaires, intérêts composés, grillage",
+   ctx:"Une entreprise prévoit 7 500 000 F pour payer ses employés.\nÀ la fin du projet, seuls les deux tiers des employés ont travaillé.\nChaque employé ayant travaillé voit sa part augmentée de 250 000 F.\n\nMonsieur FOTSO place 500 000 F dans un compte bloqué à intérêt composé.\nIl retire 583 200 F au bout de deux ans.\n\nIl possède un champ rectangulaire d'aire 9 600 m²,\ndont la longueur dépasse la largeur de 40 m.\nIl entoure ce champ d'un grillage acheté à 1 000 000 F au total.",
+   qs:[
     {id:"D1",pts:1,
-     txt:"Données : xᵢ ∈ {1,2,3,4,5,6,7,8} et yᵢ = {6,8,8,6,9,10,10,11}.\n\nLa moyenne x̄ = (1+2+3+4+5+6+7+8)/8 = 36/8 = 4,5.\nLa moyenne ȳ = (6+8+8+6+9+10+10+11)/8.\n\nȳ vaut :",
-     opts:["8,5","7,5","9","8"],rep:0},
+     txt:"Soit n le nombre initial d'employés. La part initiale est 7 500 000/n.\nLes 2n/3 employés ayant travaillé reçoivent chacun 7 500 000/(2n/3).\nL'augmentation de 250 000 F permet de trouver n, puis le montant reçu.\n\nLe montant reçu par chaque ouvrier ayant travaillé est :",
+     opts:["750 000 F","500 000 F","375 000 F","1 000 000 F"],rep:0},
 
     {id:"D2",pts:1,
-     txt:"Les coordonnées du point moyen G sont :",
-     opts:["G(4,5 ; 8,5)","G(4 ; 8)","G(4,5 ; 8)","G(5 ; 8,5)"],rep:0},
+     txt:"Le nombre initial d'employés dans cette entreprise était :",
+     opts:["n = 15 employés","n = 10 employés","n = 20 employés","n = 12 employés"],rep:0},
 
-    {id:"D3",pts:1,
-     txt:"Pour la droite de Mayer, on divise la série en deux moitiés :\nG₁ = moy des 4 premières années : x̄₁ = (1+2+3+4)/4 = 2,5  ;  ȳ₁ = (6+8+8+6)/4 = 7\nG₂ = moy des 4 dernières années : x̄₂ = (5+6+7+8)/4 = 6,5  ;  ȳ₂ = (9+10+10+11)/4 = 10\n\nLa pente a de la droite de Mayer est :",
-     opts:["a = (10−7)/(6,5−2,5) = 3/4","a = (6,5−2,5)/(10−7) = 4/3","a = 10/6,5 = 1,54","a = 7/2,5 = 2,8"],rep:0},
+    {id:"D3",pts:2,
+     txt:"Le taux d'intérêt annuel composé t vérifie :\n500 000 × (1 + t)² = 583 200\n\nQue vaut t ?",
+     opts:["t = 8 %","t = 6 %","t = 10 %","t = 7,8 %"],rep:0},
 
     {id:"D4",pts:1,
-     txt:"La droite passe par G(4,5 ; 8,5) avec pente a = 3/4.\nb = ȳ − a·x̄ = 8,5 − (3/4)×4,5 = 8,5 − 3,375 = ?\n\nDonc l'équation de la droite de Mayer est :",
-     opts:["y = (3/4)x + 5,125","y = (3/4)x + 5","y = (4/3)x + 5,125","y = (3/4)x + 4,5"],rep:0},
+     txt:"Les dimensions du champ rectangulaire (longueur L et largeur l avec L = l + 40 et L × l = 9 600) sont :",
+     opts:["l = 80 m et L = 120 m","l = 60 m et L = 100 m","l = 96 m et L = 100 m","l = 80 m et L = 100 m"],rep:0},
 
     {id:"D5",pts:1,
-     txt:"On estime la moyenne en mathématiques à la 13ᵉ année en utilisant la droite de Mayer :\ny = (3/4)×13 + 5,125 = 9,75 + 5,125 = ?\n\nCette valeur est :",
-     opts:["14,875","14","15,5","13,125"],rep:0},
-  ]},
-
-  // ══ PARTIE E — Fonction rationnelle g(x) = (x²+x+2)/(x−1) ══
-  // Chapitre : Fonctions rationnelles / Asymptotes / Dérivées
-  {badge:"PARTIE E",titre:"g(x) = (x²+x+2)/(x−1) — Asymptotes, symétrie et variations",qs:[
-
-    {id:"E1",pts:1,
-     txt:"g(x) = (x²+x+2)/(x−1) sur ℝ−{1}.\n\nlim g(x) quand x → 1⁻ = ?  et  lim g(x) quand x → 1⁺ = ?",
-     opts:["−∞ en 1⁻  et  +∞ en 1⁺","0 en 1⁻ et 0 en 1⁺","+∞ en 1⁻  et  −∞ en 1⁺","1 en 1⁻ et 1 en 1⁺"],rep:0},
-
-    {id:"E2",pts:1,
-     txt:"D'après les limites en x = 1, la courbe (Cg) admet :\nune asymptote verticale d'équation :",
-     opts:["x = 1","y = 1","x = 0","y = 0"],rep:0},
-
-    {id:"E3",pts:1,
-     txt:"On effectue la division de x²+x+2 par x−1 :\nx² ÷ x = x. x(x−1) = x²−x. Reste : 2x+2.\n2x ÷ x = 2. 2(x−1) = 2x−2. Reste : 4.\n\nDonc g(x) = x + 2 + 4/(x−1).\nLes valeurs de a, b, c sont :",
-     opts:["a=1, b=2, c=4","a=2, b=1, c=4","a=1, b=2, c=−4","a=1, b=4, c=2"],rep:0},
-
-    {id:"E4",pts:1,
-     txt:"g(x) − (x+2) = 4/(x−1).\n\nQuand x → ±∞, 4/(x−1) → 0.\nDonc la courbe (Cg) se rapproche de la droite y = x+2.\n\nCela signifie que (D) : y = x+2 est :",
-     opts:["Une asymptote oblique à (Cg)","Une asymptote verticale","Une tangente en x = 0","Une droite quelconque sans lien avec (Cg)"],rep:0},
-
-    {id:"E5",pts:1,
-     txt:"Pour montrer que Ω(1 ; 3) est centre de symétrie de (Cg),\non calcule g(1+t) + g(1−t) pour tout t ≠ 0.\n\ng(1+t) = ((1+t)²+(1+t)+2)/t\ng(1−t) = ((1−t)²+(1−t)+2)/(−t)\n\nSi Ω est bien un centre, g(1+t) + g(1−t) doit valoir :",
-     opts:["6 = 2×3, ce qui confirme Ω(1;3)","0","2","4"],rep:0,
-     hint:"Le centre de symétrie (a;b) vérifie g(a+t)+g(a−t)=2b pour tout t. Ici a=1, b=3, donc on doit obtenir 6."},
-
-    {id:"E6",pts:1,
-     txt:"g'(x) = [(2x+1)(x−1) − (x²+x+2)] / (x−1)²\n     = (x²−2x−3) / (x−1)²\n     = (x−3)(x+1) / (x−1)².\n\nSur quel intervalle g est-elle strictement croissante ?",
-     opts:["]−∞ ; −1[ et ]3 ; +∞[","]−1 ; 1[ et ]1 ; 3[","]−1 ; 3[","Partout sur son domaine"],rep:0},
-
-    {id:"E7",pts:1,
-     txt:"g'(x) = (x−3)(x+1)/(x−1)² < 0 sur ]−1;1[ et ]1;3[.\n\nLes valeurs extrémales locales de g sont :\ng(−1) = (1−1+2)/(−1−1) = 2/(−2) = ?\ng(3) = (9+3+2)/(3−1) = 14/2 = ?",
-     opts:["g(−1) = −1 (maximum local)  et  g(3) = 7 (minimum local)","g(−1) = 1  et  g(3) = 7","g(−1) = −2  et  g(3) = 8","g(−1) = 0  et  g(3) = 6"],rep:0},
+     txt:"Le prix du mètre de grillage utilisé pour entourer le champ est :",
+     opts:["2 500 F/m","2 000 F/m","5 000 F/m","1 000 F/m"],rep:0},
   ]},
 ]};
 
-const TOTAL_PTS=QUIZ.sections.flatMap(s=>s.qs).reduce((a,q)=>a+q.pts,0);
 const ALL_QS=()=>QUIZ.sections.flatMap(s=>s.qs);
+const TOTAL_PTS=ALL_QS().reduce((a,q)=>a+q.pts,0);
 
 window.showPage=id=>{document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('pg-'+id).classList.add('active');};
 
@@ -406,26 +362,27 @@ window.goRegles=()=>{
   const n=document.getElementById('f-nom').value.trim();
   const c=document.getElementById('f-classe').value;
   const s=document.getElementById('f-sexe').value;
-  const etab=document.getElementById('f-etab').value.trim();
-  if(!p||!n||!c||!s||!etab){alert('Veuillez remplir tous les champs obligatoires, y compris l\'établissement.');return;}
-  if(c!=='TleL'&&c!=='TleSES'){alert('Ce quiz est réservé aux élèves de Terminale L et SES.');return;}
-  eleve={prenom:p,nom:n,classe:c,sexe:s,etablissement:etab};showPage('regles');
+  const e=document.getElementById('f-etab').value.trim();
+  if(!p||!n||!c||!s){alert('Veuillez remplir tous les champs.');return;}
+  eleve={prenom:p,nom:n,classe:c,sexe:s,etablissement:e};
+  showPage('regles');
 };
 
 window.startQuiz=()=>{
   if(!document.getElementById('chk-accept').checked){alert('Vous devez accepter le règlement.');return;}
-  sessionStorage.setItem('se_started','1');
+  document.getElementById('topbar-label').textContent=`S.E. CORPORATION — ${eleve.classe.toUpperCase()} — MATHÉMATIQUES`;
   buildQuiz();showPage('quiz');startTimer();started=true;antiCheat();
 };
 
 function buildQuiz(){
   const body=document.getElementById('quiz-body');body.innerHTML='';
   QUIZ.sections.forEach(sec=>{
-    body.insertAdjacentHTML('beforeend',`<div class="sec-head"><span class="sec-badge">${sec.badge}</span><span class="sec-title">${sec.titre}</span></div>`);
+    let html=`<div class="sec-head"><span class="sec-badge">${sec.badge}</span><span class="sec-title">${sec.titre}</span></div>`;
+    if(sec.ctx) html+=`<div class="ctx-box">${sec.ctx}</div>`;
+    body.insertAdjacentHTML('beforeend',html);
     sec.qs.forEach(q=>{
-      const hintHTML=q.hint?`<div class="hint">💡 ${q.hint}</div>`:'';
       const opts=q.opts.map((o,i)=>`<label class="opt" id="opt-${q.id}-${i}" onclick="pick('${q.id}',${i},this)"><input type="radio" name="q${q.id}"><span class="opt-letter">${'ABCD'[i]}</span><span class="opt-text">${o}</span></label>`).join('');
-      body.insertAdjacentHTML('beforeend',`<div class="qcard" id="qc-${q.id}"><div class="q-label">QUESTION ${q.id} — ${q.pts} pt${q.pts>1?'s':''}</div><div class="q-text">${q.txt}</div>${hintHTML}<div class="opts">${opts}</div></div>`);
+      body.insertAdjacentHTML('beforeend',`<div class="qcard" id="qc-${q.id}"><div class="q-label">QUESTION — ${q.pts} pt${q.pts>1?'s':''}</div><div class="q-text">${q.txt}</div><div class="opts">${opts}</div></div>`);
     });
   });updateCounter();
 }
@@ -455,16 +412,15 @@ function startTimer(){
 }
 
 function antiCheat(){
-  document.addEventListener('visibilitychange',()=>{if(!started||done)return;if(document.hidden){frauds++;sessionStorage.setItem('se_frauds',frauds);showFraud();}});
-  document.addEventListener('pagehide',()=>{if(started&&!done){frauds++;}});
-  window.addEventListener('blur',()=>{if(started&&!done){frauds++;sessionStorage.setItem('se_frauds',frauds);showFraud();}});
+  document.addEventListener('visibilitychange',()=>{if(!started||done)return;if(document.hidden){frauds++;showFraud();}});
+  window.addEventListener('blur',()=>{if(started&&!done){frauds++;showFraud();}});
   document.addEventListener('contextmenu',e=>{if(started&&!done)e.preventDefault();});
   document.addEventListener('keydown',e=>{
     if(!started||done)return;
     if(e.ctrlKey&&'cvusap'.includes(e.key.toLowerCase()))e.preventDefault();
     if(e.key==='F12'||(e.ctrlKey&&e.shiftKey&&e.key==='I'))e.preventDefault();
   });
-  window.addEventListener('beforeunload',e=>{if(started&&!done){frauds++;sessionStorage.setItem('se_frauds',frauds);e.preventDefault();e.returnValue='';}});
+  window.addEventListener('beforeunload',e=>{if(started&&!done){frauds++;e.preventDefault();e.returnValue='';}});
 }
 
 function showFraud(){
@@ -482,17 +438,15 @@ window.confirmSubmit=()=>{
 
 async function submit(statut){
   if(done)return;done=true;started=false;clearInterval(timerInt);
-  sessionStorage.removeItem('se_started');sessionStorage.removeItem('se_frauds');
   let score=0;ALL_QS().forEach(q=>{if(reps[q.id]!==undefined&&reps[q.id]===q.rep)score+=q.pts;});
   const s20=Math.round(score/TOTAL_PTS*20*100)/100;
   let st=statut;if(frauds>0&&statut==='normal')st=`fraude_${frauds}_sorties`;
   const id=genId();
   const data={identifiant:id,prenom:eleve.prenom,nom:eleve.nom,classe:eleve.classe,sexe:eleve.sexe,
-    etablissement:eleve.etablissement||'',
-    score,scoreOn20:s20,totalPts:TOTAL_PTS,statut:st,fraudCount:frauds,
-    reponses:JSON.stringify(reps),createdAt:new Date().toISOString()};
-  try{await addDoc(collection(db,'resultats_l'),data);}catch(e){
-    try{const arr=JSON.parse(localStorage.getItem('se_res')||'[]');arr.push(data);localStorage.setItem('se_res',JSON.stringify(arr));}catch(e2){}
+    etablissement:eleve.etablissement||'',score,scoreOn20:s20,totalPts:TOTAL_PTS,statut:st,
+    fraudCount:frauds,reponses:JSON.stringify(reps),createdAt:new Date().toISOString()};
+  try{await addDoc(collection(db,'resultats_a'),data);}catch(e){
+    try{const arr=JSON.parse(localStorage.getItem('se_a')||'[]');arr.push(data);localStorage.setItem('se_a',JSON.stringify(arr));}catch(e2){}
   }
   document.getElementById('fin-id').textContent=id;
   document.getElementById('score-val').textContent=s20;
@@ -501,12 +455,12 @@ async function submit(statut){
     const box=document.getElementById('score-box');
     box.style.background='rgba(139,26,26,.18)';box.style.borderColor='rgba(224,85,85,.4)';
     document.getElementById('score-val').style.color='#e05555';
-    document.getElementById('fin-note').innerHTML=`⚠️ Votre résultat est marqué <strong>${st.replace(/_/g,' ')}</strong>.<br>Votre classement sera pénalisé en conséquence.`;
+    document.getElementById('fin-note').innerHTML=`⚠️ Résultat marqué <strong>${st.replace(/_/g,' ')}</strong>. Classement pénalisé.`;
   }
   showPage('fin');
 }
 
-function genId(){const c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';return 'SE-'+[...Array(4)].map(()=>c[Math.floor(Math.random()*c.length)]).join('');}
+function genId(){const c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';return 'TA-'+[...Array(4)].map(()=>c[Math.floor(Math.random()*c.length)]).join('');}
 </script>
 </body>
 </html>
