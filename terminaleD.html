@@ -285,119 +285,106 @@ let eleve={},reps={},frauds=_savedFrauds,started=false,done=false,timerInt=null,
 // ══════════════════════════════════════════════════════════════
 window.QUIZ={duree:45*60,sections:[
 
-  // ══ PARTIE A — f(x) = ln((eˣ+e⁻ˣ)/2) ══
-  // Chapitre : Étude de fonctions / Exponentielle / Asymptotes
-  {badge:"PARTIE A",titre:"f(x) = ln((eˣ+e⁻ˣ)/2) — Variations, asymptotes et réciproque",qs:[
+  {badge:"PARTIE A",titre:"f(x) = ln((eˣ + e⁻ˣ)/2)",qs:[
 
     {id:"A1",pts:1,
-     txt:"f(x) = ln((eˣ+e⁻ˣ)/2).\n\nf'(x) = (eˣ−e⁻ˣ)/(eˣ+e⁻ˣ) = th(x).\n\nf'(0) = 0. f'(x) < 0 pour x < 0 et f'(x) > 0 pour x > 0.\nLe minimum de f est atteint en x = 0 et vaut f(0) = ?\nDe plus (eˣ+e⁻ˣ)/2 ≥ 1 par inégalité AM-GM, donc :",
-     opts:["f(0) = 0 et f(x) ≥ 0 pour tout x","f(0) = ln 2 et f(x) ≥ ln 2","f(0) = 1","f est décroissante sur ℝ"],rep:0},
+     txt:"Soit f(x) = ln((eˣ + e⁻ˣ)/2) définie sur ℝ.\nQuelle est la valeur minimale de f et pour quelle valeur de x est-elle atteinte ?",
+     opts:["f(0) = 0, minimum en x = 0","f(0) = ln 2, minimum en x = 0","f(1) = 0, minimum en x = 1","f n'admet pas de minimum"],rep:0},
 
     {id:"A2",pts:1,
-     txt:"En +∞ : f(x) = ln(eˣ(1+e⁻²ˣ)/2) = x − ln 2 + ln(1+e⁻²ˣ).\nComme ln(1+e⁻²ˣ) → 0 quand x → +∞ :\n\nL'asymptote oblique en +∞ est :",
-     opts:["y = x − ln 2","y = x","y = x + ln 2","y = −x − ln 2"],rep:0},
+     txt:"Quelle est l'expression de f'(x) ?",
+     opts:["(eˣ − e⁻ˣ)/(eˣ + e⁻ˣ)","(eˣ + e⁻ˣ)/(eˣ − e⁻ˣ)","eˣ/(eˣ + e⁻ˣ)","(eˣ − e⁻ˣ)/2"],rep:0},
 
     {id:"A3",pts:1,
-     txt:"f est paire (vérifier : f(−x) = f(x)), donc la courbe est symétrique par rapport à l'axe Oy.\nL'asymptote en −∞ est symétrique de celle en +∞.\n\nAsymptote oblique en −∞ :",
-     opts:["y = −x − ln 2","y = x − ln 2","y = −x + ln 2","y = ln 2"],rep:0},
+     txt:"Quelle est l'asymptote oblique à la courbe C_f en +∞ ?",
+     opts:["y = x − ln 2","y = x","y = x + ln 2","y = 2x − ln 2"],rep:0},
 
     {id:"A4",pts:1,
-     txt:"f''(x) = 1 − (f'(x))² = 1 − th²x = 1/ch²x > 0.\n\nDonc f' est strictement croissante sur ℝ, et f' : ℝ → ]−1;1[ est une bijection.\n\nPour x ∈ ]−1;1[, on cherche y tel que f'(y) = x, c'est-à-dire th(y) = x.\nth(y) = x ⟺ e^(2y) = (1+x)/(1−x).\n\nDonc y = ?",
-     opts:["y = (1/2)ln((1+x)/(1−x))","y = ln((1+x)/(1−x))","y = arctan(x)","y = (1/2)ln(1+x)"],rep:0},
+     txt:"On sait que f''(x) = 1 − (f'(x))².\nPour x ∈ ]−1 ; 1[, il existe un unique réel y tel que f'(y) = x.\nQuelle est l'expression de y en fonction de x ?",
+     opts:["(1/2) ln((1+x)/(1−x))","ln((1+x)/(1−x))","(1/2) ln(1+x)","arctan(x)"],rep:0},
   ]},
 
-  // ══ PARTIE B — Suite (uₙ) et (vₙ) ══
-  // Chapitre : Suites / Logarithme / Récurrence
-  {badge:"PARTIE B",titre:"Suite (uₙ) avec uₙ₊₁ = 1/(2−uₙ) et suite (vₙ) = ln(n/(n+1))",qs:[
+  {badge:"PARTIE B",titre:"Suite (uₙ) définie par u₀ = 0 et uₙ₊₁ = 1/(2 − uₙ)",qs:[
 
     {id:"B1",pts:1,
-     txt:"u₀ = 0, uₙ₊₁ = 1/(2−uₙ).\nu₁ = 1/2 ; u₂ = 2/3 ; u₃ = 3/4.\n\nLa suite (wₙ) est définie par wₙ = n/(n+1).\nOn conjecture uₙ = wₙ. Vérification par récurrence :\nSi uₙ = n/(n+1), alors uₙ₊₁ = 1/(2 − n/(n+1)) = ?",
-     opts:["(n+1)/(n+2) = wₙ₊₁ ✓","n/(n+1) ✗","1/(n+1) ✗","(n+2)/(n+1) ✗"],rep:0},
+     txt:"u₀ = 0, uₙ₊₁ = 1/(2 − uₙ).\nQuelle est la valeur de u₃ ?",
+     opts:["3/4","2/3","1/2","4/5"],rep:0},
 
     {id:"B2",pts:1,
-     txt:"La suite (uₙ) converge. Sa limite est :",
-     opts:["lim uₙ = lim n/(n+1) = 1","lim uₙ = 0","lim uₙ = +∞","lim uₙ = 1/2"],rep:0},
+     txt:"On pose wₙ = n/(n+1).\nQuelle est la limite de la suite (uₙ) = (wₙ) ?",
+     opts:["1","0","1/2","+∞"],rep:0},
 
     {id:"B3",pts:1,
-     txt:"vₙ = ln(n/(n+1)) pour n ≥ 1.\n\nv₁ + v₂ + v₃ = ln(1/2) + ln(2/3) + ln(3/4)\n= ln(1/2 × 2/3 × 3/4) = ln(1/4) = ?\n",
-     opts:["−ln 4","ln 4","−2ln 2 = −ln 4 ✓ (les deux premières sont correctes)","0"],rep:2,
-     hint:"ln(1/4) = −ln 4 = −2ln 2. Les deux premières propositions sont donc identiques."},
+     txt:"Soit vₙ = ln(n/(n+1)) pour n ≥ 1.\nQuelle est la valeur de v₁ + v₂ + v₃ ?",
+     opts:["−ln 4","ln 4","−ln 3","ln(1/6)"],rep:0},
 
     {id:"B4",pts:1,
-     txt:"Sₙ = Σₖ₌₁ⁿ vₖ = Σₖ₌₁ⁿ (ln k − ln(k+1)).\n\nC'est une somme télescopique :\nSₙ = ln 1 − ln(n+1) = −ln(n+1).\n\nlim Sₙ quand n → +∞ = ?",
-     opts:["−∞","0","1","−ln 2"],rep:0},
+     txt:"On pose Sₙ = Σₖ₌₁ⁿ vₖ.\nQuelle est l'expression de Sₙ en fonction de n ?",
+     opts:["−ln(n+1)","ln(n+1)","−ln n","ln n − ln(n+1)"],rep:0},
   ]},
 
-  // ══ PARTIE C — Intégrales par parties (sélection) ══
-  // Chapitre : Calcul intégral / IPP
-  {badge:"PARTIE C",titre:"Intégrales par parties — Calculs guidés",qs:[
+  {badge:"PARTIE C",titre:"Intégrales — Intégration par parties",qs:[
 
     {id:"C1",pts:1,
-     txt:"I = ∫₀^π x²cos x dx.\n\nIPP : u = x², v' = cos x → v = sin x, u' = 2x.\n[x²sin x]₀^π = 0. Il reste −2∫₀^π x sin x dx.\n2ᵉ IPP : u = x, v' = sin x → v = −cos x.\n∫₀^π x sin x dx = [−x cos x]₀^π + ∫₀^π cos x dx = π + 0 = π.\n\nDonc I = ?",
-     opts:["−2π","2π","0","−π"],rep:0},
+     txt:"Quelle est la valeur de I = ∫₀^π x² cos x dx ?",
+     opts:["−2π","2π","0","π"],rep:0},
 
     {id:"C2",pts:1,
-     txt:"I = ∫₁^e x²ln x dx.\n\nIPP : u = ln x, v' = x² → u' = 1/x, v = x³/3.\n= [x³ln x/3]₁^e − ∫₁^e x²/3 dx\n= e³/3 − [x³/9]₁^e\n= e³/3 − (e³−1)/9\n= (3e³ − e³ + 1)/9 = ?",
-     opts:["(2e³+1)/9","e³/3","(e³+1)/9","2e³/9"],rep:0},
+     txt:"Quelle est la valeur de I = ∫₁^e x² ln x dx ?",
+     opts:["(2e³+1)/9","e³/3","(e³+2)/9","2e³/9"],rep:0},
 
     {id:"C3",pts:1,
-     txt:"I = ∫₀^π 2t cos²t sin t dt.\n\nIPP : u = 2t, v' = cos²t sin t → v = −cos³t/3.\n= [−2t cos³t/3]₀^π + (2/3)∫₀^π cos³t dt.\n\n[−2t cos³t/3]₀^π = −2π(−1)³/3 − 0 = 2π/3.\n∫₀^π cos³t dt = ∫₀^π cos t(1−sin²t)dt = [sin t − sin³t/3]₀^π = 0.\n\nI = ?",
-     opts:["2π/3","π/3","4π/3","0"],rep:0},
+     txt:"Quelle est la valeur de I = ∫₀^π 2t cos²t sin t dt ?",
+     opts:["2π/3","π/3","4π/3","2π"],rep:0},
   ]},
 
-  // ══ PARTIE D — Probabilités (urne 12B + 8N) ══
-  // Chapitre : Probabilités / Combinatoire
-  {badge:"PARTIE D",titre:"Urne : 12 boules blanches et 8 noires — Tirages simultanés et successifs",qs:[
+  {badge:"PARTIE D",titre:"Probabilités — Urne contenant 12 boules blanches et 8 boules noires",qs:[
 
     {id:"D1",pts:1,
-     txt:"On tire simultanément 5 boules parmi 20 (12 blanches + 8 noires).\nNombre de façons d'obtenir 3 blanches et 2 noires :\nC₁₂³ × C₈² = 220 × 28 = 6160.\nNombre total : C₂₀⁵ = 15504.\n\nP(3B et 2N) = ?",
-     opts:["6160/15504 = 385/969 ≈ 0,397","220/15504","28/15504","6160/20"],rep:0},
+     txt:"On tire simultanément 5 boules parmi les 20.\nQuelle est la probabilité d'obtenir exactement 3 boules blanches et 2 boules noires ?",
+     opts:["385/969","220/969","56/969","6160/969"],rep:0},
 
     {id:"D2",pts:1,
-     txt:"P(boules de couleurs différentes) = 1 − P(toutes blanches) − P(toutes noires).\n\nC₁₂⁵ = 792 et C₈⁵ = 56.\n\nP(couleurs différentes) = 1 − (792+56)/15504 = 1 − 848/15504 = ?",
-     opts:["14656/15504 = 916/969 ≈ 0,947","848/15504","1 − 792/15504","848/15504"],rep:0},
+     txt:"On tire simultanément 5 boules.\nQuelle est la probabilité d'obtenir des boules de deux couleurs différentes ?",
+     opts:["916/969","848/15504","121/969","14656/969"],rep:0},
 
     {id:"D3",pts:1,
-     txt:"On tire successivement 5 boules SANS remise.\nP(3B puis 2N dans cet ordre exact) :\n= (12/20)(11/19)(10/18)(8/17)(7/16)\n\nOn calcule : 12×11×10 = 1320 et 8×7 = 56.\n1320×56 = 73920. Dénominateur = 20×19×18×17×16 = 1860480.\n\nP = 73920/1860480 = ?",
-     opts:["77/1938 ≈ 0,0397","1/4896","385/969","1/1938"],rep:0},
+     txt:"On tire successivement 5 boules sans remise.\nQuelle est la probabilité d'obtenir 3 blanches puis 2 noires dans cet ordre précis ?",
+     opts:["77/1938","385/969","1/4896","154/1938"],rep:0},
 
     {id:"D4",pts:1,
-     txt:"P(3B et 2N dans un ordre quelconque parmi 5 tirages) :\n= C₅³ × P(3B puis 2N dans l'ordre)\n= 10 × 77/1938 = ?\n\nCe résultat doit coïncider avec la réponse du tirage simultané.",
-     opts:["770/1938 = 385/969 ✓ (cohérent avec tirage simultané)","77/1938","10/1938","770/15504"],rep:0},
+     txt:"On tire successivement 5 boules sans remise.\nQuelle est la probabilité d'obtenir 3 blanches et 2 noires dans un ordre quelconque ?",
+     opts:["385/969","77/1938","770/1938","77/969"],rep:0},
   ]},
 
-  // ══ PARTIE E — Nombres complexes forme exponentielle ══
-  // Chapitre : Nombres complexes
   {badge:"PARTIE E",titre:"Nombres complexes — Forme exponentielle",qs:[
 
     {id:"E1",pts:1,
-     txt:"Z₁ = 1 + cos α − i sin α.\n\nEn utilisant les formules de demi-angle :\n1 + cos α = 2cos²(α/2)  et  sin α = 2sin(α/2)cos(α/2).\n\nZ₁ = 2cos(α/2)[cos(α/2) − i sin(α/2)] = ?\n\nForme exponentielle de Z₁ :",
-     opts:["2cos(α/2)·e^(−iα/2)","2e^(−iα)","cos(α/2)·e^(iα/2)","2sin(α/2)·e^(−iα/2)"],rep:0},
+     txt:"Z₁ = 1 + cos α − i sin α.\nQuelle est la forme exponentielle de Z₁ ?",
+     opts:["2cos(α/2) · e^(−iα/2)","2e^(−iα)","cos(α/2) · e^(−iα)","2sin(α/2) · e^(iα/2)"],rep:0},
 
     {id:"E2",pts:1,
-     txt:"Z₃ = (cos x − i sin x)/(sin x − i cos x).\n\nsin x − i cos x = −i(cos x + i sin x) = −i·e^(ix).\nNumérateur = e^(−ix).\n\nZ₃ = e^(−ix)/(−i·e^(ix)) = i·e^(−2ix) = e^(i(π/2−2x)).\n\nModule et argument de Z₃ :",
-     opts:["Module 1, argument π/2 − 2x","Module 1, argument −2x","Module 2, argument π/2","Module 1, argument 2x"],rep:0},
+     txt:"Z₃ = (cos x − i sin x) / (sin x − i cos x).\nModule et argument de Z₃ ?",
+     opts:["Module 1, argument π/2 − 2x","Module 1, argument −2x","Module 2, argument π/2","Module 1, argument π/2 + 2x"],rep:0},
 
     {id:"E3",pts:1,
-     txt:"Z₅ = (1+cos x − i sin x)/(sin x − i(1+cos x)).\n\nNumérateur = 2cos(x/2)·e^(−ix/2).\nDénominateur = −2i·cos(x/2)·e^(ix/2).\n\nZ₅ = e^(−ix/2)/(−i·e^(ix/2)) = i·e^(−ix) = e^(i(π/2−x)).\n\nQue peut-on conclure ?",
-     opts:["Z₅ est de module 1 et d'argument π/2−x","Z₅ = e^(ix)","Module de Z₅ = 2","Z₅ est réel"],rep:0},
+     txt:"Z₅ = (1 + cos x − i sin x) / (sin x − i(1 + cos x)).\nQuelle est la forme exponentielle de Z₅ ?",
+     opts:["e^(i(π/2 − x))","e^(i(π/2 + x))","e^(−ix)","e^(i(x − π/2))"],rep:0},
   ]},
 
-  // ══ PARTIE F — Similitude T ══
-  // Chapitre : Similitudes directes
-  {badge:"PARTIE F",titre:"Similitude T : z' = (1−i)z − i — Centre, angle, image de droite",qs:[
+  {badge:"PARTIE F",titre:"Similitude T définie par z' = (1−i)z − i",qs:[
 
     {id:"F1",pts:1,
-     txt:"T est définie par z' = (1−i)z − i.\n\n1−i = √2·e^(−iπ/4).\n\nT est une similitude directe de :",
-     opts:["Rapport √2 et angle −π/4","Rapport 2 et angle −π/4","Rapport √2 et angle π/4","Rapport 1 et angle −π/4"],rep:0},
+     txt:"La transformation T est définie par z' = (1−i)z − i.\nQuelle est la nature et les éléments caractéristiques de T ?",
+     opts:["Similitude directe, rapport √2, angle −π/4","Similitude indirecte, rapport √2, angle −π/4","Rotation d'angle π/4 et de centre (−1;0)","Similitude directe, rapport 2, angle −π/2"],rep:0},
 
     {id:"F2",pts:1,
-     txt:"Centre Ω d'affixe ω : T(ω) = ω\n(1−i)ω − i = ω  ⟹  −iω = i  ⟹  ω = −1.\n\nΩ a pour coordonnées :",
-     opts:["Ω(−1 ; 0)","Ω(0 ; −1)","Ω(1 ; 0)","Ω(0 ; 1)"],rep:0},
+     txt:"Quelle est l'affixe du centre Ω de la similitude T ?",
+     opts:["−1","1","−i","i"],rep:0},
 
     {id:"F3",pts:1,
-     txt:"Image de (D) : 2x − y + 1 = 0 par T.\n\nDe z' = (1−i)z−i, on tire x = (x'−y'−1)/2 et y = (x'+y'+1)/2.\nEn substituant dans 2x − y + 1 = 0 :\n(x'−y'−1) − (x'+y'+1)/2 + 1 = 0\n⟹ x' − 3y' − 1 = 0.\n\nÉquation de (D') :",
-     opts:["x − 3y − 1 = 0","3x − y − 1 = 0","x + 3y + 1 = 0","x − y − 1 = 0"],rep:0},
+     txt:"L'image de la droite (D) d'équation 2x − y + 1 = 0 par T est (D').\nQuelle est l'équation de (D') ?",
+     opts:["x − 3y − 1 = 0","3x − y + 1 = 0","x + 3y − 1 = 0","x − 3y + 1 = 0"],rep:0},
   ]},
 ]};
 ;
