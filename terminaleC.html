@@ -290,118 +290,106 @@ let eleve={},reps={},frauds=_savedFrauds,started=false,done=false,timerInt=null,
 // ══════════════════════════════════════════════════════════════
 window.QUIZ={duree:45*60,sections:[
 
-  // ══ PARTIE A — f_m(x) = ln(mx) + m/ln(x) ══
-  // Chapitre : Étude de fonctions / Logarithme
-  {badge:"PARTIE A",titre:"f_m(x) = ln(mx) + m/ln x — Domaine, dérivée et extremums",qs:[
+  {badge:"PARTIE A",titre:"f_m(x) = ln(mx) + m/ln x",qs:[
 
     {id:"A1",pts:1,
-     txt:"f_m(x) = ln(mx) + m/ln x, m > 0.\n\nLe domaine D_m exige mx > 0 et ln x ≠ 0.\nCela donne x > 0 et x ≠ 1.\n\nD_m = ?",
-     opts:["]0;1[ ∪ ]1;+∞[","]0;+∞[","ℝ \\ {0}","]1;+∞["],rep:0},
+     txt:"Soit m un réel strictement positif et f_m(x) = ln(mx) + m/ln x.\nQuel est l'ensemble de définition D_m de f_m ?",
+     opts:["]0;1[ ∪ ]1;+∞[","]0;+∞[ \\ {1}","]0;+∞[","ℝ \\ {0;1}"],rep:0},
 
     {id:"A2",pts:1,
-     txt:"f_m'(x) = 1/x − m/(x(ln x)²) = [(ln x)² − m] / [x(ln x)²]\n\nf_m'(x) = 0 ⟺ (ln x)² = m ⟺ ln x = ±√m\n\nSur ]1;+∞[, l'extremum est atteint en x = ?",
-     opts:["x = e^√m","x = e^m","x = √m","x = m"],rep:0},
+     txt:"Pour f_m(x) = ln(mx) + m/ln x, quelle est l'expression de f_m'(x) ?",
+     opts:["[(ln x)² − m] / [x(ln x)²]","[m − (ln x)²] / [x(ln x)²]","1/x + m/(ln x)²","(ln x − m) / [x(ln x)]"],rep:0},
 
     {id:"A3",pts:1,
-     txt:"En x₀ = e^√m, on calcule f_m(x₀) = ln(m·e^√m) + m/√m\n= ln m + √m + √m = ln m + 2√m.\n\nOn veut montrer que ce point est sur Γ : y = 2ln(x|ln x|).\n2ln(x₀|ln x₀|) = 2ln(e^√m · √m) = 2(√m + ln√m) = 2√m + ln m.\n\nDonc f_m(x₀) vaut bien :",
-     opts:["ln m + 2√m = 2ln(x₀|ln x₀|) ✓","ln m + √m ✗","2ln m + √m ✗","2√m ✗"],rep:0},
+     txt:"Lorsque m décrit ]0;+∞[, l'ensemble des extremums de C_m est une courbe Γ.\nQuelle est l'équation de Γ ?",
+     opts:["y = 2ln(x|ln x|)","y = ln(x²|ln x|)","y = 2x ln x","y = ln x + |ln x|"],rep:0},
 
     {id:"A4",pts:1,
-     txt:"La courbe Γ d'équation y = 2ln(x|ln x|) est l'ensemble des extremums de C_m quand m décrit ]0;+∞[.\n\nSur ]1;+∞[, h(x) = 2ln(x ln x). Sa dérivée est :\nh'(x) = 2(ln x + 1)/(x ln x)\n\nSur ]1;+∞[, ln x > 0 donc h'(x) > 0. Γ est donc :",
-     opts:["Strictement croissante sur ]1;+∞[","Décroissante sur ]1;+∞[","Constante","Convexe uniquement"],rep:0},
+     txt:"On pose h(x) = 2ln(x|ln x|) sur ]1;+∞[.\nQuel est le sens de variation de h sur cet intervalle ?",
+     opts:["h est strictement croissante","h est strictement décroissante","h admet un extremum en x = e","h est constante"],rep:0},
   ]},
 
-  // ══ PARTIE B — Suite S_n(θ) ══
-  // Chapitre : Suites / Logarithmes / Trigonométrie
-  {badge:"PARTIE B",titre:"Suite S_n(θ) = Σ ln(2cos(θ/3^k)−1) — Télescopage",qs:[
+  {badge:"PARTIE B",titre:"Suite S_n(θ) avec θ ∈ ]−π/3 ; π/3[",qs:[
 
     {id:"B1",pts:1,
-     txt:"θ ∈ ]−π/3 ; π/3[. Pour tout entier k ≥ 1, θ/3^k ∈ ]−π/3 ; π/3[.\nDonc cos(θ/3^k) > cos(π/3) = 1/2.\n\nOn en déduit que 2cos(θ/3^k) − 1 est :",
-     opts:["Strictement positif — la suite est bien définie","Nul en certains k","Négatif — problème de définition","Positif seulement pour k = 1"],rep:0},
+     txt:"Soit θ ∈ ]−π/3 ; π/3[ et S_n(θ) = Σₖ₌₁ⁿ ln(2cos(θ/3^k) − 1).\nPourquoi la suite (S_n) est-elle bien définie ?",
+     opts:["Car 2cos(θ/3^k) − 1 > 0 pour tout k ≥ 1","Car cos(θ/3^k) > 1 pour tout k","Car θ/3^k → 0 donc le logarithme est défini","Car S_n est bornée"],rep:0},
 
     {id:"B2",pts:1,
-     txt:"On veut montrer : cos 3α = (2cos 2α − 1)cos α.\n\n2cos 2α · cos α = cos(3α) + cos α  (formule produit).\nDonc (2cos 2α − 1)cos α = cos 3α + cos α − cos α = ?\n\nLa démonstration conclut :",
-     opts:["(2cos 2α−1)cos α = cos 3α ✓","(2cos 2α−1)cos α = cos α ✗","(2cos 2α−1)cos α = 2cos 3α ✗","La formule est fausse ✗"],rep:0},
+     txt:"Laquelle de ces identités trigonométriques est vraie pour tout réel α ?",
+     opts:["cos 3α = (2cos 2α − 1)cos α","cos 3α = (2cos α − 1)cos 2α","cos 3α = 2cos 2α · cos α − 1","cos 3α = cos²α − 2sin²α · cos α"],rep:0},
 
     {id:"B3",pts:1,
-     txt:"De cos 3α = (2cos 2α − 1)cos α, avec α = θ/(2·3^k) :\nln(2cos(θ/3^k) − 1) = ln cos(θ/3^k) − ln cos(θ/(2·3^k))\n... (simplification intermédiaire)\n\nAprès télescopage de k=1 à n :\nS_n(θ) = ln cos(θ/2) − ln cos(θ/(2·3^n)).\n\nQuand n → +∞, θ/(2·3^n) → 0 donc cos(θ/(2·3^n)) → 1 et ln cos(θ/(2·3^n)) → ?\n",
-     opts:["→ 0 donc S(θ) = ln cos(θ/2)","→ 1 donc S(θ) = ln cos(θ/2) − 1","→ +∞ donc S diverge","→ ln(1/2)"],rep:0},
+     txt:"Après télescopage, S_n(θ) s'exprime sous la forme :",
+     opts:["ln cos(θ/2) − ln cos(θ/(2·3^n))","ln cos(θ/3) − ln cos(θ/3^n)","ln cos θ − ln cos(θ/3^n)","ln(cos(θ/2) / cos(θ/3^n))"],rep:0},
 
     {id:"B4",pts:1,
-     txt:"La limite S(θ) de la suite (S_n(θ)) est :\nS(θ) = ln cos(θ/2)\n\nPour θ = π/6, S(π/6) = ln cos(π/12).\ncos(π/12) = cos(15°) = (√6+√2)/4.\n\nDonc S(π/6) = ?",
-     opts:["ln((√6+√2)/4)","ln(√3/2)","ln(1/2)","ln(√2/2)"],rep:0},
+     txt:"La limite S(θ) de la suite (S_n(θ)) quand n → +∞ est :",
+     opts:["ln cos(θ/2)","ln cos θ","−ln cos(θ/2)","ln(2cos θ − 1)"],rep:0},
   ]},
 
-  // ══ PARTIE C — Intégrales I = ∫cos⁴x et J = ∫sin⁴x ══
-  // Chapitre : Calcul intégral / IPP
   {badge:"PARTIE C",titre:"I = ∫₀^π cos⁴x dx  et  J = ∫₀^π sin⁴x dx",qs:[
 
     {id:"C1",pts:1,
-     txt:"I = ∫₀^π cos⁴x dx.\n\nOn écrit cos⁴x = cos x · cos³x = cos x(cos x − cos x sin²x).\n\nDonc I = ∫₀^π cos x(cos x − cos x sin²x) dx.\nCette écriture permet d'utiliser une IPP avec u = cos³x, v' = cos x.\n\nAprès IPP : [sin x · cos³x]₀^π = ?",
-     opts:["0 car sin 0 = sin π = 0","π","1","−1"],rep:0},
+     txt:"Après une intégration par parties appliquée à I = ∫₀^π cos⁴x dx, on obtient une relation entre I et J. Laquelle ?",
+     opts:["I + 3J = 3π/2","I − 3J = π/2","3I + J = 3π/2","I + J = π"],rep:0},
 
     {id:"C2",pts:1,
-     txt:"L'IPP donne : I = 3∫₀^π sin²x cos²x dx = 3∫₀^π sin²x(1−sin²x)dx\n= 3∫₀^π sin²x dx − 3J.\n\nSachant ∫₀^π sin²x dx = π/2 :\nI + 3J = ?",
-     opts:["3π/2","π","π/2","2π"],rep:0},
-
-    {id:"C3",pts:1,
-     txt:"On calcule I + J = ∫₀^π(cos⁴x + sin⁴x)dx.\n\ncos⁴x + sin⁴x = (cos²x + sin²x)² − 2sin²x cos²x = 1 − sin²(2x)/2.\n\n∫₀^π sin²(2x)dx = π/2 (linéarisation).\n\nDonc I + J = π − π/4 = ?",
+     txt:"On calcule I + J = ∫₀^π (cos⁴x + sin⁴x) dx.\nQuelle est la valeur de I + J ?",
      opts:["3π/4","π/2","π","5π/4"],rep:0},
 
+    {id:"C3",pts:1,
+     txt:"On montre que J − I = 0.\nEn déduire la valeur commune de I et J.",
+     opts:["I = J = 3π/8","I = J = π/4","I = J = 3π/4","I = J = π/8"],rep:0},
+
     {id:"C4",pts:1,
-     txt:"J − I = ∫₀^π(sin⁴x − cos⁴x)dx = −∫₀^π cos 2x dx = [−sin(2x)/2]₀^π = ?\n\nEn déduire les valeurs de I et J.",
-     opts:["J−I = 0 donc I = J = 3π/8","J−I = π/2 donc J > I","J−I = −π/4","J = 0 et I = 3π/4"],rep:0},
+     txt:"On pose K = ∫₀^π sin²x cos²x dx.\nQuelle est la valeur de K ?",
+     opts:["π/8","π/4","3π/8","π/16"],rep:0},
   ]},
 
-  // ══ PARTIE D — Probabilités Tiercé ══
-  // Chapitre : Probabilités / Combinatoire
-  {badge:"PARTIE D",titre:"Probabilités — 18 chevaux, tiercé dans l'ordre et dans le désordre",qs:[
+  {badge:"PARTIE D",titre:"Probabilités — Course de 18 chevaux",qs:[
 
     {id:"D1",pts:1,
-     txt:"18 chevaux partants. On veut gagner le tiercé dans l'ordre exact.\n\nLe nombre de façons d'ordonner 3 chevaux parmi 18 est A₁₈³ = 18×17×16.\n\nLa probabilité de gagner dans l'ordre est :",
-     opts:["1/4896","1/816","3/4896","1/18"],rep:0},
+     txt:"Dans une course de 18 chevaux, quelle est la probabilité de trouver le tiercé dans l'ordre exact ?",
+     opts:["1/4896","1/816","1/306","3/4896"],rep:0},
 
     {id:"D2",pts:1,
-     txt:"Le tiercé gagnant est (9, 17, 13). On veut la probabilité de gagner dans le désordre.\n\nCela signifie trouver ces 3 chevaux dans n'importe quel ordre.\nLe nombre d'ordres possibles pour ces 3 chevaux est 3! = 6.\n\nP(désordre) = ?",
-     opts:["6/4896 = 1/816","1/4896","1/6","3/4896"],rep:0},
+     txt:"Le tiercé gagnant est (9, 17, 13).\nQuelle est la probabilité de trouver ces trois chevaux dans le désordre ?",
+     opts:["1/816","1/4896","1/306","6/816"],rep:0},
   ]},
 
-  // ══ PARTIE E — Nombres complexes forme exponentielle ══
-  // Chapitre : Nombres complexes
   {badge:"PARTIE E",titre:"Nombres complexes — Forme exponentielle",qs:[
 
     {id:"E1",pts:1,
-     txt:"Z₁ = 1 + cos α − i sin α.\n\nEn utilisant les formules de demi-angle :\n1 + cos α = 2cos²(α/2)  et  sin α = 2sin(α/2)cos(α/2).\n\nZ₁ = 2cos(α/2)[cos(α/2) − i sin(α/2)] = ?\n\nFormes exponentielle de Z₁ :",
-     opts:["2cos(α/2)·e^(−iα/2)","2e^(−iα)","cos(α/2)·e^(iα/2)","2sin(α/2)·e^(−iα/2)"],rep:0},
+     txt:"Z₁ = 1 + cos α − i sin α.\nQuelle est la forme exponentielle de Z₁ ?",
+     opts:["2cos(α/2) · e^(−iα/2)","2e^(−iα)","2sin(α/2) · e^(iα/2)","cos(α/2) · e^(−iα/2)"],rep:0},
 
     {id:"E2",pts:1,
-     txt:"Z₃ = (cos x − i sin x)/(sin x − i cos x).\n\nOn écrit le dénominateur : sin x − i cos x = −i(cos x + i sin x) = −i·e^(ix).\nLe numérateur = e^(−ix).\n\nDonc Z₃ = e^(−ix)/(−i·e^(ix)) = (1/(−i))·e^(−2ix) = i·e^(−2ix).\n\nModule et argument de Z₃ :",
-     opts:["Module 1, argument π/2 − 2x","Module 1, argument −2x","Module 2, argument π/2","Module 1, argument 2x − π/2"],rep:0},
+     txt:"Z₃ = (cos x − i sin x) / (sin x − i cos x).\nModule et argument de Z₃ ?",
+     opts:["Module 1, argument π/2 − 2x","Module 1, argument −2x","Module 2, argument π/2 − x","Module 1, argument 2x − π/2"],rep:0},
 
     {id:"E3",pts:1,
-     txt:"Z₅ = (1 + cos x − i sin x)/(sin x − i(1 + cos x)).\n\nNumérateur = 2cos(x/2)·e^(−ix/2).\nDénominateur = −2i·cos(x/2)·e^(ix/2).\n\nZ₅ = e^(−ix/2)/(−i·e^(ix/2)) = i·e^(−ix) = e^(i(π/2−x)).\n\nQue peut-on conclure sur Z₅ ?",
-     opts:["Z₅ est de module 1 et argument π/2 − x","Z₅ = e^(ix)","Z₅ est réel","Module de Z₅ = 2"],rep:0},
+     txt:"Z₅ = (1 + cos x − i sin x) / (sin x − i(1 + cos x)).\nQuelle est la forme exponentielle de Z₅ ?",
+     opts:["e^(i(π/2 − x))","e^(−ix)","e^(i(π/2 + x))","e^(i(x − π/2))"],rep:0},
   ]},
 
-  // ══ PARTIE F — Similitude T et application g ══
-  // Chapitre : Similitudes directes / Complexes
-  {badge:"PARTIE F",titre:"Similitude T : z' = (1−i)z − i — Centre, angle, image de droite",qs:[
+  {badge:"PARTIE F",titre:"Similitude T définie par z' = (1−i)z − i",qs:[
 
     {id:"F1",pts:1,
-     txt:"T est définie par z' = (1−i)z − i.\n\n1−i = √2·e^(−iπ/4).\n\nT est une similitude directe de :",
-     opts:["Rapport √2 et angle −π/4","Rapport 2 et angle −π/4","Rapport √2 et angle π/4","Rapport 1 et angle −π/4"],rep:0},
+     txt:"La transformation T est définie par z' = (1−i)z − i.\nQuelle est la nature et les éléments caractéristiques de T ?",
+     opts:["Similitude directe, rapport √2, angle −π/4","Similitude directe, rapport 2, angle −π/4","Rotation d'angle −π/4","Similitude directe, rapport √2, angle π/4"],rep:0},
 
     {id:"F2",pts:1,
-     txt:"Le centre Ω d'affixe ω vérifie T(ω) = ω :\n(1−i)ω − i = ω\nω(1−(1−i)) = i\nω·i = −i\n\nDonc ω = ?",
-     opts:["ω = −1  →  Ω(−1 ; 0)","ω = i  →  Ω(0 ; 1)","ω = 1  →  Ω(1 ; 0)","ω = 1−i"],rep:0},
+     txt:"Quelle est l'affixe du centre Ω de la similitude T ?",
+     opts:["−1","i","1","−i"],rep:0},
 
     {id:"F3",pts:1,
-     txt:"Pour M ≠ Ω, on calcule (z'−z)/(ω−z) avec z' = (1−i)z − i et ω = −1 :\n\n(z'−z)/(ω−z) = ((1−i)z−i−z)/(−1−z) = (−iz−i)/(−1−z) = −i(z+1)/(−(z+1)) = ?\n\nCela signifie géométriquement que :",
-     opts:["= i : rotation d'angle π/2 de ΩM donne ΩM'","= −i : M' est le symétrique de M","= 1 : T est une translation","= −1 : T est une symétrie centrale"],rep:0},
+     txt:"Pour M ≠ Ω d'affixe z, on pose ω l'affixe de Ω.\nQuelle est la valeur de (z' − ω) / (z − ω) ?",
+     opts:["1 − i","i","−i","√2 · e^(iπ/4)"],rep:0},
 
     {id:"F4",pts:1,
-     txt:"Image de (D) : 2x − y + 1 = 0 par T.\n\nDe z' = (1−i)z − i, on tire z = (z'+i)/(1−i) = (z'+i)(1+i)/2.\nDonc x = (x'−y'−1)/2 et y = (x'+y'+1)/2.\n\nOn substitue dans 2x − y + 1 = 0 :\n(x'−y'−1) − (x'+y'+1)/2 + 1 = 0.\nEn simplifiant :\n2(x'−y'−1) − (x'+y'+1) + 2 = 0\nx' − 3y' − 1 = 0.\n\nL'image (D') a pour équation :",
-     opts:["x − 3y − 1 = 0","x + 3y + 1 = 0","3x − y − 1 = 0","x − y − 1 = 0"],rep:0},
+     txt:"L'image de la droite (D) d'équation 2x − y + 1 = 0 par T est la droite (D').\nQuelle est l'équation de (D') ?",
+     opts:["x − 3y − 1 = 0","3x − y + 1 = 0","x + 3y − 1 = 0","2x − y − 1 = 0"],rep:0},
   ]},
 ]};
 ;
