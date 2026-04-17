@@ -238,7 +238,7 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
     <div class="topbar-l">S.E. CORPORATION — TERMINALE C — MATHÉMATIQUES</div>
     <div class="timer" id="timer-box">
       <div class="timer-dot"></div>
-      <span id="timer-display">35:00</span>
+      <span id="timer-display">45:00</span>
     </div>
   </div>
   <div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
@@ -270,7 +270,7 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, collection, addDoc, getDocs, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 const firebaseConfig = {
   apiKey:"AIzaSyAhSTl2OR5ztfoIwB2TgIqEaiMjD6TmrcI",
   authDomain:"se-corporation-quiz-7187e.firebaseapp.com",
@@ -288,142 +288,154 @@ let eleve={},reps={},frauds=_savedFrauds,started=false,done=false,timerInt=null,
 // ══════════════════════════════════════════════════════════════
 //  QUESTIONS — SESSION GEMEC FÉV 2026 · 20 POINTS
 // ══════════════════════════════════════════════════════════════
-window.QUIZ={duree:35*60,sections:[
+window.QUIZ={duree:45*60,sections:[
 
-  // ══ PARTIE A — Similitude directe (Exercice 1) ══
-  {badge:"PARTIE A",titre:"Similitude directe — f(z) = (1−i√3)z + 2i√3",qs:[
+  // ══ PARTIE A — f_m(x) = ln(mx) + m/ln(x) ══
+  // Chapitre : Étude de fonctions / Logarithme
+  {badge:"PARTIE A",titre:"f_m(x) = ln(mx) + m/ln x — Domaine, dérivée et extremums",qs:[
 
     {id:"A1",pts:1,
-     txt:"On considère f(z) = (1 − i√3)z + 2i√3.\n\nPour identifier le rapport et l'angle d'une similitude directe, on écrit le coefficient de z sous la forme r·eⁱᶿ.\n\n|1 − i√3| = ?",
-     opts:["1","√2","2","√3"],rep:2},
+     txt:"f_m(x) = ln(mx) + m/ln x, m > 0.\n\nLe domaine D_m exige mx > 0 et ln x ≠ 0.\nCela donne x > 0 et x ≠ 1.\n\nD_m = ?",
+     opts:["]0;1[ ∪ ]1;+∞[","]0;+∞[","ℝ \\ {0}","]1;+∞["],rep:0},
 
     {id:"A2",pts:1,
-     txt:"1 − i√3 a pour module 2. Pour l'argument, on a :\ncos θ = 1/2  et  sin θ = −√3/2.\n\nL'argument de (1 − i√3) est :",
-     opts:["π/3","−π/3","−π/6","2π/3"],rep:1},
+     txt:"f_m'(x) = 1/x − m/(x(ln x)²) = [(ln x)² − m] / [x(ln x)²]\n\nf_m'(x) = 0 ⟺ (ln x)² = m ⟺ ln x = ±√m\n\nSur ]1;+∞[, l'extremum est atteint en x = ?",
+     opts:["x = e^√m","x = e^m","x = √m","x = m"],rep:0},
 
     {id:"A3",pts:1,
-     txt:"Le centre Ω de la similitude f vérifie f(Ω) = Ω.\n\nSoit z_Ω le complexe de Ω :\n(1 − i√3)z_Ω + 2i√3 = z_Ω\n⟺ z_Ω(−i√3) = −2i√3\n\nOn en déduit z_Ω = ?",
-     opts:["2i","2","−2","i√3"],rep:1},
+     txt:"En x₀ = e^√m, on calcule f_m(x₀) = ln(m·e^√m) + m/√m\n= ln m + √m + √m = ln m + 2√m.\n\nOn veut montrer que ce point est sur Γ : y = 2ln(x|ln x|).\n2ln(x₀|ln x₀|) = 2ln(e^√m · √m) = 2(√m + ln√m) = 2√m + ln m.\n\nDonc f_m(x₀) vaut bien :",
+     opts:["ln m + 2√m = 2ln(x₀|ln x₀|) ✓","ln m + √m ✗","2ln m + √m ✗","2√m ✗"],rep:0},
 
     {id:"A4",pts:1,
-     txt:"A est le point d'affixe z_A = 3 + i.\nΩ a pour affixe 2 (résultat de A3).\n\nΩA⃗ a pour affixe z_A − z_Ω = (3+i) − 2 = ?\n\nDonc |ΩA| = ?",
-     opts:["|ΩA| = √2","|ΩA| = √3","|ΩA| = 2","|ΩA| = √5"],rep:0,
-     hint:"z_A − z_Ω = 1 + i, calculez le module de ce complexe."},
-
-    {id:"A5",pts:1,
-     txt:"On rappelle : arg(ΩA⃗) = arg(z_A − z_Ω) = arg(1 + i).\n\nQuelle est la mesure de l'angle (u⃗, ΩA⃗) ?\n(u⃗ est le vecteur unitaire de l'axe réel)",
-     opts:["π/4","−π/4","3π/4","π/6"],rep:0},
+     txt:"La courbe Γ d'équation y = 2ln(x|ln x|) est l'ensemble des extremums de C_m quand m décrit ]0;+∞[.\n\nSur ]1;+∞[, h(x) = 2ln(x ln x). Sa dérivée est :\nh'(x) = 2(ln x + 1)/(x ln x)\n\nSur ]1;+∞[, ln x > 0 donc h'(x) > 0. Γ est donc :",
+     opts:["Strictement croissante sur ]1;+∞[","Décroissante sur ]1;+∞[","Constante","Convexe uniquement"],rep:0},
   ]},
 
-  // ══ PARTIE B — Suite (Mₙ) et équation diophantienne ══
-  {badge:"PARTIE B",titre:"Suite (zₙ), distance ΩMₙ et équation diophantienne",qs:[
+  // ══ PARTIE B — Suite S_n(θ) ══
+  // Chapitre : Suites / Logarithmes / Trigonométrie
+  {badge:"PARTIE B",titre:"Suite S_n(θ) = Σ ln(2cos(θ/3^k)−1) — Télescopage",qs:[
 
     {id:"B1",pts:1,
-     txt:"On a zₙ − 2 = 2ⁿ·e^(−inπ/3)·(z₀ − 2).\n\nLa distance ΩMₙ = |zₙ − 2|.\n\nAvec |e^(−inπ/3)| = 1 et |2ⁿ| = 2ⁿ, on obtient ΩMₙ = ?",
-     opts:["2ⁿ · |z₀ − 2|","n · |z₀ − 2|","2ⁿ","2|z₀ − 2|"],rep:0},
+     txt:"θ ∈ ]−π/3 ; π/3[. Pour tout entier k ≥ 1, θ/3^k ∈ ]−π/3 ; π/3[.\nDonc cos(θ/3^k) > cos(π/3) = 1/2.\n\nOn en déduit que 2cos(θ/3^k) − 1 est :",
+     opts:["Strictement positif — la suite est bien définie","Nul en certains k","Négatif — problème de définition","Positif seulement pour k = 1"],rep:0},
 
     {id:"B2",pts:1,
-     txt:"z_A = 3 + i et z_Ω = 2, donc z₀ − 2 = 1 + i, |z₀ − 2| = √2.\n\nÀ partir de quel entier naturel n a-t-on ΩMₙ ≥ 2026 ?\n(c'est-à-dire 2ⁿ·√2 ≥ 2026)\n\nOn cherche le plus petit n tel que 2ⁿ ≥ 2026/√2 ≈ 1432,5 :",
-     opts:["n = 9","n = 10","n = 11","n = 12"],rep:1,
-     hint:"2¹⁰ = 1024 et 2¹¹ = 2048. Vérifiez lequel dépasse 1432,5."},
+     txt:"On veut montrer : cos 3α = (2cos 2α − 1)cos α.\n\n2cos 2α · cos α = cos(3α) + cos α  (formule produit).\nDonc (2cos 2α − 1)cos α = cos 3α + cos α − cos α = ?\n\nLa démonstration conclut :",
+     opts:["(2cos 2α−1)cos α = cos 3α ✓","(2cos 2α−1)cos α = cos α ✗","(2cos 2α−1)cos α = 2cos 3α ✗","La formule est fausse ✗"],rep:0},
 
     {id:"B3",pts:1,
-     txt:"L'équation diophantienne (E) : 5x − 6y = 3.\n\nOn vérifie que (3 ; 2) est solution en calculant 5×3 − 6×2 = ?",
-     opts:["15 − 12 = 3 ✓","15 − 12 = 5 ✗","15 + 12 = 27 ✗","5 − 6 = −1 ✗"],rep:0},
+     txt:"De cos 3α = (2cos 2α − 1)cos α, avec α = θ/(2·3^k) :\nln(2cos(θ/3^k) − 1) = ln cos(θ/3^k) − ln cos(θ/(2·3^k))\n... (simplification intermédiaire)\n\nAprès télescopage de k=1 à n :\nS_n(θ) = ln cos(θ/2) − ln cos(θ/(2·3^n)).\n\nQuand n → +∞, θ/(2·3^n) → 0 donc cos(θ/(2·3^n)) → 1 et ln cos(θ/(2·3^n)) → ?\n",
+     opts:["→ 0 donc S(θ) = ln cos(θ/2)","→ 1 donc S(θ) = ln cos(θ/2) − 1","→ +∞ donc S diverge","→ ln(1/2)"],rep:0},
 
     {id:"B4",pts:1,
-     txt:"La solution générale de (E) : 5x − 6y = 3 est, à partir du couple particulier (3 ; 2) :\n\n{ x = 3 + 6k\n{ y = 2 + 5k,  k ∈ ℤ\n\nPour k = −1 : (x, y) = ?",
-     opts:["(−3, −3)","(9, 7)","(−3, 7)","(−3, 2)"],rep:0,
-     hint:"x = 3 + 6(−1) = −3  et  y = 2 + 5(−1) = ?"},
+     txt:"La limite S(θ) de la suite (S_n(θ)) est :\nS(θ) = ln cos(θ/2)\n\nPour θ = π/6, S(π/6) = ln cos(π/12).\ncos(π/12) = cos(15°) = (√6+√2)/4.\n\nDonc S(π/6) = ?",
+     opts:["ln((√6+√2)/4)","ln(√3/2)","ln(1/2)","ln(√2/2)"],rep:0},
   ]},
 
-  // ══ PARTIE C — Fonction f(x) = (x²−2ln x)/4 ══
-  {badge:"PARTIE C",titre:"Analyse — f(x) = (x² − 2 ln x) / 4 sur [1 ; +∞[",qs:[
+  // ══ PARTIE C — Intégrales I = ∫cos⁴x et J = ∫sin⁴x ══
+  // Chapitre : Calcul intégral / IPP
+  {badge:"PARTIE C",titre:"I = ∫₀^π cos⁴x dx  et  J = ∫₀^π sin⁴x dx",qs:[
 
     {id:"C1",pts:1,
-     txt:"f(x) = (x² − 2 ln x) / 4  sur [1 ; +∞[.\n\nf'(x) = ?",
-     opts:["(2x − 2/x)/4 = (x² − 1)/(2x)","(2x + 2/x)/4","(x − 2/x)/4","(x² − 2)/(4x)"],rep:0},
+     txt:"I = ∫₀^π cos⁴x dx.\n\nOn écrit cos⁴x = cos x · cos³x = cos x(cos x − cos x sin²x).\n\nDonc I = ∫₀^π cos x(cos x − cos x sin²x) dx.\nCette écriture permet d'utiliser une IPP avec u = cos³x, v' = cos x.\n\nAprès IPP : [sin x · cos³x]₀^π = ?",
+     opts:["0 car sin 0 = sin π = 0","π","1","−1"],rep:0},
 
     {id:"C2",pts:1,
-     txt:"f'(x) = (x² − 1)/(2x).\n\nSur [1 ; +∞[, x ≥ 1 donc x² − 1 ≥ 0 et 2x > 0.\n\nLe signe de f'(x) sur ]1 ; +∞[ est :",
-     opts:["f'(x) < 0 : f décroissante","f'(x) > 0 : f strictement croissante","f'(x) = 0 : f constante","f' change de signe en x = 1"],rep:1},
+     txt:"L'IPP donne : I = 3∫₀^π sin²x cos²x dx = 3∫₀^π sin²x(1−sin²x)dx\n= 3∫₀^π sin²x dx − 3J.\n\nSachant ∫₀^π sin²x dx = π/2 :\nI + 3J = ?",
+     opts:["3π/2","π","π/2","2π"],rep:0},
 
     {id:"C3",pts:1,
-     txt:"On calcule I(λ) = ∫₁^λ f(x) dx par intégration par parties (IPP).\n\nOn pose u = f(x) et v' = 1, donc v = x.\n\nAprès IPP : I(λ) = [xf(x)]₁^λ − ∫₁^λ xf'(x) dx\n\n∫₁^λ x · (x²−1)/(2x) dx = ∫₁^λ (x²−1)/2 dx = ?\n\n(Résultat à calculer de 1 à λ)",
-     opts:["(λ³−3λ)/6 + 1/3","(λ²−1)/2","(λ³−λ)/6 − (1−1)/6","(λ³/3 − λ)/2 − (1/3−1)/2"],rep:0,
-     hint:"∫(x²−1)/2 dx = x³/6 − x/2. Évaluez en λ et en 1, puis soustrayez."},
+     txt:"On calcule I + J = ∫₀^π(cos⁴x + sin⁴x)dx.\n\ncos⁴x + sin⁴x = (cos²x + sin²x)² − 2sin²x cos²x = 1 − sin²(2x)/2.\n\n∫₀^π sin²(2x)dx = π/2 (linéarisation).\n\nDonc I + J = π − π/4 = ?",
+     opts:["3π/4","π/2","π","5π/4"],rep:0},
 
     {id:"C4",pts:1,
-     txt:"Pour Sₙ = (1/n)∑ₚ₌₁ⁿ⁻¹ f(1 + p/n), l'encadrement clé est :\n\n(1/n)f(1+p/n) ≤ ∫_{1+p/n}^{1+(p+1)/n} f(x)dx ≤ (1/n)f(1+(p+1)/n)\n\nCela vient du fait que f est :",
-     opts:["Concave","Convexe","Décroissante","Constante"],rep:1,
-     hint:"f est croissante sur [1;+∞[ et l'intégrale est donc encadrée par les valeurs aux extrémités."},
-
-    {id:"C5",pts:1,
-     txt:"En sommant les encadrements de p = 1 à p = n−1, on obtient :\nSₙ ≤ ∫₁² f(x) dx ≤ Sₙ + (1/n)f(2).\n\nf(2) = (4 − 2 ln 2)/4 = 1 − (ln 2)/2.\n\nQue vaut lim(n→+∞) Sₙ ?",
-     opts:["lim Sₙ = ∫₁² f(x)dx","lim Sₙ = f(2)","lim Sₙ = 0","lim Sₙ = 1"],rep:0,
-     hint:"Comme (1/n)f(2) → 0, les deux membres encadrant Sₙ convergent vers ∫₁²f."},
+     txt:"J − I = ∫₀^π(sin⁴x − cos⁴x)dx = −∫₀^π cos 2x dx = [−sin(2x)/2]₀^π = ?\n\nEn déduire les valeurs de I et J.",
+     opts:["J−I = 0 donc I = J = 3π/8","J−I = π/2 donc J > I","J−I = −π/4","J = 0 et I = 3π/4"],rep:0},
   ]},
 
-  // ══ PARTIE D — Intégrales par substitution ══
-  {badge:"PARTIE D",titre:"Intégrales — Substitution et calcul",qs:[
+  // ══ PARTIE D — Probabilités Tiercé ══
+  // Chapitre : Probabilités / Combinatoire
+  {badge:"PARTIE D",titre:"Probabilités — 18 chevaux, tiercé dans l'ordre et dans le désordre",qs:[
 
     {id:"D1",pts:1,
-     txt:"On calcule I = ∫₁ᵉ (1 + ln t)/t dt.\n\nOn pose u = ln t, donc du = dt/t.\nBornes : t=1 → u=0 ; t=e → u=1.\n\nL'intégrale se transforme en :",
-     opts:["∫₀¹ (1+u) du","∫₀ᵉ (1+u) du","∫₀¹ u du","∫₁ᵉ (1+u) du"],rep:0},
+     txt:"18 chevaux partants. On veut gagner le tiercé dans l'ordre exact.\n\nLe nombre de façons d'ordonner 3 chevaux parmi 18 est A₁₈³ = 18×17×16.\n\nLa probabilité de gagner dans l'ordre est :",
+     opts:["1/4896","1/816","3/4896","1/18"],rep:0},
 
     {id:"D2",pts:1,
-     txt:"I = ∫₀¹ (1+u) du = [u + u²/2]₀¹\n\nI = ?",
-     opts:["1","1/2","3/2","2"],rep:2},
-
-    {id:"D3",pts:1,
-     txt:"J₃ = ∫₀^(π/4) sin²w · cos³w dw.\n\nOn écrit cos³w = (1 − sin²w)cosw pour utiliser la substitution u = sin w.\n\nAvec u = sin w : bornes 0 → sin(π/4) = ?",
-     opts:["1","√2/2","√3/2","1/2"],rep:1},
-
-    {id:"D4",pts:1,
-     txt:"Après substitution u = sin w dans J₃ :\nJ₃ = ∫₀^(√2/2) u²(1−u²) du = [u³/3 − u⁵/5]₀^(√2/2)\n\nOn a (√2/2)³ = 2√2/8 = √2/4 et (√2/2)⁵ = 4√2/32 = √2/8.\n\nJ₃ = (√2/4)/3 − (√2/8)/5 = √2/12 − √2/40 = √2(10−3)/120 = ?",
-     opts:["7√2/120","√2/12","√2/8","7/120"],rep:0},
+     txt:"Le tiercé gagnant est (9, 17, 13). On veut la probabilité de gagner dans le désordre.\n\nCela signifie trouver ces 3 chevaux dans n'importe quel ordre.\nLe nombre d'ordres possibles pour ces 3 chevaux est 3! = 6.\n\nP(désordre) = ?",
+     opts:["6/4896 = 1/816","1/4896","1/6","3/4896"],rep:0},
   ]},
 
-  // ══ PARTIE E — Linéarisation (J₄) ══
-  {badge:"PARTIE E",titre:"Linéarisation — J₄ = ∫₀^π sin²u · cos²u du",qs:[
+  // ══ PARTIE E — Nombres complexes forme exponentielle ══
+  // Chapitre : Nombres complexes
+  {badge:"PARTIE E",titre:"Nombres complexes — Forme exponentielle",qs:[
 
     {id:"E1",pts:1,
-     txt:"J₄ = ∫₀^π sin²u · cos²u du.\n\n⚠️ Une substitution directe ne s'applique pas ici car sin et cos ont la même variable.\n\nPour simplifier sin²u · cos²u, on utilise d'abord l'identité :\nsin u · cos u = ?\n\n(Formule de duplication)",
-     opts:["sin(2u)/2","sin(2u)","cos(2u)/2","2sin(u)cos(u)"],rep:0},
+     txt:"Z₁ = 1 + cos α − i sin α.\n\nEn utilisant les formules de demi-angle :\n1 + cos α = 2cos²(α/2)  et  sin α = 2sin(α/2)cos(α/2).\n\nZ₁ = 2cos(α/2)[cos(α/2) − i sin(α/2)] = ?\n\nFormes exponentielle de Z₁ :",
+     opts:["2cos(α/2)·e^(−iα/2)","2e^(−iα)","cos(α/2)·e^(iα/2)","2sin(α/2)·e^(−iα/2)"],rep:0},
 
     {id:"E2",pts:1,
-     txt:"On sait que sin u · cos u = sin(2u)/2.\n\nDonc sin²u · cos²u = [sin(2u)/2]² = sin²(2u)/4.\n\nPour linéariser sin²(2u), on utilise :\nsin²(θ) = (1 − cos 2θ)/2  avec θ = 2u.\n\nsin²(2u) = ?",
-     opts:["(1 − cos 4u)/2","(1 + cos 4u)/2","1 − cos²(2u)","cos(4u)/2"],rep:0,
-     hint:"Formule : sin²(θ) = (1 − cos(2θ))/2. Posez θ = 2u."},
+     txt:"Z₃ = (cos x − i sin x)/(sin x − i cos x).\n\nOn écrit le dénominateur : sin x − i cos x = −i(cos x + i sin x) = −i·e^(ix).\nLe numérateur = e^(−ix).\n\nDonc Z₃ = e^(−ix)/(−i·e^(ix)) = (1/(−i))·e^(−2ix) = i·e^(−2ix).\n\nModule et argument de Z₃ :",
+     opts:["Module 1, argument π/2 − 2x","Module 1, argument −2x","Module 2, argument π/2","Module 1, argument 2x − π/2"],rep:0},
 
     {id:"E3",pts:1,
-     txt:"Après linéarisation complète :\nsin²u · cos²u = (1 − cos 4u)/8.\n\nJ₄ = ∫₀^π (1 − cos 4u)/8 du = (1/8)[u − sin(4u)/4]₀^π\n\nsin(4π) = sin(0) = 0. Donc J₄ = ?",
-     opts:["π/8","π/4","1/8","π/16"],rep:0},
+     txt:"Z₅ = (1 + cos x − i sin x)/(sin x − i(1 + cos x)).\n\nNumérateur = 2cos(x/2)·e^(−ix/2).\nDénominateur = −2i·cos(x/2)·e^(ix/2).\n\nZ₅ = e^(−ix/2)/(−i·e^(ix/2)) = i·e^(−ix) = e^(i(π/2−x)).\n\nQue peut-on conclure sur Z₅ ?",
+     opts:["Z₅ est de module 1 et argument π/2 − x","Z₅ = e^(ix)","Z₅ est réel","Module de Z₅ = 2"],rep:0},
   ]},
 
-  // ══ PARTIE F — Nombres complexes GEMEC (Exercice 1 suite) ══
-  {badge:"PARTIE F",titre:"Complexes — Suite géométrique (zₙ) et congruences",qs:[
+  // ══ PARTIE F — Similitude T et application g ══
+  // Chapitre : Similitudes directes / Complexes
+  {badge:"PARTIE F",titre:"Similitude T : z' = (1−i)z − i — Centre, angle, image de droite",qs:[
 
     {id:"F1",pts:1,
-     txt:"On a zₙ − 2 = 2ⁿ·e^(−inπ/3)·(z₀ − 2) avec z₀ = 3+i, z_Ω = 2.\n\nLe terme z₀ − 2 = 1 + i. En forme exponentielle :\n|1+i| = √2 et arg(1+i) = π/4.\n\nDonc zₙ − 2 = 2ⁿ · √2 · e^(i(π/4 − nπ/3)).\n\nLe module de zₙ − 2 est :",
-     opts:["2ⁿ√2","2ⁿ","√2","2ⁿ + √2"],rep:0},
+     txt:"T est définie par z' = (1−i)z − i.\n\n1−i = √2·e^(−iπ/4).\n\nT est une similitude directe de :",
+     opts:["Rapport √2 et angle −π/4","Rapport 2 et angle −π/4","Rapport √2 et angle π/4","Rapport 1 et angle −π/4"],rep:0},
 
     {id:"F2",pts:1,
-     txt:"Mₙ appartient à la demi-droite d'origine Ω et de vecteur directeur u⃗ si et seulement si :\narg(zₙ − z_Ω) = arg(u⃗)  [modulo 2π] et zₙ ≠ Ω.\n\nOn a arg(zₙ − 2) = π/4 − nπ/3.\n\nSi u⃗ a pour argument π/4, la condition est :\nπ/4 − nπ/3 ≡ 0 [2π]\n⟺ nπ/3 ≡ π/4 − 0 [2π]... En simplifiant :\n−nπ/3 ≡ 0 [2π] ⟺ n ≡ ? [6]",
-     opts:["n ≡ 0 [6]","n ≡ 1 [6]","n ≡ 3 [6]","n ≡ 2 [6]"],rep:0,
-     hint:"nπ/3 ≡ 0 [2π] ⟺ n/3 ≡ 0 [2] ⟺ n ≡ 0 [6]."},
+     txt:"Le centre Ω d'affixe ω vérifie T(ω) = ω :\n(1−i)ω − i = ω\nω(1−(1−i)) = i\nω·i = −i\n\nDonc ω = ?",
+     opts:["ω = −1  →  Ω(−1 ; 0)","ω = i  →  Ω(0 ; 1)","ω = 1  →  Ω(1 ; 0)","ω = 1−i"],rep:0},
 
     {id:"F3",pts:1,
-     txt:"La condition de l'épreuve est : −4n + 3 = 24k pour un entier k.\n\nCela s'écrit aussi : 4n ≡ 3 [24], ou encore 4n − 3 = 24k.\n\nDivisez par le pgcd(4, 24) = 4 : cela n'est possible que si 4 | 3, ce qui est faux.\n\nOu bien, la condition de l'énoncé est −4n + 3 ≡ 0 [24k], qui revient à n ≡ ? mod un certain entier.\n\nSelon l'épreuve, Mₙ est sur la demi-droite ssi ∃ entier relatif k tel que −4n + 3 = 24k.\nOn cherche n mod 6 :",
-     opts:["n ≡ 0 [6]","n ≡ 3 [6]","n ≡ 1 [6]","Cette condition n'a pas de solution"],rep:0,
-     hint:"−4n + 3 = 24k ⟺ 4n = 3 − 24k ⟺ n = (3 − 24k)/4. Pour n ∈ ℤ, il faut 4 | (3−24k), ie 3 ≡ 0 [4] — contradiction. Donc vérifiez si la formulation exacte est −4n+3 ≡ 0 [24], ce qui donne n entier multiple de 6."},
+     txt:"Pour M ≠ Ω, on calcule (z'−z)/(ω−z) avec z' = (1−i)z − i et ω = −1 :\n\n(z'−z)/(ω−z) = ((1−i)z−i−z)/(−1−z) = (−iz−i)/(−1−z) = −i(z+1)/(−(z+1)) = ?\n\nCela signifie géométriquement que :",
+     opts:["= i : rotation d'angle π/2 de ΩM donne ΩM'","= −i : M' est le symétrique de M","= 1 : T est une translation","= −1 : T est une symétrie centrale"],rep:0},
+
+    {id:"F4",pts:1,
+     txt:"Image de (D) : 2x − y + 1 = 0 par T.\n\nDe z' = (1−i)z − i, on tire z = (z'+i)/(1−i) = (z'+i)(1+i)/2.\nDonc x = (x'−y'−1)/2 et y = (x'+y'+1)/2.\n\nOn substitue dans 2x − y + 1 = 0 :\n(x'−y'−1) − (x'+y'+1)/2 + 1 = 0.\nEn simplifiant :\n2(x'−y'−1) − (x'+y'+1) + 2 = 0\nx' − 3y' − 1 = 0.\n\nL'image (D') a pour équation :",
+     opts:["x − 3y − 1 = 0","x + 3y + 1 = 0","3x − y − 1 = 0","x − y − 1 = 0"],rep:0},
   ]},
 ]};
+;
 
 const TOTAL_PTS=QUIZ.sections.flatMap(s=>s.qs).reduce((a,q)=>a+q.pts,0);
 const ALL_QS=()=>QUIZ.sections.flatMap(s=>s.qs);
 
-window.goRegles=()=>{
+
+// ═══ ANTI DOUBLE PARTICIPATION ═══
+function getLundiSemaine(){
+  const d=new Date();const day=d.getDay()||7;
+  d.setHours(0,0,0,0);d.setDate(d.getDate()-(day-1));
+  return d.toISOString();
+}
+async function dejaCompose(prenom, nom, classe, colName){
+  try{
+    const lundi = getLundiSemaine();
+    const prenomN = prenom.trim().toLowerCase();
+    const nomN    = nom.trim().toLowerCase();
+    const q = query(
+      collection(db, colName),
+      where('createdAt','>=', lundi)
+    );
+    const snap = await getDocs(q);
+    return snap.docs.some(d=>{
+      const data = d.data();
+      return (data.prenom||'').trim().toLowerCase() === prenomN
+          && (data.nom||'').trim().toLowerCase()    === nomN
+          && (data.classe||'') === classe;
+    });
+  }catch(e){ return false; }
+}
+
+window.goRegles=async ()=>{
   const p=document.getElementById('f-prenom').value.trim();
   const n=document.getElementById('f-nom').value.trim();
   const c=document.getElementById('f-classe').value;
@@ -431,6 +443,15 @@ window.goRegles=()=>{
   const etab=document.getElementById('f-etab').value.trim();
   if(!p||!n||!c||!s||!etab){alert('Veuillez remplir tous les champs obligatoires, y compris l\'établissement.');return;}
   if(c!=='TleC'){alert('Ce quiz est réservé aux élèves de Terminale C.');return;}
+  // Anti double participation — vérification en temps réel
+  const btn=document.querySelector('#pg-accueil .btn-gold');
+  if(btn){btn.disabled=true;btn.textContent='Vérification…';}
+  const deja=await dejaCompose(p,n,c,'resultats_c');
+  if(btn){btn.disabled=false;btn.textContent='Continuer →';}
+  if(deja){
+    alert('❌ ' + p + ' ' + n + ' a déjà composé cette évaluation cette semaine.\nUne seule participation est autorisée.');
+    return;
+  }
   eleve={prenom:p,nom:n,classe:c,sexe:s,etablissement:etab};showPage('regles');
 };
 
