@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>S.E. Corporation — QCM Terminale A</title>
+<title>S.E. Corporation — QCM Terminales L / SES</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
@@ -153,19 +153,18 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
     <div class="logo-divider"></div>
     <div class="logo-since">Since 2015 — Excellence académique</div>
   </div>
-  <h1 class="acc-title">QCM — Session Intensive<br>Terminale A</h1>
-  <p class="acc-sub">Fonctions · Logarithmes · Statistiques · Situations-problèmes</p>
+  <h1 class="acc-title">QCM — Session Intensive<br>Terminales L / SES</h1>
+  <p class="acc-sub">Terminales L &amp; SES — Fonctions · Logarithmes · Statistiques · Situations-problèmes</p>
   <div class="form-box">
     <div class="field"><label>Prénom</label><input type="text" id="f-prenom" placeholder="Votre prénom" autocomplete="off" spellcheck="false"></div>
     <div class="field"><label>Nom</label><input type="text" id="f-nom" placeholder="Votre nom de famille" autocomplete="off" spellcheck="false"></div>
     <div class="field"><label>Établissement</label><input type="text" id="f-etab" placeholder="Nom de votre lycée" autocomplete="off" spellcheck="false"></div>
     <div class="row2">
-      <div class="field"><label>Sous-série</label>
+      <div class="field"><label>Classe</label>
         <select id="f-classe">
           <option value="">— Choisir —</option>
-          <option value="TleA1">Terminale A1</option>
-          <option value="TleA2">Terminale A2</option>
-          <option value="TleA4">Terminale A4</option>
+          <option value="TleA">Terminale A</option>
+          <option value="TleSES">Terminale SES</option>
         </select>
       </div>
       <div class="field"><label>Sexe</label>
@@ -445,8 +444,8 @@ async function submit(statut){
   const data={identifiant:id,prenom:eleve.prenom,nom:eleve.nom,classe:eleve.classe,sexe:eleve.sexe,
     etablissement:eleve.etablissement||'',score,scoreOn20:s20,totalPts:TOTAL_PTS,statut:st,
     fraudCount:frauds,reponses:JSON.stringify(reps),createdAt:new Date().toISOString()};
-  try{await addDoc(collection(db,'resultats_a'),data);}catch(e){
-    try{const arr=JSON.parse(localStorage.getItem('se_a')||'[]');arr.push(data);localStorage.setItem('se_a',JSON.stringify(arr));}catch(e2){}
+  try{await addDoc(collection(db,'resultats_l_ses'),data);}catch(e){
+    try{const arr=JSON.parse(localStorage.getItem('se_l_ses')||'[]');arr.push(data);localStorage.setItem('se_l_ses',JSON.stringify(arr));}catch(e2){}
   }
   document.getElementById('fin-id').textContent=id;
   document.getElementById('score-val').textContent=s20;
@@ -460,7 +459,7 @@ async function submit(statut){
   showPage('fin');
 }
 
-function genId(){const c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';return 'TA-'+[...Array(4)].map(()=>c[Math.floor(Math.random()*c.length)]).join('');}
+function genId(){const c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';return 'TL-'+[...Array(4)].map(()=>c[Math.floor(Math.random()*c.length)]).join('');}
 </script>
 </body>
 </html>
