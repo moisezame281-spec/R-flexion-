@@ -233,7 +233,7 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
     <div class="topbar-l">S.E. CORPORATION — TERMINALE D — MATHÉMATIQUES</div>
     <div class="timer" id="timer-box">
       <div class="timer-dot"></div>
-      <span id="timer-display">35:00</span>
+      <span id="timer-display">45:00</span>
     </div>
   </div>
   <div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
@@ -265,7 +265,7 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, collection, addDoc, getDocs, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 const firebaseConfig = {
   apiKey:"AIzaSyAhSTl2OR5ztfoIwB2TgIqEaiMjD6TmrcI",
   authDomain:"se-corporation-quiz-7187e.firebaseapp.com",
@@ -283,139 +283,155 @@ let eleve={},reps={},frauds=_savedFrauds,started=false,done=false,timerInt=null,
 // ══════════════════════════════════════════════════════════════
 //  QUESTIONS — QCM SESSION INTENSIVE TERMINALE D — 20 POINTS
 // ══════════════════════════════════════════════════════════════
-window.QUIZ={duree:35*60,sections:[
+window.QUIZ={duree:45*60,sections:[
 
-  // ══ PARTIE A — Décomposition en éléments simples & intégrale ══
-  // Chapitre : Calcul intégral / Décomposition
-  {badge:"PARTIE A",titre:"Décomposition — (4x²+7x+1)/(x+2) et calcul de I",qs:[
+  // ══ PARTIE A — f(x) = ln((eˣ+e⁻ˣ)/2) ══
+  // Chapitre : Étude de fonctions / Exponentielle / Asymptotes
+  {badge:"PARTIE A",titre:"f(x) = ln((eˣ+e⁻ˣ)/2) — Variations, asymptotes et réciproque",qs:[
 
     {id:"A1",pts:1,
-     txt:"On cherche a, b, c tels que :\n(4x²+7x+1)/(x+2) = ax + b + c/(x+2).\n\nOn effectue la division euclidienne de 4x²+7x+1 par x+2.\n4x² ÷ x = 4x. Puis 4x(x+2) = 4x²+8x.\n\n(4x²+7x+1) − (4x²+8x) = −x + 1.\nEnsuite −x ÷ x = −1, et −1(x+2) = −x−2.\n\n(−x+1) − (−x−2) = ?\nDonc le reste vaut :",
-     opts:["3","−1","1","0"],rep:0},
+     txt:"f(x) = ln((eˣ+e⁻ˣ)/2).\n\nf'(x) = (eˣ−e⁻ˣ)/(eˣ+e⁻ˣ) = th(x).\n\nf'(0) = 0. f'(x) < 0 pour x < 0 et f'(x) > 0 pour x > 0.\nLe minimum de f est atteint en x = 0 et vaut f(0) = ?\nDe plus (eˣ+e⁻ˣ)/2 ≥ 1 par inégalité AM-GM, donc :",
+     opts:["f(0) = 0 et f(x) ≥ 0 pour tout x","f(0) = ln 2 et f(x) ≥ ln 2","f(0) = 1","f est décroissante sur ℝ"],rep:0},
 
     {id:"A2",pts:1,
-     txt:"La division euclidienne donne :\n4x²+7x+1 = (x+2)(4x−1) + 3.\n\nDonc (4x²+7x+1)/(x+2) = 4x − 1 + 3/(x+2).\n\nLes valeurs de a, b et c sont :",
-     opts:["a=4, b=−1, c=3","a=4, b=1, c=−3","a=4, b=−1, c=−3","a=−4, b=1, c=3"],rep:0},
+     txt:"En +∞ : f(x) = ln(eˣ(1+e⁻²ˣ)/2) = x − ln 2 + ln(1+e⁻²ˣ).\nComme ln(1+e⁻²ˣ) → 0 quand x → +∞ :\n\nL'asymptote oblique en +∞ est :",
+     opts:["y = x − ln 2","y = x","y = x + ln 2","y = −x − ln 2"],rep:0},
 
     {id:"A3",pts:1,
-     txt:"On calcule I = ∫₀² (4x²+7x+1)/(x+2) dx.\n\nGrâce à la décomposition : I = ∫₀² (4x−1) dx + ∫₀² 3/(x+2) dx.\n\n∫₀²(4x−1)dx = [2x²−x]₀² = 8−2 = 6.\n∫₀² 3/(x+2)dx = 3[ln|x+2|]₀² = 3(ln4 − ln2) = 3 ln 2.\n\nDonc I = ?",
-     opts:["6 + 3 ln 2","6 − 3 ln 2","3 + 6 ln 2","6 + ln 2"],rep:0},
+     txt:"f est paire (vérifier : f(−x) = f(x)), donc la courbe est symétrique par rapport à l'axe Oy.\nL'asymptote en −∞ est symétrique de celle en +∞.\n\nAsymptote oblique en −∞ :",
+     opts:["y = −x − ln 2","y = x − ln 2","y = −x + ln 2","y = ln 2"],rep:0},
+
+    {id:"A4",pts:1,
+     txt:"f''(x) = 1 − (f'(x))² = 1 − th²x = 1/ch²x > 0.\n\nDonc f' est strictement croissante sur ℝ, et f' : ℝ → ]−1;1[ est une bijection.\n\nPour x ∈ ]−1;1[, on cherche y tel que f'(y) = x, c'est-à-dire th(y) = x.\nth(y) = x ⟺ e^(2y) = (1+x)/(1−x).\n\nDonc y = ?",
+     opts:["y = (1/2)ln((1+x)/(1−x))","y = ln((1+x)/(1−x))","y = arctan(x)","y = (1/2)ln(1+x)"],rep:0},
   ]},
 
-  // ══ PARTIE B — Identité 1/(1+eˣ) et intégrale ══
-  // Chapitre : Calcul intégral / Fonctions exponentielles
-  {badge:"PARTIE B",titre:"Identité 1/(1+eˣ) = 1 − eˣ/(1+eˣ) et calcul de J",qs:[
+  // ══ PARTIE B — Suite (uₙ) et (vₙ) ══
+  // Chapitre : Suites / Logarithme / Récurrence
+  {badge:"PARTIE B",titre:"Suite (uₙ) avec uₙ₊₁ = 1/(2−uₙ) et suite (vₙ) = ln(n/(n+1))",qs:[
 
     {id:"B1",pts:1,
-     txt:"On veut prouver que pour tout réel x :\n1/(1+eˣ) = 1 − eˣ/(1+eˣ).\n\nEn partant du membre droit :\n1 − eˣ/(1+eˣ) = (1+eˣ−eˣ)/(1+eˣ) = ?\n\nDonc l'identité est :",
-     opts:["Vraie : on obtient bien 1/(1+eˣ)","Fausse : on obtient eˣ/(1+eˣ)","Vraie seulement pour x > 0","Fausse : le membre droit n'est pas défini en 0"],rep:0},
+     txt:"u₀ = 0, uₙ₊₁ = 1/(2−uₙ).\nu₁ = 1/2 ; u₂ = 2/3 ; u₃ = 3/4.\n\nLa suite (wₙ) est définie par wₙ = n/(n+1).\nOn conjecture uₙ = wₙ. Vérification par récurrence :\nSi uₙ = n/(n+1), alors uₙ₊₁ = 1/(2 − n/(n+1)) = ?",
+     opts:["(n+1)/(n+2) = wₙ₊₁ ✓","n/(n+1) ✗","1/(n+1) ✗","(n+2)/(n+1) ✗"],rep:0},
 
     {id:"B2",pts:1,
-     txt:"On déduit J = ∫₀¹ 1/(1+eˣ) dx.\n\nJ = ∫₀¹ 1 dx − ∫₀¹ eˣ/(1+eˣ) dx.\n\nOn reconnaît que eˣ/(1+eˣ) est de la forme u'/u avec u = 1+eˣ.\nDonc ∫₀¹ eˣ/(1+eˣ) dx = [ln(1+eˣ)]₀¹ = ln(1+e) − ln 2.\n\nJ = 1 − ln(1+e) + ln 2 = ?",
-     opts:["1 + ln 2 − ln(1+e)","1 − ln 2 + ln(1+e)","ln(1+e) − ln 2","1 + ln(e/(1+e))"],rep:0,
-     hint:"ln(1+e) − ln 2 = ln((1+e)/2). Donc J = 1 − ln((1+e)/2) = 1 + ln(2/(1+e))."},
+     txt:"La suite (uₙ) converge. Sa limite est :",
+     opts:["lim uₙ = lim n/(n+1) = 1","lim uₙ = 0","lim uₙ = +∞","lim uₙ = 1/2"],rep:0},
 
     {id:"B3",pts:1,
-     txt:"On peut aussi écrire J = 1 + ln 2 − ln(1+e).\n\nComme e ≈ 2,718, on a 1+e ≈ 3,718 et ln(1+e) ≈ 1,313.\nAinsi J ≈ 1 + 0,693 − 1,313 ≈ 0,38.\n\nLequel de ces encadrements est vrai pour J ?",
-     opts:["0 < J < 1","J > 1","J < 0","J = 1/2"],rep:0},
+     txt:"vₙ = ln(n/(n+1)) pour n ≥ 1.\n\nv₁ + v₂ + v₃ = ln(1/2) + ln(2/3) + ln(3/4)\n= ln(1/2 × 2/3 × 3/4) = ln(1/4) = ?\n",
+     opts:["−ln 4","ln 4","−2ln 2 = −ln 4 ✓ (les deux premières sont correctes)","0"],rep:2,
+     hint:"ln(1/4) = −ln 4 = −2ln 2. Les deux premières propositions sont donc identiques."},
+
+    {id:"B4",pts:1,
+     txt:"Sₙ = Σₖ₌₁ⁿ vₖ = Σₖ₌₁ⁿ (ln k − ln(k+1)).\n\nC'est une somme télescopique :\nSₙ = ln 1 − ln(n+1) = −ln(n+1).\n\nlim Sₙ quand n → +∞ = ?",
+     opts:["−∞","0","1","−ln 2"],rep:0},
   ]},
 
-  // ══ PARTIE C — Fonctions affines par morceaux f et g ══
-  // Chapitre : Fonctions / Représentations graphiques / Intégrales
-  {badge:"PARTIE C",titre:"Fonctions f et g par morceaux sur [−1 ; 5] — Intégrales I et J",qs:[
+  // ══ PARTIE C — Intégrales par parties (sélection) ══
+  // Chapitre : Calcul intégral / IPP
+  {badge:"PARTIE C",titre:"Intégrales par parties — Calculs guidés",qs:[
 
     {id:"C1",pts:1,
-     txt:"f est définie sur [−1;5] par :\nf(x) = x+3 si −1≤x≤0\nf(x) = −x+3 si 0<x≤3\nf(x) = x−3 si 3<x≤5.\n\nQuelle est la valeur de f(0) ? Et f(3) ? La fonction f est-elle continue en x=0 ?",
-     opts:["f(0)=3, f(3)=0, continue en 0","f(0)=2, f(3)=1, non continue en 0","f(0)=3, f(3)=3, non continue en 0","f(0)=0, f(3)=0, continue en 0"],rep:0},
+     txt:"I = ∫₀^π x²cos x dx.\n\nIPP : u = x², v' = cos x → v = sin x, u' = 2x.\n[x²sin x]₀^π = 0. Il reste −2∫₀^π x sin x dx.\n2ᵉ IPP : u = x, v' = sin x → v = −cos x.\n∫₀^π x sin x dx = [−x cos x]₀^π + ∫₀^π cos x dx = π + 0 = π.\n\nDonc I = ?",
+     opts:["−2π","2π","0","−π"],rep:0},
 
     {id:"C2",pts:1,
-     txt:"On calcule I = ∫₋₁⁵ f(x)dx en découpant :\n\nI₁ = ∫₋₁⁰ (x+3)dx = [x²/2 + 3x]₋₁⁰ = 0 − (1/2−3) = 5/2\nI₂ = ∫₀³ (−x+3)dx = [−x²/2+3x]₀³ = (−9/2+9) = 9/2\nI₃ = ∫₃⁵ (x−3)dx = [x²/2−3x]₃⁵ = (25/2−15)−(9/2−9) = ?\n\nI₃ vaut :",
-     opts:["2","3","4","5/2"],rep:0,
-     hint:"(25/2−15) = −5/2  et  (9/2−9) = −9/2. I₃ = −5/2 − (−9/2) = 4/2 = 2."},
+     txt:"I = ∫₁^e x²ln x dx.\n\nIPP : u = ln x, v' = x² → u' = 1/x, v = x³/3.\n= [x³ln x/3]₁^e − ∫₁^e x²/3 dx\n= e³/3 − [x³/9]₁^e\n= e³/3 − (e³−1)/9\n= (3e³ − e³ + 1)/9 = ?",
+     opts:["(2e³+1)/9","e³/3","(e³+1)/9","2e³/9"],rep:0},
 
     {id:"C3",pts:1,
-     txt:"I = I₁ + I₂ + I₃ = 5/2 + 9/2 + 2.\n\nI = ?",
-     opts:["9","8","7 + 1/2","10"],rep:0,
-     hint:"5/2 + 9/2 = 14/2 = 7. Puis 7 + 2 = 9."},
-
-    {id:"C4",pts:1,
-     txt:"g est définie sur [−1;5] par :\ng(x) = −x/2 + 3/2 si −1≤x≤1\ng(x) = −x/4 + 5/4 si 1<x≤5.\n\nJ = ∫₋₁⁵ g(x)dx.\n\nJ₁ = ∫₋₁¹ (−x/2+3/2)dx = [−x²/4+3x/2]₋₁¹\n= (−1/4+3/2) − (−1/4−3/2) = ?\n\nJ₁ vaut :",
-     opts:["3","2","1","4"],rep:0,
-     hint:"(−1/4+3/2)−(−1/4−3/2) = 3/2+3/2 = 3."},
-
-    {id:"C5",pts:1,
-     txt:"J₂ = ∫₁⁵ (−x/4+5/4)dx = [−x²/8+5x/4]₁⁵\n= (−25/8+25/4) − (−1/8+5/4)\n= (−25/8+50/8) − (−1/8+10/8)\n= 25/8 − 9/8 = ?\n\nJ₂ vaut :",
-     opts:["2","1","3/2","16/8"],rep:0,
-     hint:"25/8 − 9/8 = 16/8 = 2."},
-
-    {id:"C6",pts:1,
-     txt:"J = J₁ + J₂ = 3 + 2 = 5.\n\nOn veut ∫₋₁⁵ (f + 4g)(x)dx.\n\nPar linéarité de l'intégrale :\n∫(f+4g) = I + 4J = 9 + 4×5 = ?",
-     opts:["29","20","25","14"],rep:0},
-
-    {id:"C7",pts:1,
-     txt:"On veut ∫₋₁⁵ (5f − 2g)(x)dx.\n\n∫(5f−2g) = 5I − 2J = 5×9 − 2×5 = ?",
-     opts:["45","35","55","40"],rep:1,
-     hint:"5×9 = 45 et 2×5 = 10. Donc 45 − 10 = 35."},
+     txt:"I = ∫₀^π 2t cos²t sin t dt.\n\nIPP : u = 2t, v' = cos²t sin t → v = −cos³t/3.\n= [−2t cos³t/3]₀^π + (2/3)∫₀^π cos³t dt.\n\n[−2t cos³t/3]₀^π = −2π(−1)³/3 − 0 = 2π/3.\n∫₀^π cos³t dt = ∫₀^π cos t(1−sin²t)dt = [sin t − sin³t/3]₀^π = 0.\n\nI = ?",
+     opts:["2π/3","π/3","4π/3","0"],rep:0},
   ]},
 
-  // ══ PARTIE D — Étude de f(x) = eˣ/(eˣ+1) ══
-  // Chapitre : Étude de fonctions / Dérivées / Limites / Asymptotes
-  {badge:"PARTIE D",titre:"Étude complète de f(x) = eˣ/(eˣ + 1)",qs:[
+  // ══ PARTIE D — Probabilités (urne 12B + 8N) ══
+  // Chapitre : Probabilités / Combinatoire
+  {badge:"PARTIE D",titre:"Urne : 12 boules blanches et 8 noires — Tirages simultanés et successifs",qs:[
 
     {id:"D1",pts:1,
-     txt:"f(x) = eˣ/(eˣ+1) est définie sur ℝ car eˣ+1 > 0 pour tout x.\n\nCalculer lim f(x) quand x → −∞.\neˣ → 0 donc f(x) → 0/(0+1) = ?\n\nEt lim f(x) quand x → +∞ ?\nOn divise par eˣ : f(x) = 1/(1+e⁻ˣ) → ?",
-     opts:["lim = 0 en −∞ et lim = 1 en +∞","lim = 1 en −∞ et lim = 0 en +∞","lim = 0 en −∞ et lim = +∞ en +∞","lim = 1/2 en −∞ et en +∞"],rep:0},
+     txt:"On tire simultanément 5 boules parmi 20 (12 blanches + 8 noires).\nNombre de façons d'obtenir 3 blanches et 2 noires :\nC₁₂³ × C₈² = 220 × 28 = 6160.\nNombre total : C₂₀⁵ = 15504.\n\nP(3B et 2N) = ?",
+     opts:["6160/15504 = 385/969 ≈ 0,397","220/15504","28/15504","6160/20"],rep:0},
 
     {id:"D2",pts:1,
-     txt:"f'(x) = [eˣ(eˣ+1) − eˣ·eˣ] / (eˣ+1)²\n     = eˣ / (eˣ+1)².\n\nPuisque eˣ > 0 et (eˣ+1)² > 0, on conclut que :",
-     opts:["f'(x) > 0 : f est strictement croissante sur ℝ","f'(x) < 0 : f est décroissante sur ℝ","f'(x) = 0 en x = 0","f'(x) change de signe en x = 0"],rep:0},
+     txt:"P(boules de couleurs différentes) = 1 − P(toutes blanches) − P(toutes noires).\n\nC₁₂⁵ = 792 et C₈⁵ = 56.\n\nP(couleurs différentes) = 1 − (792+56)/15504 = 1 − 848/15504 = ?",
+     opts:["14656/15504 = 916/969 ≈ 0,947","848/15504","1 − 792/15504","848/15504"],rep:0},
 
     {id:"D3",pts:1,
-     txt:"f(0) = e⁰/(e⁰+1) = 1/2.\n\nLes droites y = 0 et y = 1 sont des asymptotes horizontales.\nLa courbe de f est :\n\nQuelle propriété de symétrie possède-t-elle ?",
-     opts:["Elle est symétrique par rapport au point (0 ; 1/2)","Elle est symétrique par rapport à l'axe des ordonnées","Elle est symétrique par rapport à l'axe des abscisses","Elle n'a aucune symétrie"],rep:0,
-     hint:"Calculez f(−x) + f(x) et vérifiez si cela vaut 1, ce qui implique que le point (0 ; 1/2) est un centre de symétrie."},
+     txt:"On tire successivement 5 boules SANS remise.\nP(3B puis 2N dans cet ordre exact) :\n= (12/20)(11/19)(10/18)(8/17)(7/16)\n\nOn calcule : 12×11×10 = 1320 et 8×7 = 56.\n1320×56 = 73920. Dénominateur = 20×19×18×17×16 = 1860480.\n\nP = 73920/1860480 = ?",
+     opts:["77/1938 ≈ 0,0397","1/4896","385/969","1/1938"],rep:0},
 
     {id:"D4",pts:1,
-     txt:"On vérifie la symétrie : f(−x) = e⁻ˣ/(e⁻ˣ+1).\nEn multipliant numérateur et dénominateur par eˣ :\nf(−x) = 1/(1+eˣ).\n\nf(x) + f(−x) = eˣ/(eˣ+1) + 1/(1+eˣ) = (eˣ+1)/(eˣ+1) = ?\n\nDonc f(x) + f(−x) = 1, ce qui signifie que la courbe est :",
-     opts:["Symétrique par rapport au point (0 ; 1/2)","Symétrique par rapport à l'axe Oy","Périodique","Croissante puis décroissante"],rep:0},
-
-    {id:"D5",pts:1,
-     txt:"On note F une primitive de f sur ℝ.\nComme f(x) = eˣ/(eˣ+1) = (eˣ)'/(eˣ+1), on a :\n\nF(x) = ln(eˣ+1) + k, k constante.\n\nCalculer K = ∫₋₁¹ f(x)dx = [ln(eˣ+1)]₋₁¹ = ln(e+1) − ln(e⁻¹+1).\n\nOn a e⁻¹+1 = (1+e)/e, donc ln(e⁻¹+1) = ln(1+e) − 1.\n\nK = ln(e+1) − (ln(1+e) − 1) = ?",
-     opts:["K = 1","K = 0","K = ln 2","K = 2"],rep:0},
+     txt:"P(3B et 2N dans un ordre quelconque parmi 5 tirages) :\n= C₅³ × P(3B puis 2N dans l'ordre)\n= 10 × 77/1938 = ?\n\nCe résultat doit coïncider avec la réponse du tirage simultané.",
+     opts:["770/1938 = 385/969 ✓ (cohérent avec tirage simultané)","77/1938","10/1938","770/15504"],rep:0},
   ]},
 
-  // ══ PARTIE E — Intégrales cos²x et cos⁴x ══
-  // Chapitre : Calcul intégral / Primitives trigonométriques
-  {badge:"PARTIE E",titre:"Intégrales trigonométriques — I = ∫dx/cos²x  et  J = ∫dx/cos⁴x",qs:[
+  // ══ PARTIE E — Nombres complexes forme exponentielle ══
+  // Chapitre : Nombres complexes
+  {badge:"PARTIE E",titre:"Nombres complexes — Forme exponentielle",qs:[
 
     {id:"E1",pts:1,
-     txt:"I = ∫₀^(π/4) dx/cos²x.\n\nLa primitive de 1/cos²x = sec²x est tan x.\n\n[tan x]₀^(π/4) = tan(π/4) − tan(0) = ?",
-     opts:["1","0","√2","π/4"],rep:0},
+     txt:"Z₁ = 1 + cos α − i sin α.\n\nEn utilisant les formules de demi-angle :\n1 + cos α = 2cos²(α/2)  et  sin α = 2sin(α/2)cos(α/2).\n\nZ₁ = 2cos(α/2)[cos(α/2) − i sin(α/2)] = ?\n\nForme exponentielle de Z₁ :",
+     opts:["2cos(α/2)·e^(−iα/2)","2e^(−iα)","cos(α/2)·e^(iα/2)","2sin(α/2)·e^(−iα/2)"],rep:0},
 
     {id:"E2",pts:1,
-     txt:"On pose g(x) = sin x / cos³x.\nOn calcule g'(x) par la règle du quotient :\n\ng'(x) = [cos x · cos³x − sin x · (−3cos²x · (−sin x))] / cos⁶x\n      = [cos⁴x − 3sin²x cos²x] / cos⁶x ... \n\nEn divisant par cos⁴x et en utilisant sin²x = 1−cos²x,\non obtient g'(x) = ?",
-     opts:["3/cos⁴x − 2/cos²x","3/cos⁴x + 2/cos²x","1/cos⁴x − 2/cos²x","2/cos⁴x − 3/cos²x"],rep:0},
+     txt:"Z₃ = (cos x − i sin x)/(sin x − i cos x).\n\nsin x − i cos x = −i(cos x + i sin x) = −i·e^(ix).\nNumérateur = e^(−ix).\n\nZ₃ = e^(−ix)/(−i·e^(ix)) = i·e^(−2ix) = e^(i(π/2−2x)).\n\nModule et argument de Z₃ :",
+     opts:["Module 1, argument π/2 − 2x","Module 1, argument −2x","Module 2, argument π/2","Module 1, argument 2x"],rep:0},
 
     {id:"E3",pts:1,
-     txt:"De la relation g'(x) = 3/cos⁴x − 2/cos²x, on tire :\n3 ∫₀^(π/4) dx/cos⁴x = [g(x)]₀^(π/4) + 2I.\n\ng(π/4) = sin(π/4)/cos³(π/4) = (√2/2) / (√2/2)³.\n(√2/2)³ = 2√2/8 = √2/4.\n\ng(π/4) = (√2/2) / (√2/4) = ?",
-     opts:["2","1","√2","4"],rep:0,
-     hint:"(√2/2) ÷ (√2/4) = (√2/2) × (4/√2) = 4/2 = 2."},
-
-    {id:"E4",pts:1,
-     txt:"g(0) = sin(0)/cos³(0) = 0.\nI = 1 (question E1).\n3J = g(π/4) − g(0) + 2I = 2 − 0 + 2×1 = 4.\n\nDonc J = ?",
-     opts:["4/3","3/4","2/3","1"],rep:0},
-
-    {id:"E5",pts:1,
-     txt:"Sur [0 ; π/4], on a 0 ≤ cos x ≤ 1.\nDonc cos⁴x ≤ cos²x.\nEn inversant (termes positifs) : 1/cos⁴x ≥ 1/cos²x.\n\nEn intégrant sur [0 ; π/4] :\n∫₀^(π/4) dx/cos⁴x ≥ ∫₀^(π/4) dx/cos²x\n\nCe qui donne :",
-     opts:["J ≥ I, c'est-à-dire 4/3 ≥ 1 ✓","I ≥ J","I = J","J ≤ 0"],rep:0},
+     txt:"Z₅ = (1+cos x − i sin x)/(sin x − i(1+cos x)).\n\nNumérateur = 2cos(x/2)·e^(−ix/2).\nDénominateur = −2i·cos(x/2)·e^(ix/2).\n\nZ₅ = e^(−ix/2)/(−i·e^(ix/2)) = i·e^(−ix) = e^(i(π/2−x)).\n\nQue peut-on conclure ?",
+     opts:["Z₅ est de module 1 et d'argument π/2−x","Z₅ = e^(ix)","Module de Z₅ = 2","Z₅ est réel"],rep:0},
   ]},
 
+  // ══ PARTIE F — Similitude T ══
+  // Chapitre : Similitudes directes
+  {badge:"PARTIE F",titre:"Similitude T : z' = (1−i)z − i — Centre, angle, image de droite",qs:[
+
+    {id:"F1",pts:1,
+     txt:"T est définie par z' = (1−i)z − i.\n\n1−i = √2·e^(−iπ/4).\n\nT est une similitude directe de :",
+     opts:["Rapport √2 et angle −π/4","Rapport 2 et angle −π/4","Rapport √2 et angle π/4","Rapport 1 et angle −π/4"],rep:0},
+
+    {id:"F2",pts:1,
+     txt:"Centre Ω d'affixe ω : T(ω) = ω\n(1−i)ω − i = ω  ⟹  −iω = i  ⟹  ω = −1.\n\nΩ a pour coordonnées :",
+     opts:["Ω(−1 ; 0)","Ω(0 ; −1)","Ω(1 ; 0)","Ω(0 ; 1)"],rep:0},
+
+    {id:"F3",pts:1,
+     txt:"Image de (D) : 2x − y + 1 = 0 par T.\n\nDe z' = (1−i)z−i, on tire x = (x'−y'−1)/2 et y = (x'+y'+1)/2.\nEn substituant dans 2x − y + 1 = 0 :\n(x'−y'−1) − (x'+y'+1)/2 + 1 = 0\n⟹ x' − 3y' − 1 = 0.\n\nÉquation de (D') :",
+     opts:["x − 3y − 1 = 0","3x − y − 1 = 0","x + 3y + 1 = 0","x − y − 1 = 0"],rep:0},
+  ]},
 ]};
+;
 
 const TOTAL_PTS=QUIZ.sections.flatMap(s=>s.qs).reduce((a,q)=>a+q.pts,0);
 const ALL_QS=()=>QUIZ.sections.flatMap(s=>s.qs);
 
-window.goRegles=()=>{
+
+// ═══ ANTI DOUBLE PARTICIPATION ═══
+function getLundiSemaine(){
+  const d=new Date();const day=d.getDay()||7;
+  d.setHours(0,0,0,0);d.setDate(d.getDate()-(day-1));
+  return d.toISOString();
+}
+async function dejaCompose(prenom, nom, classe, colName){
+  try{
+    const lundi = getLundiSemaine();
+    const prenomN = prenom.trim().toLowerCase();
+    const nomN    = nom.trim().toLowerCase();
+    const q = query(
+      collection(db, colName),
+      where('createdAt','>=', lundi)
+    );
+    const snap = await getDocs(q);
+    return snap.docs.some(d=>{
+      const data = d.data();
+      return (data.prenom||'').trim().toLowerCase() === prenomN
+          && (data.nom||'').trim().toLowerCase()    === nomN
+          && (data.classe||'') === classe;
+    });
+  }catch(e){ return false; }
+}
+
+window.goRegles=async ()=>{
   const p=document.getElementById('f-prenom').value.trim();
   const n=document.getElementById('f-nom').value.trim();
   const c=document.getElementById('f-classe').value;
@@ -423,6 +439,15 @@ window.goRegles=()=>{
   const etab=document.getElementById('f-etab').value.trim();
   if(!p||!n||!c||!s||!etab){alert('Veuillez remplir tous les champs obligatoires, y compris l\'établissement.');return;}
   if(c!=='TleD'){alert('Ce quiz est réservé aux élèves de Terminale D.');return;}
+  // Anti double participation — vérification en temps réel
+  const btn=document.querySelector('#pg-accueil .btn-gold');
+  if(btn){btn.disabled=true;btn.textContent='Vérification…';}
+  const deja=await dejaCompose(p,n,c,'resultats_d');
+  if(btn){btn.disabled=false;btn.textContent='Continuer →';}
+  if(deja){
+    alert('❌ ' + p + ' ' + n + ' a déjà composé cette évaluation cette semaine.\nUne seule participation est autorisée.');
+    return;
+  }
   eleve={prenom:p,nom:n,classe:c,sexe:s,etablissement:etab};showPage('regles');
 };
 
