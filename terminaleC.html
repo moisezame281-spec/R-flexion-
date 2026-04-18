@@ -147,6 +147,14 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
 </head>
 <body>
 
+
+<!-- AUTH OVERLAY -->
+<div id="auth-overlay" style="display:none;position:fixed;inset:0;z-index:99999;background:#0f0e0a;justify-content:center;align-items:center;flex-direction:column;gap:1.2rem">
+  <div style="width:48px;height:48px;border:3px solid rgba(232,132,58,.3);border-top-color:var(--gold);border-radius:50%;animation:spin 1s linear infinite"></div>
+  <p id="auth-msg" style="color:#f5f0e8;font-family:serif;font-size:1.1rem;text-align:center;padding:0 2rem">Connexion en cours…</p>
+  <p style="color:#666;font-size:.82rem;font-family:monospace">S.E. Corporation — Accès sécurisé</p>
+</div>
+
 <div id="fraud-overlay">
   <div class="fraud-title">⚠️ Sortie détectée !</div>
   <div class="fraud-body">
@@ -270,7 +278,8 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, collection, addDoc, getDocs, query, where, orderBy, serverTimestamp, Timestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 const firebaseConfig = {
   apiKey:"AIzaSyAhSTl2OR5ztfoIwB2TgIqEaiMjD6TmrcI",
   authDomain:"se-corporation-quiz-7187e.firebaseapp.com",
@@ -281,6 +290,44 @@ const firebaseConfig = {
 };
 const app=initializeApp(firebaseConfig);
 const db=getFirestore(app);
+const auth=getAuth(app);
+const provider=new GoogleAuthProvider();
+
+// ═══ AUTH GOOGLE ═══
+let _currentUid = null;
+(async()=>{
+  const overlay=document.getElementById('auth-overlay');
+  const msg=document.getElementById('auth-msg');
+  overlay.style.display='flex';
+  msg.textContent='Connexion en cours…';
+  try{
+    const result=await signInWithPopup(auth,provider);
+    _currentUid=result.user.uid;
+    // Vérifier si ce compte a déjà composé cette semaine
+    const lundi=getLundiSemaine();
+    const lundiTs=Timestamp.fromDate(new Date(lundi));
+    const q=query(collection(db,'resultats_c'),where('uid','==',_currentUid),where('ts','>=',lundiTs));
+    const snap=await getDocs(q);
+    if(!snap.empty){
+      overlay.innerHTML=`<div style="text-align:center;padding:2rem">
+        <div style="font-size:3rem;margin-bottom:1rem">🔒</div>
+        <h2 style="color:var(--gold);font-family:serif;font-size:1.6rem;margin-bottom:1rem">Déjà participé</h2>
+        <p style="color:#aaa;font-size:1.05rem;line-height:1.7">Vous avez déjà composé cette évaluation cette semaine.<br><strong style="color:var(--cream)">Une seule participation est autorisée.</strong></p>
+        <p style="margin-top:2rem;color:#666;font-size:.9rem">S.E. Corporation</p>
+      </div>`;
+      return;
+    }
+    overlay.style.display='none';
+  }catch(e){
+    msg.textContent='Connexion requise. Rechargez la page.';
+  }
+})();
+
+function getLundiSemaine(){
+  const d=new Date();const day=d.getDay()||7;
+  d.setHours(0,0,0,0);d.setDate(d.getDate()-(day-1));
+  return d.toISOString();
+}
 
 const _savedFrauds=parseInt(sessionStorage.getItem('se_frauds')||'0');
 let eleve={},reps={},frauds=_savedFrauds,started=false,done=false,timerInt=null,tLeft=0;
@@ -398,32 +445,7 @@ const TOTAL_PTS=QUIZ.sections.flatMap(s=>s.qs).reduce((a,q)=>a+q.pts,0);
 const ALL_QS=()=>QUIZ.sections.flatMap(s=>s.qs);
 
 
-// ═══ ANTI DOUBLE PARTICIPATION ═══
-function getLundiSemaine(){
-  const d=new Date();const day=d.getDay()||7;
-  d.setHours(0,0,0,0);d.setDate(d.getDate()-(day-1));
-  return d.toISOString();
-}
-async function dejaCompose(prenom, nom, classe, colName){
-  try{
-    const lundi = getLundiSemaine();
-    const prenomN = prenom.trim().toLowerCase();
-    const nomN    = nom.trim().toLowerCase();
-    const q = query(
-      collection(db, colName),
-      where('createdAt','>=', lundi)
-    );
-    const snap = await getDocs(q);
-    return snap.docs.some(d=>{
-      const data = d.data();
-      return (data.prenom||'').trim().toLowerCase() === prenomN
-          && (data.nom||'').trim().toLowerCase()    === nomN
-          && (data.classe||'') === classe;
-    });
-  }catch(e){ return false; }
-}
-
-window.goRegles=async ()=>{
+window.goRegles=()=>{
   const p=document.getElementById('f-prenom').value.trim();
   const n=document.getElementById('f-nom').value.trim();
   const c=document.getElementById('f-classe').value;
@@ -431,15 +453,7 @@ window.goRegles=async ()=>{
   const etab=document.getElementById('f-etab').value.trim();
   if(!p||!n||!c||!s||!etab){alert('Veuillez remplir tous les champs obligatoires, y compris l\'établissement.');return;}
   if(c!=='TleC'){alert('Ce quiz est réservé aux élèves de Terminale C.');return;}
-  // Anti double participation — vérification en temps réel
-  const btn=document.querySelector('#pg-accueil .btn-gold');
-  if(btn){btn.disabled=true;btn.textContent='Vérification…';}
-  const deja=await dejaCompose(p,n,c,'resultats_c');
-  if(btn){btn.disabled=false;btn.textContent='Continuer →';}
-  if(deja){
-    alert('❌ ' + p + ' ' + n + ' a déjà composé cette évaluation cette semaine.\nUne seule participation est autorisée.');
-    return;
-  }
+
   eleve={prenom:p,nom:n,classe:c,sexe:s,etablissement:etab};showPage('regles');
 };
 
@@ -521,7 +535,7 @@ async function submit(statut){
   const data={identifiant:id,prenom:eleve.prenom,nom:eleve.nom,classe:eleve.classe,sexe:eleve.sexe,
     etablissement:eleve.etablissement||'',
     score,scoreOn20:s20,totalPts:TOTAL_PTS,statut:st,fraudCount:frauds,
-    reponses:JSON.stringify(reps),createdAt:new Date().toISOString()};
+    uid:_currentUid||null,reponses:JSON.stringify(reps),createdAt:new Date().toISOString(),ts:serverTimestamp()};
   try{await addDoc(collection(db,'resultats_c'),data);}catch(e){
     try{const arr=JSON.parse(localStorage.getItem('se_res')||'[]');arr.push(data);localStorage.setItem('se_res',JSON.stringify(arr));}catch(e2){}
   }
