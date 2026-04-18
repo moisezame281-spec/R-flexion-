@@ -336,7 +336,6 @@ tbody td.mono{font-family:'Space Mono',monospace;font-size:.75rem;letter-spacing
     <select class="filter-sel" id="filter-classe" onchange="renderTable()">
       <option value="">Toutes les classes</option>
       <option value="TleL">Terminale L</option>
-      <option value="TleSES">Terminale SES</option>
       <option value="TleS">Terminale S</option>
       <option value="TleC">Terminale C</option>
       <option value="TleD">Terminale D</option>
@@ -400,14 +399,6 @@ tbody td.mono{font-family:'Space Mono',monospace;font-size:.75rem;letter-spacing
       <div class="pdf-opt">
         <input type="radio" name="pdf-classe" id="pdf-ts" value="TleS" checked>
         <label for="pdf-ts">Terminale S</label>
-      </div>
-      <div class="pdf-opt">
-        <input type="radio" name="pdf-classe" id="pdf-tl" value="TleL">
-        <label for="pdf-tl">Terminale L</label>
-      </div>
-      <div class="pdf-opt">
-        <input type="radio" name="pdf-classe" id="pdf-tses" value="TleSES">
-        <label for="pdf-tses">Terminale SES</label>
       </div>
       <div class="pdf-opt">
         <input type="radio" name="pdf-classe" id="pdf-tc" value="TleC">
@@ -552,7 +543,6 @@ window._doLogin = () => {
     document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
     document.getElementById('pg-admin').classList.add('active');
     startListen();
-    setTimeout(()=>window.switchMatiere('maths'), 100);
   } else {
     document.getElementById('login-err').style.display = 'block';
     document.getElementById('pwd-input').value = '';
@@ -568,13 +558,29 @@ window._logout = () => {
 };
 
 // ═══ ÉCOUTE FIREBASE EN TEMPS RÉEL (3 collections) ═══
-const COLLECTIONS_MATHS = ['resultats', 'resultats_c', 'resultats_d', 'resultats_l'];
+const COLLECTIONS_MATHS = ['resultats', 'resultats_c', 'resultats_d'];
 const COLLECTIONS_PHYS  = ['resultats_phys_c', 'resultats_phys_d'];
 const ALL_COLLECTIONS   = [...COLLECTIONS_MATHS, ...COLLECTIONS_PHYS];
 const COLLECTIONS       = ALL_COLLECTIONS; // compat legacy
 let currentMatiere = 'maths'; // 'maths' | 'phys' | 'all'
 const _snapshots = {}; // stockage par collection
 const _unsubs = [];
+
+function dedupFirstSubmission(rows) {
+  // Pour chaque prénom+nom+classe, ne garder que la première soumission (createdAt le plus ancien)
+  const seen = new Map();
+  // Trier par date croissante pour que le premier arrivé soit conservé
+  const sorted = [...rows].sort((a, b) => {
+    const ta = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(a.createdAt || 0);
+    const tb = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(b.createdAt || 0);
+    return ta - tb;
+  });
+  for (const r of sorted) {
+    const key = ((r.prenom||'').trim().toLowerCase() + '|' + (r.nom||'').trim().toLowerCase() + '|' + (r.classe||'')).trim();
+    if (key && key !== '||' && !seen.has(key)) seen.set(key, r);
+  }
+  return Array.from(seen.values());
+}
 
 function mergeAndRender() {
   // Filtrer par matière
@@ -584,14 +590,18 @@ function mergeAndRender() {
   else colsToShow = ALL_COLLECTIONS;
 
   const all = colsToShow.flatMap(col => _snapshots[col] || []);
-  // Trier par createdAt desc (Timestamp Firestore ou string ISO)
+  // Trier par createdAt desc pour l'affichage
   all.sort((a, b) => {
     const ta = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(a.createdAt || 0);
     const tb = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(b.createdAt || 0);
     return tb - ta;
   });
-  allData     = all.filter(r => r.evaluation !== 'archived');
-  archiveData = all.filter(r => r.evaluation === 'archived');
+
+  // Dédupliquer : une seule entrée par élève (première soumission uniquement)
+  const current = all.filter(r => r.evaluation !== 'archived');
+  const archived = all.filter(r => r.evaluation === 'archived');
+  allData     = dedupFirstSubmission(current);
+  archiveData = dedupFirstSubmission(archived);
   updateStats();
   renderTable();
   updateArchiveBanner();
@@ -646,7 +656,7 @@ window.switchMatiere = (m) => {
   if(filterClasse) {
     filterClasse.innerHTML = '<option value="">Toutes les classes</option>';
     if(m === 'maths' || m === 'all'){
-      filterClasse.innerHTML += '<option value="TleL">Terminale L</option><option value="TleSES">Terminale SES</option><option value="TleS">Terminale S</option><option value="TleC">Terminale C</option><option value="TleD">Terminale D</option>';
+      filterClasse.innerHTML += '<option value="TleL">Terminale L</option><option value="TleS">Terminale S</option><option value="TleC">Terminale C</option><option value="TleD">Terminale D</option>';
     }
     if(m === 'phys' || m === 'all'){
       filterClasse.innerHTML += '<option value="TleC">Terminale C (Physique)</option><option value="TleD">Terminale D (Physique)</option>';
@@ -808,7 +818,7 @@ window.renderTable = () => {
     if (statut.includes('fraude')) { badgeClass='badge-fraud'; badgeLabel='⚠ Fraude ('+r.fraudCount+')'; }
     else if (statut.includes('temps')) { badgeClass='badge-time'; badgeLabel='⏱ Temps'; }
 
-    const classBadge = (r.classe==='TleL'||r.classe==='TleSES') ? 'badge-tl' : 'badge-ts';
+    const classBadge = r.classe==='TleL' ? 'badge-tl' : 'badge-ts';
     // Déterminer la matière d'après la collection ou l'identifiant
     const isPhys = (r._col||'').includes('phys') || (r.identifiant||'').startsWith('PC') || (r.identifiant||'').startsWith('PD');
     const matiereLabel = isPhys ? '⚗️ Physique' : '➗ Maths';
@@ -820,7 +830,7 @@ window.renderTable = () => {
       <td class="mono" style="color:var(--gold)">${rank}</td>
       <td class="mono" style="font-weight:700;color:var(--cream)">${r.identifiant||'—'}</td>
       <td class="col-nom" style="display:none"><strong>${r.prenom||''}</strong> ${r.nom||''}</td>
-      <td class="col-etab" style="display:none;font-size:.78rem;color:var(--gold);max-width:110px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${r.etablissement||r.etab||'—'}</td>
+      <td class="col-etab" style="display:none;font-size:.78rem;color:var(--gold);max-width:110px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${r.etab||'—'}</td>
       <td><span class="badge ${matiereBadge}">${matiereLabel}</span></td>
       <td><span class="badge ${classBadge}">${r.classe||'—'}</span></td>
       <td style="color:var(--grey)">${r.sexe==='M'?'♂':'♀'}</td>
@@ -843,9 +853,9 @@ window.renderTable = () => {
 
 // ═══ DÉTAIL ═══
 window.showDetail = (id) => {
-  // Cherche dans toutes les collections, pas seulement allData filtré
-  const allRows = Object.values(_snapshots).flat();
-  const r = allRows.find(x=>x.identifiant===id) || allData.find(x=>x.identifiant===id);
+  // Chercher dans toutes les données brutes (pas dédupliquées)
+  const allRaw = Object.values(_snapshots).flat();
+  const r = allRaw.find(x=>x.identifiant===id) || allData.find(x=>x.identifiant===id);
   if (!r) return;
   document.getElementById('modal-id').textContent = id;
   const reps = r.reponses ? JSON.parse(r.reponses) : {};
@@ -853,7 +863,6 @@ window.showDetail = (id) => {
   document.getElementById('modal-content').innerHTML = `
     <div class="modal-row"><span class="modal-lbl">Prénom</span><span class="modal-val">${r.prenom||'—'}</span></div>
     <div class="modal-row"><span class="modal-lbl">Nom</span><span class="modal-val">${r.nom||'—'}</span></div>
-    <div class="modal-row"><span class="modal-lbl">Établissement</span><span class="modal-val" style="color:var(--gold)">${r.etablissement||r.etab||'—'}</span></div>
     <div class="modal-row"><span class="modal-lbl">Classe</span><span class="modal-val">${r.classe||'—'}</span></div>
     <div class="modal-row"><span class="modal-lbl">Sexe</span><span class="modal-val">${r.sexe==='M'?'Masculin':'Féminin'}</span></div>
     <div class="modal-row"><span class="modal-lbl">Score</span><span class="modal-val" style="font-size:1.3rem;font-weight:700;color:var(--gold)">${r.scoreOn20||0} / 20</span></div>
@@ -873,12 +882,12 @@ window.closeModal = (e) => {
 // ═══ EXPORT CSV ═══
 window.exportCSV = () => {
   if (!allData.length) { showNotif('Aucune donnée à exporter.'); return; }
-  const headers = ['Identifiant','Prénom','Nom','Établissement','Classe','Sexe','Score /20','Score brut','Total pts','Statut','Fraudes','Heure'];
+  const headers = ['Identifiant','Prénom','Nom','Classe','Sexe','Score /20','Score brut','Total pts','Statut','Fraudes','Heure'];
   const rows = allData.map(r => {
     const time = r.createdAt?.seconds
       ? new Date(r.createdAt.seconds*1000).toLocaleString('fr-FR')
       : r.createdAt ? new Date(r.createdAt).toLocaleString('fr-FR') : '';
-    return [r.identifiant,r.prenom,r.nom,r.etablissement||r.etab||'',r.classe,r.sexe,r.scoreOn20,r.score,r.totalPts,r.statut,r.fraudCount,time]
+    return [r.identifiant,r.prenom,r.nom,r.classe,r.sexe,r.scoreOn20,r.score,r.totalPts,r.statut,r.fraudCount,time]
       .map(v=>`"${v??''}"`).join(',');
   });
   const csv = [headers.join(','), ...rows].join('\n');
@@ -931,7 +940,7 @@ window.genPDF = (mode) => {
       id: r.identifiant,
       prenom: r.prenom||'',
       nom: r.nom||'',
-      etab: r.etablissement||r.etab||'—',
+      etab: r.etab||'—',
       score: r.scoreOn20||0,
       statut: r.statut||'normal',
       reel: true
@@ -962,7 +971,7 @@ window.genPDF = (mode) => {
     doc.setFont('helvetica','normal');
     doc.setFontSize(8.5);
     doc.setTextColor(201,168,76);
-    const classeLabel = {TleS:'Terminale S', TleC:'Terminale C', TleD:'Terminale D', TleL:'Terminale L', TleSES:'Terminale SES'}[classe]||classe;
+    const classeLabel = {TleS:'Terminale S', TleC:'Terminale C', TleD:'Terminale D'}[classe]||classe;
     const matiereLabel = isPhysClasse ? 'Physique-Chimie' : 'Mathématiques';
     doc.text(`${classeLabel} — ${matiereLabel}`, 40, 21);
     doc.text(`Généré le ${new Date().toLocaleDateString('fr-FR')} à ${new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})}`, 40, 27);
@@ -1129,7 +1138,7 @@ function genFictifs(n, classe, scorePlafond, isPhysClasse=false) {
     const etab = etabs[Math.floor(Math.random()*etabs.length)];
     const prefix = isPhysClasse
       ? {TleC:'PC', TleD:'PD'}[classe]||'PC'
-      : {TleS:'SE', TleC:'TC', TleD:'TD', TleL:'TL', TleSES:'SES'}[classe]||'SE';
+      : {TleS:'SE', TleC:'TC', TleD:'TD'}[classe]||'SE';
     arr.push({id: prefix+'-'+genId(), prenom, nom, etab, score, statut:'normal', reel:false});
   }
   return arr;
